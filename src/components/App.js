@@ -1,6 +1,6 @@
 import React from 'react';
-import FormSubmit from './components/form/FormSubmit'
-import Base from './components/initialSetup/Base'
+import FormSubmit from './form/form-submit'
+import Base from './initialSetup/Base'
 import './App.css';
 
 const App = () => (
