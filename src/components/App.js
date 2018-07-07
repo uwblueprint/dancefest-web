@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import FormSubmit from './components/form/form-submit'
-import Base from './components/initialSetup/base'
+import FormSubmit from './form/form-submit'
+import Base from './initialSetup/base'
 import './App.css';
 
 class App extends Component {
