@@ -26,6 +26,7 @@ class FormSubmit extends React.Component {
   }
 
   handleSubmit(event) {
+    // handle form submission here
     alert('A name was submitted: ' + this.state.name + ' with id: ' + this.state.id);
     event.preventDefault();
   }
