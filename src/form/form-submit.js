@@ -4,21 +4,29 @@ class FormSubmit extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: ''
+      name: '',
+      id: ''
     };
 
-    this.handleChange = this.handleChange.bind(this);
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleDanceIDChange = this.handleDanceIDChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange(event) {
+  handleNameChange(event) {
     this.setState({
-      value: event.target.value
+      name: event.target.value
+    });
+  }
+
+  handleDanceIDChange(event) {
+    this.setState({
+      id: event.target.value
     });
   }
 
   handleSubmit(event) {
-    alert('A name was submitted: ' + this.state.value);
+    alert('A name was submitted: ' + this.state.name + ' with id: ' + this.state.id);
     event.preventDefault();
   }
 
@@ -27,8 +35,12 @@ class FormSubmit extends React.Component {
       <form onSubmit={this.handleSubmit}>
         <label>
           Name:
-          <input type="text" value={this.state.value} onChange={this.handleChange} />
-        </label>
+          <input type="text" value={this.state.name} onChange={this.handleNameChange} />
+        </label> <br/>
+        <label>
+          DanceGroupID:
+          <input type="number" value={this.state.id} onChange={this.handleDanceIDChange} />
+        </label> <br/>
         <input type="submit" value="Submit" />
       </form>
     );
