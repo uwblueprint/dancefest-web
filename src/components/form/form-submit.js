@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './../css/App.css'
 
 class FormSubmit extends React.Component {
   constructor(props) {
@@ -33,17 +34,19 @@ class FormSubmit extends React.Component {
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-        <label>
-          Name:
-          <input type="text" value={this.state.name} onChange={this.handleNameChange} />
-        </label> <br/>
-        <label>
-          DanceGroupID:
-          <input type="number" value={this.state.id} onChange={this.handleDanceIDChange} />
-        </label> <br/>
-        <input type="submit" value="Submit" />
-      </form>
+      <div className="App">
+        <form onSubmit={this.handleSubmit}>
+          <label>
+            Name:
+            <input type="text" value={this.state.name} onChange={this.handleNameChange} />
+          </label> <br/>
+          <label>
+            DanceGroupID:
+            <input type="number" value={this.state.id} onChange={this.handleDanceIDChange} />
+          </label> <br/>
+          <input type="submit" value="Submit" />
+        </form>
+      </div>
     );
   }
 }
