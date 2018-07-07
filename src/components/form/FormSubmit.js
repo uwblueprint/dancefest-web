@@ -2,31 +2,24 @@ import React, { Component } from 'react';
 import './../css/App.css'
 
 class FormSubmit extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: '',
-      id: ''
-    };
+  state = {
+    name: '',
+    id: ''
+  };
 
-    this.handleNameChange = this.handleNameChange.bind(this);
-    this.handleDanceIDChange = this.handleDanceIDChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleNameChange(event) {
+  handleNameChange = (event) => {
     this.setState({
       name: event.target.value
     });
   }
 
-  handleDanceIDChange(event) {
+  handleDanceIDChange = (event) => {
     this.setState({
       id: event.target.value
     });
   }
 
-  handleSubmit(event) {
+  handleSubmit = (event) => {
     // handle form submission here
     alert('A name was submitted: ' + this.state.name + ' with id: ' + this.state.id);
     event.preventDefault();

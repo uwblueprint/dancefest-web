@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import * as routes from '../constants/routes'
 
-const Navigation = () =>
+const Navigation = () => (
   <div>
     <ul>
       <li><Link to={routes.SIGN_UP}>Sign Up</Link></li>
@@ -10,5 +10,6 @@ const Navigation = () =>
       <li><Link to={routes.LANDING}>Landing</Link></li>
     </ul>
   </div>
+)
 
 export default Navigation;

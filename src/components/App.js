@@ -15,10 +15,9 @@ import LandingPage from './Landing';
 
 import * as routes from './../constants/routes';
 
-class App extends Component {
-  render() {
-    return (
-      <Router>
+const App = () => {
+  return (
+    <Router>
       <div>
         <Navigation />
         <hr/>
@@ -36,8 +35,7 @@ class App extends Component {
         />
       </div>
     </Router>
-    );
-  }
+  );
 }
 
 export default App;
