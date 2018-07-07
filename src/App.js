@@ -1,17 +1,13 @@
-import React, { Component } from 'react';
-import FormSubmit from './components/form/form-submit'
-import Base from './components/initialSetup/base'
+import React from 'react';
+import FormSubmit from './components/form/FormSubmit'
+import Base from './components/initialSetup/Base'
 import './App.css';
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <Base />
-        <FormSubmit />
-      </div>
-    );
-  }
-}
+const App = () => (
+  <div className="App">
+    <Base />
+    <FormSubmit />
+  </div>
+)
 
 export default App;

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import logo from '../../logo.svg';
 
 class Base extends React.Component {
