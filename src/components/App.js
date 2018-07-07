@@ -11,27 +11,25 @@ import LandingPage from './Landing';
 
 import * as routes from './../constants/routes';
 
-const App = () => {
-  return (
-    <Router>
-      <div>
-        <Navigation />
-        <hr/>
-        <Route
-          exact path={routes.LANDING}
-          component={() => <LandingPage />}
-        />
-        <Route
-          exact path={routes.SIGN_UP}
-          component={() => <SignUpPage />}
-        />
-        <Route
-          exact path={routes.SIGN_IN}
-          component={() => <SignInPage />}
-        />
-      </div>
-    </Router>
-  );
-}
+const App = () => (
+  <Router>
+    <div>
+      <Navigation />
+      <hr/>
+      <Route
+        exact path={routes.LANDING}
+        component={() => <LandingPage />}
+      />
+      <Route
+        exact path={routes.SIGN_UP}
+        component={() => <SignUpPage />}
+      />
+      <Route
+        exact path={routes.SIGN_IN}
+        component={() => <SignInPage />}
+      />
+    </div>
+  </Router>
+)
 
 export default App;
