@@ -3,10 +3,13 @@ module.exports = {
     "parser": "babel-eslint",
     "env": {
         "es6": true,
-        "node": true
+        "node": true,
+        "jest": true,
+        "browser": true
     },
     "rules": {
-        "no-use-before-define": ["error", { "variables": false }],
+        "comma-dangle": ["error", "never"],
+        "object-curly-spacing": ["error", "always", { "arraysInObjects": false, "objectsInObjects": false }],
         "react/no-array-index-key": ["warn"],
         "react/jsx-closing-bracket-location": ["error", {
             "nonEmpty": "after-props" || false,
@@ -19,5 +22,5 @@ module.exports = {
             },
             "allowChildren": false
         }]
-    },
+    }
 };
