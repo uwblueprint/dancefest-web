@@ -19,15 +19,15 @@ const App = () => (
       <Route
         exact
         path={routes.LANDING}
-        component={() => <LandingPage />} />
+        component={LandingPage} />
       <Route
         exact
         path={routes.SIGN_UP}
-        component={() => <SignUpPage />} />
+        component={SignUpPage} />
       <Route
         exact
         path={routes.SIGN_IN}
-        component={() => <SignInPage />} />
+        component={SignInPage} />
     </div>
   </Router>
 );
