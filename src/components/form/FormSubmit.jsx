@@ -1,5 +1,5 @@
 import React from 'react';
-import './../css/App.css'
+import '../css/App.css';
 
 class FormSubmit extends React.Component {
   state = {
@@ -21,22 +21,28 @@ class FormSubmit extends React.Component {
 
   handleSubmit = (event) => {
     // handle form submission here
-    alert('A name was submitted: ' + this.state.name + ' with id: ' + this.state.id);
+    const { name, id } = this.state;
+    alert(`A name was submitted: ${name} with id: ${id}`);
     event.preventDefault();
   }
 
   render() {
+    const { name, id } = this.state;
     return (
       <div className="App">
         <form onSubmit={this.handleSubmit}>
           <label>
             Name:
-            <input type="text" value={this.state.name} onChange={this.handleNameChange} />
-          </label> <br/>
+            <input type="text" value={name} onChange={this.handleNameChange} />
+          </label>
+          {' '}
+          <br />
           <label>
             DanceGroupID:
-            <input type="number" value={this.state.id} onChange={this.handleDanceIDChange} />
-          </label> <br/>
+            <input type="number" value={id} onChange={this.handleDanceIDChange} />
+          </label>
+          {' '}
+          <br />
           <input type="submit" value="Submit" />
         </form>
       </div>
@@ -44,4 +50,4 @@ class FormSubmit extends React.Component {
   }
 }
 
-export default FormSubmit
+export default FormSubmit;
