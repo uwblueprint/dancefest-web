@@ -14,7 +14,8 @@ class FormSubmit extends React.Component {
     danceStyle: '',
     competitionLevel: '',
     school: '',
-    groupSize: ''
+    groupSize: '',
+    adjudication: []
   };
   
   db = database.ref('samTest3')
@@ -30,7 +31,8 @@ class FormSubmit extends React.Component {
       danceStyle: '',
       competitionLevel: '',
       school: '',
-      groupSize: ''
+      groupSize: '',
+      adjudication: []
     })
   }
 
@@ -96,23 +98,34 @@ class FormSubmit extends React.Component {
     })
   }
 
+  splitAndTrim = (arr) => {
+    return arr.split(',').trim();
+  }
+
   handleSubmit = (event) => {
     // TODO: handle case where state hasn't been updated
     // handle form submission here
     const { eventName, eventDate, danceID, danceTitle, choreographer, performedBy, danceStyle, competitionLevel, school, groupSize } = this.state;
 
+    let splitChoreographer = splitAndTrim(choreographer);
+    let splitPerformers = splitAndTrim(performedBy);
+    let danceEntry = {
+      danceID: danceID,
+      danceTitle: danceTitle,
+      choreographer: splitChoreographer,
+      performedBy: splitPerformers,
+      danceStyle: danceStyle,
+      competitionLevel: competitionLevel,
+      school: school,
+      groupSize: groupSize,
+      adjudication: []
+    }
+
     // TODO: check the damn variables to see they are all there...
     let item = {
       eventName: eventName,
       eventDate: eventDate,
-      danceID: danceID,
-      danceTitle: danceTitle,
-      choreographer: choreographer,
-      performedBy: performedBy,
-      danceStyle: danceStyle,
-      competitionLevel: competitionLevel,
-      school: school,
-      groupSize: groupSize
+      danceEntries: [danceEntry]
     };
 
     try {
