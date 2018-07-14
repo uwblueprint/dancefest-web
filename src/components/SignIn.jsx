@@ -17,7 +17,6 @@ class SignInPage extends React.Component {
 
   handleSubmit = (e) => {
     const {name} = this.state;
-    alert(`submit worked: ${name}`);
 
     let item = {
       name: this.state.name
@@ -28,12 +27,23 @@ class SignInPage extends React.Component {
     } catch(e) {
       alert(e);
     }
+    alert(`submit worked: ${name}`);
 
     e.preventDefault();
   }
 
   handleDataRetrieval = () => {
-    alert('smd');
+    alert("suck it");
+    var vals = [];
+    this.db.once('value', snapshot => {
+      snapshot.forEach(data => {
+        let value = {
+          name: data.val().name
+        };
+        vals.push(value);
+      });
+    });
+    console.log(vals);
   }
 
   render() {
