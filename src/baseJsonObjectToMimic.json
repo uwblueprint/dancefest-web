@@ -1,0 +1,29 @@
+{
+    "danceEvents": [
+        {
+            "name": "DanceFest2019",
+            "date": "March 1st, 2019",
+            "danceEntries": [
+                {
+                    "danceID": 1,
+                    "danceTitle": "Insert Dance Title Here",
+                    "choreographer": ["Choreographer 1", "Choreographer 2"],
+                    "performedBy": ["Student 1", "Student 2"],
+                    "danceStyle": "Hip hop",
+                    "competitionLevel": "Novice",
+                    "school": "UW",
+                    "groupSize": "Solo",
+                    "adjudicationMarks": {
+                        "elementsOfMovement": 75,
+                        "principlesOfComposition": 75,
+                        "technique": 75,
+                        "useOfMusic": 75,
+                        "creativity": 75
+                    },
+                    "judgeNotes": "I liked this dance very much",
+                    "audioRecording": "recording.mp3"
+                }
+            ]
+        }
+    ]
+}

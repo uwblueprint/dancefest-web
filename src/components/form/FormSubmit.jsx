@@ -1,5 +1,6 @@
 import React from 'react';
 import '../css/App.css';
+import {database} from '../../firebase/index';
 
 class FormSubmit extends React.Component {
   state = {
@@ -26,6 +27,10 @@ class FormSubmit extends React.Component {
     event.preventDefault();
   }
 
+  handleDataRetrieval = (event) => {
+    alert("suck it");
+  }
+
   render() {
     const { name, id } = this.state;
     return (
@@ -45,6 +50,11 @@ class FormSubmit extends React.Component {
           <br />
           <input type="submit" value="Submit" />
         </form>
+        <button onClick={this.handleDataRetrieval}>
+          <label>
+            SMD
+          </label>
+        </button>
       </div>
     );
   }
