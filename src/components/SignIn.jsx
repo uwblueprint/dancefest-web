@@ -1,6 +1,6 @@
 import React from 'react';
 import './css/App.css';
-import {database} from '../firebase/index';
+import {database} from '../firebase';
 
 class SignInPage extends React.Component {
   state = {

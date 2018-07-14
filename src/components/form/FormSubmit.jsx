@@ -1,45 +1,127 @@
 import React from 'react';
 import '../css/App.css';
-import {database} from '../../firebase/index';
+import FormLabel from './FormEntries';
+import { database } from '../../firebase';
 
 class FormSubmit extends React.Component {
   state = {
-    name: '',
-    id: ''
+    eventName: '',
+    eventDate: '',
+    danceID: '',
+    danceTitle: '',
+    choreographer: '',
+    performedBy: '',
+    danceStyle: '',
+    competitionLevel: '',
+    school: '',
+    groupSize: ''
   };
   
-  db = database.ref('samTest')
+  db = database.ref('samTest3')
 
-  handleNameChange = (event) => {
+  resetState = () => {
     this.setState({
-      name: event.target.value
+      eventName: '',
+      eventDate: '',
+      danceID: '',
+      danceTitle: '',
+      choreographer: '',
+      performedBy: '',
+      danceStyle: '',
+      competitionLevel: '',
+      school: '',
+      groupSize: ''
+    })
+  }
+
+  handleEventNameChange = (event) => {
+    this.setState({
+      eventName: event.target.value
+    });
+  }
+
+  handleDateChange = (event) => {
+    // TODO: consider using a calander since we can't trust people being consistent
+    // TODO: change type from TEXT to DATE
+    this.setState({
+      eventDate: event.target.value
     });
   }
 
   handleDanceIDChange = (event) => {
     this.setState({
-      id: event.target.value
+      danceID: event.target.value
     });
   }
 
+  handleDanceTitle = (event) => {
+    this.setState({
+      danceTitle: event.target.value
+    });
+  }
+
+  handleChoreographerChange = (event) => {
+    this.setState({
+      choreographer: event.target.value
+    });
+  }
+
+  handlePerformerChange = (event) => {
+    this.setState({
+      performedBy: event.target.value
+    });
+  }
+
+  handleDanceStyleChange = (event) => {
+    this.setState({
+      danceStyle: event.target.value
+    })
+  }
+
+  handleCompetitionLevelChange = (event) => {
+    this.setState({
+      competitionLevel: event.target.value
+    })
+  }
+
+  handleSchoolChange = (event) => {
+    this.setState({
+      school: event.target.value
+    })
+  }
+
+  handleGroupSizeChange = (event) => {
+    this.setState({
+      groupSize: event.target.value
+    })
+  }
+
   handleSubmit = (event) => {
+    // TODO: handle case where state hasn't been updated
     // handle form submission here
-    const { name, id } = this.state;
-    alert(`A name was submitted: ${name} with id: ${id}`);
+    const { eventName, eventDate, danceID, danceTitle, choreographer, performedBy, danceStyle, competitionLevel, school, groupSize } = this.state;
 
-    const { db } = this.db;
-
+    // TODO: check the damn variables to see they are all there...
     let item = {
-      name: this.state.name,
-      id: this.state.id
+      eventName: eventName,
+      eventDate: eventDate,
+      danceID: danceID,
+      danceTitle: danceTitle,
+      choreographer: choreographer,
+      performedBy: performedBy,
+      danceStyle: danceStyle,
+      competitionLevel: competitionLevel,
+      school: school,
+      groupSize: groupSize
     };
 
-    db.push(item);
+    try {
+      this.db.push(item);
+    } catch (e) {
+      console.log(e);
+    }
 
-    this.setState({
-      name: '',
-      id: ''
-    });
+    this.resetState();
 
     event.preventDefault();
   }
@@ -47,42 +129,70 @@ class FormSubmit extends React.Component {
   handleDataRetrieval = (event) => {
     alert("suck it");
     var vals = [];
-    const {db} = this.db;
-    db.once('value', snapshot => {
-      snapshot.foreach(data => {
+    this.db.once('value', snapshot => {
+      snapshot.forEach(data => {
         let value = {
-          name: data.val().name,
-          id: data.val().id,
+          eventName: data.val().eventName,
+          eventDate: data.val().eventDate,
+          danceID: data.val().danceID,
+          danceTitle: data.val().danceTitle,
+          choreographer: data.val().choreographer,
+          performedBy: data.val().performedBy,
+          danceStyle: data.val().danceStyle,
+          competitionLevel: data.val().competitionLevel,
+          school: data.val().school,
+          groupSize: data.val().groupSize
         };
         vals.push(value);
       });
     });
-    alert(`it's yeboi: ${vals}`);
+    console.log(vals);
   }
 
-  // componentWillMount = () => {
-  //   const {db} = this.db;
-  //   db.once('value', snapshot => {
-      
-  //   });
-  // }
-
   render() {
-    const { name, id } = this.state;
+    const { eventName, eventDate, danceID, danceTitle, choreographer, performedBy, danceStyle, competitionLevel, school, groupSize } = this.state;
     return (
       <div className="App">
         <form onSubmit={this.handleSubmit}>
-          <label>
-            Name:
-            <input type="text" value={name} onChange={this.handleNameChange} />
-          </label>
-          {' '}
+
+          <FormLabel jsonfield="Event Name" />
+          <input type="text" value={eventName} onChange={this.handleEventNameChange} />
           <br />
-          <label>
-            DanceGroupID:
-            <input type="number" value={id} onChange={this.handleDanceIDChange} />
-          </label>
-          {' '}
+
+          <FormLabel jsonfield="Event Date" />
+          <input type="text" value={eventDate} onChange={this.handleDateChange} /> 
+          <br />
+
+          <FormLabel jsonfield="Dance ID" />
+          <input type="number" value={danceID} onChange={this.handleDanceIDChange} /> 
+          <br />
+
+          <FormLabel jsonfield="Dance Title" />
+          <input type="text" value={danceTitle} onChange={this.handleDanceTitle} /> 
+          <br />
+
+          <FormLabel jsonfield="Choreographer" />
+          <input type="text" value={choreographer} onChange={this.handleChoreographerChange} /> 
+          <br />
+
+          <FormLabel jsonfield="Performed By" />
+          <input type="text" value={performedBy} onChange={this.handlePerformerChange} /> 
+          <br />
+
+          <FormLabel jsonfield="Dance Style" />
+          <input type="text" value={danceStyle} onChange={this.handleDanceStyleChange} /> 
+          <br />
+
+          <FormLabel jsonfield="Competition Level" />
+          <input type="text" value={competitionLevel} onChange={this.handleCompetitionLevelChange} /> 
+          <br />
+
+          <FormLabel jsonfield="School" />
+          <input type="text" value={school} onChange={this.handleSchoolChange} /> 
+          <br />
+
+          <FormLabel jsonfield="Group Size" />
+          <input type="text" value={groupSize} onChange={this.handleGroupSizeChange} /> 
           <br />
           <input type="submit" value="Submit" />
         </form>
