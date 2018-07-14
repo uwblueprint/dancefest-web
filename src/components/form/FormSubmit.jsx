@@ -4,6 +4,8 @@ import FormLabel from './FormEntries';
 import { database } from '../../firebase';
 
 class FormSubmit extends React.Component {
+  db = database.ref('samTest3');
+
   state = {
     eventName: '',
     eventDate: '',
@@ -14,11 +16,8 @@ class FormSubmit extends React.Component {
     danceStyle: '',
     competitionLevel: '',
     school: '',
-    groupSize: '',
-    adjudication: []
+    groupSize: ''
   };
-  
-  db = database.ref('samTest3')
 
   resetState = () => {
     this.setState({
@@ -31,9 +30,8 @@ class FormSubmit extends React.Component {
       danceStyle: '',
       competitionLevel: '',
       school: '',
-      groupSize: '',
-      adjudication: []
-    })
+      groupSize: ''
+    });
   }
 
   handleEventNameChange = (event) => {
@@ -77,54 +75,63 @@ class FormSubmit extends React.Component {
   handleDanceStyleChange = (event) => {
     this.setState({
       danceStyle: event.target.value
-    })
+    });
   }
 
   handleCompetitionLevelChange = (event) => {
     this.setState({
       competitionLevel: event.target.value
-    })
+    });
   }
 
   handleSchoolChange = (event) => {
     this.setState({
       school: event.target.value
-    })
+    });
   }
 
   handleGroupSizeChange = (event) => {
     this.setState({
       groupSize: event.target.value
-    })
+    });
   }
 
-  splitAndTrim = (arr) => {
-    return arr.split(',').trim();
-  }
+  splitAndTrim = arr => arr.split(',').trim()
 
   handleSubmit = (event) => {
     // TODO: handle case where state hasn't been updated
     // handle form submission here
-    const { eventName, eventDate, danceID, danceTitle, choreographer, performedBy, danceStyle, competitionLevel, school, groupSize } = this.state;
+    const {
+      eventName,
+      eventDate,
+      danceID,
+      danceTitle,
+      choreographer,
+      performedBy,
+      danceStyle,
+      competitionLevel,
+      school,
+      groupSize
+    } = this.state;
 
-    let splitChoreographer = splitAndTrim(choreographer);
-    let splitPerformers = splitAndTrim(performedBy);
-    let danceEntry = {
-      danceID: danceID,
-      danceTitle: danceTitle,
+    const splitChoreographer = this.splitAndTrim(choreographer);
+    const splitPerformers = this.splitAndTrim(performedBy);
+    const danceEntry = {
+      danceID,
+      danceTitle,
       choreographer: splitChoreographer,
       performedBy: splitPerformers,
-      danceStyle: danceStyle,
-      competitionLevel: competitionLevel,
-      school: school,
-      groupSize: groupSize,
+      danceStyle,
+      competitionLevel,
+      school,
+      groupSize,
       adjudication: []
-    }
+    };
 
     // TODO: check the damn variables to see they are all there...
-    let item = {
-      eventName: eventName,
-      eventDate: eventDate,
+    const item = {
+      eventName,
+      eventDate,
       danceEntries: [danceEntry]
     };
 
@@ -139,12 +146,12 @@ class FormSubmit extends React.Component {
     event.preventDefault();
   }
 
-  handleDataRetrieval = (event) => {
-    alert("suck it");
-    var vals = [];
-    this.db.once('value', snapshot => {
-      snapshot.forEach(data => {
-        let value = {
+  handleDataRetrieval = () => {
+    alert('suck it');
+    const vals = [];
+    this.db.once('value', (snapshot) => {
+      snapshot.forEach((data) => {
+        const value = {
           eventName: data.val().eventName,
           eventDate: data.val().eventDate,
           danceID: data.val().danceID,
@@ -163,7 +170,18 @@ class FormSubmit extends React.Component {
   }
 
   render() {
-    const { eventName, eventDate, danceID, danceTitle, choreographer, performedBy, danceStyle, competitionLevel, school, groupSize } = this.state;
+    const {
+      eventName,
+      eventDate,
+      danceID,
+      danceTitle,
+      choreographer,
+      performedBy,
+      danceStyle,
+      competitionLevel,
+      school,
+      groupSize
+    } = this.state;
     return (
       <div className="App">
         <form onSubmit={this.handleSubmit}>
@@ -173,43 +191,43 @@ class FormSubmit extends React.Component {
           <br />
 
           <FormLabel jsonfield="Event Date" />
-          <input type="text" value={eventDate} onChange={this.handleDateChange} /> 
+          <input type="text" value={eventDate} onChange={this.handleDateChange} />
           <br />
 
           <FormLabel jsonfield="Dance ID" />
-          <input type="number" value={danceID} onChange={this.handleDanceIDChange} /> 
+          <input type="number" value={danceID} onChange={this.handleDanceIDChange} />
           <br />
 
           <FormLabel jsonfield="Dance Title" />
-          <input type="text" value={danceTitle} onChange={this.handleDanceTitle} /> 
+          <input type="text" value={danceTitle} onChange={this.handleDanceTitle} />
           <br />
 
           <FormLabel jsonfield="Choreographer" />
-          <input type="text" value={choreographer} onChange={this.handleChoreographerChange} /> 
+          <input type="text" value={choreographer} onChange={this.handleChoreographerChange} />
           <br />
 
           <FormLabel jsonfield="Performed By" />
-          <input type="text" value={performedBy} onChange={this.handlePerformerChange} /> 
+          <input type="text" value={performedBy} onChange={this.handlePerformerChange} />
           <br />
 
           <FormLabel jsonfield="Dance Style" />
-          <input type="text" value={danceStyle} onChange={this.handleDanceStyleChange} /> 
+          <input type="text" value={danceStyle} onChange={this.handleDanceStyleChange} />
           <br />
 
           <FormLabel jsonfield="Competition Level" />
-          <input type="text" value={competitionLevel} onChange={this.handleCompetitionLevelChange} /> 
+          <input type="text" value={competitionLevel} onChange={this.handleCompetitionLevelChange} />
           <br />
 
           <FormLabel jsonfield="School" />
-          <input type="text" value={school} onChange={this.handleSchoolChange} /> 
+          <input type="text" value={school} onChange={this.handleSchoolChange} />
           <br />
 
           <FormLabel jsonfield="Group Size" />
-          <input type="text" value={groupSize} onChange={this.handleGroupSizeChange} /> 
+          <input type="text" value={groupSize} onChange={this.handleGroupSizeChange} />
           <br />
           <input type="submit" value="Submit" />
         </form>
-        <button onClick={this.handleDataRetrieval}>
+        <button type="button" onClick={this.handleDataRetrieval}>
           <label>
             SMD
           </label>
