@@ -7,6 +7,8 @@ class FormSubmit extends React.Component {
     name: '',
     id: ''
   };
+  
+  db = database.ref('samTest')
 
   handleNameChange = (event) => {
     this.setState({
@@ -24,12 +26,46 @@ class FormSubmit extends React.Component {
     // handle form submission here
     const { name, id } = this.state;
     alert(`A name was submitted: ${name} with id: ${id}`);
+
+    const { db } = this.db;
+
+    let item = {
+      name: this.state.name,
+      id: this.state.id
+    };
+
+    db.push(item);
+
+    this.setState({
+      name: '',
+      id: ''
+    });
+
     event.preventDefault();
   }
 
   handleDataRetrieval = (event) => {
     alert("suck it");
+    var vals = [];
+    const {db} = this.db;
+    db.once('value', snapshot => {
+      snapshot.foreach(data => {
+        let value = {
+          name: data.val().name,
+          id: data.val().id,
+        };
+        vals.push(value);
+      });
+    });
+    alert(`it's yeboi: ${vals}`);
   }
+
+  // componentWillMount = () => {
+  //   const {db} = this.db;
+  //   db.once('value', snapshot => {
+      
+  //   });
+  // }
 
   render() {
     const { name, id } = this.state;
