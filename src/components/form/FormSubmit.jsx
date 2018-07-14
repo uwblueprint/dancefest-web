@@ -124,8 +124,7 @@ class FormSubmit extends React.Component {
       danceStyle,
       competitionLevel,
       school,
-      groupSize,
-      adjudication: []
+      groupSize
     };
 
     // TODO: check the damn variables to see they are all there...
