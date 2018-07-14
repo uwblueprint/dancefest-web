@@ -4,7 +4,7 @@ import FormLabel from './FormEntries';
 import { database } from '../../firebase';
 
 class FormSubmit extends React.Component {
-  db = database.ref('samTest3');
+  db = database.ref('samTest4');
 
   state = {
     eventName: '',
@@ -114,8 +114,9 @@ class FormSubmit extends React.Component {
       groupSize
     } = this.state;
 
-    const splitChoreographer = this.splitAndTrim(choreographer);
-    const splitPerformers = this.splitAndTrim(performedBy);
+    const splitChoreographer = choreographer.split(',').map(str => str.trim());
+    const splitPerformers = performedBy.split(',').map(str => str.trim());
+
     const danceEntry = {
       danceID,
       danceTitle,
@@ -146,21 +147,13 @@ class FormSubmit extends React.Component {
   }
 
   handleDataRetrieval = () => {
-    alert('suck it');
     const vals = [];
     this.db.once('value', (snapshot) => {
       snapshot.forEach((data) => {
         const value = {
           eventName: data.val().eventName,
           eventDate: data.val().eventDate,
-          danceID: data.val().danceID,
-          danceTitle: data.val().danceTitle,
-          choreographer: data.val().choreographer,
-          performedBy: data.val().performedBy,
-          danceStyle: data.val().danceStyle,
-          competitionLevel: data.val().competitionLevel,
-          school: data.val().school,
-          groupSize: data.val().groupSize
+          danceEntries: data.val().danceEntries
         };
         vals.push(value);
       });
@@ -224,11 +217,13 @@ class FormSubmit extends React.Component {
           <FormLabel jsonfield="Group Size" />
           <input type="text" value={groupSize} onChange={this.handleGroupSizeChange} />
           <br />
+
           <input type="submit" value="Submit" />
+
         </form>
         <button type="button" onClick={this.handleDataRetrieval}>
           <label>
-            SMD
+            GetAllDataFromFirebase
           </label>
         </button>
       </div>

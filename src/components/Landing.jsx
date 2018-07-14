@@ -1,5 +1,4 @@
 import React from 'react';
-import Base from './initialSetup/Base';
 import FormSubmit from './form/FormSubmit';
 
 const LandingPage = () => (
@@ -7,7 +6,6 @@ const LandingPage = () => (
     <h1>
       Landing Page
     </h1>
-    <Base />
     <FormSubmit />
   </div>
 );
