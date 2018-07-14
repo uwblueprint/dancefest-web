@@ -1,3 +1,15 @@
+/*
+WORKFLOW:
+
+1. Dance event will open its registration and dancers will register for the event
+2. Dance event registration closes
+3. The DanceFest admins will now have a full list of the dance performances for that event
+4. Using the dancefest-web application they will enter all the static dance information (eg. ID, dance title, dance style, etc)
+5. Before the event, the dancefest admins will import this static data into the dancefest-android aplication to ensure they have their data before they lose internet connection at the event
+6. At the event, the dance judges use the android app to enter the adjudication marks, judge notes and audio recordings (offline-first approach to writing this data back to firebase)
+7. Event is finished, and the tablet regains stable internet connection again and sends new data to firebase
+8. DanceFest admins can use the web app to view final results, calculate winners, etc.
+*/
 {
     "danceEvents": [
         {
@@ -7,25 +19,34 @@
                 {
                     "danceID": 1,
                     "danceTitle": "Insert Dance Title Here",
-                    "choreographer": ["Choreographer 1", "Choreographer 2"],
-                    "performedBy": ["Student 1", "Student 2"],
+                    "choreographer": [
+                        "Choreographer 1",
+                        "Choreographer 2"
+                    ],
+                    "performedBy": [
+                        "Student 1",
+                        "Student 2"
+                    ],
                     "danceStyle": "Hip hop",
                     "competitionLevel": "Novice",
                     "school": "UW",
                     "groupSize": "Solo",
-                    "adjudicationMarks": {
-                        "elementsOfMovement": 75,
-                        "principlesOfComposition": 75,
-                        "technique": 75,
-                        "useOfMusic": 75,
-                        "creativity": 75
-                    },
-                    "judgeNotes": "I liked this dance very much",
-                    "audioRecording": "recording.mp3"
-                },
-                {}
+                    "adjudication": [
+                        {
+                            "judgeID": "judge1",
+                            "marks": {
+                                "elementsOfMovement": 75,
+                                "principlesOfComposition": 75,
+                                "technique": 75,
+                                "useOfMusic": 75,
+                                "creativity": 75
+                            },
+                            "judgeNotes": "I liked this dance very much",
+                            "audioRecording": "recording.mp3"
+                        }
+                    ]
+                }
             ]
-        },
-        {}
+        }
     ]
 }
