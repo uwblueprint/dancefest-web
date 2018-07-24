@@ -1,10 +1,7 @@
 import React from 'react';
 import './css/App.css';
-import { database } from '../firebase/database';
 
 class SignInPage extends React.Component {
-  db = database.ref('samTest');
-
   state = {
     name: ''
   }
