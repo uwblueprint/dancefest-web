@@ -1,11 +1,9 @@
 import React from 'react';
 import '../css/App.css';
 import FormLabel from './FormEntries';
-import { database } from '../../firebase';
+import { createEvent, retrieveEventData } from '../../firebase/database';
 
 class FormSubmit extends React.Component {
-  db = database.ref('samTest4');
-
   state = {
     eventName: '',
     eventDate: '',
@@ -61,12 +59,14 @@ class FormSubmit extends React.Component {
   }
 
   handleChoreographerChange = (event) => {
+    // TODO: Need to create UI component that will pass choreographers in an array
     this.setState({
       choreographer: event.target.value
     });
   }
 
   handlePerformerChange = (event) => {
+    // TODO: Need to create UI component that will pass performers in an array
     this.setState({
       performedBy: event.target.value
     });
@@ -95,8 +95,6 @@ class FormSubmit extends React.Component {
       groupSize: event.target.value
     });
   }
-
-  splitAndTrim = arr => arr.split(',').trim()
 
   handleSubmit = (event) => {
     // TODO: handle case where state hasn't been updated
@@ -135,11 +133,7 @@ class FormSubmit extends React.Component {
       danceEntries: [danceEntry]
     };
 
-    try {
-      this.db.push(item);
-    } catch (e) {
-      console.log(e);
-    }
+    createEvent(item);
 
     this.resetState();
 
@@ -147,18 +141,7 @@ class FormSubmit extends React.Component {
   }
 
   handleDataRetrieval = () => {
-    const vals = [];
-    this.db.once('value', (snapshot) => {
-      snapshot.forEach((data) => {
-        const value = {
-          eventName: data.val().eventName,
-          eventDate: data.val().eventDate,
-          danceEntries: data.val().danceEntries
-        };
-        vals.push(value);
-      });
-    });
-    console.log(vals);
+    retrieveEventData();
   }
 
   render() {

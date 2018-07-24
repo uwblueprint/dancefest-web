@@ -1,53 +1,55 @@
 import React from 'react';
 import './css/App.css';
-import {database} from '../firebase';
+import { database } from '../firebase/database';
 
 class SignInPage extends React.Component {
+  db = database.ref('samTest');
+
   state = {
     name: ''
   }
 
-  db = database.ref('samTest');
-
-  handleNameChange = (e) => {
+  handleNameChange = (event) => {
     this.setState({
-      name: e.target.value
-    })
-  }
-
-  handleSubmit = (e) => {
-    const {name} = this.state;
-
-    let item = {
-      name: this.state.name
-    };
-
-    try {
-      this.db.push(item);
-    } catch(e) {
-      alert(e);
-    }
-    alert(`submit worked: ${name}`);
-
-    e.preventDefault();
-  }
-
-  handleDataRetrieval = () => {
-    alert("suck it");
-    var vals = [];
-    this.db.once('value', snapshot => {
-      snapshot.forEach(data => {
-        let value = {
-          name: data.val().name
-        };
-        vals.push(value);
-      });
+      name: event.target.value
     });
-    console.log(vals);
   }
+
+  // TODO: Use firebase auth in this component
+
+  // handleSubmit = (event) => {
+  //   const { name } = this.state;
+
+  //   const item = {
+  //     name
+  //   };
+
+  //   try {
+  //     this.db.push(item);
+  //   } catch (e) {
+  //     alert(e);
+  //   }
+  //   alert(`submit worked: ${name}`);
+
+  //   event.preventDefault();
+  // }
+
+  // handleDataRetrieval = () => {
+  //   alert('suck it');
+  //   const vals = [];
+  //   this.db.once('value', (snapshot) => {
+  //     snapshot.forEach((data) => {
+  //       const value = {
+  //         name: data.val().name
+  //       };
+  //       vals.push(value);
+  //     });
+  //   });
+  //   console.log(vals);
+  // }
 
   render() {
-    const {name} = this.state;
+    const { name } = this.state;
     return (
       <div className="App">
         <form onSubmit={this.handleSubmit}>
@@ -58,7 +60,7 @@ class SignInPage extends React.Component {
           <br />
           <input type="submit" value="Submit" />
         </form>
-        <button onClick={this.handleDataRetrieval}>
+        <button type="button" onClick={this.handleDataRetrieval}>
           <label>
             SMD
           </label>
@@ -67,8 +69,6 @@ class SignInPage extends React.Component {
     );
   }
 }
-
-
 
 
 // const SignInPage = () => (
