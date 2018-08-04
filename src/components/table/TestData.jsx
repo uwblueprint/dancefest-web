@@ -1,6 +1,5 @@
 import React from 'react';
-// import Moment from 'react-moment';
-import Button from './EditButton';
+import Button from '../Buttons/EventEditButton/EditButton';
 
 let id = 0;
 function createData(eventName, eventDate, numberOfPerformances,
