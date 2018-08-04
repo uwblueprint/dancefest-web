@@ -21,29 +21,22 @@ class button extends React.Component {
   }
 
   render() {
-    const { state } = this.state;
+    // const { state } = this.state;
     return (
       <div>
         <Button onClick={this.handleOpen}>
           EDIT
         </Button>
-        <Modal
+        {/* <Modal
           open={state.open}
           onClose={this.handleClose}>
           <div>
             Text in modal
           </div>
-        </Modal>
+        </Modal> */}
       </div>
     );
   }
 }
-
-// const button = () => (
-//   <Button variant="outlined">
-//     EDIT
-//   </Button>
-
-// );
 
 export default button;

@@ -6,10 +6,9 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import customCell from './TableCellEntry';
-import data from './testData';
+import CustomCell from './TableCellEntry';
+import Data from './TestData';
 import styles from './styles';
-
 
 function SimpleTable() {
   return (
@@ -17,25 +16,25 @@ function SimpleTable() {
       <Table>
         <TableHead>
           <TableRow>
-            <customCell text="Event Title" />
-            <customCell text="Event Date" />
-            <customCell text="No. Performances" />
-            <customCell text="No. Score Sheets" />
-            <customCell text="Judges" />
-            <customCell text="" />
+            <CustomCell text="Event Title" />
+            <CustomCell text="Event Date" />
+            <CustomCell text="No. Performances" />
+            <CustomCell text="No. Score Sheets" />
+            <CustomCell text="Judges" />
+            <CustomCell text="" />
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map(n => (
+          {Data.map(n => (
             <TableRow key={n.id}>
               <TableCell component="th" scope="row">
                 {n.eventName}
               </TableCell>
-              <customCell text={n.eventDate} />
-              <customCell text={n.numberOfPerformances} />
-              <customCell text={n.numberOfScoreSheets} />
-              <customCell text={n.judges} />
-              <customCell text={n.jsxButton} />
+              <CustomCell text={n.eventDate} />
+              <CustomCell number={n.numberOfPerformances} />
+              <CustomCell number={n.numberOfScoreSheets} />
+              <CustomCell text={n.judges} />
+              <CustomCell button={n.jsxButton} />
             </TableRow>
           ))}
         </TableBody>
