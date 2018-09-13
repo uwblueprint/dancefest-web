@@ -2,7 +2,7 @@ import React from 'react';
 import TableCell from '@material-ui/core/TableCell';
 import PropTypes from 'prop-types';
 
-const cell = ({ text, number, button }) => (
+const CustomCell = ({ text, number, button }) => (
   <TableCell string>
     {text}
     {number}
@@ -10,16 +10,16 @@ const cell = ({ text, number, button }) => (
   </TableCell>
 );
 
-cell.propTypes = {
+CustomCell.propTypes = {
   text: PropTypes.string,
   number: PropTypes.number,
   button: PropTypes.string
 };
 
-cell.defaultProps = {
+CustomCell.defaultProps = {
   text: '',
   number: null,
   button: null
 };
 
-export default cell;
+export default CustomCell;

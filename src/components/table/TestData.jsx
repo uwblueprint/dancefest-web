@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from '../Buttons/EventEditButton/EditButton';
+import Button from '../buttons/EditButton';
 
 let id = 0;
 function createData(eventName, eventDate, numberOfPerformances,

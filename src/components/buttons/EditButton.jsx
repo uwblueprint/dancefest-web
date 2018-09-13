@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 import Modal from '@material-ui/core/Modal';
 import Typography from '@material-ui/core/Typography';
 
-function getModalStyle() {
+const getModalStyle = () => {
   const top = 50;
   const left = 50;
 
@@ -14,7 +14,7 @@ function getModalStyle() {
     left: `${left}%`,
     transform: `translate(-${top}%, -${left}%)`
   };
-}
+};
 
 const styles = theme => ({
   paper: {
@@ -26,7 +26,7 @@ const styles = theme => ({
   }
 });
 
-class button extends React.Component {
+class EditButton extends React.Component {
   state = {
     open: false
   };
@@ -71,9 +71,9 @@ class button extends React.Component {
   }
 }
 
-button.propTypes = {
-  classes: PropTypes.object.isRequired
+EditButton.propTypes = {
+  classes: PropTypes.objectOf({ paper: PropTypes.string }).isRequired
 };
 
 // export default Button;
-export default withStyles(styles)(button);
+export default withStyles(styles)(EditButton);
