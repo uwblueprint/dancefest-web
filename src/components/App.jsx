@@ -4,6 +4,8 @@ import {
   Route
 } from 'react-router-dom';
 
+// import Navigation from './Navigation';
+import Table from './table/Table';
 import Header from './header/Header';
 import SignUpPage from './SignUp';
 import SignInPage from './SignIn';
@@ -14,7 +16,10 @@ import * as routes from '../constants/routes';
 const App = () => (
   <Router>
     <div>
+      {/* <Navigation />
+      <hr /> */}
       <Header />
+      <Table />
       <Route
         exact
         path={routes.LANDING}
