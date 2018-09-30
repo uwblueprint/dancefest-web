@@ -2,27 +2,26 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import SectionTitle from './SectionTitle';
-import Table from './table/Table';
 
-class Home extends React.Component {
+// TODO: Table component will go here
+// import Table from './table/Table';
+
+class Settings extends React.Component {
   state = {};
 
   render() {
     const { match: { params }} = this.props;
-    // section consists of either critiques, performances, or events
-    const section = params[0];
 
     return (
       <div>
-        <SectionTitle title={section} />
-        <Table />
+        <SectionTitle title={params[0]} />
       </div>
     );
   }
 }
 
-Home.propTypes = {
+Settings.propTypes = {
   match: PropTypes.shape().isRequired
 };
 
-export default Home;
+export default Settings;

@@ -14,6 +14,7 @@ import Header from './header/Header';
 import SignInPage from './SignIn';
 import Landing from './Landing';
 import Home from './Home';
+import Settings from './Settings';
 
 import * as routes from '../constants/routes';
 
@@ -43,6 +44,7 @@ const PrivateRoutes = () => (
   <Switch>
     <Redirect exact from="/" to="/events" />
     <Route exact path="/(events|performances|critiques)" component={Home} />
+    <Route exact path="/Settings" component={Settings} />
     <Route component={Landing} />
   </Switch>
 );
