@@ -1,7 +1,7 @@
 import React from 'react';
 // import FormSubmit from './form/FormSubmit';
 
-const LandingPage = () => (
+const Landing = () => (
   <div>
     <h1>
       Landing Page
@@ -10,4 +10,4 @@ const LandingPage = () => (
   </div>
 );
 
-export default LandingPage;
+export default Landing;

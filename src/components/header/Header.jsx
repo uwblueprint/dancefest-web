@@ -1,19 +1,39 @@
 import React from 'react';
-// import * as Colors from '@material-ui/core/colors';
+import { withStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import SearchIcon from '@material-ui/icons/Search';
+import Input from '@material-ui/core/Input';
+import Settings from '@material-ui/icons/Settings';
+import styles from './styles';
 
-const Header = () => (
-  <div>
-    <AppBar position="static" color="default">
-      <Toolbar>
-        <Typography variant="title" color="inherit">
-          DANCEFEST
-        </Typography>
-      </Toolbar>
-    </AppBar>
-  </div>
+const Header = ({ classes }) => (
+  <AppBar position="static" color="primary" className={classes.root}>
+    <Toolbar>
+      <Typography variant="headline" color="inherit">
+        DANCEFEST
+      </Typography>
+      <div className={classes.search}>
+        <div className={classes.searchIcon}>
+          <SearchIcon />
+        </div>
+        <Input
+          placeholder="Search"
+          disableUnderline
+          classes={{
+            root: classes.inputRoot,
+            input: classes.inputInput
+          }} />
+      </div>
+      <Settings />
+    </Toolbar>
+  </AppBar>
 );
 
-export default Header;
+Header.propTypes = {
+  classes: PropTypes.objectOf().isRequired
+};
+
+export default withStyles(styles)(Header);
