@@ -1,0 +1,12 @@
+#Default GitHub
+Host github.com
+	HostName github.com
+	User git
+	IdentityFile /Users/winnie/.ssh/id_rsa
+
+#Personal  GitHub
+Host github.com
+        HostName github.com
+        User git
+        IdentityFile /Users/winnie/.ssh/id_rsa_PERSONAL
+
