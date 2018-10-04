@@ -23,7 +23,7 @@ const palette = createPalette({
     main: '#de2706'
   },
   secondary: {
-    main: '#f5f5f5'
+    main: '#000'
   }
 });
 
@@ -72,8 +72,8 @@ export default class App extends React.Component {
               <PrivateRoutes />
             </div>
           ) : (
-            <PublicRoutes />
-          )}
+              <PublicRoutes />
+            )}
         </Router>
       </MuiThemeProvider>
     );

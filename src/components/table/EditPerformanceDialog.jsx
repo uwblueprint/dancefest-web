@@ -9,6 +9,8 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import SimpleSelect from './MenuSelect';
 
 const fieldStyle = {
   background: 'rgb(211,211,211)',
@@ -51,7 +53,7 @@ const cancelBtn = {
   borderRadius: '40px'
 };
 
-export default class EventDialog extends React.Component {
+export default class EditPerformanceDialog extends React.Component {
   state = {
     open: false
   };
@@ -63,6 +65,7 @@ export default class EventDialog extends React.Component {
   handleClose = () => {
     this.setState({ open: false });
   };
+
 
   render() {
     return (
@@ -76,22 +79,49 @@ export default class EventDialog extends React.Component {
           onClose={this.handleClose}
           aria-labelledby="form-dialog-title">
           <DialogTitle style={dialogTitle} id="form-dialog-title">
-            Edit Event
+            Edit Performance
           </DialogTitle>
-          <DialogContent style={fieldStyle}>
-            <TextField
-              style={{ margin: '8px' }}
-              autoFocus
-              margin="dense"
-              id="name"
-              label="Event Title"
-              type="email"
-              fullWidth />
-          </DialogContent>
           <div style={{ display: 'flex' }}>
             <div style={{ flex: '0 0 1' }}>
-              <DialogContent style={labelFieldStyle}>
+              <DialogContent style={fieldStyle}>
                 <TextField
+                  style={{ margin: '8px' }}
+                  autoFocus
+                  margin="dense"
+                  id="name"
+                  label="Dance Entry"
+                  type="email"
+                  fullWidth />
+              </DialogContent>
+              <DialogContent style={fieldStyle}>
+                <TextField
+                  style={{ margin: '1px' }}
+                  autoFocus
+                  margin="dense"
+                  id="name"
+                  label="Dance Title"
+                  type="email"
+                  fullWidth />
+              </DialogContent>
+              <FormHelperText style={{ marginLeft: '15%', marginTop: '-10%' }}>
+                Comma separated, eg. John Smith, Jane Doe
+              </FormHelperText>
+              <DialogContent style={fieldStyle}>
+                <TextField
+                  style={{ margin: '8px' }}
+                  autoFocus
+                  margin="dense"
+                  id="name"
+                  label="Label"
+                  type="email"
+                  fullWidth />
+              </DialogContent>
+              <FormHelperText style={{ marginLeft: '15%', marginTop: '-10%' }}>
+                Comma separated, eg. John Smith, Jane Doe
+              </FormHelperText>
+              <DialogContent style={fieldStyle}>
+                <TextField
+                  style={{ margin: '8px' }}
                   autoFocus
                   margin="dense"
                   id="name"
@@ -100,18 +130,37 @@ export default class EventDialog extends React.Component {
                   fullWidth />
               </DialogContent>
             </div>
+
             <div style={{ flex: '0 0 1' }}>
-              <DialogContent style={labelFieldStyle}>
-                <TextField
-                  autoFocus
-                  margin="dense"
-                  id="name"
-                  label="Label"
-                  type="email"
-                  fullWidth />
-              </DialogContent>
+              <div style={{ display: 'flex' }}>
+                <div style={{ flex: '0 0 1' }}>
+                  <DialogContent style={fieldStyle}>
+                    <SimpleSelect style={{
+                      margin:
+                        '8px'
+                    }} />
+                  </DialogContent>
+                </div>
+                <div style={{ flex: '0 0 1' }}>
+                  <DialogContent style={fieldStyle}>
+                    <SimpleSelect />
+                  </DialogContent>
+                </div>
+              </div>
+              <div style={{ flex: '0 0 1' }}>
+                <DialogContent style={labelFieldStyle}>
+                  <SimpleSelect />
+                </DialogContent>
+                <DialogContent style={fieldStyle}>
+                  <SimpleSelect />
+                </DialogContent>
+                <DialogContent style={fieldStyle}>
+                  <SimpleSelect />
+                </DialogContent>
+              </div>
             </div>
           </div>
+
           <div style={{ margin: '15px' }}>
             <DialogActions>
               <Button onClick={this.handleClose} style={cancelBtn}>
