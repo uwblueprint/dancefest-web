@@ -24,7 +24,12 @@ const palette = createPalette({
   },
   secondary: {
     main: '#000'
+  },
+
+  text: {
+    primary: '#4d4d4d'
   }
+
 });
 
 const typography = createTypography(palette, {
@@ -72,8 +77,8 @@ export default class App extends React.Component {
               <PrivateRoutes />
             </div>
           ) : (
-              <PublicRoutes />
-            )}
+            <PublicRoutes />
+          )}
         </Router>
       </MuiThemeProvider>
     );

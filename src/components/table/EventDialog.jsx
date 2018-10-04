@@ -25,7 +25,9 @@ const labelFieldStyle = {
 };
 
 const dialogTitle = {
-  color: 'rgb(255,0,0)'
+  color: 'rgb(255,0,0)',
+  borderBottom: '1px solid #4d4d4d',
+  margin: '0 40px 0 40px'
 };
 
 const dialogBox = {
@@ -112,7 +114,7 @@ export default class EventDialog extends React.Component {
               </DialogContent>
             </div>
           </div>
-          <div style={{ margin: '15px' }}>
+          <div style={{ backgroundColor: '#F7F7F7', marginTop: '20px' }}>
             <DialogActions>
               <Button onClick={this.handleClose} style={cancelBtn}>
                 Cancel

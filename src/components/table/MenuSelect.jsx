@@ -23,49 +23,49 @@ const styles = theme => ({
 });
 
 export class SimpleSelect extends React.Component {
-    state = {
-      age: ''
-    };
+  state = {
+    age: ''
+  };
 
-    handleChange = (event) => {
-      this.setState({ [event.target.name]: event.target.value });
-    };
+  handleChange = (event) => {
+    this.setState({ [event.target.name]: event.target.value });
+  };
 
-    render() {
-      const { classes } = this.props;
+  render() {
+    const { classes } = this.props;
 
-      return (
-          <form className={classes.root} autoComplete="off">
-              <FormControl className={classes.formControl}>
-                  <InputLabel htmlFor="age-simple">
-                        Label
-                    </InputLabel>
-                  <Select
-                      value={this.state.age}
-                      onChange={this.handleChange}
-                      inputProps={{
-                          name: 'age',
-                          id: 'age-simple'
-                        }}>
-                      <MenuItem value="">
-                          <em>
-                                None
-                            </em>
-                        </MenuItem>
-                      <MenuItem value={10}>
-                            Primary
-                        </MenuItem>
-                      <MenuItem value={20}>
-                            Secondary
-                        </MenuItem>
-                      <MenuItem value={30}>
-                            Post-Secondary
-                        </MenuItem>
-                    </Select>
-                </FormControl>
-            </form>
-      );
-    }
+    return (
+      <form className={classes.root} autoComplete="off">
+        <FormControl className={classes.formControl}>
+          <InputLabel htmlFor="age-simple">
+            Label
+          </InputLabel>
+          <Select
+            value={this.state.age}
+            onChange={this.handleChange}
+            inputProps={{
+              name: 'age',
+              id: 'age-simple'
+            }}>
+            <MenuItem value="">
+              <em>
+                None
+              </em>
+            </MenuItem>
+            <MenuItem value={10}>
+              Primary
+            </MenuItem>
+            <MenuItem value={20}>
+              Secondary
+            </MenuItem>
+            <MenuItem value={30}>
+              Post-Secondary
+            </MenuItem>
+          </Select>
+        </FormControl>
+      </form>
+    );
+  }
 }
 
 SimpleSelect.propTypes = {

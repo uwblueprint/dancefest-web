@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import SearchIcon from '@material-ui/icons/Search';
 import Input from '@material-ui/core/Input';
 // import Settings from '@material-ui/icons/';
+import { DialogTitle } from '@material-ui/core';
 import styles from './styles';
 
 const Header = ({ classes }) => (
