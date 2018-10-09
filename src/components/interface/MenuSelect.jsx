@@ -1,10 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
@@ -33,6 +31,7 @@ export class SimpleSelect extends React.Component {
 
   render() {
     const { classes } = this.props;
+    const { age } = this.state;
 
     return (
       <form className={classes.root} autoComplete="off">
@@ -41,7 +40,7 @@ export class SimpleSelect extends React.Component {
             Label
           </InputLabel>
           <Select
-            value={this.state.age}
+            value={age}
             onChange={this.handleChange}
             inputProps={{
               name: 'age',
@@ -69,6 +68,6 @@ export class SimpleSelect extends React.Component {
 }
 
 SimpleSelect.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.string.isRequired
 };
 export default withStyles(styles)(SimpleSelect);

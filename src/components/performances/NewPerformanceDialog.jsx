@@ -10,7 +10,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import SimpleSelect from './MenuSelect';
+import SimpleSelect from './../interface/MenuSelect';
 
 const fieldStyle = {
   background: 'rgb(211,211,211)',
@@ -27,7 +27,7 @@ const labelFieldStyle = {
 };
 
 const dialogTitle = {
-  color: 'secondary',
+  color: 'rgb(255,0,0)',
   borderBottom: '1px solid #4d4d4d',
   margin: '0 40px 0 40px'
 };
@@ -55,7 +55,13 @@ const cancelBtn = {
   borderRadius: '40px'
 };
 
-export default class EditPerformanceDialog extends React.Component {
+const addBtn = {
+  backgroundColor: '#c61100',
+  border: '1px solid #c61100',
+  borderRadius: '40px',
+  color: '#fff'
+};
+export default class NewPerformanceDialog extends React.Component {
   state = {
     open: false
   };
@@ -73,7 +79,7 @@ export default class EditPerformanceDialog extends React.Component {
     return (
       <div>
         <Button style={buttonStyle} onClick={this.handleClickOpen}>
-          EDIT
+          NEW
         </Button>
         <Dialog
           style={dialogBox}
@@ -132,7 +138,6 @@ export default class EditPerformanceDialog extends React.Component {
                   fullWidth />
               </DialogContent>
             </div>
-
             <div style={{ flex: '0 0 1' }}>
               <div style={{ display: 'flex' }}>
                 <div style={{ flex: '0 0 1' }}>
@@ -166,13 +171,17 @@ export default class EditPerformanceDialog extends React.Component {
           <div style={{ backgroundColor: '#F7F7F7', marginTop: '20px' }}>
             <DialogActions>
               <Button onClick={this.handleClose} style={cancelBtn}>
-                Cancel
+                Discard
               </Button>
               <Button onClick={this.handleClose} style={saveBtn}>
                 Save
               </Button>
+              <Button onClick={this.handleClose} style={addBtn}>
+                Save and add another
+              </Button>
             </DialogActions>
           </div>
+
         </Dialog>
       </div>
     );

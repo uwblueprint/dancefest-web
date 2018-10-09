@@ -26,10 +26,7 @@ const styles = () => ({
 });
 
 SectionTitle.propTypes = {
-  classes: PropTypes.objectOf({
-    titleWrapper: PropTypes.string,
-    title: PropTypes.string
-  }).isRequired,
+  classes: PropTypes.shape().isRequired,
   title: PropTypes.string.isRequired
 };
 

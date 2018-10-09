@@ -6,35 +6,34 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import SearchIcon from '@material-ui/icons/Search';
 import Input from '@material-ui/core/Input';
-// import Settings from '@material-ui/icons/';
-import { DialogTitle } from '@material-ui/core';
-import styles from './styles';
+import Settings from '@material-ui/icons/Settings';
+import styles from '../styles';
 
 const Header = ({ classes }) => (
-  <AppBar position="static" color="primary" className={classes.root}>
+  <AppBar position="static" color="primary">
     <Toolbar>
       <Typography variant="headline" color="inherit">
         DANCEFEST
       </Typography>
-      <div className={classes.search}>
-        <div className={classes.searchIcon}>
+      <div className={classes.header_search}>
+        <div className={classes.header_searchIcon}>
           <SearchIcon />
         </div>
         <Input
           placeholder="Search"
           disableUnderline
           classes={{
-            root: classes.inputRoot,
-            input: classes.inputInput
+            root: classes.header_inputRoot,
+            input: classes.header_inputInput
           }} />
       </div>
-      {/* <Settings /> */}
+      <Settings />
     </Toolbar>
   </AppBar>
 );
 
 Header.propTypes = {
-  classes: PropTypes.objectOf().isRequired
+  classes: PropTypes.shape().isRequired
 };
 
 export default withStyles(styles)(Header);

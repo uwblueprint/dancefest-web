@@ -10,11 +10,10 @@ import createPalette from '@material-ui/core/styles/createPalette';
 import createTypography from '@material-ui/core/styles/createTypography';
 
 // import Navigation from './Navigation';
-import Header from './header/Header';
+import Header from './interface/Header';
 import SignInPage from './SignIn';
 import Landing from './Landing';
 import Home from './Home';
-import Settings from './Settings';
 
 import * as routes from '../constants/routes';
 
@@ -25,15 +24,14 @@ const palette = createPalette({
   secondary: {
     main: '#000'
   },
-
   text: {
     primary: '#4d4d4d'
   }
-
 });
 
 const typography = createTypography(palette, {
   fontFamily: "'Raleway', sans-serif",
+  fontSize: 14,
   headline: {
     fontFamily: "'Fjalla One', sans-serif",
     fontSize: 20
@@ -48,8 +46,7 @@ const theme = createMuiTheme({
 const PrivateRoutes = () => (
   <Switch>
     <Redirect exact from="/" to="/events" />
-    <Route exact path="/(events|performances|critiques)" component={Home} />
-    <Route exact path="/Settings" component={Settings} />
+    <Route exact path="/(events|performances|adjudications|settings)" component={Home} />
     <Route component={Landing} />
   </Switch>
 );
