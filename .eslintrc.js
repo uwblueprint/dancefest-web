@@ -8,6 +8,7 @@ module.exports = {
         "browser": true
     },
     "rules": {
+        "import/no-named-as-default": ["error", "never"],
         "comma-dangle": ["error", "never"],
         "object-curly-spacing": ["error", "always", { "arraysInObjects": false, "objectsInObjects": false }],
         "react/no-array-index-key": ["warn"],

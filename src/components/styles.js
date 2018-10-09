@@ -1,14 +1,8 @@
 import { fade } from '@material-ui/core/styles/colorManipulator';
 
 const styles = theme => ({
-  root: {
-    width: '100%',
-    flex: 1
-  },
-  grow: {
-    flexGrow: 1
-  },
-  search: {
+  // Header Styling
+  header_search: {
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
     backgroundColor: fade(theme.palette.common.white, 0.15),
@@ -18,7 +12,7 @@ const styles = theme => ({
     marginLeft: 'auto',
     marginRight: theme.spacing.unit
   },
-  searchIcon: {
+  header_searchIcon: {
     width: theme.spacing.unit * 5,
     height: '100%',
     position: 'absolute',
@@ -27,11 +21,11 @@ const styles = theme => ({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  inputRoot: {
+  header_inputRoot: {
     color: 'inherit',
     width: '100%'
   },
-  inputInput: {
+  header_inputInput: {
     paddingTop: theme.spacing.unit,
     paddingRight: theme.spacing.unit,
     paddingBottom: theme.spacing.unit,
@@ -42,12 +36,34 @@ const styles = theme => ({
       width: 200
     }
   },
-  paper: {
-    position: 'absolute',
-    width: theme.spacing.unit * 40,
-    backgroundColor: theme.palette.background.paper,
-    boxShadow: theme.shadows[4],
-    padding: theme.spacing.unit * 2
+
+  // Table Styling
+  table_editButton: {
+    border: '1px solid #cfcfcf',
+    borderRadius: '40px'
+  },
+
+  // Dialog Styling
+  dfdialog_title: {
+    color: '#de2706',
+    borderBottom: '1px solid #c4c4c4',
+    margin: '0 35px',
+    padding: '35px 0 15px 0px'
+  },
+  dfdialog_footer: {
+    backgroundColor: '#F7F7F7',
+    padding: '15px'
+  },
+  dfdialog_saveButton: {
+    backgroundColor: '#000',
+    color: '#fff',
+    border: '1px solid #4d4d4d',
+    borderRadius: '40px'
+  },
+  dfdialog_cancelButton: {
+    backgroundColor: '#d4d44',
+    border: '1px solid #4d4d4d',
+    borderRadius: '40px'
   }
 });
 
