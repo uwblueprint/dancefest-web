@@ -12,11 +12,9 @@ const styles = theme => ({
     flexWrap: 'wrap'
   },
   formControl: {
-    margin: theme.spacing.unit,
     minWidth: 120
   },
   selectEmpty: {
-    marginTop: theme.spacing.unit * 2
   }
 });
 
@@ -35,7 +33,7 @@ export class SimpleSelect extends React.Component {
 
     return (
       <form className={classes.root} autoComplete="off">
-        <FormControl className={classes.formControl}>
+        <FormControl className={classes.formControl} fullWidth>
           <InputLabel htmlFor="age-simple">
             Label
           </InputLabel>

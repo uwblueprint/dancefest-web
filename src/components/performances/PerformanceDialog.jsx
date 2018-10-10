@@ -5,30 +5,35 @@ import TextField from '@material-ui/core/TextField';
 
 import FormHelperText from '@material-ui/core/FormHelperText';
 import MenuSelect from '../interface/MenuSelect';
-import DFDialog from '../interface/Dialog';
+import DFDialog from '../interface/DFDialog';
 
 const fieldStyle = {
   background: 'rgb(211,211,211)',
   color: 'white',
   alignItems: 'center',
-  padding: '15px',
-  margin: '35px 0 0'
+  margin: '25px 0 0'
+};
+
+const firstfieldStyle = {
+  background: 'rgb(211,211,211)',
+  color: 'white',
+  alignItems: 'center',
+  margin: '25px 0 0',
+  paddingTop: '0'
 };
 
 const leftDialogInput = {
   background: 'rgb(211,211,211)',
   color: 'white',
   alignItems: 'center',
-  padding: '15px',
-  margin: '35px 0 0 5px'
+  margin: '25px 0 0 5px'
 };
 
 const rightDialogInput = {
   background: 'rgb(211,211,211)',
   color: 'white',
   alignItems: 'center',
-  padding: '15px',
-  margin: '35px 5px 0 0'
+  margin: '25px 5px 0 0'
 };
 
 
@@ -36,8 +41,8 @@ export default class PerformanceDialog extends React.Component {
   state = {};
 
   render() {
-    const { currentValues, type } = this.props
-    const buttonTitle = type === 'edit' ? 'EDIT' : 'NEW EVENT'
+    const { currentValues, type } = this.props;
+    const buttonTitle = type === 'edit' ? 'EDIT' : 'NEW EVENT';
 
     const DialogInput = ({ style }) => (
       <DialogContent style={style}>
@@ -52,11 +57,10 @@ export default class PerformanceDialog extends React.Component {
     );
 
     const eventForm = (
-      <div style={{ display: 'flex' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-around', paddingBottom: '25px' }}>
         <div style={{ flex: '0 0 1' }}>
-          <DialogContent style={fieldStyle}>
+          <DialogContent style={firstfieldStyle}>
             <TextField
-              style={{ margin: '8px' }}
               autoFocus
               margin="dense"
               id="name"
@@ -66,7 +70,6 @@ export default class PerformanceDialog extends React.Component {
           </DialogContent>
           <DialogContent style={fieldStyle}>
             <TextField
-              style={{ margin: '1px' }}
               autoFocus
               margin="dense"
               id="name"
@@ -74,12 +77,11 @@ export default class PerformanceDialog extends React.Component {
               type="email"
               fullWidth />
           </DialogContent>
-          <FormHelperText style={{ marginLeft: '15%', marginTop: '-10%' }}>
+          <FormHelperText>
             Comma separated, eg. John Smith, Jane Doe
           </FormHelperText>
           <DialogContent style={fieldStyle}>
             <TextField
-              style={{ margin: '8px' }}
               autoFocus
               margin="dense"
               id="name"
@@ -87,12 +89,11 @@ export default class PerformanceDialog extends React.Component {
               type="email"
               fullWidth />
           </DialogContent>
-          <FormHelperText style={{ marginLeft: '15%', marginTop: '-10%' }}>
+          <FormHelperText>
             Comma separated, eg. John Smith, Jane Doe
           </FormHelperText>
           <DialogContent style={fieldStyle}>
             <TextField
-              style={{ margin: '8px' }}
               autoFocus
               margin="dense"
               id="name"
@@ -120,7 +121,7 @@ export default class PerformanceDialog extends React.Component {
           </div>
           <div style={{ flex: '0 0 1' }}>
             <DialogContent style={fieldStyle}>
-              <MenuSelect />
+              <MenuSelect style={{ firstfieldStyle }} />
             </DialogContent>
             <DialogContent style={fieldStyle}>
               <MenuSelect />
@@ -135,7 +136,7 @@ export default class PerformanceDialog extends React.Component {
 
 
     return (
-      <DFDialog buttonTitle={buttonTitle} title="Edit Event">
+      <DFDialog buttonTitle={buttonTitle} title="Edit Performance">
         {eventForm}
       </DFDialog>
     );

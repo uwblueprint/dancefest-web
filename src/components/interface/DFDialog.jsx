@@ -34,6 +34,8 @@ class DFDialog extends React.Component {
           {buttonTitle}
         </Button>
         <Dialog
+          fullWidth
+          maxWidth="md"
           open={open}
           onClose={this.handleClose}
           aria-labelledby="form-dialog-title">
@@ -43,6 +45,7 @@ class DFDialog extends React.Component {
           </DialogTitle>
 
           {children}
+
 
           <div className={classes.dfdialog_footer}>
             <DialogActions>

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import DialogContent from '@material-ui/core/DialogContent';
 import TextField from '@material-ui/core/TextField';
-import DFDialog from '../interface/Dialog';
+import DFDialog from '../interface/DFDialog';
 
 const fieldStyle = {
   background: 'rgb(211,211,211)',

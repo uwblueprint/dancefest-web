@@ -6,7 +6,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import SearchIcon from '@material-ui/icons/Search';
 import Input from '@material-ui/core/Input';
-import Settings from '@material-ui/icons/Settings';
 import styles from '../styles';
 
 const Header = ({ classes }) => (
@@ -27,7 +26,6 @@ const Header = ({ classes }) => (
             input: classes.header_inputInput
           }} />
       </div>
-      <Settings />
     </Toolbar>
   </AppBar>
 );
