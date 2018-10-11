@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import Button from '@material-ui/core/Button';
-import styles from '../styles';
+import Button from '../Button';
+import styles from '../../styles';
 
 class DFDialog extends React.Component {
   state = {
@@ -17,6 +17,7 @@ class DFDialog extends React.Component {
   };
 
   handleClose = () => {
+    this.props.onSubmit && this.props.onSubmit();
     this.setState({ open: false });
   };
 
@@ -26,16 +27,18 @@ class DFDialog extends React.Component {
       buttonTitle,
       children,
       classes,
-      title
+      footer,
+      title,
+      width
     } = this.props;
     return (
       <div>
-        <Button classes={{ root: classes.table_editButton }} onClick={this.handleClickOpen}>
+        <Button type="default" onClick={this.handleClickOpen}>
           {buttonTitle}
         </Button>
         <Dialog
           fullWidth
-          maxWidth="md"
+          maxWidth={width || 'sm'}
           open={open}
           onClose={this.handleClose}
           aria-labelledby="form-dialog-title">
@@ -44,19 +47,17 @@ class DFDialog extends React.Component {
             {title}
           </DialogTitle>
 
-          {children}
-
-
-          <div className={classes.dfdialog_footer}>
-            <DialogActions>
-              <Button onClick={this.handleClose} classes={{ root: classes.dfdialog_saveButton }}>
-                Cancel
-              </Button>
-              <Button onClick={this.handleClose} classes={{ root: classes.dfdialog_cancelButton }}>
-                Save
-              </Button>
-            </DialogActions>
+          <div style={{ margin: '25px' }}>
+            {children}
           </div>
+
+          {footer && (
+            <div className={classes.dfdialog_footer}>
+              <DialogActions>
+                {footer}
+              </DialogActions>
+            </div>
+          )}
         </Dialog>
       </div>
     );
@@ -70,7 +71,8 @@ DFDialog.propTypes = {
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node
   ]).isRequired,
-  title: PropTypes.string.isRequired
+  title: PropTypes.string.isRequired,
+  width: PropTypes.string.isRequired
 };
 
 export default withStyles(styles)(DFDialog);
