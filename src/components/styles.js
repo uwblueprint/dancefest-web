@@ -54,16 +54,29 @@ const styles = theme => ({
     backgroundColor: '#F7F7F7',
     padding: '15px'
   },
-  dfdialog_saveButton: {
-    backgroundColor: '#000',
-    color: '#fff',
+
+  // Button Styling
+  button: {
     border: '1px solid #4d4d4d',
-    borderRadius: '40px'
+    borderRadius: '40px',
+    margin: 'auto 5px'
   },
-  dfdialog_cancelButton: {
+  button_default: {
     backgroundColor: '#d4d44',
-    border: '1px solid #4d4d4d',
-    borderRadius: '40px'
+    borderColor: '#cfcfcf'
+  },
+  button_primary: {
+    backgroundColor: 'black',
+    color: '#fff'
+  },
+  button_secondary: {
+    backgroundColor: '#c61100',
+    color: '#fff',
+    borderColor: '#c61100'
+  },
+  button_outline: {
+    color: '#c61100',
+    borderColor: '#cfcfcf'
   }
 });
 

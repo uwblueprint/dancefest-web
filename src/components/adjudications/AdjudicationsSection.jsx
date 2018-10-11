@@ -10,7 +10,7 @@ class AdjudicationsSection extends React.Component {
   state = {};
 
   render() {
-    const headings = ['Judge', 'Audio', 'Cummulative Score',  'Awards'];
+    const headings = ['Judge', 'Audio', 'Cummulative Score', 'Awards'];
 
     if (!AdjudicationTestData) {
       // TODO: Create Event Empty State

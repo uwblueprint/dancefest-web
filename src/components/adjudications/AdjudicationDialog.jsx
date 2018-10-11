@@ -6,16 +6,12 @@ import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import Button from '@material-ui/core/Button';
+import Button from '../interface/Button';
 import styles from '../styles';
 
-const fieldStyle = {
-  background: 'rgb(211,211,211)',
-  color: 'white',
-  alignItems: 'center',
-  padding: '15px',
-  margin: '35px 0 0'
-};
+import DialogReadOnly from '../interface/dialog/DialogReadOnly'
+import DialogInput from '../interface/dialog/DialogInput'
+import DialogSelect from '../interface/dialog/DialogSelect'
 
 const leftDialogInput = {
   background: 'rgb(211,211,211)',
@@ -44,7 +40,7 @@ class AdjudicationDialog extends React.Component {
   };
 
   handleClose = () => {
-    this.setState({ open: false, view: false });
+    this.setState({ open: false, view: true });
   };
 
   handleView = () => {
@@ -54,36 +50,37 @@ class AdjudicationDialog extends React.Component {
   render() {
     const { currentValues, type, classes } = this.props;
     const { open, view } = this.state;
-    const buttonTitle = type === 'edit' ? 'EDIT' : 'NEW EVENT';
-
-    console.log(currentValues);
-
-    const DialogInput = ({ style }) => (
-      <DialogContent style={style}>
-        <TextField
-          autoFocus
-          margin="dense"
-          id="name"
-          label="Label"
-          type="email"
-          fullWidth />
-      </DialogContent>
-    );
 
     const adjudicationForm = (
-      <div style={{ margin: '35px' }}>
-        <DialogInput style={fieldStyle} />
-        <div style={{ display: 'flex' }}>
-          <DialogInput style={rightDialogInput} />
-          <DialogInput style={leftDialogInput} />
+      <div style={{ display: 'flex', flexFlow: 'column', margin: '25px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+          <div style={{ flex: '1 0 0' }}>
+            <DialogReadOnly defaultValue="hi" label="Dance Entry" />
+            <DialogReadOnly defaultValue="hi" label="Dance Title" />
+            <DialogReadOnly defaultValue="hi" label="Performers" />
+            <DialogReadOnly defaultValue="hi" label="Choreographer" />
+          </div>
+
+          <div style={{ flex: '1 0 0' }}>
+            <div style={{ display: 'flex' }}>
+              <DialogReadOnly label="School" />
+              <DialogReadOnly label="Level" />
+            </div>
+            <DialogReadOnly label="Competition Level" />
+            <DialogReadOnly label="Dance Style" helperText="  " />
+            <DialogReadOnly label="Size" />
+          </div>
         </div>
+        <hr />
+        <DialogReadOnly fullWidth label="Competition Level" />
+        <DialogReadOnly fullWidth label="Competition Level" />
       </div>
     );
 
     return (
       <div>
         <Button classes={{ root: classes.table_editButton }} onClick={this.handleClickOpen}>
-          {buttonTitle}
+          edit
         </Button>
         <Dialog
           fullWidth
@@ -91,10 +88,10 @@ class AdjudicationDialog extends React.Component {
           open={open}
           onClose={this.handleClose}
           aria-labelledby="form-dialog-title">
-          {view ? (
+          {!view ? (
             <div>
               <DialogTitle classes={{ root: classes.dfdialog_title }} disableTypography id="form-dialog-title">
-                
+
               </DialogTitle>
               <div onClick={() => { this.setState({ view: !view }); }} />
             </div>
@@ -108,10 +105,10 @@ class AdjudicationDialog extends React.Component {
 
               <div className={classes.dfdialog_footer}>
                 <DialogActions>
-                  <Button onClick={this.handleClose} classes={{ root: classes.dfdialog_saveButton }}>
+                  <Button type="default" onClick={this.handleClose}>
                     Cancel
                   </Button>
-                  <Button onClick={this.handleClose} classes={{ root: classes.dfdialog_cancelButton }}>
+                  <Button type="primary" onClick={this.handleClose}>
                     Save
                   </Button>
                 </DialogActions>

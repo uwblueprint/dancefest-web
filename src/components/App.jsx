@@ -40,7 +40,45 @@ const typography = createTypography(palette, {
 
 const theme = createMuiTheme({
   palette,
-  typography
+  typography,
+  overrides: {
+    MuiFilledInput: {
+      underline: {
+        '&:after': {
+          borderBottom: '2px solid black'
+        },
+        '&$focused:after': {
+          borderBottom: '2px solid black'
+        }
+      }
+    },
+    MuiInput: {
+      root: {
+        underline: {
+          '&:after': {
+            borderBottom: '2px solid black'
+          },
+          '&$focused:after': {
+            borderBottom: '2px solid black'
+          }
+        }
+      }
+    },
+    MuiFormLabel: {
+      root: {
+        '&$focused': {
+          color: 'black',
+          fontWeight: 'semi-bold'
+        }
+      },
+      focused: {
+        '&$focused': {
+          color: 'black',
+          fontWeight: 'semi-bold'
+        }
+      }
+    }
+  }
 });
 
 const PrivateRoutes = () => (
