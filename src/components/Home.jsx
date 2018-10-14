@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import AdjudicationsSection from './adjudications/AdjudicationsSection';
 import EventsSection from './events/EventsSection';
 import PerformancesSection from './performances/PerformancesSection';
+import SettingsSection from './settings/SettingsSection';
 import SectionTitle from './interface/SectionTitle';
 
 class Home extends React.Component {
@@ -17,9 +18,9 @@ class Home extends React.Component {
     let section;
     switch (sectionType) {
       // TODO: Create settings section
-      // case 'settings':
-      //   section = (<SettingsSection />);
-      //   break;
+      case 'settings':
+        section = (<SettingsSection />);
+        break;
       case 'adjudications':
         section = (<AdjudicationsSection />);
         break;
