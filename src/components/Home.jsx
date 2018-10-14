@@ -5,6 +5,7 @@ import AdjudicationsSection from './adjudications/AdjudicationsSection';
 import EventsSection from './events/EventsSection';
 import PerformancesSection from './performances/PerformancesSection';
 import SectionTitle from './interface/SectionTitle';
+import SettingsSection from './Settings';
 
 class Home extends React.Component {
   state = {};
@@ -17,9 +18,9 @@ class Home extends React.Component {
     let section;
     switch (sectionType) {
       // TODO: Create settings section
-      // case 'settings':
-      //   section = (<SettingsSection />);
-      //   break;
+      case 'settings':
+        section = (<SettingsSection />);
+        break;
       case 'adjudications':
         section = (<AdjudicationsSection />);
         break;
