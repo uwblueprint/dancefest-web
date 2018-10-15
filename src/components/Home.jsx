@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import AdjudicationsSection from './adjudications/AdjudicationsSection';
 import EventsSection from './events/EventsSection';
 import PerformancesSection from './performances/PerformancesSection';
+import SettingsSection from './settings/SettingsSection';
 import SectionTitle from './interface/SectionTitle';
-import SettingsSection from './Settings';
 
 class Home extends React.Component {
   state = {};

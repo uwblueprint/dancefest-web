@@ -4,6 +4,7 @@ import TableBody from '@material-ui/core/TableBody';
 
 import TableHeader from '../interface/TableHeader';
 import EventTableRow from './EventTableRow';
+import EmptyState from '../interface/EmptyStates';
 
 // Testing Data
 import TestData from './TestData';
@@ -15,8 +16,7 @@ class EventsSection extends React.Component {
     const headings = ['Event Title', 'Event Date', 'No. Dancers', 'No. Performances', 'No. Judges'];
 
     if (!TestData) {
-      // TODO: Create Event Empty State
-      return (<div>emptystate </div>);
+      return (<EmptyState />);
     }
 
     return (

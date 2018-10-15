@@ -26,12 +26,24 @@ class EventTableRow extends React.Component {
 
     return (
       <TableRow key={id}>
-        <TableCell>{name}</TableCell>
-        <TableCell>{date}</TableCell>
-        <TableCell>{numDancers}</TableCell>
-        <TableCell>{numPerformances}</TableCell>
-        <TableCell>{numJudges}</TableCell>
-        <TableCell><EventDialog type="edit" defaultValues={defaultValues} /></TableCell>
+        <TableCell>
+          {name}
+        </TableCell>
+        <TableCell>
+          {date}
+        </TableCell>
+        <TableCell>
+          {numDancers}
+        </TableCell>
+        <TableCell>
+          {numPerformances}
+        </TableCell>
+        <TableCell>
+          {numJudges}
+        </TableCell>
+        <TableCell>
+          <EventDialog type="edit" defaultValues={defaultValues} />
+        </TableCell>
       </TableRow>
     );
   }
