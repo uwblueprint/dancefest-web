@@ -5,6 +5,7 @@ import TableHeader from '../interface/TableHeader';
 import AdjudicationTableRow from './AdjudicationTableRow';
 // Testing Data
 import AdjudicationTestData from './AdjudicationTestData';
+import EmptyState from '../interface/EmptyStates';
 
 class AdjudicationsSection extends React.Component {
   state = {};
@@ -12,13 +13,10 @@ class AdjudicationsSection extends React.Component {
   render() {
     const headings = ['Judge', 'Audio', 'Cummulative Score', 'Awards'];
 
-    if (!AdjudicationTestData) {
+    if (AdjudicationTestData) {
       // TODO: Create Event Empty State
       return (
-        <div>
-          emptystate
-          {' '}
-        </div>
+        <EmptyState type="adjudication" />
       );
     }
 

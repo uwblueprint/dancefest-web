@@ -4,6 +4,7 @@ import TableBody from '@material-ui/core/TableBody';
 
 import TableHeader from '../interface/TableHeader';
 import PerformanceTableRow from './PerformanceTableRow';
+import EmptyState from '../interface/EmptyStates';
 
 // Testing Data
 import Data from './TestData';
@@ -16,7 +17,7 @@ class PerformancesSection extends React.Component {
 
     if (!Data) {
       // TODO: Create Event Empty State
-      return (<div>emptystate </div>);
+      return (<EmptyState type="performance" />);
     }
 
     return (
