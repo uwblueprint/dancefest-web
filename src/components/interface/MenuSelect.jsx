@@ -5,6 +5,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import CheckBoxLabels from './CheckBox';
 
 const styles = theme => ({
   root: {
@@ -50,13 +51,7 @@ export class SimpleSelect extends React.Component {
               </em>
             </MenuItem>
             <MenuItem value={10}>
-              Primary
-            </MenuItem>
-            <MenuItem value={20}>
-              Secondary
-            </MenuItem>
-            <MenuItem value={30}>
-              Post-Secondary
+              <CheckBoxLabels />
             </MenuItem>
           </Select>
         </FormControl>

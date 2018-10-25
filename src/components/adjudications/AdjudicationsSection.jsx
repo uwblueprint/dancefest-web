@@ -13,18 +13,16 @@ class AdjudicationsSection extends React.Component {
   render() {
     const headings = ['Judge', 'Audio', 'Cummulative Score', 'Awards'];
 
-    if (AdjudicationTestData) {
-      // TODO: Create Event Empty State
-      return (
-        <EmptyState type="adjudication" />
-      );
-    }
 
     return (
       <Table>
         <TableHeader headings={headings} />
         <TableBody>
-          {AdjudicationTestData.map(rowProps => (<AdjudicationTableRow {...rowProps} />))}
+          {AdjudicationTestData ? (
+            AdjudicationTestData.map(rowProps => (<AdjudicationTableRow {...rowProps} />))
+          ) : (
+            <EmptyState type="adjudication" title="Empty Adjudications Page" subtitle="Create your first Adjudication" />
+          )}
         </TableBody>
       </Table>
     );

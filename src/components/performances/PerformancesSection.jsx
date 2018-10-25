@@ -7,7 +7,7 @@ import PerformanceTableRow from './PerformanceTableRow';
 import EmptyState from '../interface/EmptyStates';
 
 // Testing Data
-import Data from './TestData';
+import PerformanceTestData from './PerformanceTestData';
 
 class PerformancesSection extends React.Component {
   state = {};
@@ -15,16 +15,17 @@ class PerformancesSection extends React.Component {
   render() {
     const headings = ['Dance Entry', 'Dance Title', 'School', 'Acaademic Level', 'Level of Competition', 'Dance Style', 'Dance Size'];
 
-    if (!Data) {
-      // TODO: Create Event Empty State
-      return (<EmptyState type="performance" />);
-    }
 
     return (
       <Table>
         <TableHeader headings={headings} />
         <TableBody>
-          {Data.map(rowProps => (<PerformanceTableRow {...rowProps} />))}
+          {PerformanceTestData ? (
+            PerformanceTestData.map(rowProps => (<PerformanceTableRow {...rowProps} />))
+          ) : (
+            <EmptyState type="performance" title="Empty Performances Page" subtitle="Create your first Performance" />
+          )}
+
         </TableBody>
       </Table>
     );

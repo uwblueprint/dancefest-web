@@ -9,9 +9,9 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '../interface/Button';
 import styles from '../styles';
 
-import DialogReadOnly from '../interface/dialog/DialogReadOnly'
-import DialogInput from '../interface/dialog/DialogInput'
-import DialogSelect from '../interface/dialog/DialogSelect'
+import DialogReadOnly from '../interface/dialog/DialogReadOnly';
+import DialogInput from '../interface/dialog/DialogInput';
+import DialogSelect from '../interface/dialog/DialogSelect';
 
 const leftDialogInput = {
   background: 'rgb(211,211,211)',
@@ -90,9 +90,7 @@ class AdjudicationDialog extends React.Component {
           aria-labelledby="form-dialog-title">
           {!view ? (
             <div>
-              <DialogTitle classes={{ root: classes.dfdialog_title }} disableTypography id="form-dialog-title">
-
-              </DialogTitle>
+              <DialogTitle classes={{ root: classes.dfdialog_title }} disableTypography id="form-dialog-title" />
               <div onClick={() => { this.setState({ view: !view }); }} />
             </div>
           )
@@ -113,7 +111,7 @@ class AdjudicationDialog extends React.Component {
                   </Button>
                 </DialogActions>
               </div>
-            </div>
+               </div>
             )
           }
         </Dialog>

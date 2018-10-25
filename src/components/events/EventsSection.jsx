@@ -5,7 +5,6 @@ import TableBody from '@material-ui/core/TableBody';
 import TableHeader from '../interface/TableHeader';
 import EventTableRow from './EventTableRow';
 import EmptyState from '../interface/EmptyStates';
-
 // Testing Data
 import TestData from './TestData';
 

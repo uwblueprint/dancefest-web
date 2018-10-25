@@ -5,6 +5,8 @@ const styles = theme => ({
   header_search: {
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
+    border: '1px solid #DCDCDC',
+    boxShadow: '2px 2px 5px #DCDCDC',
     backgroundColor: fade(theme.palette.common.white, 0.15),
     '&:hover': {
       backgroundColor: fade(theme.palette.common.white, 0.25)
