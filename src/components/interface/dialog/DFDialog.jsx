@@ -2,62 +2,33 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '../Button';
 import styles from '../../styles';
 
 class DFDialog extends React.Component {
-  state = {
-    open: false
-  };
-
-  handleClickOpen = () => {
-    this.setState({ open: true });
-  };
-
-  handleClose = () => {
-    this.props.onSubmit && this.props.onSubmit();
-    this.setState({ open: false });
-  };
+  state = {};
 
   render() {
-    const { open } = this.state;
     const {
       buttonTitle,
       children,
-      classes,
-      footer,
-      title,
+      onClick,
+      onClose,
+      open,
       width
     } = this.props;
     return (
       <div>
-        <Button type="default" onClick={this.handleClickOpen}>
+        <Button type="default" onClick={onClick}>
           {buttonTitle}
         </Button>
         <Dialog
           fullWidth
-          maxWidth={width || 'sm'}
+          maxWidth={width}
           open={open}
-          onClose={this.handleClose}
+          onClose={onClose}
           aria-labelledby="form-dialog-title">
-
-          <DialogTitle classes={{ root: classes.dfdialog_title }} disableTypography id="form-dialog-title">
-            {title}
-          </DialogTitle>
-
-          <div style={{ margin: '25px' }}>
-            {children}
-          </div>
-
-          {footer && (
-            <div className={classes.dfdialog_footer}>
-              <DialogActions>
-                {footer}
-              </DialogActions>
-            </div>
-          )}
+          {children}
         </Dialog>
       </div>
     );
@@ -66,13 +37,18 @@ class DFDialog extends React.Component {
 
 DFDialog.propTypes = {
   buttonTitle: PropTypes.string.isRequired,
-  classes: PropTypes.string.isRequired,
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node
   ]).isRequired,
-  title: PropTypes.string.isRequired,
-  width: PropTypes.string.isRequired
+  onClick: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+  width: PropTypes.string
+};
+
+DFDialog.defaultProps = {
+  width: 'sm'
 };
 
 export default withStyles(styles)(DFDialog);

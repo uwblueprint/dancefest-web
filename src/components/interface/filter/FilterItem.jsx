@@ -27,7 +27,6 @@ export default class FilterItem extends React.Component {
 
 FilterItem.propTypes = {
   anchorElement: PropTypes.node.isRequired,
-  menuItems: PropTypes.arrayOf(PropTypes.object).isRequired,
   onClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired
 };

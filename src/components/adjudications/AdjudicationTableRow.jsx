@@ -42,7 +42,7 @@ class AdjudicationTableRow extends React.Component {
 AdjudicationTableRow.propTypes = {
   id: PropTypes.number,
   judge: PropTypes.string,
-  cumlScore: PropTypes.string,
+  cumlScore: PropTypes.number,
   audio: PropTypes.string,
   awards: PropTypes.string
 };
@@ -50,7 +50,7 @@ AdjudicationTableRow.propTypes = {
 AdjudicationTableRow.defaultProps = {
   id: 1,
   judge: '',
-  cumlScore: '',
+  cumlScore: null,
   audio: '',
   awards: ''
 };

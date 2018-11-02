@@ -21,7 +21,7 @@ class AdjudicationsSection extends React.Component {
           <TableHeader headings={headings} />
           <TableBody>
             {AdjudicationTestData ? (
-              AdjudicationTestData.map(rowProps => (<AdjudicationTableRow {...rowProps} />))
+              AdjudicationTestData.map(rowProps => (<AdjudicationTableRow key={`${rowProps.judge}`} {...rowProps} />))
             ) : (
               <EmptyState type="adjudication" title="Empty Adjudications Page" subtitle="Create your first Adjudication" />
             )}

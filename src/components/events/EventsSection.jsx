@@ -21,7 +21,7 @@ class EventsSection extends React.Component {
           <TableHeader headings={headings} />
           <TableBody>
             {TestData ? (
-              TestData.map(rowProps => (<EventTableRow {...rowProps} />))
+              TestData.map(rowProps => (<EventTableRow key={rowProps.id} {...rowProps} />))
             ) : (
               <EmptyState type="event" title="Empty Events Page" subtitle="Create your first event" />
             )}

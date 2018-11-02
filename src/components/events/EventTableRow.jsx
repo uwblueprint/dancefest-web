@@ -26,7 +26,7 @@ class EventTableRow extends React.Component {
     };
 
     return (
-      <TableRow key={id}>
+      <TableRow>
         <TableCell>
           <Link to={`/events/${id}/performances`}>{name}</Link>
         </TableCell>
