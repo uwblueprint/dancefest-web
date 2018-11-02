@@ -13,7 +13,7 @@ class CheckBox extends React.Component {
     this.state = {};
 
     props.choices.forEach((choice, index) => {
-      this.state[`${choice.value}-${index}`] = false;
+      this.setSate({ [`${choice.value}-${index}`]: false });
     });
   }
 

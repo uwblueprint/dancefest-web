@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
+import { Link } from 'react-router-dom';
 
 import EventDialog from './EventDialog';
 
@@ -27,7 +28,7 @@ class EventTableRow extends React.Component {
     return (
       <TableRow key={id}>
         <TableCell>
-          {name}
+          <Link to={`/events/${id}/performances`}>{name}</Link>
         </TableCell>
         <TableCell>
           {date}

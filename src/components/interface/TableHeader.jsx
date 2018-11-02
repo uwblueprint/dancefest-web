@@ -12,7 +12,6 @@ import Filter from './filter/index';
 
 const TableHeader = ({ headings, classes }) => (
   <TableHead>
-
     <div style={{ display: 'flex' }}>
       <div className={classes.header_search}>
         <div className={classes.header_searchIcon}>

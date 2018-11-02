@@ -5,3 +5,7 @@ body {
   padding: 0;
   font-family: 'Raleway', sans-serif;
 }
+
+a {
+  color: initial;
+}

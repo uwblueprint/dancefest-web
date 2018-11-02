@@ -1,5 +1,4 @@
 import React from 'react';
-import '../css/App.css';
 import FormLabel from './FormEntries';
 import { createEvent, retrieveEventData } from '../../firebase/database';
 

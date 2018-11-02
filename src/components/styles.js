@@ -98,8 +98,8 @@ const styles = theme => ({
 
   // Filter SubMenu Item Styling
   subMenuItem: {
-    display: "flex",
-    justifyContent: "space-between"
+    display: 'flex',
+    justifyContent: 'space-between'
   }
 });
 

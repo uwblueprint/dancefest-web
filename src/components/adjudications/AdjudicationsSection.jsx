@@ -6,6 +6,7 @@ import AdjudicationTableRow from './AdjudicationTableRow';
 // Testing Data
 import AdjudicationTestData from './AdjudicationTestData';
 import EmptyState from '../interface/EmptyStates';
+import SectionTitle from '../interface/SectionTitle';
 
 class AdjudicationsSection extends React.Component {
   state = {};
@@ -13,18 +14,20 @@ class AdjudicationsSection extends React.Component {
   render() {
     const headings = ['Judge', 'Audio', 'Cummulative Score', 'Awards'];
 
-
     return (
-      <Table>
-        <TableHeader headings={headings} />
-        <TableBody>
-          {AdjudicationTestData ? (
-            AdjudicationTestData.map(rowProps => (<AdjudicationTableRow {...rowProps} />))
-          ) : (
-            <EmptyState type="adjudication" title="Empty Adjudications Page" subtitle="Create your first Adjudication" />
-          )}
-        </TableBody>
-      </Table>
+      <React.Fragment>
+        <SectionTitle title="adjudications" />
+        <Table>
+          <TableHeader headings={headings} />
+          <TableBody>
+            {AdjudicationTestData ? (
+              AdjudicationTestData.map(rowProps => (<AdjudicationTableRow {...rowProps} />))
+            ) : (
+              <EmptyState type="adjudication" title="Empty Adjudications Page" subtitle="Create your first Adjudication" />
+            )}
+          </TableBody>
+        </Table>
+      </React.Fragment>
     );
   }
 }
