@@ -15,16 +15,20 @@ class AdjudicationsSection extends React.Component {
 
 
     return (
-      <Table>
-        <TableHeader headings={headings} />
-        <TableBody>
-          {AdjudicationTestData ? (
-            AdjudicationTestData.map(rowProps => (<AdjudicationTableRow {...rowProps} />))
-          ) : (
+      <React.Fragment>
+        <Table>
+          <TableHeader headings={headings} />
+          <TableBody>
+            {AdjudicationTestData && AdjudicationTestData.map(rowProps => (<AdjudicationTableRow {...rowProps} />))}
+          </TableBody>
+        </Table>
+        {!AdjudicationTestData && (
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
             <EmptyState type="adjudication" title="Empty Adjudications Page" subtitle="Create your first Adjudication" />
-          )}
-        </TableBody>
-      </Table>
+          </div>
+        )}
+
+      </React.Fragment>
     );
   }
 }

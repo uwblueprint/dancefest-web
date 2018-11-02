@@ -21,13 +21,13 @@ export default class PerformanceDialog extends React.Component {
           <DialogInput fullWidth label="Choreographer" helperText="Comma separated, eg. John Smith, Jane Doe" />
         </div>
 
-        <div style={{ flex: '1 0 0' }}>
+        <div style={{ flex: '1 0 0', marginTop: '2.5%' }}>
           <div style={{ display: 'flex' }}>
             <DialogSelect fullWidth label="School" />
             <DialogSelect fullWidth label="Level" />
           </div>
           <DialogSelect fullWidth label="Competition Level" />
-          <DialogSelect fullWidth label="Dance Style" helperText="  " />
+          <DialogSelect fullWidth label="Dance Style" />
           <DialogSelect fullWidth label="Size" />
         </div>
       </div>

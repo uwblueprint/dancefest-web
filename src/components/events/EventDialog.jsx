@@ -22,7 +22,7 @@ export default class EventDialog extends React.Component {
     this.setState({ [name]: value });
   }
 
-  handleSubmit = () => {}
+  handleSubmit = () => { }
 
   render() {
     const { type } = this.props;
@@ -47,8 +47,12 @@ export default class EventDialog extends React.Component {
       <DFDialog buttonTitle={buttonTitle} title="Edit Event" onSubmit={this.handleSubmit} footer={footer}>
         <DialogInput fullWidth name="eventTitle" label="Event Title" onChange={this.handleChange} value={eventTitle} />
         <div style={{ display: 'flex' }}>
-          <DialogInput fullWidth name="eventDate" label="Event Date" onChange={this.handleChange} value={eventDate} />
-          <DialogInput fullWidth name="numJudges" label="No. Judges" onChange={this.handleChange} value={numJudges} />
+          <div style={{ display: 'flex', width: '60%' }}>
+            <DialogInput fullWidth name="eventDate" label="Event Date" onChange={this.handleChange} value={eventDate} />
+          </div>
+          <div style={{ display: 'flex', marginLeft: '5%' }}>
+            <DialogInput fullWidth name="numJudges" label="No. Judges" onChange={this.handleChange} value={numJudges} />
+          </div>
         </div>
       </DFDialog>
     );

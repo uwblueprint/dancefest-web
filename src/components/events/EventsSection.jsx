@@ -14,16 +14,22 @@ class EventsSection extends React.Component {
   render() {
     const headings = ['Event Title', 'Event Date', 'No. Dancers', 'No. Performances', 'No. Judges'];
     return (
-      <Table>
-        <TableHeader headings={headings} />
-        <TableBody>
-          {TestData ? (
-            TestData.map(rowProps => (<EventTableRow {...rowProps} />))
-          ) : (
+      <React.Fragment>
+        <Table>
+          <TableHeader headings={headings} />
+          <TableBody>
+            {TestData
+              && TestData.map(rowProps => (<EventTableRow {...rowProps} />))
+            }
+          </TableBody>
+        </Table>
+        {!TestData && (
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
             <EmptyState type="event" title="Empty Events Page" subtitle="Create your first event" />
-          )}
-        </TableBody>
-      </Table>
+          </div>
+        )
+        }
+      </React.Fragment>
     );
   }
 }

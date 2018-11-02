@@ -17,17 +17,23 @@ class PerformancesSection extends React.Component {
 
 
     return (
-      <Table>
-        <TableHeader headings={headings} />
-        <TableBody>
-          {PerformanceTestData ? (
-            PerformanceTestData.map(rowProps => (<PerformanceTableRow {...rowProps} />))
-          ) : (
-            <EmptyState type="performance" title="Empty Performances Page" subtitle="Create your first Performance" />
-          )}
-
-        </TableBody>
-      </Table>
+      <React.Fragment>
+        <Table>
+          <TableHeader headings={headings} />
+          <TableBody>
+            {PerformanceTestData
+              && PerformanceTestData.map(rowProps => (<PerformanceTableRow {...rowProps} />))
+            }
+          </TableBody>
+        </Table>
+        {
+          !PerformanceTestData && (
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <EmptyState type="performance" title="Empty Performances Page" subtitle="Create your first Performance" />
+            </div>
+          )
+        }
+      </React.Fragment>
     );
   }
 }
