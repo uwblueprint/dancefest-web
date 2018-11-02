@@ -6,9 +6,10 @@ import TextField from '@material-ui/core/TextField';
 
 const onChange = () => onChange && onChange()
 
-const DialogInput = ({ name, fullWidth = false, label, helperText, onChange, style, value }) => (
+const DialogInput = ({ name, fullWidth = false, label, multiline = false, helperText, onChange, style, value }) => (
   <TextField
     style={style}
+    multiline={multiline}
     fullWidth={fullWidth}
     onChange={onChange}
     id={name}

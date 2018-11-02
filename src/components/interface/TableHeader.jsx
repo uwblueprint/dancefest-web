@@ -7,7 +7,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { withStyles } from '@material-ui/core/styles';
 import styles from '../styles';
-import Filter from './Filter';
+import Filter from './filter/index';
 
 
 const TableHeader = ({ headings, classes }) => (

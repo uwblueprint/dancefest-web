@@ -1,33 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import EditIcon from '@material-ui/icons/Edit';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { withStyles } from '@material-ui/core/styles';
-import DialogContent from '@material-ui/core/DialogContent';
-import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import FormLabel from '@material-ui/core/FormLabel';
 import Button from '../interface/Button';
 import styles from '../styles';
 
 import DialogReadOnly from '../interface/dialog/DialogReadOnly';
 import DialogInput from '../interface/dialog/DialogInput';
-import DialogSelect from '../interface/dialog/DialogSelect';
-
-const leftDialogInput = {
-  background: 'rgb(211,211,211)',
-  color: 'white',
-  alignItems: 'center',
-  padding: '15px',
-  margin: '35px 0 0 5px'
-};
-
-const rightDialogInput = {
-  background: 'rgb(211,211,211)',
-  color: 'white',
-  alignItems: 'center',
-  padding: '15px',
-  margin: '35px 5px 0 0'
-};
+import Checkboxlabels from '../interface/CheckBox'
 
 class AdjudicationDialog extends React.Component {
   state = {
@@ -44,14 +29,16 @@ class AdjudicationDialog extends React.Component {
   };
 
   handleView = () => {
-    this.setState((prevState) => { prevState.view; });
+    this.setState(prevState => ({
+      view: !prevState.view
+    }));
   }
 
   render() {
     const { currentValues, type, classes } = this.props;
     const { open, view } = this.state;
 
-    const adjudicationForm = (
+    const viewForm = (
       <div style={{ display: 'flex', flexFlow: 'column', margin: '25px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-around' }}>
           <div style={{ flex: '1 0 0' }}>
@@ -74,6 +61,23 @@ class AdjudicationDialog extends React.Component {
         <hr />
         <DialogReadOnly fullWidth label="Competition Level" />
         <DialogReadOnly fullWidth label="Competition Level" />
+        <FormLabel component="legend">Award Considerations</FormLabel>
+        <Checkboxlabels row choices={[{ value: 'test', label: 'test' }, { value: 'test', label: 'test' }]} />
+      </div>
+    );
+
+    const editForm = (
+      <div style={{ display: 'flex', flexFlow: 'column', margin: '25px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+          <div style={{ flex: '1 0 0' }}>
+            <DialogInput defaultValue="hi" label="Artistic" />
+          </div>
+          <div style={{ flex: '1 0 0' }}>
+            <DialogInput label="Technical" />
+          </div>
+        </div>
+        <DialogInput fullWidth multiline label="Notes" />
+        <DialogInput fullWidth label="Competition Level" />
       </div>
     );
 
@@ -88,32 +92,26 @@ class AdjudicationDialog extends React.Component {
           open={open}
           onClose={this.handleClose}
           aria-labelledby="form-dialog-title">
-          {!view ? (
-            <div>
-              <DialogTitle classes={{ root: classes.dfdialog_title }} disableTypography id="form-dialog-title" />
-              <div onClick={() => { this.setState({ view: !view }); }} />
-            </div>
-          )
-            : (<div>
-              <DialogTitle classes={{ root: classes.dfdialog_title }} disableTypography id="form-dialog-title">
-                Edit Performance
-              </DialogTitle>
-
-              {adjudicationForm}
-
-              <div className={classes.dfdialog_footer}>
-                <DialogActions>
-                  <Button type="default" onClick={this.handleClose}>
-                    Cancel
-                  </Button>
-                  <Button type="primary" onClick={this.handleClose}>
-                    Save
-                  </Button>
-                </DialogActions>
+          <div>
+            <DialogTitle classes={{ root: classes.dfdialog_title }} disableTypography id="form-dialog-title">
+              Edit Performance
+              <div style={{ float: 'right', color: 'black' }}>
+                <EditIcon onClick={this.handleView} />
+                <MoreVertIcon onClick={() => console.log(this.state.view)} />
               </div>
-               </div>
-            )
-          }
+            </DialogTitle>
+            { view ? (viewForm) : (editForm)}
+            <div className={classes.dfdialog_footer}>
+              <DialogActions>
+                <Button type="default" onClick={this.handleClose}>
+                  Cancel
+                </Button>
+                <Button type="primary" onClick={this.handleClose}>
+                  Save
+                </Button>
+              </DialogActions>
+            </div>
+          </div>
         </Dialog>
       </div>
     );

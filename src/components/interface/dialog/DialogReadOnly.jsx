@@ -1,18 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
 
 import TextField from '@material-ui/core/TextField';
+import styles from '../../styles';
 
-const DialogReadOnly = ({ label, defaultValue, fullWidth = false }) => (
+const DialogReadOnly = ({ classes, label, defaultValue, fullWidth = false }) => (
   <TextField
     id="standard-read-only-input"
-    classes={{ underline: 'none' }}
     label={label}
     defaultValue={defaultValue}
     margin="normal"
-    InputProps={{ readOnly: true }} />
+    InputLabelProps={{ shrink: true, className: classes.readOnlyLabel }}
+    InputProps={{ readOnly: true, className: classes.readOnlyInput }} />
 );
 
-export default DialogReadOnly;
+export default withStyles(styles)(DialogReadOnly);
 
-DialogReadOnly.propTypes = {};
+DialogReadOnly.propTypes = {
+  classes: PropTypes.shape().isRequired
+};

@@ -56,6 +56,21 @@ const styles = theme => ({
     backgroundColor: '#F7F7F7',
     padding: '15px'
   },
+  readOnlyInput: {
+    fontWeight: '500',
+    '&:before': {
+      borderBottom: 'none!important'
+    },
+    '&:hover': {
+      borderBottom: 'none'
+    },
+    '&:after': {
+      borderBottom: 'none'
+    }
+  },
+  readOnlyLabel: {
+    color: 'gray!important'
+  },
 
   // Button Styling
   button: {
@@ -79,6 +94,12 @@ const styles = theme => ({
   button_outline: {
     color: '#c61100',
     borderColor: '#cfcfcf'
+  },
+
+  // Filter SubMenu Item Styling
+  subMenuItem: {
+    display: "flex",
+    justifyContent: "space-between"
   }
 });
 
