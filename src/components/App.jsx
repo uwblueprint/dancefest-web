@@ -10,11 +10,14 @@ import createPalette from '@material-ui/core/styles/createPalette';
 import createTypography from '@material-ui/core/styles/createTypography';
 
 // import Navigation from './Navigation';
-import Header from './header/Header';
+import Header from './interface/Header';
 import SignInPage from './SignIn';
 import Landing from './Landing';
-import Home from './Home';
-import Settings from './Settings';
+
+import AdjudicationsSection from './adjudications/AdjudicationsSection';
+import EventsSection from './events/EventsSection';
+import PerformancesSection from './performances/PerformancesSection';
+import SettingsSection from './settings/SettingsSection';
 
 import * as routes from '../constants/routes';
 
@@ -23,12 +26,16 @@ const palette = createPalette({
     main: '#de2706'
   },
   secondary: {
-    main: '#f5f5f5'
+    main: '#000'
+  },
+  text: {
+    primary: '#4d4d4d'
   }
 });
 
 const typography = createTypography(palette, {
   fontFamily: "'Raleway', sans-serif",
+  fontSize: 14,
   headline: {
     fontFamily: "'Fjalla One', sans-serif",
     fontSize: 20
@@ -37,14 +44,54 @@ const typography = createTypography(palette, {
 
 const theme = createMuiTheme({
   palette,
-  typography
+  typography,
+  overrides: {
+    MuiFilledInput: {
+      underline: {
+        '&:after': {
+          borderBottom: '2px solid black'
+        },
+        '&$focused:after': {
+          borderBottom: '2px solid black'
+        }
+      }
+    },
+    MuiInput: {
+      root: {
+        underline: {
+          '&:after': {
+            borderBottom: '2px solid black'
+          },
+          '&$focused:after': {
+            borderBottom: '2px solid black'
+          }
+        }
+      }
+    },
+    MuiFormLabel: {
+      root: {
+        '&$focused': {
+          color: 'black',
+          fontWeight: 'semi-bold'
+        }
+      },
+      focused: {
+        '&$focused': {
+          color: 'black',
+          fontWeight: 'semi-bold'
+        }
+      }
+    }
+  }
 });
 
 const PrivateRoutes = () => (
   <Switch>
     <Redirect exact from="/" to="/events" />
-    <Route exact path="/(events|performances|critiques)" component={Home} />
-    <Route exact path="/Settings" component={Settings} />
+    <Route exact path="/events" component={EventsSection} />
+    <Route exact path="/settings" component={SettingsSection} />
+    <Route path="/events/:eventId/performances" component={PerformancesSection} />
+    <Route path="/events/:eventId/performance/:performanceId/adjudications" component={AdjudicationsSection} />
     <Route component={Landing} />
   </Switch>
 );

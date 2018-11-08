@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 
+
 const SectionTitle = ({ classes, title }) => (
   <div className={classes.titleWrapper}>
     <Typography className={classes.title} variant="headline">
@@ -20,15 +21,12 @@ const styles = () => ({
   title: {
     textTransform: 'uppercase',
     fontSize: 36,
-    color: '#9b9b9b'
+    color: '#de2706'
   }
 });
 
 SectionTitle.propTypes = {
-  classes: PropTypes.objectOf({
-    titleWrapper: PropTypes.string,
-    title: PropTypes.string
-  }).isRequired,
+  classes: PropTypes.shape().isRequired,
   title: PropTypes.string.isRequired
 };
 
