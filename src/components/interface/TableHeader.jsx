@@ -7,13 +7,12 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { withStyles } from '@material-ui/core/styles';
 import styles from '../styles';
-import Filter from './Filter';
+import Filter from './filter/index';
 
 
 const TableHeader = ({ headings, classes }) => (
   <TableHead>
-
-    <div style={{ display: 'flex' }}>
+    <div style={{ display: 'flex', margin: '5px' }}>
       <div className={classes.header_search}>
         <div className={classes.header_searchIcon}>
           <SearchIcon />

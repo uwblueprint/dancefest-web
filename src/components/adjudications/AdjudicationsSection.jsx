@@ -6,6 +6,7 @@ import AdjudicationTableRow from './AdjudicationTableRow';
 // Testing Data
 import AdjudicationTestData from './AdjudicationTestData';
 import EmptyState from '../interface/EmptyStates';
+import SectionTitle from '../interface/SectionTitle';
 
 class AdjudicationsSection extends React.Component {
   state = {};
@@ -13,9 +14,9 @@ class AdjudicationsSection extends React.Component {
   render() {
     const headings = ['Judge', 'Audio', 'Cummulative Score', 'Awards'];
 
-
     return (
       <React.Fragment>
+        <SectionTitle title="adjudications" />
         <Table>
           <TableHeader headings={headings} />
           <TableBody>

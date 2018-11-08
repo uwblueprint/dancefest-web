@@ -1,14 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
 
 import TextField from '@material-ui/core/TextField';
 
-const onChange = () => onChange && onChange()
-
-const DialogInput = ({ name, fullWidth = false, label, helperText, onChange, style, value }) => (
+const DialogInput = ({
+  name,
+  fullWidth,
+  label,
+  multiline = false,
+  onChange,
+  style,
+  value
+}) => (
   <TextField
     style={style}
+    multiline={multiline}
     fullWidth={fullWidth}
     onChange={onChange}
     id={name}
@@ -21,4 +27,20 @@ const DialogInput = ({ name, fullWidth = false, label, helperText, onChange, sty
 
 export default DialogInput;
 
-DialogInput.propTypes = {};
+DialogInput.propTypes = {
+  name: PropTypes.string.isRequired,
+  fullWidth: PropTypes.bool,
+  label: PropTypes.string,
+  multiline: PropTypes.bool,
+  onChange: PropTypes.func,
+  style: PropTypes.node,
+  value: PropTypes.node.isRequired
+};
+
+DialogInput.defaultProps = {
+  fullWidth: false,
+  multiline: false,
+  label: '',
+  onChange: () => {},
+  style: null
+};

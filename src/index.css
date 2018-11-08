@@ -7,8 +7,13 @@ body {
 }
 
 a {
+<<<<<<< HEAD
   color: #FFF;
 }
 a:hover {
    color: grey;
 }
+=======
+  color: initial;
+}
+>>>>>>> fix-filter-wip

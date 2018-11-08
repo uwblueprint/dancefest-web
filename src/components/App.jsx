@@ -13,7 +13,11 @@ import createTypography from '@material-ui/core/styles/createTypography';
 import Header from './interface/Header';
 import SignInPage from './SignIn';
 import Landing from './Landing';
-import Home from './Home';
+
+import AdjudicationsSection from './adjudications/AdjudicationsSection';
+import EventsSection from './events/EventsSection';
+import PerformancesSection from './performances/PerformancesSection';
+import SettingsSection from './settings/SettingsSection';
 
 import * as routes from '../constants/routes';
 
@@ -84,7 +88,10 @@ const theme = createMuiTheme({
 const PrivateRoutes = () => (
   <Switch>
     <Redirect exact from="/" to="/events" />
-    <Route exact path="/(events|performances|adjudications|settings)" component={Home} />
+    <Route exact path="/events" component={EventsSection} />
+    <Route exact path="/settings" component={SettingsSection} />
+    <Route path="/events/:eventId/performances" component={PerformancesSection} />
+    <Route path="/events/:eventId/performance/:performanceId/adjudications" component={AdjudicationsSection} />
     <Route component={Landing} />
   </Switch>
 );

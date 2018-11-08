@@ -1,18 +1,26 @@
 import { fade } from '@material-ui/core/styles/colorManipulator';
 
 const styles = theme => ({
+  // Link Styling
+  link: {
+    color: 'inherit',
+    textDecoration: 'none',
+    '&:hover': {
+      cursor: 'pointer',
+      opacity: '0.8'
+    }
+  },
   // Header Styling
   header_search: {
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
     border: '1px solid #DCDCDC',
-    boxShadow: '2px 2px 5px #DCDCDC',
+    boxShadow: '2px 2px 2px #DCDCDC',
     backgroundColor: fade(theme.palette.common.white, 0.15),
     '&:hover': {
       backgroundColor: fade(theme.palette.common.white, 0.25)
     },
-    marginLeft: 'auto',
-    marginRight: theme.spacing.unit
+    minWidth: '300px'
   },
   header_searchIcon: {
     width: theme.spacing.unit * 5,
@@ -52,9 +60,35 @@ const styles = theme => ({
     margin: '0 35px',
     padding: '35px 0 15px 0px'
   },
+  dfdialog_editIcon: {
+    marginRight: '10px',
+    '&:hover': {
+      cursor: 'pointer'
+    }
+  },
+  dfdialog_moreIcon: {
+    '&:hover': {
+      cursor: 'pointer'
+    }
+  },
   dfdialog_footer: {
     backgroundColor: '#F7F7F7',
     padding: '15px'
+  },
+  readOnlyInput: {
+    fontWeight: '500',
+    '&:before': {
+      borderBottom: 'none!important'
+    },
+    '&:hover': {
+      borderBottom: 'none'
+    },
+    '&:after': {
+      borderBottom: 'none'
+    }
+  },
+  readOnlyLabel: {
+    color: 'gray!important'
   },
 
   // Button Styling
@@ -79,6 +113,12 @@ const styles = theme => ({
   button_outline: {
     color: '#c61100',
     borderColor: '#cfcfcf'
+  },
+
+  // Filter SubMenu Item Styling
+  subMenuItem: {
+    display: 'flex',
+    justifyContent: 'space-between'
   }
 });
 
