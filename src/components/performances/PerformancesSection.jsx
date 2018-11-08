@@ -5,6 +5,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableHeader from '../interface/TableHeader';
 import PerformanceTableRow from './PerformanceTableRow';
 import EmptyState from '../interface/EmptyStates';
+import SectionTitle from '../interface/SectionTitle';
 
 // Testing Data
 import PerformanceTestData from './PerformanceTestData';
@@ -18,6 +19,7 @@ class PerformancesSection extends React.Component {
 
     return (
       <React.Fragment>
+        <SectionTitle title="performances" />
         <Table>
           <TableHeader headings={headings} />
           <TableBody>

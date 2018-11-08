@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
+import { Link } from 'react-router-dom';
 
 import PerformanceDialog from './PerformanceDialog';
 
@@ -21,8 +22,8 @@ class PerformanceTableRow extends React.Component {
     } = this.props;
 
     return (
-      <TableRow key={id}>
-        <TableCell>{entry}</TableCell>
+      <TableRow key={id} style={{}}>
+        <TableCell><Link to={`performance/${id}/adjudications`}>{entry}</Link></TableCell>
         <TableCell>{title}</TableCell>
         <TableCell>{school}</TableCell>
         <TableCell>{academicLevel}</TableCell>

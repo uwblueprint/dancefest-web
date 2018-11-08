@@ -1,58 +1,61 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import green from '@material-ui/core/colors/green';
 import FormGroup from '@material-ui/core/FormGroup';
+import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
 import Checkbox from '@material-ui/core/Checkbox';
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
-import Favorite from '@material-ui/icons/Favorite';
-import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
+import styles from '../styles';
 
-const styles = {
-  root: {
-    color: green[600],
-    '&$checked': {
-      color: green[500]
-    }
-  },
-  checked: {}
-};
+class CheckBox extends React.Component {
+  constructor(props) {
+    super(props);
 
-class Checkboxlabels extends React.Component {
-  state = {
-    checkedA: true,
-    checkedB: true,
-    checkedC: true
-  };
+    this.state = {};
+
+    props.choices.forEach((choice, index) => {
+      this.setState({ [`${choice.value}-${index}`]: false });
+    });
+  }
 
   handleChange = name => (event) => {
     this.setState({ [name]: event.target.checked });
   };
 
   render() {
-    const { classes } = this.props;
+    const { row, choices, label } = this.props;
+    // TODO: Implement error handling with maxChecked
+    // const error = choices.filter(v => v).length !== maxChecked;
 
     return (
-      <FormGroup row>
-        <FormControlLabel
-          control={(
-            <Checkbox
-              checked={this.state.checkedA}
-              onChange={this.handleChange('checkedA')}
-              value="checkedA" />
-          )}
-          label="Secondary" />
-        <FormControlLabel control={<Checkbox value="checkedC" />} label="Elementary" />
-        <FormControlLabel control={<Checkbox value="checkedB" />} label="Secondary" />
-      </FormGroup>
+      <FormControl>
+        {label && (<FormHelperText>{label}</FormHelperText>)}
+        <FormGroup row={row} label="hi">
+          {choices.map((choice, index) => {
+            const name = `${choice.value}-${index}`;
+            const { [name]: checked } = this.state;
+            return (
+              <FormControlLabel
+                control={(
+                  <Checkbox
+                    color="primary"
+                    checked={checked}
+                    onChange={this.handleChange(name)}
+                    value={choice.value} />)}
+                label={choice.label} />
+            );
+          })}
+        </FormGroup>
+      </FormControl>
     );
   }
 }
 
-Checkboxlabels.propTypes = {
-  classes: PropTypes.object.isRequired
+CheckBox.propTypes = {
+  choices: PropTypes.shape().isRequired,
+  row: PropTypes.bool.isRequired,
+  label: PropTypes.string.isRequired
 };
 
-export default withStyles(styles)(Checkboxlabels);
+export default withStyles(styles)(CheckBox);

@@ -1,11 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import DialogActions from '@material-ui/core/DialogActions';
 
 import DFDialog from '../interface/dialog/DFDialog';
+import DialogHeader from '../interface/dialog/DialogHeader';
 import DialogInput from '../interface/dialog/DialogInput';
 import Button from '../interface/Button';
+import styles from '../styles';
 
-export default class EventDialog extends React.Component {
+class EventDialog extends React.Component {
   constructor(props) {
     super(props);
     const { defaultValues } = props;
@@ -13,7 +17,8 @@ export default class EventDialog extends React.Component {
     this.state = {
       eventTitle: defaultValues.eventTitle || '',
       eventDate: defaultValues.eventDate || '',
-      numJudges: defaultValues.numJudges || ''
+      numJudges: defaultValues.numJudges || '',
+      open: false
     };
   }
 
@@ -22,37 +27,44 @@ export default class EventDialog extends React.Component {
     this.setState({ [name]: value });
   }
 
-  handleSubmit = () => { }
+  handleClickOpen = () => {
+    this.setState({ open: true });
+  };
+
+  handleClose = () => {
+    this.setState({ open: false });
+  };
+
+  handleSubmit = () => {}
 
   render() {
-    const { type } = this.props;
-    const { eventTitle, eventDate, numJudges } = this.state;
+    const { classes, type } = this.props;
+    const { eventTitle, eventDate, numJudges, open } = this.state;
     const buttonTitle = type === 'edit' ? 'EDIT' : 'NEW EVENT';
-    const footer = [
-      <Button type="default" onClick={this.handleClose}>
-        Cancel
-      </Button>,
-      <Button type="primary" onClick={this.handleClose}>
-        Save
-      </Button>,
-      <Button type="secondary" onClick={this.handleClose}>
-        Save
-      </Button>,
-      <Button type="outline" onClick={this.handleClose}>
-        Save
-      </Button>
-    ];
 
     return (
-      <DFDialog buttonTitle={buttonTitle} title="Edit Event" onSubmit={this.handleSubmit} footer={footer}>
-        <DialogInput fullWidth name="eventTitle" label="Event Title" onChange={this.handleChange} value={eventTitle} />
-        <div style={{ display: 'flex' }}>
-          <div style={{ display: 'flex', width: '60%' }}>
+      <DFDialog
+        open={open}
+        buttonTitle={buttonTitle}
+        onClick={this.handleClickOpen}
+        onClose={this.handleClose}>
+        <DialogHeader title="Edit Event" onMoreClick={() => {}} />
+        <div style={{ margin: '25px' }}>
+          <DialogInput fullWidth name="eventTitle" label="Event Title" onChange={this.handleChange} value={eventTitle} />
+          <div style={{ display: 'flex' }}>
             <DialogInput fullWidth name="eventDate" label="Event Date" onChange={this.handleChange} value={eventDate} />
-          </div>
-          <div style={{ display: 'flex', marginLeft: '5%' }}>
             <DialogInput fullWidth name="numJudges" label="No. Judges" onChange={this.handleChange} value={numJudges} />
           </div>
+        </div>
+        <div className={classes.dfdialog_footer}>
+          <DialogActions>
+            <Button type="default" onClick={this.handleClose}>
+              Cancel
+            </Button>
+            <Button type="primary" onClick={this.handleClose}>
+              Save
+            </Button>
+          </DialogActions>
         </div>
       </DFDialog>
     );
@@ -63,3 +75,5 @@ EventDialog.propTypes = {
   defaultValues: PropTypes.shape().isRequired,
   type: PropTypes.oneOf(['edit', 'new']).isRequired
 };
+
+export default withStyles(styles)(EventDialog);
