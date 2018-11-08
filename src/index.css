@@ -6,14 +6,10 @@ body {
   font-family: 'Raleway', sans-serif;
 }
 
-a {
-<<<<<<< HEAD
-  color: #FFF;
+a{
+  color: initial;
 }
+
 a:hover {
    color: grey;
 }
-=======
-  color: initial;
-}
->>>>>>> fix-filter-wip
