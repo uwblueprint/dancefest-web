@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import FilterIcon from '@material-ui/icons/FilterList';
+import FilterIcon from '@material-ui/icons/PlaylistAdd';
 import EnhancedMenu from './EnhancedMenu';
 
 class Filter extends React.Component {

@@ -4,7 +4,7 @@ import Menu from '@material-ui/core/Menu';
 import CheckBoxLabels from '../CheckBox';
 
 export default class FilterItem extends React.Component {
-  state = {}
+  state = {};
 
   render() {
     const {
@@ -16,7 +16,7 @@ export default class FilterItem extends React.Component {
 
     return (
       <Menu {...others} anchorEl={anchorElement} open={open} onClose={onClose}>
-        <div style={{ padding: '15px' }}>
+        <div style={{ padding: '15px', outline: 'none' }}>
           <CheckBoxLabels
             choices={[{ value: 'test', label: 'test' }, { value: 'test', label: 'test' }]} />
         </div>

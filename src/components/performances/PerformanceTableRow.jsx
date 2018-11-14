@@ -30,7 +30,7 @@ class PerformanceTableRow extends React.Component {
         <TableCell>{competitionLevel}</TableCell>
         <TableCell>{danceStyle}</TableCell>
         <TableCell>{danceSize}</TableCell>
-        <TableCell><PerformanceDialog type="edit" currentValues={this.props} /></TableCell>
+        <TableCell><PerformanceDialog formType="edit" currentValues={this.props} /></TableCell>
       </TableRow>
     );
   }

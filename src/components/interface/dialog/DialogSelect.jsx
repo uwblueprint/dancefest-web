@@ -1,12 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
 
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 
-
-const DialogSelect = ({ label, helperText, fullWidth = false, style }) => (
+const DialogSelect = ({
+  label,
+  helperText,
+  fullWidth,
+  options
+}) => (
   <TextField
     style={{ margin: '0 5px 25px 5px' }}
     fullWidth={fullWidth}
@@ -17,11 +20,23 @@ const DialogSelect = ({ label, helperText, fullWidth = false, style }) => (
     SelectProps={{ MenuProps: {}}}
     margin="normal"
     variant="filled">
-    {/* {currencies.map(option => ( */}
-    <MenuItem />
-    {/* ))} */}
+    {options.map(option => (
+      <MenuItem {...option} />
+    ))}
   </TextField>);
 
 export default DialogSelect;
 
-DialogSelect.propTypes = {};
+DialogSelect.propTypes = {
+  label: PropTypes.string,
+  helperText: PropTypes.string,
+  options: PropTypes.arrayOf(PropTypes.shape()),
+  fullWidth: PropTypes.bool
+};
+
+DialogSelect.defaultProps = {
+  label: null,
+  helperText: null,
+  options: [],
+  fullWidth: false
+};

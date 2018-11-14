@@ -32,7 +32,7 @@ class AdjudicationTableRow extends React.Component {
           {awards}
         </TableCell>
         <TableCell>
-          <AdjudicationDialog type="edit" currentValues={this.props} />
+          <AdjudicationDialog currentValues={this.props} />
         </TableCell>
       </TableRow>
     );

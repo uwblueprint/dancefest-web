@@ -114,6 +114,11 @@ const styles = theme => ({
     color: '#c61100',
     borderColor: '#cfcfcf'
   },
+  button_disabled: {
+    opacity: 0.7,
+    cursor: 'no-drop',
+    color: '#fff!important'
+  },
 
   // Filter SubMenu Item Styling
   subMenuItem: {

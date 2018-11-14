@@ -2,23 +2,32 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import LensIcon from '@material-ui/icons/Lens';
 import { withStyles } from '@material-ui/core/styles';
-import DFDialog from '../interface/dialog/DFDialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import Button from '../interface/Button';
+import DFDialog from '../interface/dialog/DFDialog';
 import styles from '../styles';
 
+import AudioPlay from '../interface/AudioPlay';
 import DialogReadOnly from '../interface/dialog/DialogReadOnly';
 import DialogHeader from '../interface/dialog/DialogHeader';
-import DialogInput from '../interface/dialog/DialogInput';
+import AdjudicationForm from './AdjudicationForm';
 import Score from '../interface/dialog/Score';
-import Checkboxlabels from '../interface/CheckBox';
 
 class AdjudicationDialog extends React.Component {
   state = {
     open: false,
-    view: true
+    view: true,
+    artistic: '',
+    technical: '',
+    notes: '',
+    audio: '',
+    awardsConsideration: null
   };
+
+  handleChange = (e) => {
+    const { name, value } = e.target;
+    this.setState({ [name]: value });
+  }
 
   handleClickOpen = () => {
     this.setState({ open: true });
@@ -35,12 +44,20 @@ class AdjudicationDialog extends React.Component {
   }
 
   render() {
-    const { currentValues, type, classes } = this.props;
-    const { open, view } = this.state;
+    const { currentValues } = this.props;
+    const {
+      open,
+      view,
+      artistic,
+      technical,
+      notes,
+      audio,
+      awardsConsideration,
+    } = this.state;
 
     const viewForm = (
       <React.Fragment>
-        <div style={{ display: 'flex', flexFlow: 'column', margin: '25px' }}>
+        <div style={{ display: 'flex', flexFlow: 'column', margin: '35px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-around', borderBottom: '1px solid #dcdcdc' }}>
             <div style={{ flex: '1 0 0' }}>
               <DialogReadOnly defaultValue="hi" label="Dance Entry" />
@@ -60,6 +77,7 @@ class AdjudicationDialog extends React.Component {
             </div>
           </div>
           <DialogReadOnly fullWidth label="Notes" />
+          <AudioPlay fileName="file_test.mp3" time={34} />
           <FormHelperText>Award Considerations</FormHelperText>
           <div>
             <LensIcon fontSize="inherit" color="inherit" style={{ color: 'purple' }} />
@@ -70,44 +88,34 @@ class AdjudicationDialog extends React.Component {
            Choreography Award
           </div>
         </div>
-        <DialogActions style={{ display: 'flex', height: '75px', padding: '0', margin: '0' }}>
-          <Score type="subtotal" score={34} scoreName="artistic" />
-          <Score type="subtotal" score={34} scoreName="technical" />
-          <Score type="total" score={34} scoreName="score" />
+        <DialogActions style={{
+          display: 'flex',
+          height: '75px',
+          padding: '0',
+          margin: '0'
+        }}>
+          <Score type="subtotal" score={88} scoreName="artistic" />
+          <Score type="subtotal" score={90} scoreName="technical" />
+          <Score type="total" score={89} scoreName="score" />
         </DialogActions>
       </React.Fragment>
     );
 
     const editForm = (
-      <React.Fragment>
-        <div style={{ display: 'flex', flexFlow: 'column', margin: '25px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-            <div style={{ flex: '1 0 0' }}>
-              <DialogInput value="" defaultValue="hi" name="Artistic" label="Artistic" />
-            </div>
-            <div style={{ flex: '1 0 0' }}>
-              <DialogInput value="" name="Technical" label="Technical" />
-            </div>
-          </div>
-          <DialogInput fullWidth multiline name="Notes" value="" label="Notes" />
-          <Checkboxlabels label="Award Considerations" choices={[{ value: 'specialAward', label: 'Special Award' }, { value: 'choreoAward', label: 'Choreography Award' }]} />
-        </div>
-        <div className={classes.dfdialog_footer}>
-          <DialogActions>
-            <Button type="default" onClick={this.handleView}>
-              Cancel
-            </Button>
-            <Button type="primary" onClick={this.handleClose}>
-              Save
-            </Button>
-          </DialogActions>
-        </div>
-      </React.Fragment>
+      <AdjudicationForm
+        view={view}
+        defaultValues={[]}
+        onModalClose={this.handleClose}
+        handleView={this.handleView} />
     );
 
     return (
-      <DFDialog open={open} buttonTitle="edit" onClick={this.handleClickOpen} onClose={this.handleClose}>
-        <DialogHeader edit={view} title={currentValues.judge} onEditClick={this.handleView} onMoreClick={() => {}} />
+      <DFDialog open={open} formType="edit" buttonTitle="edit" onClick={this.handleClickOpen} onClose={this.handleClose}>
+        <DialogHeader
+          edit={view}
+          title={currentValues.judge}
+          onEditClick={this.handleView}
+          onMoreClick={() => {}} />
         { view ? (viewForm) : (editForm)}
       </DFDialog>
     );
@@ -115,9 +123,7 @@ class AdjudicationDialog extends React.Component {
 }
 
 AdjudicationDialog.propTypes = {
-  currentValues: PropTypes.shape().isRequired,
-  classes: PropTypes.string.isRequired,
-  type: PropTypes.oneOf(['edit', 'new']).isRequired
+  currentValues: PropTypes.shape().isRequired
 };
 
 export default withStyles(styles)(AdjudicationDialog);

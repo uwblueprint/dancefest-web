@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import DialogActions from '@material-ui/core/DialogActions';
+import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 
 import DFDialog from '../interface/dialog/DFDialog';
 import DialogHeader from '../interface/dialog/DialogHeader';
@@ -38,21 +39,27 @@ class EventDialog extends React.Component {
   handleSubmit = () => {}
 
   render() {
-    const { classes, type } = this.props;
+    const { classes, formType } = this.props;
     const { eventTitle, eventDate, numJudges, open } = this.state;
-    const buttonTitle = type === 'edit' ? 'EDIT' : 'NEW EVENT';
+    const newButtonTitle = (
+      <React.Fragment>
+        <CalendarTodayIcon fontSize="small" style={{ color: 'gray', marginRight: '5px' }} />
+        NEW PERFORMANCE
+      </React.Fragment>);
+    const buttonTitle = formType === 'edit' ? 'EDIT' : newButtonTitle;
 
     return (
       <DFDialog
         open={open}
         buttonTitle={buttonTitle}
+        formType={formType}
         onClick={this.handleClickOpen}
         onClose={this.handleClose}>
         <DialogHeader title="Edit Event" onMoreClick={() => {}} />
         <div style={{ margin: '25px' }}>
           <DialogInput fullWidth name="eventTitle" label="Event Title" onChange={this.handleChange} value={eventTitle} />
           <div style={{ display: 'flex' }}>
-            <DialogInput fullWidth name="eventDate" label="Event Date" onChange={this.handleChange} value={eventDate} />
+            <DialogInput style={{ marginRight: '5px' }} fullWidth name="eventDate" label="Event Date" onChange={this.handleChange} value={eventDate} />
             <DialogInput fullWidth name="numJudges" label="No. Judges" onChange={this.handleChange} value={numJudges} />
           </div>
         </div>
@@ -73,7 +80,11 @@ class EventDialog extends React.Component {
 
 EventDialog.propTypes = {
   defaultValues: PropTypes.shape().isRequired,
-  type: PropTypes.oneOf(['edit', 'new']).isRequired
+  formType: PropTypes.oneOf(['edit', 'new'])
+};
+
+EventDialog.defaultProps = {
+  formType: 'edit'
 };
 
 export default withStyles(styles)(EventDialog);

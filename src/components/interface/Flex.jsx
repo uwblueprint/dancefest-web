@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Score = ({ type, score, scoreName }) => {
+const Flex = ({ children }) => {
   const outerStyles = type === 'subtotal' ? ({
     flex: 3, backgroundColor: '#cfcfcf', height: '100%', margin: '0', borderRight: '3px solid white', textAlign: 'center'
   }) : ({
@@ -17,20 +17,15 @@ const Score = ({ type, score, scoreName }) => {
   };
 
   return (
-    <div style={outerStyles}>
-      <div style={innerStyles}>
-        <span style={{ fontSize: '36px', fontWeight: 'bold' }}>
-          {score}
-        </span>
-        {scoreName}
-      </div>
+    <div style={{ display: 'flex' }}>
+      {children}
     </div>
   );
 };
 
-export default Score;
+export default Flex;
 
-Score.propTypes = {
+Flex.propTypes = {
   type: PropTypes.oneOf(['subtotal', 'total']).isRequired,
   score: PropTypes.number.isRequired,
   scoreName: PropTypes.string.isRequired
