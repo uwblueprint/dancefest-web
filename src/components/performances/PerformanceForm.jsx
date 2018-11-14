@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import DialogActions from '@material-ui/core/DialogActions';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import { createEvent, retrieveEventData } from '../../firebase/database';
 
 import DialogInput from '../interface/dialog/DialogInput';
@@ -21,8 +20,8 @@ class PerformanceForm extends React.Component {
       performers: defaultValues.performers || '',
       danceStyle: defaultValues.danceStyle || '',
       competitionLevel: defaultValues.competitionLevel || '',
-      choreographer: defaultValues.choreographer || '',
-      level: defaultValues.level || '',
+      choreographers: defaultValues.choreographers || '',
+      academicLevel: defaultValues.academicLevel || '',
       school: defaultValues.school || '',
       size: defaultValues.size || '',
       disabled: true
@@ -72,32 +71,33 @@ class PerformanceForm extends React.Component {
       performers,
       danceStyle,
       competitionLevel,
-      choreographer,
-      level,
+      choreographers,
+      academicLevel,
       school,
       size,
       disabled
     } = this.state;
     return (
       <React.Fragment>
-        <div style={{ display: 'flex', margin: '25px' }}>
-          <div style={{ flex: '1 0 0' }}>
-            <div style={{ display: 'flex' }}>
-              <DialogInput label="Dance Entry" value={danceEntry} />
+        <div style={{ padding: '25px 25px 0' }}>
+          <div className={classes.flex}>
+            <DialogInput className={classes.flex_default} type="number" name="danceEntry" label="Dance Entry" value={danceEntry} onChange={this.handleChange} />
+            <div className={classes.flex_default}>
+              <DialogSelect fullWidth label="School" name="school" value={school} />
+              <DialogSelect fullWidth label="Level" name="academicLevel" value={academicLevel} />
             </div>
-            <DialogInput fullWidth label="Dance Title" value={danceTitle} />
-            <DialogInput fullWidth label="Performers" helperText="Comma separated, eg. John Smith, Jane Doe" value={performers} />
-            <DialogInput fullWidth label="Choreographer" helperText="Comma separated, eg. John Smith, Jane Doe" value={choreographer} />
           </div>
-
-          <div style={{ flex: '1 0 0', marginLeft: '5px' }}>
-            <div style={{ display: 'flex' }}>
-              <DialogSelect fullWidth label="School" value={school} />
-              <DialogSelect fullWidth label="Level" value={level} />
-            </div>
-            <DialogSelect fullWidth label="Competition Level" value={competitionLevel} />
-            <DialogSelect fullWidth label="Dance Style" value={danceStyle} />
-            <DialogSelect fullWidth label="Size" value={size} />
+          <div className={classes.flex}>
+            <DialogInput className={classes.flex_default} name="danceTitle" label="Dance Title" value={danceTitle} onChange={this.handleChange} />
+            <DialogSelect className={classes.flex_default} name="competitionLevel" label="Competition Level" value={competitionLevel} />
+          </div>
+          <div className={classes.flex}>
+            <DialogInput className={classes.flex_default} name="performers" label="Performers" helperText="Comma separated, eg. John Smith, Jane Doe" value={performers} onChange={this.handleChange} />
+            <DialogSelect className={classes.flex_default} name="danceStyle" label="Dance Style" value={danceStyle} />
+          </div>
+          <div className={classes.flex}>
+            <DialogInput className={classes.flex_default} name="choreographers" label="Choreographers" helperText="Comma separated, eg. John Smith, Jane Doe" value={choreographers} onChange={this.handleChange} />
+            <DialogSelect className={classes.flex_default} name="size" label="Size" value={size} />
           </div>
         </div>
         <div className={classes.dfdialog_footer}>

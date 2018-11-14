@@ -4,7 +4,9 @@ import Typography from '@material-ui/core/Typography';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 import { withStyles } from '@material-ui/core/styles';
 import EventDialog from '../events/EventDialog';
+import PerformanceDialog from '../performances/PerformanceDialog';
 import Button from './Button';
+import styles from '../styles';
 
 const SectionHeader = ({
   classes,
@@ -24,33 +26,16 @@ const SectionHeader = ({
           Winners
         </Button>
       )}
-      {showNew && (<EventDialog formType="new" defaultValues={[]} />)}
+      {showNew && (title === 'event'
+        ? (<EventDialog formType="new" defaultValues={[]} />)
+        : (<PerformanceDialog formType="new" defaultValues={[]} />)
+      )}
     </div>
   </div>
 );
 
-const styles = () => ({
-  sectionHeaderWrapper: {
-    textAlign: 'center',
-    position: 'relative',
-    marginTop: '25px',
-    marginBottom: '25px'
-  },
-  sectionHeaderAction: {
-    display: 'flex',
-    position: 'absolute',
-    top: '5px',
-    right: '25px'
-  },
-  title: {
-    textTransform: 'uppercase',
-    fontSize: 36,
-    color: '#de2706'
-  }
-});
-
 SectionHeader.propTypes = {
-  classes: PropTypes.shape().isRequired,
+  classes: PropTypes.string.isRequired,
   showWinner: PropTypes.bool,
   showNew: PropTypes.bool,
   title: PropTypes.string.isRequired

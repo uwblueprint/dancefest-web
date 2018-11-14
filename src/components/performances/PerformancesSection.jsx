@@ -16,7 +16,6 @@ class PerformancesSection extends React.Component {
   render() {
     const headings = ['Dance Entry', 'Dance Title', 'School', 'Acaademic Level', 'Level of Competition', 'Dance Style', 'Dance Size'];
 
-
     return (
       <React.Fragment>
         <SectionHeader title="performance" showWinner />

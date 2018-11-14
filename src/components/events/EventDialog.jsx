@@ -41,10 +41,11 @@ class EventDialog extends React.Component {
   render() {
     const { classes, formType } = this.props;
     const { eventTitle, eventDate, numJudges, open } = this.state;
+    const dialogTitle = formType === 'edit' ? 'Edit' : 'New'
     const newButtonTitle = (
       <React.Fragment>
         <CalendarTodayIcon fontSize="small" style={{ color: 'gray', marginRight: '5px' }} />
-        NEW PERFORMANCE
+        NEW EVENT
       </React.Fragment>);
     const buttonTitle = formType === 'edit' ? 'EDIT' : newButtonTitle;
 
@@ -55,7 +56,7 @@ class EventDialog extends React.Component {
         formType={formType}
         onClick={this.handleClickOpen}
         onClose={this.handleClose}>
-        <DialogHeader title="Edit Event" onMoreClick={() => {}} />
+        <DialogHeader title={`${dialogTitle} Event`} onMoreClick={() => {}} />
         <div style={{ margin: '25px' }}>
           <DialogInput fullWidth name="eventTitle" label="Event Title" onChange={this.handleChange} value={eventTitle} />
           <div style={{ display: 'flex' }}>

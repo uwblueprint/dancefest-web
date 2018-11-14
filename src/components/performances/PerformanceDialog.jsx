@@ -24,6 +24,7 @@ class PerformanceDialog extends React.Component {
   render() {
     const { classes, currentValues, formType } = this.props;
     const { open } = this.state;
+    const dialogTitle = formType === 'edit' ? 'Edit' : 'New'
     const buttonTitle = formType === 'edit' ? 'EDIT'
       : (
         <React.Fragment>
@@ -38,7 +39,7 @@ class PerformanceDialog extends React.Component {
         formType={formType}
         onClick={this.handleClickOpen}
         onClose={this.handleClose}>
-        <DialogHeader title="Edit Performance" onMoreClick={() => {}} />
+        <DialogHeader title={`${dialogTitle} Performance`} onMoreClick={() => {}} />
         <PerformanceForm type="edit" onModalClose={this.handleClose} />
       </DFDialog>
     );

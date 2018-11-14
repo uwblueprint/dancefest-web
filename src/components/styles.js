@@ -1,6 +1,15 @@
 import { fade } from '@material-ui/core/styles/colorManipulator';
 
 const styles = theme => ({
+  // flex
+  flex: {
+    display: 'flex'
+  },
+  flex_default: {
+    display: 'flex',
+    flex: '1 1 0'
+  },
+
   // Link Styling
   link: {
     color: 'inherit',
@@ -45,6 +54,25 @@ const styles = theme => ({
     [theme.breakpoints.up('md')]: {
       width: 200
     }
+  },
+
+  // Section Header Styling
+  sectionHeaderWrapper: {
+    textAlign: 'center',
+    position: 'relative',
+    marginTop: '25px',
+    marginBottom: '25px'
+  },
+  sectionHeaderAction: {
+    display: 'flex',
+    position: 'absolute',
+    top: '5px',
+    right: '25px'
+  },
+  title: {
+    textTransform: 'uppercase',
+    fontSize: 36,
+    color: '#de2706'
   },
 
   // Table Styling
