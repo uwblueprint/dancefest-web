@@ -76,7 +76,9 @@ class PerformanceDialog extends React.Component {
 PerformanceDialog.propTypes = {
   classes: PropTypes.string.isRequired,
   currentValues: PropTypes.shape().isRequired,
-  type: PropTypes.oneOf(['edit', 'new']).isRequired
+  type: PropTypes.oneOf(['edit', 'new']).isRequired,
+  choreographers: PropTypes.arrayOf(PropTypes.string).isRequired,
+  performers: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default withStyles(styles)(PerformanceDialog);

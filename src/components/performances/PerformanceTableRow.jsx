@@ -12,24 +12,24 @@ class PerformanceTableRow extends React.Component {
   render() {
     const {
       id,
-      entry,
-      title,
+      entryId,
+      danceTitle,
       school,
       academicLevel,
       competitionLevel,
       danceStyle,
-      danceSize
+      groupSize
     } = this.props;
 
     return (
-      <TableRow key={id} style={{}}>
-        <TableCell><Link to={`performance/${id}/adjudications`}>{entry}</Link></TableCell>
-        <TableCell>{title}</TableCell>
+      <TableRow style={{}}>
+        <TableCell><Link to={`performance/${id}/adjudications`}>{danceTitle}</Link></TableCell>
+        <TableCell>{entryId}</TableCell>
         <TableCell>{school}</TableCell>
         <TableCell>{academicLevel}</TableCell>
         <TableCell>{competitionLevel}</TableCell>
         <TableCell>{danceStyle}</TableCell>
-        <TableCell>{danceSize}</TableCell>
+        <TableCell>{groupSize}</TableCell>
         <TableCell><PerformanceDialog type="edit" currentValues={this.props} /></TableCell>
       </TableRow>
     );
@@ -37,25 +37,25 @@ class PerformanceTableRow extends React.Component {
 }
 
 PerformanceTableRow.propTypes = {
-  id: PropTypes.number,
-  entry: PropTypes.string,
-  title: PropTypes.string,
+  id: PropTypes.string,
+  entryId: PropTypes.string,
+  danceTitle: PropTypes.string,
   school: PropTypes.string,
   academicLevel: PropTypes.string,
   competitionLevel: PropTypes.string,
-  danceStyle: PropTypes.number,
-  danceSize: PropTypes.number
+  danceStyle: PropTypes.string,
+  groupSize: PropTypes.string
 };
 
 PerformanceTableRow.defaultProps = {
-  id: 1,
-  entry: '',
-  title: '',
+  id: null,
+  entryId: '',
+  danceTitle: '',
   school: '',
   academicLevel: '',
   competitionLevel: '',
-  danceStyle: 1,
-  danceSize: 1
+  danceStyle: null,
+  groupSize: ''
 };
 
 export default PerformanceTableRow;
