@@ -39,7 +39,12 @@ class EventDialog extends React.Component {
 
   render() {
     const { classes, type } = this.props;
-    const { eventTitle, eventDate, numJudges, open } = this.state;
+    const {
+      eventTitle,
+      eventDate,
+      numJudges,
+      open
+    } = this.state;
     const buttonTitle = type === 'edit' ? 'EDIT' : 'NEW EVENT';
 
     return (
@@ -72,6 +77,7 @@ class EventDialog extends React.Component {
 }
 
 EventDialog.propTypes = {
+  classes: PropTypes.string.isRequired,
   defaultValues: PropTypes.shape().isRequired,
   type: PropTypes.oneOf(['edit', 'new']).isRequired
 };

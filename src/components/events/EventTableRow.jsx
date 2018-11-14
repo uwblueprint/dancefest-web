@@ -12,26 +12,26 @@ class EventTableRow extends React.Component {
   render() {
     const {
       id,
-      name,
-      date,
+      eventTitle,
+      eventDate,
       numDancers,
       numPerformances,
       numJudges
     } = this.props;
 
     const defaultValues = {
-      eventTitle: name,
-      eventDate: date,
+      eventTitle,
+      eventDate,
       numJudges
     };
 
     return (
       <TableRow>
         <TableCell>
-          <Link to={`/events/${id}/performances`}>{name}</Link>
+          <Link to={`/events/${id}/performances`}>{eventTitle}</Link>
         </TableCell>
         <TableCell>
-          {date}
+          {eventDate}
         </TableCell>
         <TableCell>
           {numDancers}
@@ -51,9 +51,9 @@ class EventTableRow extends React.Component {
 }
 
 EventTableRow.propTypes = {
-  id: PropTypes.number,
-  name: PropTypes.string,
-  date: PropTypes.string,
+  id: PropTypes.string,
+  eventTitle: PropTypes.string,
+  eventDate: PropTypes.string,
   numDancers: PropTypes.number,
   numPerformances: PropTypes.number,
   numJudges: PropTypes.number
@@ -61,12 +61,12 @@ EventTableRow.propTypes = {
 
 
 EventTableRow.defaultProps = {
-  id: 1,
-  name: '',
-  date: '',
-  numDancers: 1,
-  numPerformances: 1,
-  numJudges: 1
+  id: null,
+  eventTitle: '',
+  eventDate: '',
+  numDancers: null,
+  numPerformances: null,
+  numJudges: null
 };
 
 export default EventTableRow;
