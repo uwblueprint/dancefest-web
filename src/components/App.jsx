@@ -7,7 +7,6 @@ import {
 } from 'react-router-dom';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import createPalette from '@material-ui/core/styles/createPalette';
-import createTypography from '@material-ui/core/styles/createTypography';
 
 // import Navigation from './Navigation';
 import Header from './interface/Header';
@@ -33,18 +32,23 @@ const palette = createPalette({
   }
 });
 
-const typography = createTypography(palette, {
-  fontFamily: "'Raleway', sans-serif",
-  fontSize: 14,
-  headline: {
-    fontFamily: "'Fjalla One', sans-serif",
-    fontSize: 20
-  }
-});
-
 const theme = createMuiTheme({
   palette,
-  typography,
+  typography: {
+    useNextVariants: true,
+    fontFamily: "'Raleway', sans-serif",
+    fontSize: 14,
+    subtitle1: {
+      fontFamily: "'Fjalla One', sans-serif",
+      fontSize: 20
+    },
+    h3: {
+      fontFamily: "'Fjalla One', sans-serif",
+      textTransform: 'uppercase',
+      fontSize: 36,
+      color: '#de2706'
+    }
+  },
   overrides: {
     MuiFilledInput: {
       underline: {

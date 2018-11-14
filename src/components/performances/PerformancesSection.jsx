@@ -5,7 +5,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableHeader from '../interface/TableHeader';
 import PerformanceTableRow from './PerformanceTableRow';
 import EmptyState from '../interface/EmptyStates';
-import SectionTitle from '../interface/SectionTitle';
+import SectionHeader from '../interface/SectionHeader';
 
 // Testing Data
 import PerformanceTestData from './PerformanceTestData';
@@ -16,10 +16,9 @@ class PerformancesSection extends React.Component {
   render() {
     const headings = ['Dance Entry', 'Dance Title', 'School', 'Acaademic Level', 'Level of Competition', 'Dance Style', 'Dance Size'];
 
-
     return (
       <React.Fragment>
-        <SectionTitle title="performances" />
+        <SectionHeader title="performance" showWinner />
         <Table>
           <TableHeader headings={headings} />
           <TableBody>

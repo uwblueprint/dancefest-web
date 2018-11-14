@@ -14,14 +14,16 @@ class DFDialog extends React.Component {
       children,
       onClick,
       onClose,
+      formType,
       open,
       width
     } = this.props;
+    const type = formType === 'edit' ? 'default' : 'outline'
     return (
       <div>
-        <Button type="default" onClick={onClick}>
+        {<Button type={type} onClick={onClick}>
           {buttonTitle}
-        </Button>
+         </Button>}
         <Dialog
           fullWidth
           maxWidth={width}
@@ -36,11 +38,12 @@ class DFDialog extends React.Component {
 }
 
 DFDialog.propTypes = {
-  buttonTitle: PropTypes.string.isRequired,
+  buttonTitle: PropTypes.node.isRequired,
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node
   ]).isRequired,
+  formType: PropTypes.oneOf(['edit', 'new']).isRequired,
   onClick: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
