@@ -2,15 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import DialogActions from '@material-ui/core/DialogActions';
-import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
+import { createEvent, retrieveEventData } from '../../firebase/database';
 
-import DFDialog from '../interface/dialog/DFDialog';
-import DialogHeader from '../interface/dialog/DialogHeader';
 import DialogInput from '../interface/dialog/DialogInput';
 import Button from '../interface/Button';
 import styles from '../styles';
 
-class EventDialog extends React.Component {
+class EventForm extends React.Component {
   constructor(props) {
     super(props);
     const { defaultValues } = props;
@@ -19,7 +17,7 @@ class EventDialog extends React.Component {
       eventTitle: defaultValues.eventTitle || '',
       eventDate: defaultValues.eventDate || '',
       numJudges: defaultValues.numJudges || '',
-      open: false
+      disabled: true
     };
   }
 
@@ -28,39 +26,46 @@ class EventDialog extends React.Component {
     this.setState({ [name]: value });
   }
 
-  handleClickOpen = () => {
-    this.setState({ open: true });
-  };
+  handleCancel = () => {
+    // TODO: ask are you sure?
+    const { onModalClose } = this.props;
+    onModalClose();
+  }
 
-  handleClose = () => {
-    this.setState({ open: false });
-  };
+  // TODO: create validation form method
+  validateData = () => {
+    const validate = false;
 
-  handleSubmit = () => {}
+    // TODO: different validation cases depending on adding new vs editing
+    this.setState({ disabled: validate });
+  }
+
+  // TODO: handle submmission of the form
+  handleSubmit = () => {
+    const { eventTitle, eventDate, numJudges } = this.state;
+    const item = { eventTitle, eventDate, numJudges };
+    createEvent(item);
+  }
+
+  handleDataRetrieval = () => {
+    retrieveEventData();
+  }
+
+  handleModalClose = () => {
+    const { onModalClose } = this.props;
+    onModalClose();
+  }
 
   render() {
-    const { classes, formType } = this.props;
+    const { classes, type } = this.props;
     const {
       eventTitle,
-      eventDate, numJudges,
-      open
+      eventDate,
+      numJudges,
+      disabled
     } = this.state;
-    const dialogTitle = formType === 'edit' ? 'Edit' : 'New';
-    const newButtonTitle = (
-      <React.Fragment>
-        <CalendarTodayIcon fontSize="small" style={{ color: 'gray', marginRight: '5px' }} />
-        NEW EVENT
-      </React.Fragment>);
-    const buttonTitle = formType === 'edit' ? 'EDIT' : newButtonTitle;
-
     return (
-      <DFDialog
-        open={open}
-        buttonTitle={buttonTitle}
-        formType={formType}
-        onClick={this.handleClickOpen}
-        onClose={this.handleClose}>
-        <DialogHeader title={`${dialogTitle} Event`} onMoreClick={() => {}} />
+      <React.Fragment>
         <div style={{ margin: '25px' }}>
           <DialogInput fullWidth name="eventTitle" label="Event Title" onChange={this.handleChange} value={eventTitle} />
           <div style={{ display: 'flex' }}>
@@ -70,27 +75,29 @@ class EventDialog extends React.Component {
         </div>
         <div className={classes.dfdialog_footer}>
           <DialogActions>
-            <Button type="default" onClick={this.handleClose}>
-              Cancel
+            <Button type="default" onClick={this.handleCancel}>
+              {type === 'edit' ? 'cancel' : 'discard'}
             </Button>
-            <Button type="primary" onClick={this.handleClose}>
+            <Button disabled={disabled} type="primary" onClick={this.handleSubmit}>
               Save
             </Button>
           </DialogActions>
         </div>
-      </DFDialog>
+      </React.Fragment>
     );
   }
 }
 
-EventDialog.propTypes = {
+EventForm.propTypes = {
   classes: PropTypes.string.isRequired,
-  defaultValues: PropTypes.shape().isRequired,
-  formType: PropTypes.oneOf(['edit', 'new'])
+  defaultValues: PropTypes.shape(),
+  onModalClose: PropTypes.func.isRequired,
+  type: PropTypes.oneOf(['edit', 'new'])
 };
 
-EventDialog.defaultProps = {
-  formType: 'edit'
+EventForm.defaultProps = {
+  defaultValues: [],
+  type: 'edit'
 };
 
-export default withStyles(styles)(EventDialog);
+export default withStyles(styles)(EventForm);

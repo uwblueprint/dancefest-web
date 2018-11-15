@@ -7,7 +7,7 @@ import AdjudicationTableRow from './AdjudicationTableRow';
 import AdjudicationTestData from './AdjudicationTestData';
 // =====================================================
 import EmptyState from '../interface/EmptyStates';
-import SectionTitle from '../interface/SectionTitle';
+import SectionHeader from '../interface/SectionHeader';
 
 class AdjudicationsSection extends React.Component {
   constructor(props) {
@@ -31,7 +31,7 @@ class AdjudicationsSection extends React.Component {
 
     return (
       <React.Fragment>
-        <SectionTitle title="adjudications" />
+        <SectionHeader title="adjudication" showNew={false} />
         <Table>
           <TableHeader headings={headings} />
           <TableBody>

@@ -6,7 +6,7 @@ import db from '../../firebase/firebase';
 import TableHeader from '../interface/TableHeader';
 import EventTableRow from './EventTableRow';
 import EmptyState from '../interface/EmptyStates';
-import SectionTitle from '../interface/SectionTitle';
+import SectionHeader from '../interface/SectionHeader';
 
 class EventsSection extends React.Component {
   constructor(props) {
@@ -46,7 +46,7 @@ class EventsSection extends React.Component {
     const headings = ['Event Title', 'Event Date', 'No. Dancers', 'No. Performances', 'No. Judges'];
     return (
       <React.Fragment>
-        <SectionTitle title="events" />
+        <SectionHeader title="event" />
         <Table>
           <TableHeader headings={headings} />
           <TableBody>

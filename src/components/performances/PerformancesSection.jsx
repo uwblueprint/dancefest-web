@@ -7,7 +7,7 @@ import db from '../../firebase/firebase';
 import TableHeader from '../interface/TableHeader';
 import PerformanceTableRow from './PerformanceTableRow';
 import EmptyState from '../interface/EmptyStates';
-import SectionTitle from '../interface/SectionTitle';
+import SectionHeader from '../interface/SectionHeader';
 
 class PerformancesSection extends React.Component {
   constructor(props) {
@@ -39,7 +39,7 @@ class PerformancesSection extends React.Component {
     const { performances } = this.state;
     return (
       <React.Fragment>
-        <SectionTitle title="performances" />
+        <SectionHeader title="performance" showWinner />
         <Table>
           <TableHeader headings={headings} />
           <TableBody>

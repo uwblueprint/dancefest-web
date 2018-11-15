@@ -13,10 +13,6 @@ class CheckBox extends React.Component {
     super(props);
 
     this.state = {};
-
-    props.choices.forEach((choice, index) => {
-      this.setState({ [`${choice.value}-${index}`]: false });
-    });
   }
 
   handleChange = name => (event) => {
@@ -24,7 +20,12 @@ class CheckBox extends React.Component {
   };
 
   render() {
-    const { row, choices, label } = this.props;
+    const {
+      row,
+      choices,
+      label
+    } = this.props;
+
     // TODO: Implement error handling with maxChecked
     // const error = choices.filter(v => v).length !== maxChecked;
 
@@ -37,11 +38,12 @@ class CheckBox extends React.Component {
             const { [name]: checked } = this.state;
             return (
               <FormControlLabel
+                key={name}
                 control={(
                   <Checkbox
                     color="primary"
                     checked={checked}
-                    onChange={this.handleChange(name)}
+                    onChange={this.handleChange}
                     value={choice.value} />)}
                 label={choice.label} />
             );
@@ -53,9 +55,14 @@ class CheckBox extends React.Component {
 }
 
 CheckBox.propTypes = {
-  choices: PropTypes.shape().isRequired,
-  row: PropTypes.bool.isRequired,
-  label: PropTypes.string.isRequired
+  choices: PropTypes.PropTypes.arrayOf(PropTypes.shape()).isRequired,
+  row: PropTypes.bool,
+  label: PropTypes.string
+};
+
+CheckBox.defaultProps = {
+  label: null,
+  row: false
 };
 
 export default withStyles(styles)(CheckBox);
