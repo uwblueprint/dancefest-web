@@ -3,9 +3,7 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableHeader from '../interface/TableHeader';
 import AdjudicationTableRow from './AdjudicationTableRow';
-// TODO: REMOVE THIS WHEN FIRESTORE DATA IS ADDED =====
-import AdjudicationTestData from './AdjudicationTestData';
-// =====================================================
+import db from '../../firebase/firebase';
 import EmptyState from '../interface/EmptyStates';
 import SectionHeader from '../interface/SectionHeader';
 
@@ -18,16 +16,29 @@ class AdjudicationsSection extends React.Component {
   }
 
   componentDidMount() {
-    /* TODO: FILL IN THIS
-    1. Get eventId and performanceId from url params using react-router-dom
-    2. Get adjudications data from firebase
-    3. Add to state
-    */
+    const { match: { params: { eventId, performanceId } } } = this.props;
+    const adjudications = []
+
+    console.log(performanceId);
+
+    db.collection(`events/${eventId}/performances/${performanceId}/adjudications`).get().then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        const adjudication = {
+          id: doc.id,
+          ...doc.data()
+        };
+        console.log(doc)
+        adjudications.push(adjudication);
+      });
+    }).then(() => {
+      this.setState({ adjudications });
+    });
   }
 
   render() {
     const headings = ['Judge', 'Audio', 'Cummulative Score', 'Awards'];
     const { adjudications } = this.state;
+    console.log(adjudications);
 
     return (
       <React.Fragment>
@@ -35,11 +46,11 @@ class AdjudicationsSection extends React.Component {
         <Table>
           <TableHeader headings={headings} />
           <TableBody>
-            {AdjudicationTestData
-              && AdjudicationTestData.map(rowProps => (<AdjudicationTableRow {...rowProps} />))}
+            {adjudications
+              && adjudications.map(rowProps => (<AdjudicationTableRow {...rowProps} />))}
           </TableBody>
         </Table>
-        {!AdjudicationTestData && (
+        {!adjudications && (
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <EmptyState type="adjudication" title="Empty Adjudications Page" subtitle="Create your first Adjudication" />
           </div>

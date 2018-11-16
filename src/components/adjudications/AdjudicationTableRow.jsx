@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
+import LensIcon from '@material-ui/icons/Lens';
 
 import AdjudicationDialog from './AdjudicationDialog';
 
@@ -11,25 +12,29 @@ class AdjudicationTableRow extends React.Component {
   render() {
     const {
       id,
-      judge,
+      judgeName,
       audio,
-      cumlScore,
-      awards
+      //audio yes or no
+      specialAward,
+      choreoAward,
+      cumulativeMark
     } = this.props;
 
     return (
       <TableRow key={id}>
         <TableCell>
-          {judge}
+          {judgeName}
         </TableCell>
         <TableCell>
-          {audio}
+          {audio && (<p>Yes</p>)}
+          {!audio && (<p>No</p>)}
         </TableCell>
         <TableCell>
-          {cumlScore}
+          {cumulativeMark}
         </TableCell>
         <TableCell>
-          {awards}
+          {specialAward && <LensIcon fontSize="inherit" style={{ color: 'purple' }} />}
+          {choreoAward && <LensIcon fontSize="inherit" color="primary" />}
         </TableCell>
         <TableCell>
           <AdjudicationDialog currentValues={this.props} />
