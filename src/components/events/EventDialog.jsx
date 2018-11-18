@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import DialogActions from '@material-ui/core/DialogActions';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
+import db from '../../firebase/firebase';
 
 import DFDialog from '../interface/dialog/DFDialog';
 import DialogHeader from '../interface/dialog/DialogHeader';
@@ -36,7 +37,21 @@ class EventDialog extends React.Component {
     this.setState({ open: false });
   };
 
-  handleSubmit = () => {}
+  handleSubmit = () => {
+    this.updateData();
+  }
+
+  updateData = () => {
+    db.collection('events').doc('gXzBAVAMM2CPgdZObWnY').set({
+      eventTitle: 'testing update data'
+    }, { merge: true })
+      .then(() => {
+        console.log('Document successfully written!');
+      })
+      .catch((error) => {
+        console.error('Error writing document: ', error);
+      });
+  }
 
   render() {
     const { classes, formType } = this.props;
@@ -73,7 +88,7 @@ class EventDialog extends React.Component {
             <Button type="default" onClick={this.handleClose}>
               Cancel
             </Button>
-            <Button type="primary" onClick={this.handleClose}>
+            <Button type="primary" onClick={this.updateData}>
               Save
             </Button>
           </DialogActions>

@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import DialogActions from '@material-ui/core/DialogActions';
-import { createEvent, retrieveEventData } from '../../firebase/database';
+import addData from '../../firebase/utils/addData';
+import updateData from '../../firebase/utils/updateData';
 
 import DialogInput from '../interface/dialog/DialogInput';
 import Button from '../interface/Button';
@@ -44,12 +45,8 @@ class EventForm extends React.Component {
   handleSubmit = () => {
     const { eventTitle, eventDate, numJudges } = this.state;
     const item = { eventTitle, eventDate, numJudges };
-    createEvent(item);
   }
 
-  handleDataRetrieval = () => {
-    retrieveEventData();
-  }
 
   handleModalClose = () => {
     const { onModalClose } = this.props;
