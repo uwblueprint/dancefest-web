@@ -1,9 +1,12 @@
 import db from '../firebase';
 
-const addData = (collectionName, data) => {
+const addData = (collectionName, data, onSuccess) => {
   db.collection(collectionName).add(data)
     .then((docRef) => {
       console.log('Document successfully added!');
+      if (onSuccess) {
+        onSuccess();
+      }
       return docRef.id;
     })
     .catch((error) => {
