@@ -1,12 +1,12 @@
-import db from './firebase';
+import db from '../firebase';
 
-const deleteData = ({ collectionName, docName, data }) => {
-  db.collection(collectionName).doc(docName).set(data)
+const deleteData = (collectionName, docName) => {
+  db.collection(collectionName).doc(docName).delete()
     .then(() => {
-      console.log('Document successfully written!');
+      console.log('Document successfully deleted!');
     })
     .catch((error) => {
-      console.error('Error writing document: ', error);
+      console.error('Error deleted document: ', error);
     });
 };
 
