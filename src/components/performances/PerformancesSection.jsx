@@ -13,7 +13,7 @@ class PerformancesSection extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      performances: []
+      performances: null
     };
   }
 
@@ -30,7 +30,9 @@ class PerformancesSection extends React.Component {
         performances.push(performance);
       });
     }).then(() => {
-      this.setState({ performances });
+      if (performances.length > 0) {
+        this.setState({ performances });
+      }
     });
   }
 
@@ -43,13 +45,13 @@ class PerformancesSection extends React.Component {
         <Table>
           <TableHeader headings={headings} />
           <TableBody>
-            {performances
+            {(performances && performances.length > 0)
               && performances.map(rowProps => (<PerformanceTableRow {...rowProps} />))
             }
           </TableBody>
         </Table>
         {
-          !performances && (
+          (!performances) && (
             <div style={{ display: 'flex', justifyContent: 'center' }}>
               <EmptyState type="performance" title="Empty Performances Page" subtitle="Create your first Performance" />
             </div>

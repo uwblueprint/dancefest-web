@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import DialogActions from '@material-ui/core/DialogActions';
-import { createEvent, retrieveEventData } from '../../firebase/database';
+import _ from 'lodash';
 
 import DialogInput from '../interface/dialog/DialogInput';
 import DialogSelect from '../interface/dialog/DialogSelect';
@@ -12,20 +12,26 @@ import styles from '../styles';
 class PerformanceForm extends React.Component {
   constructor(props) {
     super(props);
-    const { defaultValues } = props;
+    const { currentValues } = props;
 
     this.state = {
-      danceEntry: defaultValues.danceEntry || 0,
-      danceTitle: defaultValues.danceTitle || '',
-      performers: defaultValues.performers || '',
-      danceStyle: defaultValues.danceStyle || '',
-      competitionLevel: defaultValues.competitionLevel || '',
-      choreographers: defaultValues.choreographers || '',
-      academicLevel: defaultValues.academicLevel || '',
-      school: defaultValues.school || '',
-      size: defaultValues.size || '',
+      danceEntry: currentValues.danceEntry || 0,
+      danceTitle: currentValues.danceTitle || '',
+      performers: currentValues.performers || '',
+      danceStyle: currentValues.danceStyle || '',
+      competitionLevel: currentValues.competitionLevel || '',
+      choreographers: currentValues.choreographers || '',
+      academicLevel: currentValues.academicLevel || '',
+      school: currentValues.school || '',
+      size: currentValues.size || '',
       disabled: true
     };
+  }
+
+  // disable save button if not all input fields are filled
+  static getDerivedStateFromProps(props, state) {
+    const values = _.omit(state, 'disabled');
+    return { disabled: !(Object.keys(values).every(value => !!state[value])) };
   }
 
   handleChange = (e) => {
@@ -39,23 +45,9 @@ class PerformanceForm extends React.Component {
     onModalClose();
   }
 
-  // TODO: create validation form method
-  validateData = () => {
-    const validate = false;
-
-    // TODO: different validation cases depending on adding new vs editing
-    this.setState({ disabled: validate });
-  }
-
   // TODO: handle submmission of the form
   handleSubmit = () => {
-    const { eventTitle, eventDate, numJudges } = this.state;
-    const item = { eventTitle, eventDate, numJudges };
-    createEvent(item);
-  }
 
-  handleDataRetrieval = () => {
-    retrieveEventData();
   }
 
   handleModalClose = () => {
@@ -64,7 +56,7 @@ class PerformanceForm extends React.Component {
   }
 
   render() {
-    const { classes, type } = this.props;
+    const { classes, formType } = this.props;
     const {
       danceEntry,
       danceTitle,
@@ -103,7 +95,7 @@ class PerformanceForm extends React.Component {
         <div className={classes.dfdialog_footer}>
           <DialogActions>
             <Button type="default" onClick={this.handleCancel}>
-              {type === 'edit' ? 'cancel' : 'discard'}
+              {formType === 'edit' ? 'cancel' : 'discard'}
             </Button>
             <Button disabled={disabled} type="primary" onClick={this.handleSubmit}>
               Save
@@ -117,14 +109,14 @@ class PerformanceForm extends React.Component {
 
 PerformanceForm.propTypes = {
   classes: PropTypes.string.isRequired,
-  defaultValues: PropTypes.shape(),
+  currentValues: PropTypes.shape(),
   onModalClose: PropTypes.func.isRequired,
-  type: PropTypes.oneOf(['edit', 'new'])
+  formType: PropTypes.oneOf(['edit', 'new'])
 };
 
 PerformanceForm.defaultProps = {
-  defaultValues: [],
-  type: 'edit'
+  currentValues: [],
+  formType: 'edit'
 };
 
 export default withStyles(styles)(PerformanceForm);

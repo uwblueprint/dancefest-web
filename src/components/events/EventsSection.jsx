@@ -12,7 +12,7 @@ class EventsSection extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      events: []
+      events: null
     };
   }
 
@@ -34,7 +34,9 @@ class EventsSection extends React.Component {
         events.push(event);
       });
     }).then(() => {
-      this.setState({ events });
+      if (events.length > 0) {
+        this.setState({ events });
+      }
     });
   }
 
@@ -53,8 +55,8 @@ class EventsSection extends React.Component {
         <Table>
           <TableHeader headings={headings} />
           <TableBody>
-            {events
-              && events.map(event => (<EventTableRow id={event.id} {...event} />))
+            {(events)
+              && events.map(event => (<EventTableRow key={event.id} {...event} />))
             }
           </TableBody>
         </Table>

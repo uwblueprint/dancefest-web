@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import DialogActions from '@material-ui/core/DialogActions';
-import { createEvent, retrieveEventData } from '../../firebase/database';
 
 import DialogInput from '../interface/dialog/DialogInput';
 import Button from '../interface/Button';
@@ -69,11 +68,6 @@ class AdjudicationForm extends React.Component {
       awards,
       notes
     }
-    createEvent(item);
-  }
-
-  handleDataRetrieval = () => {
-    retrieveEventData();
   }
 
   handleModalClose = () => {

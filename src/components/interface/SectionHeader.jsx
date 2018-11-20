@@ -27,8 +27,8 @@ const SectionHeader = ({
         </Button>
       )}
       {showNew && (title === 'event'
-        ? (<EventDialog formType="new" defaultValues={[]} />)
-        : (<PerformanceDialog formType="new" defaultValues={[]} />)
+        ? (<EventDialog formType="new" />)
+        : (<PerformanceDialog formType="new" />)
       )}
     </div>
   </div>
