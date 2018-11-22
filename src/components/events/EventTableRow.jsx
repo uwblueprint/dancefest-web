@@ -19,7 +19,7 @@ class EventTableRow extends React.Component {
       numJudges
     } = this.props;
 
-    const defaultValues = {
+    const currentValues = {
       eventTitle,
       eventDate,
       numJudges
@@ -43,7 +43,7 @@ class EventTableRow extends React.Component {
           {numJudges}
         </TableCell>
         <TableCell>
-          <EventDialog type="edit" defaultValues={defaultValues} />
+          <EventDialog formType="edit" eventId={id} currentValues={currentValues} />
         </TableCell>
       </TableRow>
     );
@@ -54,16 +54,16 @@ EventTableRow.propTypes = {
   id: PropTypes.string,
   eventTitle: PropTypes.string,
   eventDate: PropTypes.string,
-  numDancers: PropTypes.number,
-  numPerformances: PropTypes.number,
-  numJudges: PropTypes.number
+  numDancers: PropTypes.string,
+  numPerformances: PropTypes.string,
+  numJudges: PropTypes.string
 };
 
 
 EventTableRow.defaultProps = {
   id: null,
-  eventTitle: '',
-  eventDate: '',
+  eventTitle: null,
+  eventDate: null,
   numDancers: null,
   numPerformances: null,
   numJudges: null

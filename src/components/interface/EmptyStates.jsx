@@ -20,8 +20,8 @@ const EmptyState = ({ type, title, subtitle }) => {
   }
 
   return (
-    <div>
-      <img src={image} alt="" />
+    <div style={{ textAlign: 'center', margin: '50px' }}>
+      <img src={image} alt="" auto />
       <p>{title}</p>
       <p>{subtitle}</p>
     </div>
