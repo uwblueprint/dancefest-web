@@ -41,8 +41,10 @@ class EventForm extends React.Component {
 
   handleSubmit = async () => {
     const { eventId, formType } = this.props;
+    console.log(eventId);
     const collectionName = 'events';
     const data = _.omit(this.state, 'disabled');
+
 
     if (formType === 'new') {
       await addData(collectionName, data, this.handleModalClose);
@@ -91,7 +93,6 @@ class EventForm extends React.Component {
 EventForm.propTypes = {
   classes: PropTypes.string.isRequired,
   currentValues: PropTypes.shape(),
-  eventId: PropTypes.string.isRequired,
   onModalClose: PropTypes.func.isRequired,
   formType: PropTypes.oneOf(['edit', 'new'])
 };

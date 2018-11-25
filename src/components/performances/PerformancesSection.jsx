@@ -47,7 +47,7 @@ class PerformancesSection extends React.Component {
           <TableHeader headings={headings} />
           <TableBody>
             {(performances && performances.length > 0)
-              && performances.map(rowProps => (<PerformanceTableRow {...rowProps} />))
+              && performances.map(performance => (<PerformanceTableRow key={performance.id} {...performance} />))
             }
           </TableBody>
         </Table>

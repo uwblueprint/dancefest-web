@@ -53,22 +53,22 @@ class PerformanceForm extends React.Component {
   }
 
   handleSubmit = async () => {
-    const { currentValues, formType } = this.props;
-    console.log(currentValues.id, 'dajflajdfk;jsk');
-    const collectionName = 'events';
+    const { performanceId, formType } = this.props;
+
+    console.log(performanceId);
+    const collectionName = 'performances';
     const data = _.omit(this.state, 'disabled');
-    console.log(data);
     if (formType === 'new') {
       await addData(collectionName, data, this.handleModalClose);
     } else {
-      await updateData(collectionName, currentValues.id, data, this.handleModalClose);
+      await updateData(collectionName, performanceId, data, this.handleModalClose);
+
+      console.log(data);
     }
   }
 
   render() {
     const { classes, formType } = this.props;
-    console.log(this.state);
-    console.log(this.props.currentValues.id);
     const {
       danceEntry,
       danceTitle,
@@ -78,8 +78,7 @@ class PerformanceForm extends React.Component {
       choreographers,
       academicLevel,
       school,
-      size,
-      disabled
+      size
     } = this.state;
     return (
       <React.Fragment>

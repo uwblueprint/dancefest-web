@@ -4,6 +4,7 @@ import _ from 'lodash';
 import db from '../../firebase/firebase';
 
 import addData from '../../firebase/utils/addData';
+import updateData from '../../firebase/utils/updateData';
 import SettingData from './SettingData';
 import DialogInput from '../interface/dialog/DialogInput';
 import DialogSelect from '../interface/dialog/DialogSelect';
