@@ -6,10 +6,12 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 const DialogSelect = ({
   className,
+  onChange,
   label,
   helperText,
   fullWidth,
   options,
+  value,
   style
 }) => (
   <TextField
@@ -20,13 +22,25 @@ const DialogSelect = ({
     id="filled-select-currency"
     select
     label={label}
-    SelectProps={{ MenuProps: {}}}
+    SelectProps={{
+      MenuProps: {
+        getContentAnchorEl: null,
+        anchorOrigin: {
+          vertical: 'bottom',
+          horizontal: 'left'
+        }
+      }
+    }}
+    value={value}
+    onChange={onChange}
     margin="normal"
     variant="filled">
     {options.map(option => (
-      <MenuItem {...option} />
+      <MenuItem key={option.value} value={option.value}>{option.value}</MenuItem>
     ))}
-  </TextField>);
+  </TextField>
+);
+
 
 export default DialogSelect;
 
@@ -35,15 +49,19 @@ DialogSelect.propTypes = {
   label: PropTypes.string,
   helperText: PropTypes.string,
   options: PropTypes.arrayOf(PropTypes.shape()),
+  onChange: PropTypes.func,
   fullWidth: PropTypes.bool,
-  style: PropTypes.shape()
+  style: PropTypes.shape(),
+  value: PropTypes.string
 };
 
 DialogSelect.defaultProps = {
   className: null,
   label: null,
   helperText: null,
+  onChange: () => {},
   options: [],
   fullWidth: false,
-  style: null
+  style: null,
+  value: ''
 };

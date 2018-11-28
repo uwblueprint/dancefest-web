@@ -22,7 +22,7 @@ class PerformanceDialog extends React.Component {
   };
 
   render() {
-    const { currentValues, formType } = this.props;
+    const { formType } = this.props;
     const { open } = this.state;
     const dialogTitle = formType === 'edit' ? 'Edit' : 'New';
     const buttonTitle = formType === 'edit' ? 'EDIT'
@@ -39,10 +39,9 @@ class PerformanceDialog extends React.Component {
         formType={formType}
         onClick={this.handleClickOpen}
         onClose={this.handleClose}>
-        <DialogHeader title={`${dialogTitle} Performance`} onMoreClick={() => {}} />
+        <DialogHeader title={`${dialogTitle} Performance`} onMoreClick={() => { }} />
         <PerformanceForm
-          formType={formType}
-          currentValues={currentValues}
+          {...this.props}
           onModalClose={this.handleClose} />
       </DFDialog>
     );
@@ -50,12 +49,11 @@ class PerformanceDialog extends React.Component {
 }
 
 PerformanceDialog.propTypes = {
-  currentValues: PropTypes.shape(),
+  currentValues: PropTypes.shape().isRequired,
   formType: PropTypes.oneOf(['edit', 'new'])
 };
 
 PerformanceDialog.defaultProps = {
-  currentValues: [],
   formType: 'edit'
 };
 

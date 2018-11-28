@@ -18,8 +18,21 @@ class PerformanceTableRow extends React.Component {
       academicLevel,
       competitionLevel,
       danceStyle,
+      performers,
+      choreographers,
       groupSize
     } = this.props;
+
+    const currentValues = {
+      danceTitle,
+      performers,
+      danceStyle,
+      competitionLevel,
+      choreographers,
+      academicLevel,
+      school,
+      groupSize
+    };
 
     return (
       <TableRow style={{}}>
@@ -30,7 +43,13 @@ class PerformanceTableRow extends React.Component {
         <TableCell>{competitionLevel}</TableCell>
         <TableCell>{danceStyle}</TableCell>
         <TableCell>{groupSize}</TableCell>
-        <TableCell><PerformanceDialog formType="edit" currentValues={this.props} /></TableCell>
+        <TableCell>
+          <PerformanceDialog
+            formType="edit"
+            currentValues={currentValues}
+            performanceId={id} />
+
+        </TableCell>
       </TableRow>
     );
   }
@@ -44,6 +63,8 @@ PerformanceTableRow.propTypes = {
   academicLevel: PropTypes.string,
   competitionLevel: PropTypes.string,
   danceStyle: PropTypes.string,
+  performers: PropTypes.string,
+  choreographers: PropTypes.string,
   groupSize: PropTypes.string
 };
 
@@ -54,6 +75,8 @@ PerformanceTableRow.defaultProps = {
   school: '',
   academicLevel: '',
   competitionLevel: '',
+  performers: null,
+  choreographers: null,
   danceStyle: null,
   groupSize: ''
 };

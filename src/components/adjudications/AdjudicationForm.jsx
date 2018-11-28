@@ -79,12 +79,13 @@ class AdjudicationForm extends React.Component {
     const { classes } = this.props;
     const choices = [{ value: 'specialAward', label: 'Special Award' }, { value: 'choreoAward', label: 'Choreography Award' }];
     const {
-      artistic,
-      technical,
+      artisticMark,
+      technicalMark,
       audio,
       specialAward,
       choreoAward,
       notes,
+      cumulativeMark,
       disabled,
     } = this.state;
     return (
@@ -92,10 +93,10 @@ class AdjudicationForm extends React.Component {
         <div style={{ display: 'flex', flexFlow: 'column', margin: '25px' }}>
           <div style={{ display: 'flex' }}>
             <div>
-              <DialogInput type="number" value={artistic} name="artistic" label="Artistic" onChange={this.handleChange} />
+              <DialogInput type="number" value={artisticMark} name="artisticMark" label="Artistic" onChange={this.handleChange} />
             </div>
             <div>
-              <DialogInput type="number" value={technical} name="technical" label="Technical" onChange={this.handleChange} />
+              <DialogInput type="number" value={technicalMark} name="technicalMark" label="Technical" onChange={this.handleChange} />
             </div>
           </div>
           <DialogInput fullWidth multiline name="notes" value={notes} label="Notes" onChange={this.handleChange} />

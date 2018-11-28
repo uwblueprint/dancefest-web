@@ -18,7 +18,8 @@ class AdjudicationDialog extends React.Component {
     open: false,
     view: true,
     artistic: '',
-    technical: '',
+    technicalMark: '',
+    cumulativeMark: '',
     notes: '',
     audio: '',
     awardsConsideration: null
@@ -49,10 +50,13 @@ class AdjudicationDialog extends React.Component {
       open,
       view,
       artistic,
-      technical,
+      technicalMark,
+      cumulativeMark,
+      specialAward,
+      judgeName,
+      choreoAward,
       notes,
-      audio,
-      awardsConsideration,
+      audio
     } = this.state;
 
     const viewForm = (
@@ -81,11 +85,11 @@ class AdjudicationDialog extends React.Component {
           <FormHelperText>Award Considerations</FormHelperText>
           <div>
             <LensIcon fontSize="inherit" color="inherit" style={{ color: 'purple' }} />
-           Special Award
+            Special Award
           </div>
           <div>
             <LensIcon fontSize="inherit" color="primary" />
-           Choreography Award
+            Choreography Award
           </div>
         </div>
         <DialogActions style={{
@@ -94,9 +98,9 @@ class AdjudicationDialog extends React.Component {
           padding: '0',
           margin: '0'
         }}>
-          <Score type="subtotal" score={88} scoreName="artistic" />
-          <Score type="subtotal" score={90} scoreName="technical" />
-          <Score type="total" score={89} scoreName="score" />
+          <Score type="subtotal" score={artistic} scoreName="artisticMark" />
+          <Score type="subtotal" score={technicalMark} scoreName="technicalMark" />
+          <Score type="total" score={cumulativeMark} scoreName="cumulativeMark" />
         </DialogActions>
       </React.Fragment>
     );
@@ -115,8 +119,8 @@ class AdjudicationDialog extends React.Component {
           edit={view}
           title={currentValues.judge}
           onEditClick={this.handleView}
-          onMoreClick={() => {}} />
-        { view ? (viewForm) : (editForm)}
+          onMoreClick={() => { }} />
+        {view ? (viewForm) : (editForm)}
       </DFDialog>
     );
   }
