@@ -18,9 +18,8 @@ class PerformancesSection extends React.Component {
   }
 
   componentDidMount() {
-    const { match: { params: { eventId } } } = this.props;
+    const { match: { params: { eventId }}} = this.props;
     const performances = [];
-
     db.collection(`events/${eventId}/performances`).get().then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
         const performance = {
@@ -39,7 +38,8 @@ class PerformancesSection extends React.Component {
   render() {
     const headings = ['Dance Title', 'Dance Entry', 'School', 'Acaademic Level', 'Level of Competition', 'Dance Style', 'Dance Size'];
     const { performances } = this.state;
-    console.log(performances)
+    const { match: { params: { eventId }}} = this.props;
+    console.log('adfkajdfklajlkfjadf', eventId);
     return (
       <React.Fragment>
         <SectionHeader title="performance" showWinner />
@@ -47,7 +47,7 @@ class PerformancesSection extends React.Component {
           <TableHeader headings={headings} />
           <TableBody>
             {(performances && performances.length > 0)
-              && performances.map(performance => (<PerformanceTableRow key={performance.id} {...performance} />))
+              && performances.map(performance => (<PerformanceTableRow key={performance.id} {...performance} eventId={eventId} />))
             }
           </TableBody>
         </Table>

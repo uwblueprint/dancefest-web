@@ -20,9 +20,9 @@ class PerformanceTableRow extends React.Component {
       danceStyle,
       performers,
       choreographers,
-      groupSize
+      groupSize,
+      eventId
     } = this.props;
-
     const currentValues = {
       danceTitle,
       performers,
@@ -47,7 +47,8 @@ class PerformanceTableRow extends React.Component {
           <PerformanceDialog
             formType="edit"
             currentValues={currentValues}
-            performanceId={id} />
+            performanceId={id}
+            eventId={eventId} />
 
         </TableCell>
       </TableRow>
