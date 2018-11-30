@@ -53,10 +53,10 @@ class PerformanceForm extends React.Component {
   }
 
   handleSubmit = async () => {
-    const { performanceId, formType } = this.props;
+    const { performanceId, formType, eventId } = this.props;
 
     console.log(performanceId);
-    const collectionName = 'performances';
+    const collectionName = `events/${eventId}/performances`;
     const data = _.omit(this.state, 'disabled');
     if (formType === 'new') {
       await addData(collectionName, data, this.handleModalClose);
@@ -68,7 +68,8 @@ class PerformanceForm extends React.Component {
   }
 
   render() {
-    const { classes, formType } = this.props;
+    const { classes, formType, eventId } = this.props;
+    console.log(eventId);
     const {
       danceEntry,
       danceTitle,
