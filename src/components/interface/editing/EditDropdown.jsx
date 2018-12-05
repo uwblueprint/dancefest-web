@@ -6,56 +6,37 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import styles from '../../styles';
 
 class EditDropdown extends React.Component {
-  constructor(props) {
-    super(props);
+  state = {
+    anchorEl: null
+  };
 
-    this.state = {
-      menuOpen: false,
-      deleteElement: false,
-      editElement: false
-    };
-  }
+  handleClick = (event) => {
+    this.setState({ anchorEl: event.currentTarget });
+  };
 
-  onMoreClick = () => {
-    this.setState({
-      menuOpen: !this.menuOpen
-    });
-  }
-
-  handleDelete = () => {
-    this.setState({
-      deleteElement: true
-    });
-  }
-
-  handleEdit = () => {
-    this.setState({
-      editElement: true
-    });
-  }
+  handleClose = () => {
+    this.setState({ anchorEl: null });
+  };
 
   render() {
-    const { classes } = this.props;
-    const { deleteElement, editElement, menuOpen } = this.state;
+    const { anchorEl } = this.state;
 
     return (
-      <React.Fragment>
-
-        <MoreVertIcon style={{ cursor: 'pointer' }} clases={{ root: classes.dfdialog_moreIcon }} onClick={this.onMoreClick} />
-        {menuOpen && (
-          <div style={{ cursor: 'pointer' }}>
-            <MenuItem onClick={this.handleDelete}>
-              <text>Delete</text>
-            </MenuItem>
-            <MenuItem onClick={this.handleEdit}>
-              <text>Edit</text>
-            </MenuItem>
-          </div>
-        )
-        }
-
-
-      </React.Fragment>
+      <div>
+        <MoreVertIcon
+          aria-owns={anchorEl ? 'simple-menu' : undefined}
+          aria-haspopup="true"
+          onClick={this.handleClick}
+          style={{ cursor: 'pointer' }} />
+        <Menu
+          id="simple-menu"
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={this.handleClose}>
+          <MenuItem onClick={this.handleClose}>Delete</MenuItem>
+          <MenuItem onClick={this.handleClose}>Edit</MenuItem>
+        </Menu>
+      </div>
     );
   }
 }
