@@ -7,9 +7,7 @@ const Score = ({ type, score, scoreName }) => {
   }) : ({
     flex: 1, backgroundColor: '#c61100', height: '100%', margin: '0', textAlign: 'center', color: 'white'
   });
-  console.log(score)
 
-  
   const innerStyles = {
     display: 'flex',
     flexFlow: 'column',
@@ -24,7 +22,9 @@ const Score = ({ type, score, scoreName }) => {
         <span style={{ fontSize: '36px', fontWeight: 'bold' }}>
           {score}
         </span>
-        {scoreName}
+        <span style={{ color: '#99999' }}>
+          {scoreName}
+        </span>
       </div>
     </div>
   );

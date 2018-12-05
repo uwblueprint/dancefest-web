@@ -46,7 +46,7 @@ class AudioPlayer extends React.Component {
 
 AudioPlayer.propTypes = {
   fileName: PropTypes.string.isRequired,
-  time: PropTypes.number.isRequired
+  time: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
 };
 
 export default withStyles(styles)(AudioPlayer);

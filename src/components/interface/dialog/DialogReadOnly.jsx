@@ -5,8 +5,14 @@ import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import styles from '../../styles';
 
-const DialogReadOnly = ({ classes, label, defaultValue, fullWidth = false }) => (
+const DialogReadOnly = ({
+  classes,
+  label,
+  defaultValue,
+  fullWidth
+}) => (
   <TextField
+    fullWidth={fullWidth}
     id="standard-read-only-input"
     label={label}
     defaultValue={defaultValue}
@@ -18,5 +24,14 @@ const DialogReadOnly = ({ classes, label, defaultValue, fullWidth = false }) => 
 export default withStyles(styles)(DialogReadOnly);
 
 DialogReadOnly.propTypes = {
-  classes: PropTypes.shape().isRequired
+  classes: PropTypes.shape().isRequired,
+  defaultValue: PropTypes.string,
+  fullWidth: PropTypes.bool,
+  label: PropTypes.string
+};
+
+DialogReadOnly.defaultProps = {
+  defaultValue: '',
+  fullWidth: false,
+  label: ''
 };

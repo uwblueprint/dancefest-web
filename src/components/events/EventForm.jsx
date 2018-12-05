@@ -41,7 +41,6 @@ class EventForm extends React.Component {
 
   handleSubmit = async () => {
     const { eventId, formType } = this.props;
-    console.log(eventId);
     const collectionName = 'events';
     const data = _.omit(this.state, 'disabled');
 
