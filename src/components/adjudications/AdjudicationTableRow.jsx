@@ -14,7 +14,6 @@ class AdjudicationTableRow extends React.Component {
       id,
       judgeName,
       audio,
-      //audio yes or no
       specialAward,
       choreoAward,
       cumulativeMark
@@ -26,8 +25,9 @@ class AdjudicationTableRow extends React.Component {
           {judgeName}
         </TableCell>
         <TableCell>
-          {audio && (<p>Yes</p>)}
-          {!audio && (<p>No</p>)}
+          <p>
+            {audio ? 'yes' : 'no'}
+          </p>
         </TableCell>
         <TableCell>
           {cumulativeMark}
@@ -45,19 +45,21 @@ class AdjudicationTableRow extends React.Component {
 }
 
 AdjudicationTableRow.propTypes = {
-  id: PropTypes.number,
-  judge: PropTypes.string,
-  cumlScore: PropTypes.number,
   audio: PropTypes.string,
-  awards: PropTypes.string
+  choreoAward: PropTypes.bool,
+  cumulativeMark: PropTypes.number,
+  id: PropTypes.number,
+  judgeName: PropTypes.string,
+  specialAward: PropTypes.bool
 };
 
 AdjudicationTableRow.defaultProps = {
-  id: 1,
-  judge: '',
-  cumlScore: null,
   audio: '',
-  awards: ''
+  cumulativeMark: 0,
+  choreoAward: false,
+  id: 1,
+  judgeName: '',
+  specialAward: false
 };
 
 

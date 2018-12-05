@@ -14,21 +14,7 @@ import AdjudicationForm from './AdjudicationForm';
 import Score from '../interface/dialog/Score';
 
 class AdjudicationDialog extends React.Component {
-  state = {
-    open: false,
-    view: true,
-    artistic: '',
-    technicalMark: '',
-    cumulativeMark: '',
-    notes: '',
-    audio: '',
-    awardsConsideration: null
-  };
-
-  handleChange = (e) => {
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
-  }
+  state = { open: false, view: true };
 
   handleClickOpen = () => {
     this.setState({ open: true });
@@ -47,17 +33,16 @@ class AdjudicationDialog extends React.Component {
   render() {
     const { currentValues } = this.props;
     const {
-      open,
-      view,
-      artistic,
+      artisticMark,
       technicalMark,
       cumulativeMark,
-      specialAward,
       judgeName,
-      choreoAward,
       notes,
-      audio
-    } = this.state;
+      audio,
+      specialAward,
+      choreoAward
+    } = currentValues;
+    const { open, view } = this.state;
 
     const viewForm = (
       <React.Fragment>
@@ -80,17 +65,23 @@ class AdjudicationDialog extends React.Component {
               <DialogReadOnly label="Size" />
             </div>
           </div>
-          <DialogReadOnly fullWidth label="Notes" />
-          <AudioPlay fileName="file_test.mp3" time={34} />
+          <DialogReadOnly fullWidth label="Notes" defaultValue={notes} />
+          {audio && <AudioPlay fileName="file_test.mp3" time="3:07" />}
           <FormHelperText>Award Considerations</FormHelperText>
-          <div>
-            <LensIcon fontSize="inherit" color="inherit" style={{ color: 'purple' }} />
-            Special Award
-          </div>
-          <div>
-            <LensIcon fontSize="inherit" color="primary" />
-            Choreography Award
-          </div>
+          {specialAward
+            && (
+              <div>
+                <LensIcon fontSize="inherit" color="inherit" style={{ color: 'purple' }} />
+                Special Award
+              </div>
+            )}
+          {choreoAward
+            && (
+              <div>
+                <LensIcon fontSize="inherit" color="primary" />
+                Choreography Award
+              </div>
+            )}
         </div>
         <DialogActions style={{
           display: 'flex',
@@ -98,9 +89,9 @@ class AdjudicationDialog extends React.Component {
           padding: '0',
           margin: '0'
         }}>
-          <Score type="subtotal" score={artistic} scoreName="artisticMark" />
-          <Score type="subtotal" score={technicalMark} scoreName="technicalMark" />
-          <Score type="total" score={cumulativeMark} scoreName="cumulativeMark" />
+          <Score type="subtotal" score={artisticMark} scoreName="Artistic" />
+          <Score type="subtotal" score={technicalMark} scoreName="Technical" />
+          <Score type="total" score={cumulativeMark} scoreName="Score" />
         </DialogActions>
       </React.Fragment>
     );
@@ -108,7 +99,7 @@ class AdjudicationDialog extends React.Component {
     const editForm = (
       <AdjudicationForm
         view={view}
-        defaultValues={[]}
+        currentValues={currentValues}
         onModalClose={this.handleClose}
         handleView={this.handleView} />
     );
@@ -117,7 +108,7 @@ class AdjudicationDialog extends React.Component {
       <DFDialog open={open} formType="edit" buttonTitle="edit" onClick={this.handleClickOpen} onClose={this.handleClose}>
         <DialogHeader
           edit={view}
-          title={currentValues.judge}
+          title={judgeName}
           onEditClick={this.handleView}
           onMoreClick={() => { }} />
         {view ? (viewForm) : (editForm)}

@@ -16,10 +16,8 @@ class AdjudicationsSection extends React.Component {
   }
 
   componentDidMount() {
-    const { match: { params: { eventId, performanceId } } } = this.props;
-    const adjudications = []
-
-    console.log(performanceId);
+    const { match: { params: { eventId, performanceId }}} = this.props;
+    const adjudications = [];
 
     db.collection(`events/${eventId}/performances/${performanceId}/adjudications`).get().then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
@@ -27,7 +25,6 @@ class AdjudicationsSection extends React.Component {
           id: doc.id,
           ...doc.data()
         };
-        console.log(doc)
         adjudications.push(adjudication);
       });
     }).then(() => {
@@ -38,7 +35,6 @@ class AdjudicationsSection extends React.Component {
   render() {
     const headings = ['Judge', 'Audio', 'Cummulative Score', 'Awards'];
     const { adjudications } = this.state;
-    console.log(adjudications);
 
     return (
       <React.Fragment>
@@ -47,7 +43,8 @@ class AdjudicationsSection extends React.Component {
           <TableHeader headings={headings} />
           <TableBody>
             {adjudications
-              && adjudications.map(rowProps => (<AdjudicationTableRow {...rowProps} />))}
+              && adjudications.map(rowProps => (
+                <AdjudicationTableRow key={rowProps.id} {...rowProps} />))}
           </TableBody>
         </Table>
         {!adjudications && (

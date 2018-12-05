@@ -3,30 +3,34 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import DialogActions from '@material-ui/core/DialogActions';
 
+import updateData from '../../firebase/utils/updateData';
+
 import DialogInput from '../interface/dialog/DialogInput';
 import Button from '../interface/Button';
-import Checkboxlabels from '../interface/CheckBox';
+import CheckBox from '../interface/CheckBox';
 import styles from '../styles';
 
 class AdjudicationForm extends React.Component {
   constructor(props) {
     super(props);
-    const { defaultValues } = props;
+    const { currentValues } = props;
 
     this.state = {
-      artistic: defaultValues.artistic || '',
-      technical: defaultValues.technical || '',
-      audio: null,
-      specialAward: false,
-      choreoAward: false,
-      notes: defaultValues.notes || '',
-      disabled: true
+      artisticMark: currentValues.artisticMark || '',
+      choreoAward: currentValues.choreoAward || false,
+      specialAward: currentValues.specialAward || false,
+      technicalMark: currentValues.technicalMark || ''
     };
   }
 
   handleChange = (e) => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
+  }
+
+  handleCheckedAward = (e) => {
+    const { name, checked } = e.target;
+    this.setState({ [name]: checked });
   }
 
   handleCancel = () => {
@@ -39,35 +43,17 @@ class AdjudicationForm extends React.Component {
     }
   }
 
-  // TODO: create validation form method
-  validateData = () => {
-    const validate = false;
-
-    // TODO: different validation cases depending on adding new vs editing
-    this.setState({ disabled: validate });
-  }
-
-  handleCheckedAward = name => (event) => {
-    this.setState({ [name]: event.target.checked });
-  };
-
   // TODO: handle submmission of the form
-  handleSubmit = () => {
-    const {
-      artistic,
-      technical,
-      audio,
-      awards,
-      notes
-    } = this.state;
-
-    const item = {
-      artistic,
-      technical,
-      audio,
-      awards,
-      notes
-    }
+  handleSubmit = async () => {
+    const { artisticMark, technicalMark } = this.state;
+    const cumulativeMark = artisticMark + technicalMark;
+    const collectionName = 'adjudications';
+    const adjudicationId = 1;
+    await updateData(
+      collectionName,
+      adjudicationId,
+      { artisticMark, technicalMark, cumulativeMark }
+    );
   }
 
   handleModalClose = () => {
@@ -76,18 +62,18 @@ class AdjudicationForm extends React.Component {
   }
 
   render() {
-    const { classes } = this.props;
-    const choices = [{ value: 'specialAward', label: 'Special Award' }, { value: 'choreoAward', label: 'Choreography Award' }];
+    const { classes, currentValues: { notes }} = this.props;
     const {
       artisticMark,
-      technicalMark,
-      audio,
-      specialAward,
       choreoAward,
-      notes,
-      cumulativeMark,
-      disabled,
+      specialAward,
+      technicalMark
     } = this.state;
+    const choices = [
+      { checked: specialAward, value: 'specialAward', label: 'Special Award' },
+      { checked: choreoAward, value: 'choreoAward', label: 'Choreography Award' }
+    ];
+
     return (
       <React.Fragment>
         <div style={{ display: 'flex', flexFlow: 'column', margin: '25px' }}>
@@ -99,15 +85,15 @@ class AdjudicationForm extends React.Component {
               <DialogInput type="number" value={technicalMark} name="technicalMark" label="Technical" onChange={this.handleChange} />
             </div>
           </div>
-          <DialogInput fullWidth multiline name="notes" value={notes} label="Notes" onChange={this.handleChange} />
-          <Checkboxlabels label="Award Considerations" choices={choices} onChange={this.handleCheckedAward} />
+          <DialogInput fullWidth disabled multiline name="notes" value={notes} label="Notes" />
+          <CheckBox label="Award Considerations" choices={choices} onChange={this.handleCheckedAward} />
         </div>
         <div className={classes.dfdialog_footer}>
           <DialogActions>
             <Button type="default" onClick={this.handleCancel}>
               cancel
             </Button>
-            <Button disabled={disabled} type="primary" onClick={this.handleSubmit}>
+            <Button type="primary" onClick={this.handleSubmit}>
               save
             </Button>
           </DialogActions>
@@ -118,15 +104,15 @@ class AdjudicationForm extends React.Component {
 }
 
 AdjudicationForm.propTypes = {
-  classes: PropTypes.string.isRequired,
-  defaultValues: PropTypes.shape(),
+  classes: PropTypes.shape().isRequired,
+  currentValues: PropTypes.shape(),
   handleView: PropTypes.func.isRequired,
   onModalClose: PropTypes.func.isRequired,
   view: PropTypes.bool.isRequired
 };
 
 AdjudicationForm.defaultProps = {
-  defaultValues: []
+  currentValues: []
 };
 
 export default withStyles(styles)(AdjudicationForm);
