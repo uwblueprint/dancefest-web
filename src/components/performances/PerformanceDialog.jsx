@@ -22,7 +22,8 @@ class PerformanceDialog extends React.Component {
   };
 
   render() {
-    const { formType } = this.props;
+    const { collectionName, formType, id } = this.props;
+    console.log(this.props, ' #');
     const { open } = this.state;
     const dialogTitle = formType === 'edit' ? 'Edit' : 'New';
     const buttonTitle = formType === 'edit' ? 'EDIT'
@@ -31,7 +32,6 @@ class PerformanceDialog extends React.Component {
           <CalendarTodayIcon style={{ color: 'gray', marginRight: '5px' }} />
           NEW PERFORMANCE
         </React.Fragment>);
-
     return (
       <DFDialog
         open={open}
@@ -39,7 +39,7 @@ class PerformanceDialog extends React.Component {
         formType={formType}
         onClick={this.handleClickOpen}
         onClose={this.handleClose}>
-        <DialogHeader title={`${dialogTitle} Performance`} onMoreClick={() => { }} />
+        <DialogHeader title={`${dialogTitle} Performance`} onMoreClick={() => { }} collectionName={collectionName} />
         <PerformanceForm
           {...this.props}
           onModalClose={this.handleClose} />

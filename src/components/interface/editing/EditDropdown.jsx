@@ -3,7 +3,9 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import withStyles from '@material-ui/core/styles/withStyles';
+import _ from 'lodash';
 import styles from '../../styles';
+import deleteData from '../../../firebase/utils/deleteData';
 
 class EditDropdown extends React.Component {
   state = {
@@ -18,9 +20,16 @@ class EditDropdown extends React.Component {
     this.setState({ anchorEl: null });
   };
 
+  handleDelete = async () => {
+    const { collectionName, docId } = this.props;
+    console.log(collectionName);
+    deleteData('performances', docId);
+    this.setState({ anchorEl: null });
+  };
+
   render() {
     const { anchorEl } = this.state;
-
+    console.log(this.props.collectionName);
     return (
       <div>
         <MoreVertIcon
@@ -33,8 +42,8 @@ class EditDropdown extends React.Component {
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
           onClose={this.handleClose}>
-          <MenuItem onClick={this.handleClose}>Delete</MenuItem>
-          <MenuItem onClick={this.handleClose}>Edit</MenuItem>
+          <MenuItem onClick={this.handleClose}>Duplicate</MenuItem>
+          <MenuItem onClick={this.handleDelete}>Delete</MenuItem>
         </Menu>
       </div>
     );

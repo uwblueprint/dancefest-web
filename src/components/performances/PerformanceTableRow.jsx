@@ -13,6 +13,7 @@ class PerformanceTableRow extends React.Component {
     const {
       id,
       entryId,
+      collectionName,
       danceTitle,
       school,
       academicLevel,
@@ -34,6 +35,8 @@ class PerformanceTableRow extends React.Component {
       groupSize
     };
 
+    console.log(collectionName, 'TEST');
+
     return (
       <TableRow style={{}}>
         <TableCell><Link to={`performance/${id}/adjudications`}>{danceTitle}</Link></TableCell>
@@ -45,11 +48,11 @@ class PerformanceTableRow extends React.Component {
         <TableCell>{groupSize}</TableCell>
         <TableCell>
           <PerformanceDialog
+            collectionName={collectionName}
             formType="edit"
             currentValues={currentValues}
             performanceId={id}
             eventId={eventId} />
-
         </TableCell>
       </TableRow>
     );

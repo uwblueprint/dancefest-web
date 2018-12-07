@@ -8,6 +8,8 @@ import EditDropDown from '../editing/EditDropdown';
 
 
 const DialogHeader = ({
+  collectionName,
+  docId,
   classes,
   edit,
   title,
@@ -17,7 +19,7 @@ const DialogHeader = ({
       {title}
       <div style={{ float: 'right', color: 'black' }}>
         {edit && <EditIcon classes={{ root: classes.dfdialog_editIcon }} onClick={onEditClick} />}
-        <EditDropDown />
+        <EditDropDown collectionName={collectionName} docId={docId} />
       </div>
     </DialogTitle>
 );
