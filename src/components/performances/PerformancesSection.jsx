@@ -39,15 +39,15 @@ class PerformancesSection extends React.Component {
     const headings = ['Dance Title', 'Dance Entry', 'School', 'Acaademic Level', 'Level of Competition', 'Dance Style', 'Dance Size'];
     const { performances } = this.state;
     const { match: { params: { eventId }}} = this.props;
-    console.log('adfkajdfklajlkfjadf', eventId);
     return (
       <React.Fragment>
-        <SectionHeader title="performance" showWinner />
+        <SectionHeader title="performance" />
         <Table>
           <TableHeader headings={headings} />
           <TableBody>
             {(performances && performances.length > 0)
-              && performances.map(performance => (<PerformanceTableRow key={performance.id} {...performance} eventId={eventId} />))
+              && performances.map(performance => (
+                <PerformanceTableRow key={performance.id} {...performance} eventId={eventId} />))
             }
           </TableBody>
         </Table>
