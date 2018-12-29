@@ -17,8 +17,8 @@ class EventsSection extends React.Component {
   }
 
   componentDidMount() {
-    const events = [];
-    db.collection('events').get().then((querySnapshot) => {
+    db.collection('events').onSnapshot((querySnapshot) => {
+      let events = [];
       querySnapshot.forEach((doc) => {
         const { eventTitle, numJudges, date } = doc.data();
         let eventDate;
@@ -33,11 +33,8 @@ class EventsSection extends React.Component {
         };
         events.push(event);
       });
-    }).then(() => {
-      if (events.length > 0) {
-        this.setState({ events });
-      }
-    });
+      this.setState({ events });
+    })
   }
 
   // TODO: create method for getting total number of Dancers

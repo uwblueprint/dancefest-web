@@ -19,11 +19,8 @@ class PerformancesSection extends React.Component {
 
   componentDidMount() {
     const { match: { params: { eventId }}} = this.props;
-    let performances = [];
-    const collectionName = `events/${eventId}/performances`;
-
-    db.collection(collectionName).onSnapshot((querySnapshot) => {
-      performances = [];
+    db.collection(`events/${eventId}/performances`).onSnapshot((querySnapshot) => {
+      let performances = [];
       querySnapshot.forEach((doc) => {
         const performance = {
           id: doc.id,
@@ -31,9 +28,7 @@ class PerformancesSection extends React.Component {
         };
         performances.push(performance);
       });
-      if (performances.length) {
-        this.setState({ performances });
-      }
+      this.setState({ performances });
     });
   }
 
@@ -41,7 +36,7 @@ class PerformancesSection extends React.Component {
     const headings = ['Dance Title', 'Dance Entry', 'School', 'Acaademic Level', 'Level of Competition', 'Dance Style', 'Dance Size'];
     const { performances } = this.state;
     const { match: { params: { eventId }}} = this.props;
-    const collectionName = `events/${eventId}/performances`;
+
     return (
       <React.Fragment>
         <SectionHeader eventId={eventId} title="performance" />

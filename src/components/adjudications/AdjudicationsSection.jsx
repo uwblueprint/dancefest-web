@@ -17,9 +17,9 @@ class AdjudicationsSection extends React.Component {
 
   componentDidMount() {
     const { match: { params: { eventId, performanceId }}} = this.props;
-    const adjudications = [];
 
-    db.collection(`events/${eventId}/performances/${performanceId}/adjudications`).get().then((querySnapshot) => {
+    db.collection(`events/${eventId}/performances/${performanceId}/adjudications`).onSnapshot((querySnapshot) => {
+      let adjudications = [];
       querySnapshot.forEach((doc) => {
         const adjudication = {
           id: doc.id,
@@ -27,9 +27,8 @@ class AdjudicationsSection extends React.Component {
         };
         adjudications.push(adjudication);
       });
-    }).then(() => {
       this.setState({ adjudications });
-    });
+    })
   }
 
   render() {
