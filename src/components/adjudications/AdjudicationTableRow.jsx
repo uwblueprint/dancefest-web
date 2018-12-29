@@ -11,12 +11,13 @@ class AdjudicationTableRow extends React.Component {
 
   render() {
     const {
+      audio,
+      collectionName,
+      choreoAward,
+      cumulativeMark,
       id,
       judgeName,
-      audio,
-      specialAward,
-      choreoAward,
-      cumulativeMark
+      specialAward
     } = this.props;
 
     return (
@@ -37,7 +38,10 @@ class AdjudicationTableRow extends React.Component {
           {choreoAward && <LensIcon fontSize="inherit" color="primary" />}
         </TableCell>
         <TableCell>
-          <AdjudicationDialog adjudicationId={id} collectionName={collectionName} currentValues={this.props} />
+          <AdjudicationDialog
+            adjudicationId={id}
+            collectionName={collectionName}
+            currentValues={this.props} />
         </TableCell>
       </TableRow>
     );
@@ -47,6 +51,7 @@ class AdjudicationTableRow extends React.Component {
 AdjudicationTableRow.propTypes = {
   audio: PropTypes.string,
   choreoAward: PropTypes.bool,
+  collectionName: PropTypes.string.isRequired,
   cumulativeMark: PropTypes.number,
   id: PropTypes.number,
   judgeName: PropTypes.string,

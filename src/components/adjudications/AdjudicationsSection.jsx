@@ -36,8 +36,10 @@ class AdjudicationsSection extends React.Component {
   }
 
   render() {
-    const headings = ['Judge', 'Audio', 'Cummulative Score', 'Awards'];
+    const { match: { params: { eventId, performanceId }}} = this.props;
     const { adjudications } = this.state;
+    const collectionName = `events/${eventId}/performances/${performanceId}/adjudications`;
+    const headings = ['Judge', 'Audio', 'Cummulative Score', 'Awards'];
 
     return (
       <React.Fragment>
@@ -47,7 +49,10 @@ class AdjudicationsSection extends React.Component {
           <TableBody>
             {Array.isArray(adjudications) && adjudications.length
               && adjudications.map(rowProps => (
-                <AdjudicationTableRow key={rowProps.id} {...rowProps} />))}
+                <AdjudicationTableRow
+                  collectionName={collectionName}
+                  key={rowProps.id}
+                  {...rowProps} />))}
           </TableBody>
         </Table>
         {!adjudications && (
