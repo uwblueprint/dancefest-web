@@ -12,7 +12,6 @@ const SectionHeader = ({
   classes,
   title,
   showNew,
-  showWinner,
   eventId
 }) => (
   <div className={classes.sectionHeaderWrapper}>
@@ -21,12 +20,6 @@ const SectionHeader = ({
       s
     </Typography>
     <div className={classes.sectionHeaderAction}>
-      {showWinner && (
-        <Button type="outline" onClick={() => {}}>
-          <CalendarTodayIcon style={{ color: 'gray', marginRight: '5px' }} />
-          Winners
-        </Button>
-      )}
       {showNew && (title === 'event'
         ? (<EventDialog formType="new" />)
         : (<PerformanceDialog formType="new" eventId={eventId} />)
@@ -37,14 +30,12 @@ const SectionHeader = ({
 
 SectionHeader.propTypes = {
   classes: PropTypes.string.isRequired,
-  showWinner: PropTypes.bool,
   showNew: PropTypes.bool,
   title: PropTypes.string.isRequired,
   eventId: PropTypes.string,
 };
 
 SectionHeader.defaultProps = {
-  showWinner: false,
   showNew: true
 };
 
