@@ -12,7 +12,8 @@ const SectionHeader = ({
   classes,
   title,
   showNew,
-  showWinner
+  showWinner,
+  eventId
 }) => (
   <div className={classes.sectionHeaderWrapper}>
     <Typography variant="h3">
@@ -28,7 +29,7 @@ const SectionHeader = ({
       )}
       {showNew && (title === 'event'
         ? (<EventDialog formType="new" />)
-        : (<PerformanceDialog formType="new" />)
+        : (<PerformanceDialog formType="new" eventId={eventId} />)
       )}
     </div>
   </div>
@@ -38,7 +39,8 @@ SectionHeader.propTypes = {
   classes: PropTypes.string.isRequired,
   showWinner: PropTypes.bool,
   showNew: PropTypes.bool,
-  title: PropTypes.string.isRequired
+  title: PropTypes.string.isRequired,
+  eventId: PropTypes.string,
 };
 
 SectionHeader.defaultProps = {
