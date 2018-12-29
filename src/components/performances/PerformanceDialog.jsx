@@ -22,8 +22,7 @@ class PerformanceDialog extends React.Component {
   };
 
   render() {
-    const { collectionName, formType, id } = this.props;
-    console.log(this.props, ' #');
+    const { collectionName, formType } = this.props;
     const { open } = this.state;
     const dialogTitle = formType === 'edit' ? 'Edit' : 'New';
     const buttonTitle = formType === 'edit' ? 'EDIT'
