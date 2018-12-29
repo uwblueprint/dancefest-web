@@ -9,18 +9,19 @@ import styles from '../../styles';
 import EditDropDown from '../editing/EditDropdown';
 
 const DialogHeader = ({
+  classes,
   collectionName,
   docId,
-  classes,
   edit,
-  title,
-  onEditClick
+  onEditClick,
+  shouldShowDropdown,
+  title
 }) => (
   <DialogTitle classes={{ root: classes.dfdialog_title }} disableTypography id="form-dialog-title">
     {title}
     <div style={{ float: 'right', color: 'black' }}>
       {edit && <EditIcon classes={{ root: classes.dfdialog_editIcon }} onClick={onEditClick} />}
-      <EditDropDown collectionName={collectionName} docId={docId} />
+      {shouldShowDropdown && <EditDropDown collectionName={collectionName} docId={docId} />}
     </div>
   </DialogTitle>
 );
@@ -33,11 +34,13 @@ DialogHeader.propTypes = {
   edit: PropTypes.bool,
   docId: PropTypes.string,
   onEditClick: PropTypes.func,
+  shouldShowDropdown: PropTypes.bool,
   title: PropTypes.string.isRequired
 };
 
 DialogHeader.defaultProps = {
   docId: '',
   edit: false,
-  onEditClick: null
+  onEditClick: null,
+  shouldShowDropdown: false
 };

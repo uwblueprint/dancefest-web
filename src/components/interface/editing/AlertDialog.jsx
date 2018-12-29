@@ -7,9 +7,12 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 class AlertDialog extends React.Component {
-  state = {
-    open: true
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      open: true
+    };
+  }
 
   handleClose = () => {
     this.setState({ open: false });
@@ -19,28 +22,26 @@ class AlertDialog extends React.Component {
     const { open } = this.state;
     const { optionName } = this.props;
     return (
-      <div>
-        <Dialog
-          open={open}
-          onClose={this.handleClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description">
-          <DialogTitle id="alert-dialog-title">
-            {`Delete ${optionName}?`}
-          </DialogTitle>
-          <DialogContent>
-            <p>Deleted categories cannot be restored.</p>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.handleClose} color="secondary">
-              Cancel
-            </Button>
-            <Button onClick={this.handleClose} color="primary" autoFocus>
-              Delete
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </div>
+      <Dialog
+        open={open}
+        onClose={this.handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description">
+        <DialogTitle id="alert-dialog-title">
+          {`Delete ${optionName}?`}
+        </DialogTitle>
+        <DialogContent>
+          <p>Deleted categories cannot be restored.</p>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.handleClose} color="secondary">
+            Cancel
+          </Button>
+          <Button onClick={this.handleClose} color="primary" autoFocus>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     );
   }
 }
