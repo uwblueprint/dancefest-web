@@ -1,18 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Typography from '@material-ui/core/Typography';
-import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
+
 import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+
+import styles from '../styles';
 import EventDialog from '../events/EventDialog';
 import PerformanceDialog from '../performances/PerformanceDialog';
-import Button from './Button';
-import styles from '../styles';
 
 const SectionHeader = ({
   classes,
-  title,
+  eventId,
   showNew,
-  showWinner
+  title
 }) => (
   <div className={classes.sectionHeaderWrapper}>
     <Typography variant="h3">
@@ -20,15 +20,9 @@ const SectionHeader = ({
       s
     </Typography>
     <div className={classes.sectionHeaderAction}>
-      {showWinner && (
-        <Button type="outline" onClick={() => {}}>
-          <CalendarTodayIcon style={{ color: 'gray', marginRight: '5px' }} />
-          Winners
-        </Button>
-      )}
       {showNew && (title === 'event'
         ? (<EventDialog formType="new" />)
-        : (<PerformanceDialog formType="new" />)
+        : (<PerformanceDialog eventId={eventId} formType="new" />)
       )}
     </div>
   </div>
@@ -36,13 +30,13 @@ const SectionHeader = ({
 
 SectionHeader.propTypes = {
   classes: PropTypes.string.isRequired,
-  showWinner: PropTypes.bool,
+  eventId: PropTypes.string,
   showNew: PropTypes.bool,
   title: PropTypes.string.isRequired
 };
 
 SectionHeader.defaultProps = {
-  showWinner: false,
+  eventId: '',
   showNew: true
 };
 
