@@ -42,7 +42,6 @@ class PerformanceDialog extends React.Component {
         <DialogHeader shouldShowDropdown={shouldShowDropdown} title={`${dialogTitle} Performance`} collectionName={collectionName} />
         <PerformanceForm
           {...(this.props)}
-          eventId={this.props.eventId}
           onModalClose={this.handleClose} />
       </DFDialog>
     );
