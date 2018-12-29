@@ -24,8 +24,8 @@ class EditDropdown extends React.Component {
   };
 
   handleDelete = async () => {
-    const { docId } = this.props;
-    deleteData('performances', docId);
+    const { collectionName, docId } = this.props;
+    deleteData(collectionName, docId);
     this.setState({ anchorEl: undefined });
   };
 

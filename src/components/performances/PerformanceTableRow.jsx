@@ -47,10 +47,10 @@ class PerformanceTableRow extends React.Component {
         <TableCell>
           <PerformanceDialog
             collectionName={collectionName}
-            formType="edit"
             currentValues={currentValues}
-            performanceId={id}
-            eventId={eventId} />
+            eventId={eventId}
+            formType="edit"
+            performanceId={id} />
         </TableCell>
       </TableRow>
     );

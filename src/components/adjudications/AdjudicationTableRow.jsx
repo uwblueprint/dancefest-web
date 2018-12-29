@@ -37,7 +37,7 @@ class AdjudicationTableRow extends React.Component {
           {choreoAward && <LensIcon fontSize="inherit" color="primary" />}
         </TableCell>
         <TableCell>
-          <AdjudicationDialog currentValues={this.props} />
+          <AdjudicationDialog adjudicationId={id} collectionName={collectionName} currentValues={this.props} />
         </TableCell>
       </TableRow>
     );

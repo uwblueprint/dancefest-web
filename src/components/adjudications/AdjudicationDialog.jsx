@@ -31,7 +31,7 @@ class AdjudicationDialog extends React.Component {
   }
 
   render() {
-    const { currentValues } = this.props;
+    const { adjudicationId, collectionName, currentValues } = this.props;
     const {
       artisticMark,
       technicalMark,
@@ -104,9 +104,13 @@ class AdjudicationDialog extends React.Component {
         handleView={this.handleView} />
     );
 
+    console.log(adjudicationId, collectionName)
+
     return (
       <DFDialog open={open} formType="edit" buttonTitle="edit" onClick={this.handleClickOpen} onClose={this.handleClose}>
         <DialogHeader
+          collectionName={collectionName}
+          docId={adjudicationId}
           edit={view}
           onEditClick={this.handleView}
           shouldShowDropdown
@@ -118,6 +122,8 @@ class AdjudicationDialog extends React.Component {
 }
 
 AdjudicationDialog.propTypes = {
+  adjudicationId: PropTypes.string.isRequired,
+  collectionName: PropTypes.string.isRequired,
   currentValues: PropTypes.shape().isRequired
 };
 
