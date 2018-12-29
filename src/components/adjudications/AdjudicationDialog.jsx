@@ -108,9 +108,9 @@ class AdjudicationDialog extends React.Component {
       <DFDialog open={open} formType="edit" buttonTitle="edit" onClick={this.handleClickOpen} onClose={this.handleClose}>
         <DialogHeader
           edit={view}
-          title={judgeName}
           onEditClick={this.handleView}
-          onMoreClick={() => { }} />
+          shouldShowDropdown
+          title={judgeName} />
         {view ? (viewForm) : (editForm)}
       </DFDialog>
     );

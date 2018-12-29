@@ -88,12 +88,6 @@ const styles = theme => ({
     margin: '0 35px',
     padding: '35px 0 15px 0px'
   },
-  dfdialog_editIcon: {
-    marginRight: '10px',
-    '&:hover': {
-      cursor: 'pointer'
-    }
-  },
   dfdialog_moreIcon: {
     '&:hover': {
       cursor: 'pointer'

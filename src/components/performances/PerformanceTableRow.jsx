@@ -13,6 +13,7 @@ class PerformanceTableRow extends React.Component {
     const {
       id,
       entryId,
+      collectionName,
       danceTitle,
       school,
       academicLevel,
@@ -45,11 +46,11 @@ class PerformanceTableRow extends React.Component {
         <TableCell>{groupSize}</TableCell>
         <TableCell>
           <PerformanceDialog
+            collectionName={collectionName}
             formType="edit"
             currentValues={currentValues}
             performanceId={id}
             eventId={eventId} />
-
         </TableCell>
       </TableRow>
     );
@@ -58,7 +59,9 @@ class PerformanceTableRow extends React.Component {
 
 PerformanceTableRow.propTypes = {
   id: PropTypes.string,
+  collectionName: PropTypes.string.isRequired,
   entryId: PropTypes.string,
+  eventId: PropTypes.string.isRequired,
   danceTitle: PropTypes.string,
   school: PropTypes.string,
   academicLevel: PropTypes.string,

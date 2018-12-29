@@ -28,7 +28,7 @@ class EventDialog extends React.Component {
   };
 
   render() {
-    const { formType } = this.props;
+    const { eventId, formType } = this.props;
     const { open } = this.state;
     const dialogTitle = formType === 'edit' ? 'Edit' : 'New';
     const newButtonTitle = (
@@ -45,7 +45,7 @@ class EventDialog extends React.Component {
         formType={formType}
         onClick={this.handleClickOpen}
         onClose={this.handleClose}>
-        <DialogHeader title={`${dialogTitle} Event`} onMoreClick={() => {}} />
+        <DialogHeader collectionName="events" docId={eventId} title={`${dialogTitle} Event`} />
         <EventForm {...this.props} onModalClose={this.handleClose} />
       </DFDialog>
     );
