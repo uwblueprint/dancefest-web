@@ -32,6 +32,7 @@ class AdjudicationDialog extends React.Component {
 
   render() {
     const { currentValues } = this.props;
+    console.log(currentValues, ' hi');
     const {
       artisticMark,
       technicalMark,

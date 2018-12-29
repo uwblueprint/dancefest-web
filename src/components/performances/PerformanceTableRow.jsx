@@ -24,7 +24,6 @@ class PerformanceTableRow extends React.Component {
       groupSize,
       eventId
     } = this.props;
-
     const currentValues = {
       danceTitle,
       performers,
@@ -35,6 +34,8 @@ class PerformanceTableRow extends React.Component {
       school,
       groupSize
     };
+
+    console.log(collectionName, 'TEST');
 
     return (
       <TableRow style={{}}>

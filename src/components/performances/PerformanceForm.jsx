@@ -64,7 +64,8 @@ class PerformanceForm extends React.Component {
   }
 
   render() {
-    const { classes, formType } = this.props;
+    const { classes, formType, eventId } = this.props;
+    console.log(eventId);
     const {
       danceEntry,
       danceTitle,
