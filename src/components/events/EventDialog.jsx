@@ -31,7 +31,6 @@ class EventDialog extends React.Component {
     const { eventId, formType } = this.props;
     const { open } = this.state;
     const dialogTitle = formType === 'edit' ? 'Edit' : 'New';
-    const shouldShowDropdown = formType === 'edit';
     const newButtonTitle = (
       <React.Fragment>
         <CalendarTodayIcon fontSize="small" style={{ color: 'gray', marginRight: '5px' }} />
@@ -46,7 +45,7 @@ class EventDialog extends React.Component {
         formType={formType}
         onClick={this.handleClickOpen}
         onClose={this.handleClose}>
-        <DialogHeader shouldShowDropdown={shouldShowDropdown} collectionName="events" docId={eventId} title={`${dialogTitle} Event`} />
+        <DialogHeader collectionName="events" docId={eventId} title={`${dialogTitle} Event`} />
         <EventForm {...this.props} onModalClose={this.handleClose} />
       </DFDialog>
     );

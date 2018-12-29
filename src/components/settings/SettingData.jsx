@@ -8,6 +8,7 @@ import AlertDialog from '../interface/editing/AlertDialog';
 class SettingData extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       alert: false
     };
