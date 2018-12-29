@@ -14,7 +14,7 @@
     "react-dom": "^16.4.1",
     "react-moment": "^0.7.9",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "^2.1.1"
+    "react-scripts": "^2.1.2"
   },
   "scripts": {
     "start": "react-scripts start",
