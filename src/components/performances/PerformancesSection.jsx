@@ -31,7 +31,7 @@ class PerformancesSection extends React.Component {
         };
         performances.push(performance);
       });
-      if (performances.length > 0) {
+      if (performances.length) {
         this.setState({ performances });
       }
     });
