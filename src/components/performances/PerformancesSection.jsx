@@ -44,7 +44,7 @@ class PerformancesSection extends React.Component {
     const collectionName = `events/${eventId}/performances`;
     return (
       <React.Fragment>
-        <SectionHeader title="performance" eventId={eventId} />
+        <SectionHeader eventId={eventId} title="performance" />
         <Table>
           <TableHeader headings={headings} />
           <TableBody>

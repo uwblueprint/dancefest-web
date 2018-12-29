@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Typography from '@material-ui/core/Typography';
-import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
+
 import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+
+import styles from '../styles';
 import EventDialog from '../events/EventDialog';
 import PerformanceDialog from '../performances/PerformanceDialog';
-import Button from './Button';
-import styles from '../styles';
 
 const SectionHeader = ({
   classes,
@@ -30,9 +30,9 @@ const SectionHeader = ({
 
 SectionHeader.propTypes = {
   classes: PropTypes.string.isRequired,
+  eventId: PropTypes.string,
   showNew: PropTypes.bool,
-  title: PropTypes.string.isRequired,
-  eventId: PropTypes.string
+  title: PropTypes.string.isRequired
 };
 
 SectionHeader.defaultProps = {
