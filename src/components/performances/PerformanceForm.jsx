@@ -64,8 +64,7 @@ class PerformanceForm extends React.Component {
   }
 
   render() {
-    const { classes, formType, eventId } = this.props;
-    console.log(eventId);
+    const { classes, formType } = this.props;
     const {
       danceEntry,
       danceTitle,
@@ -118,8 +117,9 @@ class PerformanceForm extends React.Component {
 PerformanceForm.propTypes = {
   classes: PropTypes.string.isRequired,
   currentValues: PropTypes.shape(),
-  onModalClose: PropTypes.func.isRequired,
-  formType: PropTypes.oneOf(['edit', 'new'])
+  eventId: PropTypes.string.isRequired,
+  formType: PropTypes.oneOf(['edit', 'new']),
+  onModalClose: PropTypes.func.isRequired
 };
 
 PerformanceForm.defaultProps = {

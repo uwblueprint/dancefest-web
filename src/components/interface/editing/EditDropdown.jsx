@@ -7,22 +7,26 @@ import styles from '../../styles';
 import deleteData from '../../../firebase/utils/deleteData';
 
 class EditDropdown extends React.Component {
-  state = {
-    anchorEl: null
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      anchorEl: undefined
+    };
+  }
 
   handleClick = (event) => {
     this.setState({ anchorEl: event.currentTarget });
   };
 
   handleClose = () => {
-    this.setState({ anchorEl: null });
+    this.setState({ anchorEl: undefined });
   };
 
   handleDelete = async () => {
     const { docId } = this.props;
     deleteData('performances', docId);
-    this.setState({ anchorEl: null });
+    this.setState({ anchorEl: undefined });
   };
 
   render() {
@@ -30,7 +34,7 @@ class EditDropdown extends React.Component {
     return (
       <div style={{ display: 'inline' }}>
         <MoreVertIcon
-          aria-owns={anchorEl ? 'simple-menu' : undefined}
+          aria-owns={anchorEl && 'simple-menu'}
           aria-haspopup="true"
           onClick={this.handleClick}
           style={{ cursor: 'pointer' }} />

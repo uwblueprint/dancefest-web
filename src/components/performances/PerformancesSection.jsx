@@ -47,13 +47,14 @@ class PerformancesSection extends React.Component {
         <Table>
           <TableHeader headings={headings} />
           <TableBody>
-            {(performances && performances.length > 0) && performances.map(performance => (
-              <PerformanceTableRow
-                key={performance.id}
-                {...performance}
-                eventId={eventId}
-                collectionName={collectionName} />
-            ))}
+            {(Array.isArray(performances) && performances.length)
+              && performances.map(performance => (
+                <PerformanceTableRow
+                  key={performance.id}
+                  {...performance}
+                  eventId={eventId}
+                  collectionName={collectionName} />
+              ))}
           </TableBody>
         </Table>
         {

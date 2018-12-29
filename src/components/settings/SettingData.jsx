@@ -18,8 +18,7 @@ class SettingData extends React.Component {
     const { alert } = this.state;
     return (
       <div style={{ float: 'left' }}>
-        {optionName}
-        {' '}
+        {`${optionName} `}
         <CloseIcon style={{ cursor: 'pointer' }} onClick={this.callAlert} />
         {alert && (<AlertDialog optionName={optionName} />)}
       </div>

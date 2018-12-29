@@ -26,10 +26,7 @@ class AlertDialog extends React.Component {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description">
           <DialogTitle id="alert-dialog-title">
-            Delete
-            {' '}
-            {optionName}
-            ?
+            {`Delete ${optionName}?`}
           </DialogTitle>
           <DialogContent>
             <p>Deleted categories cannot be restored.</p>
