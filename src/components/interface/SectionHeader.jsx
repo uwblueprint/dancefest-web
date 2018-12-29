@@ -36,6 +36,7 @@ SectionHeader.propTypes = {
 };
 
 SectionHeader.defaultProps = {
+  eventId: '',
   showNew: true
 };
 
