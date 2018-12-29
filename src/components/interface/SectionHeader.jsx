@@ -10,9 +10,9 @@ import PerformanceDialog from '../performances/PerformanceDialog';
 
 const SectionHeader = ({
   classes,
-  title,
+  eventId,
   showNew,
-  eventId
+  title
 }) => (
   <div className={classes.sectionHeaderWrapper}>
     <Typography variant="h3">
