@@ -35,8 +35,6 @@ class PerformanceTableRow extends React.Component {
       groupSize
     };
 
-    console.log(collectionName, 'TEST');
-
     return (
       <TableRow style={{}}>
         <TableCell><Link to={`performance/${id}/adjudications`}>{danceTitle}</Link></TableCell>
