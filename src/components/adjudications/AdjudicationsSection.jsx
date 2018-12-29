@@ -12,6 +12,7 @@ import SectionHeader from '../interface/SectionHeader';
 class AdjudicationsSection extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       adjudications: []
     };
@@ -44,7 +45,7 @@ class AdjudicationsSection extends React.Component {
         <Table>
           <TableHeader headings={headings} />
           <TableBody>
-            {adjudications
+            {Array.isArray(adjudications) && adjudications.length
               && adjudications.map(rowProps => (
                 <AdjudicationTableRow key={rowProps.id} {...rowProps} />))}
           </TableBody>

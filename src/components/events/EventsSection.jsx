@@ -12,6 +12,7 @@ import SectionHeader from '../interface/SectionHeader';
 class EventsSection extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       events: null
     };
@@ -53,7 +54,7 @@ class EventsSection extends React.Component {
         <Table>
           <TableHeader headings={headings} />
           <TableBody>
-            {(events)
+            {(Array.isArray(events) && events.length)
               && events.map(event => (<EventTableRow key={event.id} {...event} />))
             }
           </TableBody>
