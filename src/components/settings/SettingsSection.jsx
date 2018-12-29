@@ -1,8 +1,8 @@
 import React from 'react';
 import db from '../../firebase/firebase';
-import constants from '../../constants';
-
 import updateSettings from '../../firebase/utils/updateSettings';
+
+import constants from '../../constants';
 import SettingData from './SettingData';
 import DialogInput from '../interface/dialog/DialogInput';
 import DialogSelect from '../interface/dialog/DialogSelect';
@@ -32,7 +32,6 @@ class SettingsSection extends React.Component {
   handleChange = event => this.setState({ selectedCategory: event.target.value })
 
   handleOptionChange = event => this.setState({ value: event.target.value })
-
 
   handleSubmit = async () => {
     const { selectedCategory, value } = this.state;
