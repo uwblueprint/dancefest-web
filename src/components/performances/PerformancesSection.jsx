@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
-import db from '../../firebase/firebase';
 
+import db from '../../firebase/firebase';
 import TableHeader from '../interface/TableHeader';
 import PerformanceTableRow from './PerformanceTableRow';
 import EmptyState from '../interface/EmptyStates';
@@ -12,6 +13,7 @@ import SectionHeader from '../interface/SectionHeader';
 class PerformancesSection extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       performances: null
     };
@@ -19,11 +21,10 @@ class PerformancesSection extends React.Component {
 
   componentDidMount() {
     const { match: { params: { eventId }}} = this.props;
-    let performances = [];
     const collectionName = `events/${eventId}/performances`;
 
     db.collection(collectionName).onSnapshot((querySnapshot) => {
-      performances = [];
+      const performances = [];
       querySnapshot.forEach((doc) => {
         const performance = {
           id: doc.id,
@@ -31,9 +32,7 @@ class PerformancesSection extends React.Component {
         };
         performances.push(performance);
       });
-      if (performances.length) {
-        this.setState({ performances });
-      }
+      this.setState({ performances });
     });
   }
 
@@ -42,6 +41,7 @@ class PerformancesSection extends React.Component {
     const { performances } = this.state;
     const { match: { params: { eventId }}} = this.props;
     const collectionName = `events/${eventId}/performances`;
+
     return (
       <React.Fragment>
         <SectionHeader eventId={eventId} title="performance" />

@@ -1,8 +1,9 @@
 import React from 'react';
+
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
-import db from '../../firebase/firebase';
 
+import db from '../../firebase/firebase';
 import TableHeader from '../interface/TableHeader';
 import EventTableRow from './EventTableRow';
 import EmptyState from '../interface/EmptyStates';
@@ -11,14 +12,15 @@ import SectionHeader from '../interface/SectionHeader';
 class EventsSection extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       events: null
     };
   }
 
   componentDidMount() {
-    const events = [];
-    db.collection('events').get().then((querySnapshot) => {
+    db.collection('events').onSnapshot((querySnapshot) => {
+      const events = [];
       querySnapshot.forEach((doc) => {
         const { eventTitle, numJudges, date } = doc.data();
         let eventDate;
@@ -33,10 +35,7 @@ class EventsSection extends React.Component {
         };
         events.push(event);
       });
-    }).then(() => {
-      if (events.length > 0) {
-        this.setState({ events });
-      }
+      this.setState({ events });
     });
   }
 
@@ -55,7 +54,7 @@ class EventsSection extends React.Component {
         <Table>
           <TableHeader headings={headings} />
           <TableBody>
-            {(events)
+            {(Array.isArray(events) && events.length)
               && events.map(event => (<EventTableRow key={event.id} {...event} />))
             }
           </TableBody>

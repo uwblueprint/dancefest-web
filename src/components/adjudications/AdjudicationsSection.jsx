@@ -1,6 +1,8 @@
 import React from 'react';
+
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
+
 import TableHeader from '../interface/TableHeader';
 import AdjudicationTableRow from './AdjudicationTableRow';
 import db from '../../firebase/firebase';
@@ -10,6 +12,7 @@ import SectionHeader from '../interface/SectionHeader';
 class AdjudicationsSection extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       adjudications: []
     };
@@ -17,9 +20,10 @@ class AdjudicationsSection extends React.Component {
 
   componentDidMount() {
     const { match: { params: { eventId, performanceId }}} = this.props;
-    const adjudications = [];
+    const collectionName = `events/${eventId}/performances/${performanceId}/adjudications`;
 
-    db.collection(`events/${eventId}/performances/${performanceId}/adjudications`).get().then((querySnapshot) => {
+    db.collection(collectionName).onSnapshot((querySnapshot) => {
+      const adjudications = [];
       querySnapshot.forEach((doc) => {
         const adjudication = {
           id: doc.id,
@@ -27,7 +31,6 @@ class AdjudicationsSection extends React.Component {
         };
         adjudications.push(adjudication);
       });
-    }).then(() => {
       this.setState({ adjudications });
     });
   }
@@ -42,7 +45,7 @@ class AdjudicationsSection extends React.Component {
         <Table>
           <TableHeader headings={headings} />
           <TableBody>
-            {adjudications
+            {Array.isArray(adjudications) && adjudications.length
               && adjudications.map(rowProps => (
                 <AdjudicationTableRow key={rowProps.id} {...rowProps} />))}
           </TableBody>
