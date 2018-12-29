@@ -22,7 +22,7 @@ const SectionHeader = ({
     <div className={classes.sectionHeaderAction}>
       {showNew && (title === 'event'
         ? (<EventDialog formType="new" />)
-        : (<PerformanceDialog formType="new" eventId={eventId} />)
+        : (<PerformanceDialog eventId={eventId} formType="new" />)
       )}
     </div>
   </div>
