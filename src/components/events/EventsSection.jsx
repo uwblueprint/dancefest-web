@@ -34,7 +34,7 @@ class EventsSection extends React.Component {
         events.push(event);
       });
       this.setState({ events });
-    })
+    });
   }
 
   // TODO: create method for getting total number of Dancers

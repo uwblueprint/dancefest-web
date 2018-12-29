@@ -29,7 +29,7 @@ class AdjudicationsSection extends React.Component {
         adjudications.push(adjudication);
       });
       this.setState({ adjudications });
-    })
+    });
   }
 
   render() {
