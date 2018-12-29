@@ -1,8 +1,9 @@
 import React from 'react';
+
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
-import db from '../../firebase/firebase';
 
+import db from '../../firebase/firebase';
 import TableHeader from '../interface/TableHeader';
 import EventTableRow from './EventTableRow';
 import EmptyState from '../interface/EmptyStates';
@@ -18,7 +19,7 @@ class EventsSection extends React.Component {
 
   componentDidMount() {
     db.collection('events').onSnapshot((querySnapshot) => {
-      let events = [];
+      const events = [];
       querySnapshot.forEach((doc) => {
         const { eventTitle, numJudges, date } = doc.data();
         let eventDate;

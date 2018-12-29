@@ -1,6 +1,8 @@
 import React from 'react';
+
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
+
 import TableHeader from '../interface/TableHeader';
 import AdjudicationTableRow from './AdjudicationTableRow';
 import db from '../../firebase/firebase';
@@ -20,7 +22,7 @@ class AdjudicationsSection extends React.Component {
     const collectionName = `events/${eventId}/performances/${performanceId}/adjudications`;
 
     db.collection(collectionName).onSnapshot((querySnapshot) => {
-      let adjudications = [];
+      const adjudications = [];
       querySnapshot.forEach((doc) => {
         const adjudication = {
           id: doc.id,

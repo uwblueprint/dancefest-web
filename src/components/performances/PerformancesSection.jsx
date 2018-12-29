@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
-import db from '../../firebase/firebase';
 
+import db from '../../firebase/firebase';
 import TableHeader from '../interface/TableHeader';
 import PerformanceTableRow from './PerformanceTableRow';
 import EmptyState from '../interface/EmptyStates';
@@ -22,7 +23,7 @@ class PerformancesSection extends React.Component {
     const collectionName = `events/${eventId}/performances`;
 
     db.collection(collectionName).onSnapshot((querySnapshot) => {
-      let performances = [];
+      const performances = [];
       querySnapshot.forEach((doc) => {
         const performance = {
           id: doc.id,
