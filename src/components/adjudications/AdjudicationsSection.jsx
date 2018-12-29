@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -64,4 +65,9 @@ class AdjudicationsSection extends React.Component {
     );
   }
 }
+
+AdjudicationsSection.propTypes = {
+  match: PropTypes.shape().isRequired
+};
+
 export default AdjudicationsSection;

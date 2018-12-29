@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import { withStyles } from '@material-ui/core/styles';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 
@@ -32,6 +33,8 @@ class PerformanceDialog extends React.Component {
           <CalendarTodayIcon style={{ color: 'gray', marginRight: '5px' }} />
           NEW PERFORMANCE
         </React.Fragment>);
+    const title = `${dialogTitle} Performance`;
+
     return (
       <DFDialog
         open={open}
@@ -39,7 +42,11 @@ class PerformanceDialog extends React.Component {
         formType={formType}
         onClick={this.handleClickOpen}
         onClose={this.handleClose}>
-        <DialogHeader collectionName={collectionName} docId={performanceId} shouldShowDropdown={shouldShowDropdown} title={`${dialogTitle} Performance`} />
+        <DialogHeader
+          collectionName={collectionName}
+          docId={performanceId}
+          shouldShowDropdown={shouldShowDropdown}
+          title={title} />
         <PerformanceForm
           {...this.props}
           onModalClose={this.handleClose} />
