@@ -13,6 +13,7 @@ import SectionHeader from '../interface/SectionHeader';
 class PerformancesSection extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       performances: null
     };
