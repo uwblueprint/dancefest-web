@@ -3,7 +3,6 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import withStyles from '@material-ui/core/styles/withStyles';
-import _ from 'lodash';
 import styles from '../../styles';
 import deleteData from '../../../firebase/utils/deleteData';
 
@@ -21,17 +20,15 @@ class EditDropdown extends React.Component {
   };
 
   handleDelete = async () => {
-    const { collectionName, docId } = this.props;
-    console.log(collectionName);
+    const { docId } = this.props;
     deleteData('performances', docId);
     this.setState({ anchorEl: null });
   };
 
   render() {
     const { anchorEl } = this.state;
-    console.log(this.props.collectionName);
     return (
-      <div>
+      <div style={{ display: 'inline' }}>
         <MoreVertIcon
           aria-owns={anchorEl ? 'simple-menu' : undefined}
           aria-haspopup="true"
