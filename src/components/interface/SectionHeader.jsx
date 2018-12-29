@@ -32,7 +32,7 @@ SectionHeader.propTypes = {
   classes: PropTypes.string.isRequired,
   showNew: PropTypes.bool,
   title: PropTypes.string.isRequired,
-  eventId: PropTypes.string,
+  eventId: PropTypes.string
 };
 
 SectionHeader.defaultProps = {
