@@ -104,8 +104,6 @@ class AdjudicationDialog extends React.Component {
         handleView={this.handleView} />
     );
 
-    console.log(adjudicationId, collectionName)
-
     return (
       <DFDialog open={open} formType="edit" buttonTitle="edit" onClick={this.handleClickOpen} onClose={this.handleClose}>
         <DialogHeader
