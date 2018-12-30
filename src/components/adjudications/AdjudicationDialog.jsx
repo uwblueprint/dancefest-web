@@ -49,7 +49,6 @@ class AdjudicationDialog extends React.Component {
         <div style={{ display: 'flex', flexFlow: 'column', margin: '35px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-around', borderBottom: '1px solid #dcdcdc' }}>
             <div style={{ flex: '1 0 0' }}>
-              <DialogReadOnly defaultValue="hi" label="Dance Entry" />
               <DialogReadOnly defaultValue="hi" label="Dance Title" />
               <DialogReadOnly defaultValue="hi" label="Performers" />
               <DialogReadOnly defaultValue="hi" label="Choreographer" />
@@ -68,17 +67,16 @@ class AdjudicationDialog extends React.Component {
           <DialogReadOnly fullWidth label="Notes" defaultValue={notes} />
           {audio && <AudioPlay fileName="file_test.mp3" time="3:07" />}
           <FormHelperText>Award Considerations</FormHelperText>
-          {specialAward
-            && (
-              <div>
-                <LensIcon fontSize="inherit" color="inherit" style={{ color: 'purple' }} />
-                Special Award
-              </div>
-            )}
+          {specialAward && (
+            <div>
+              <LensIcon fontSize="inherit" color="primary" />
+              Special Award
+            </div>
+          )}
           {choreoAward
             && (
               <div>
-                <LensIcon fontSize="inherit" color="primary" />
+                <LensIcon fontSize="inherit" color="inherit" style={{ color: 'purple' }} />
                 Choreography Award
               </div>
             )}
@@ -89,19 +87,21 @@ class AdjudicationDialog extends React.Component {
           padding: '0',
           margin: '0'
         }}>
-          <Score type="subtotal" score={artisticMark} scoreName="Artistic" />
-          <Score type="subtotal" score={technicalMark} scoreName="Technical" />
-          <Score type="total" score={cumulativeMark} scoreName="Score" />
+          <Score type="subtotal" score={String(artisticMark)} scoreName="Artistic" />
+          <Score type="subtotal" score={String(technicalMark)} scoreName="Technical" />
+          <Score type="total" score={String(cumulativeMark)} scoreName="Score" />
         </DialogActions>
       </React.Fragment>
     );
 
     const editForm = (
       <AdjudicationForm
-        view={view}
+        adjudicationId={adjudicationId}
+        collectionName={collectionName}
         currentValues={currentValues}
+        handleView={this.handleView}
         onModalClose={this.handleClose}
-        handleView={this.handleView} />
+        view={view} />
     );
 
     return (
@@ -112,7 +112,7 @@ class AdjudicationDialog extends React.Component {
           edit={view}
           onEditClick={this.handleView}
           shouldShowDropdown
-          title={judgeName} />
+          title={judgeName || ''} />
         {view ? (viewForm) : (editForm)}
       </DFDialog>
     );

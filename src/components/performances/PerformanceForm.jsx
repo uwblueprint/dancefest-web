@@ -18,7 +18,7 @@ class PerformanceForm extends React.Component {
     const { currentValues } = props;
 
     this.state = {
-      danceEntry: currentValues.danceEntry || null,
+      danceEntry: currentValues.danceEntry || '',
       danceTitle: currentValues.danceTitle || '',
       performers: currentValues.performers || '',
       danceStyle: currentValues.danceStyle || '',
@@ -29,12 +29,6 @@ class PerformanceForm extends React.Component {
       size: currentValues.size || '',
       disabled: false
     };
-  }
-
-  // disable save button if not all input fields are filled
-  static getDerivedStateFromProps(props, state) {
-    const values = omit(state, 'disabled');
-    return { disabled: !(Object.keys(values).every(value => !!state[value])) };
   }
 
   handleChange = (e) => {

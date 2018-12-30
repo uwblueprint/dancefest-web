@@ -7,6 +7,7 @@ import TableBody from '@material-ui/core/TableBody';
 
 import db from '../../firebase/firebase';
 import TableHeader from '../interface/TableHeader';
+import TableSettings from '../interface/TableSettings';
 import PerformanceTableRow from './PerformanceTableRow';
 import EmptyState from '../interface/EmptyStates';
 import SectionHeader from '../interface/SectionHeader';
@@ -46,6 +47,7 @@ class PerformancesSection extends React.Component {
     return (
       <React.Fragment>
         <SectionHeader eventId={eventId} title="performance" />
+        <TableSettings />
         <Table>
           <TableHeader headings={headings} />
           <TableBody>

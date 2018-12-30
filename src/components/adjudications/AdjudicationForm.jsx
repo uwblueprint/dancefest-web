@@ -45,15 +45,19 @@ class AdjudicationForm extends React.Component {
 
   // TODO: handle submmission of the form
   handleSubmit = async () => {
+    const { adjudicationId, collectionName } = this.props;
     const { artisticMark, technicalMark } = this.state;
-    const cumulativeMark = artisticMark + technicalMark;
-    const collectionName = 'adjudications';
-    const adjudicationId = 1;
+    const cumulativeMark = (Number(artisticMark) + Number(technicalMark)) / 2;
+    const data = {
+      cumulativeMark,
+      ...this.state
+    };
     await updateData(
       collectionName,
       adjudicationId,
-      { artisticMark, technicalMark, cumulativeMark }
+      data
     );
+    this.handleModalClose();
   }
 
   handleModalClose = () => {
@@ -85,7 +89,7 @@ class AdjudicationForm extends React.Component {
               <DialogInput type="number" value={technicalMark} name="technicalMark" label="Technical" onChange={this.handleChange} />
             </div>
           </div>
-          <DialogInput fullWidth disabled multiline name="notes" value={notes} label="Notes" />
+          <DialogInput fullWidth disabled multiline name="notes" value={notes || ''} label="Notes" />
           <CheckBox label="Award Considerations" choices={choices} onChange={this.handleCheckedAward} />
         </div>
         <div className={classes.dfdialog_footer}>

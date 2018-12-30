@@ -51,7 +51,7 @@ class AdjudicationsSection extends React.Component {
           <TableHeader headings={headings} />
           <TableBody>
             {showAdjudications && adjudications.map((rowProps) => {
-              const keys = ['artisticMark', 'audio', 'choreoAward', 'cumulativeMark', 'notes', 'judgeName', 'sepcialAward', 'technicalMark'];
+              const keys = ['artisticMark', 'audio', 'choreoAward', 'cumulativeMark', 'notes', 'judgeName', 'specialAward', 'technicalMark'];
               const currentValues = pick(rowProps, keys);
               return (
                 <AdjudicationTableRow

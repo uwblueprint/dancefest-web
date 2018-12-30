@@ -33,8 +33,8 @@ const AdjudicationTableRow = ({
         {cumulativeMark}
       </TableCell>
       <TableCell>
-        {specialAward && <LensIcon fontSize="inherit" style={{ color: 'purple' }} />}
-        {choreoAward && <LensIcon fontSize="inherit" color="primary" />}
+        {specialAward && <LensIcon fontSize="inherit" color="primary" />}
+        {choreoAward && <LensIcon fontSize="inherit" style={{ color: 'purple' }} />}
       </TableCell>
       <TableCell>
         <AdjudicationDialog
