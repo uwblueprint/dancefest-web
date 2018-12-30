@@ -18,16 +18,16 @@ class PerformanceForm extends React.Component {
     const { currentValues } = props;
 
     this.state = {
-      danceEntry: currentValues.danceEntry || '',
-      danceTitle: currentValues.danceTitle || '',
-      performers: currentValues.performers || '',
-      danceStyle: currentValues.danceStyle || '',
-      competitionLevel: currentValues.competitionLevel || '',
-      choreographers: currentValues.choreographers || '',
       academicLevel: currentValues.academicLevel || '',
+      choreographers: currentValues.choreographers || '',
+      competitionLevel: currentValues.competitionLevel || '',
+      danceEntry: currentValues.danceEntry,
+      danceTitle: currentValues.danceTitle || '',
+      danceStyle: currentValues.danceStyle || '',
+      disabled: false,
+      performers: currentValues.performers || '',
       school: currentValues.school || '',
-      size: currentValues.size || '',
-      disabled: false
+      size: currentValues.size || ''
     };
   }
 
@@ -111,7 +111,16 @@ class PerformanceForm extends React.Component {
 
 PerformanceForm.propTypes = {
   classes: PropTypes.shape().isRequired,
-  currentValues: PropTypes.shape(),
+  currentValues: PropTypes.shape({
+    academicLevel: PropTypes.string,
+    choreographers: PropTypes.string,
+    danceEntry: PropTypes.number,
+    danceTitle: PropTypes.string,
+    danceStyle: PropTypes.string,
+    performers: PropTypes.string,
+    school: PropTypes.string,
+    size: PropTypes.string
+  }),
   formType: PropTypes.oneOf(['edit', 'new']),
   onModalClose: PropTypes.func.isRequired
 };

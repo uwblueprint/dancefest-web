@@ -22,7 +22,7 @@ class PerformanceTableRow extends React.Component {
       competitionLevel,
       academicLevel,
       school,
-      groupSize
+      size
     } = currentValues;
 
     return (
@@ -33,7 +33,7 @@ class PerformanceTableRow extends React.Component {
         <TableCell>{academicLevel}</TableCell>
         <TableCell>{competitionLevel}</TableCell>
         <TableCell>{danceStyle}</TableCell>
-        <TableCell>{groupSize}</TableCell>
+        <TableCell>{size}</TableCell>
         <TableCell>
           <PerformanceDialog
             currentValues={currentValues}
@@ -47,9 +47,22 @@ class PerformanceTableRow extends React.Component {
 }
 
 PerformanceTableRow.propTypes = {
-  currentValues: PropTypes.shape().isRequired,
+  currentValues: PropTypes.shape({
+    academicLevel: PropTypes.string,
+    choreographers: PropTypes.string,
+    danceEntry: PropTypes.number,
+    danceTitle: PropTypes.string,
+    danceStyle: PropTypes.string,
+    performers: PropTypes.string,
+    school: PropTypes.string,
+    size: PropTypes.string
+  }),
   eventId: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired
+};
+
+PerformanceTableRow.defaultProps = {
+  currentValues: {}
 };
 
 export default PerformanceTableRow;

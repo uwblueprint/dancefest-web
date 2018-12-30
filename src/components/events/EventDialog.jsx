@@ -57,7 +57,11 @@ class EventDialog extends React.Component {
 }
 
 EventDialog.propTypes = {
-  currentValues: PropTypes.shape(),
+  currentValues: PropTypes.shape({
+    eventTitle: PropTypes.string,
+    eventDate: PropTypes.string,
+    numJudges: PropTypes.number
+  }),
   eventId: PropTypes.string,
   formType: PropTypes.oneOf(['edit', 'new'])
 };

@@ -18,9 +18,9 @@ class EventForm extends React.Component {
     const { currentValues } = props;
 
     this.state = {
+      disabled: true,
       eventDate: currentValues.eventDate || '',
       eventTitle: currentValues.eventTitle || '',
-      disabled: true,
       numJudges: currentValues.numJudges || ''
     };
   }

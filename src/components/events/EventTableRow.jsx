@@ -51,7 +51,11 @@ class EventTableRow extends React.Component {
 }
 
 EventTableRow.propTypes = {
-  currentValues: PropTypes.shape(),
+  currentValues: PropTypes.shape({
+    eventTitle: PropTypes.string,
+    eventDate: PropTypes.string,
+    numJudges: PropTypes.number
+  }),
   id: PropTypes.string
 };
 

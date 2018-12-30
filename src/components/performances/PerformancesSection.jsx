@@ -54,12 +54,13 @@ class PerformancesSection extends React.Component {
             {showPerformances && performances.map((performance) => {
               const keys = ['danceEntry', 'danceTitle', 'performers', 'danceStyle', 'competitionLevel', 'choreographers', 'academicLevel', 'school', 'size'];
               const currentValues = pick(performance, keys);
+              const { id } = performance;
               return (
                 <PerformanceTableRow
                   currentValues={currentValues}
                   eventId={eventId}
-                  id={performance.id}
-                  key={performance.id} />
+                  id={id}
+                  key={id} />
               );
             })}
           </TableBody>
