@@ -73,13 +73,12 @@ class AdjudicationDialog extends React.Component {
               Special Award
             </div>
           )}
-          {choreoAward
-            && (
-              <div>
-                <LensIcon fontSize="inherit" color="inherit" style={{ color: 'purple' }} />
-                Choreography Award
-              </div>
-            )}
+          {choreoAward && (
+            <div>
+              <LensIcon fontSize="inherit" color="inherit" style={{ color: 'purple' }} />
+              Choreography Award
+            </div>
+          )}
         </div>
         <DialogActions style={{
           display: 'flex',

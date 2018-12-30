@@ -30,7 +30,7 @@ const EmptyState = ({ type, title, subtitle }) => {
 
 EmptyState.propTypes = {
   subtitle: PropTypes.string.isRequired,
-  type: PropTypes.oneOf(['event', 'adjudication', 'performance']).isRequired,
+  type: PropTypes.oneOf(['adjudication', 'event', 'performance']).isRequired,
   title: PropTypes.string.isRequired
 };
 
