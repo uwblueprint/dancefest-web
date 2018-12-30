@@ -42,6 +42,7 @@ class AdjudicationsSection extends React.Component {
     const { adjudications } = this.state;
     const collectionName = `events/${eventId}/performances/${performanceId}/adjudications`;
     const headings = ['Judge', 'Audio', 'Cummulative Score', 'Awards'];
+    const showAdjudications = Array.isArray(adjudications) && adjudications.length > 0;
 
     return (
       <React.Fragment>
@@ -49,20 +50,19 @@ class AdjudicationsSection extends React.Component {
         <Table>
           <TableHeader headings={headings} />
           <TableBody>
-            {Array.isArray(adjudications) && adjudications.length
-              && adjudications.map((rowProps) => {
-                const keys = ['artisticMark', 'audio', 'choreoAward', 'cumulativeMark', 'notes', 'judgeName', 'sepcialAward', 'technicalMark'];
-                const currentValues = pick(rowProps, keys);
-                return (
-                  <AdjudicationTableRow
-                    collectionName={collectionName}
-                    currentValues={currentValues}
-                    key={rowProps.id}
-                    id={rowProps.id} />);
-              })}
+            {showAdjudications && adjudications.map((rowProps) => {
+              const keys = ['artisticMark', 'audio', 'choreoAward', 'cumulativeMark', 'notes', 'judgeName', 'sepcialAward', 'technicalMark'];
+              const currentValues = pick(rowProps, keys);
+              return (
+                <AdjudicationTableRow
+                  collectionName={collectionName}
+                  currentValues={currentValues}
+                  key={rowProps.id}
+                  id={rowProps.id} />);
+            })}
           </TableBody>
         </Table>
-        {!adjudications && (
+        {!showAdjudications && (
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <EmptyState type="adjudication" title="Empty Adjudications Page" subtitle="Create your first Adjudication" />
           </div>

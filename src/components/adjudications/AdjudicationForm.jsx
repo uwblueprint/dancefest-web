@@ -112,7 +112,7 @@ AdjudicationForm.propTypes = {
 };
 
 AdjudicationForm.defaultProps = {
-  currentValues: []
+  currentValues: {}
 };
 
 export default withStyles(styles)(AdjudicationForm);

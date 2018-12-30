@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import omit from 'lodash/omit';
+
 import { withStyles } from '@material-ui/core/styles';
 import DialogActions from '@material-ui/core/DialogActions';
-import _ from 'lodash';
-import updateData from '../../firebase/utils/updateData';
 
+import updateData from '../../firebase/utils/updateData';
 import addData from '../../firebase/utils/addData';
 import DialogInput from '../interface/dialog/DialogInput';
 import DialogSelect from '../interface/dialog/DialogSelect';
@@ -17,7 +18,7 @@ class PerformanceForm extends React.Component {
     const { currentValues } = props;
 
     this.state = {
-      danceEntry: currentValues.danceEntry || 0,
+      danceEntry: currentValues.danceEntry || null,
       danceTitle: currentValues.danceTitle || '',
       performers: currentValues.performers || '',
       danceStyle: currentValues.danceStyle || '',
@@ -32,7 +33,7 @@ class PerformanceForm extends React.Component {
 
   // disable save button if not all input fields are filled
   static getDerivedStateFromProps(props, state) {
-    const values = _.omit(state, 'disabled');
+    const values = omit(state, 'disabled');
     return { disabled: !(Object.keys(values).every(value => !!state[value])) };
   }
 
@@ -54,7 +55,7 @@ class PerformanceForm extends React.Component {
 
   handleSubmit = async () => {
     const { collectionName, performanceId, formType } = this.props;
-    const data = _.omit(this.state, 'disabled');
+    const data = omit(this.state, 'disabled');
     if (formType === 'new') {
       await addData(collectionName, data);
     } else {
@@ -122,7 +123,7 @@ PerformanceForm.propTypes = {
 };
 
 PerformanceForm.defaultProps = {
-  currentValues: [],
+  currentValues: {},
   formType: 'edit'
 };
 

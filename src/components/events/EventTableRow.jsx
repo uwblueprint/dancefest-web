@@ -56,7 +56,7 @@ EventTableRow.propTypes = {
 };
 
 EventTableRow.defaultProps = {
-  currentValues: null,
+  currentValues: {},
   id: null
 };
 

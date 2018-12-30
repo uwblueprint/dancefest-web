@@ -49,6 +49,7 @@ class EventDialog extends React.Component {
         <EventForm
           currentValues={currentValues}
           eventId={eventId}
+          formType={formType}
           onModalClose={this.handleClose} />
       </DFDialog>
     );

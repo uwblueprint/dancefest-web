@@ -38,9 +38,10 @@ class PerformancesSection extends React.Component {
   }
 
   render() {
-    const headings = ['Dance Title', 'Dance Entry', 'School', 'Acaademic Level', 'Level of Competition', 'Dance Style', 'Dance Size'];
     const { performances } = this.state;
     const { match: { params: { eventId }}} = this.props;
+    const headings = ['Dance Title', 'Dance Entry', 'School', 'Acaademic Level', 'Level of Competition', 'Dance Style', 'Dance Size'];
+    const showPerformances = Array.isArray(performances) && performances.length > 0;
 
     return (
       <React.Fragment>
@@ -48,22 +49,21 @@ class PerformancesSection extends React.Component {
         <Table>
           <TableHeader headings={headings} />
           <TableBody>
-            {(Array.isArray(performances) && performances.length)
-              && performances.map((performance) => {
-                const keys = ['danceEntry', 'danceTitle', 'performers', 'danceStyle', 'competitionLevel', 'choreographers', 'academicLevel', 'school', 'size'];
-                const currentValues = pick(performance, keys);
-                return (
-                  <PerformanceTableRow
-                    currentValues={currentValues}
-                    eventId={eventId}
-                    id={performance.id}
-                    key={performance.id} />
-                );
-              })}
+            {showPerformances && performances.map((performance) => {
+              const keys = ['danceEntry', 'danceTitle', 'performers', 'danceStyle', 'competitionLevel', 'choreographers', 'academicLevel', 'school', 'size'];
+              const currentValues = pick(performance, keys);
+              return (
+                <PerformanceTableRow
+                  currentValues={currentValues}
+                  eventId={eventId}
+                  id={performance.id}
+                  key={performance.id} />
+              );
+            })}
           </TableBody>
         </Table>
         {
-          (!performances) && (
+          (!showPerformances) && (
             <div style={{ display: 'flex', justifyContent: 'center' }}>
               <EmptyState type="performance" title="Empty Performances Page" subtitle="Create your first Performance" />
             </div>

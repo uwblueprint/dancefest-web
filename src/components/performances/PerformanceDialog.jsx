@@ -72,7 +72,7 @@ PerformanceDialog.propTypes = {
 };
 
 PerformanceDialog.defaultProps = {
-  currentValues: undefined,
+  currentValues: {},
   formType: 'edit',
   performanceId: null
 };
