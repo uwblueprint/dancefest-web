@@ -29,7 +29,7 @@ const DialogHeader = ({
 export default withStyles(styles)(DialogHeader);
 
 DialogHeader.propTypes = {
-  classes: PropTypes.string.isRequired,
+  classes: PropTypes.shape().isRequired,
   collectionName: PropTypes.string.isRequired,
   edit: PropTypes.bool,
   docId: PropTypes.string,

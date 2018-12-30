@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import pick from 'lodash/pick';
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -40,7 +41,6 @@ class PerformancesSection extends React.Component {
     const headings = ['Dance Title', 'Dance Entry', 'School', 'Acaademic Level', 'Level of Competition', 'Dance Style', 'Dance Size'];
     const { performances } = this.state;
     const { match: { params: { eventId }}} = this.props;
-    const collectionName = `events/${eventId}/performances`;
 
     return (
       <React.Fragment>
@@ -49,13 +49,17 @@ class PerformancesSection extends React.Component {
           <TableHeader headings={headings} />
           <TableBody>
             {(Array.isArray(performances) && performances.length)
-              && performances.map(performance => (
-                <PerformanceTableRow
-                  key={performance.id}
-                  {...performance}
-                  eventId={eventId}
-                  collectionName={collectionName} />
-              ))}
+              && performances.map((performance) => {
+                const keys = ['danceEntry', 'danceTitle', 'performers', 'danceStyle', 'competitionLevel', 'choreographers', 'academicLevel', 'school', 'size'];
+                const currentValues = pick(performance, keys);
+                return (
+                  <PerformanceTableRow
+                    currentValues={currentValues}
+                    eventId={eventId}
+                    id={performance.id}
+                    key={performance.id} />
+                );
+              })}
           </TableBody>
         </Table>
         {

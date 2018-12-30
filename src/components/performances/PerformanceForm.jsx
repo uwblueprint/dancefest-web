@@ -53,14 +53,14 @@ class PerformanceForm extends React.Component {
   }
 
   handleSubmit = async () => {
-    const { performanceId, formType, eventId } = this.props;
-    const collectionName = `events/${eventId}/performances`;
+    const { collectionName, performanceId, formType } = this.props;
     const data = _.omit(this.state, 'disabled');
     if (formType === 'new') {
-      await addData(collectionName, data, this.handleModalClose);
+      await addData(collectionName, data);
     } else {
-      await updateData(collectionName, performanceId, data, this.handleModalClose);
+      await updateData(collectionName, performanceId, data);
     }
+    this.handleModalClose();
   }
 
   render() {
@@ -115,9 +115,8 @@ class PerformanceForm extends React.Component {
 }
 
 PerformanceForm.propTypes = {
-  classes: PropTypes.string.isRequired,
+  classes: PropTypes.shape().isRequired,
   currentValues: PropTypes.shape(),
-  eventId: PropTypes.string.isRequired,
   formType: PropTypes.oneOf(['edit', 'new']),
   onModalClose: PropTypes.func.isRequired
 };

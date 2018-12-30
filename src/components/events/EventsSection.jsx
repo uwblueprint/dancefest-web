@@ -1,4 +1,5 @@
 import React from 'react';
+import pick from 'lodash/pick';
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -55,7 +56,15 @@ class EventsSection extends React.Component {
           <TableHeader headings={headings} />
           <TableBody>
             {(Array.isArray(events) && events.length)
-              && events.map(event => (<EventTableRow key={event.id} {...event} />))
+              && events.map((event) => {
+                const keys = ['eventTitle', 'eventDate', 'numJudges'];
+                const currentValues = pick(event, keys);
+                return (
+                  <EventTableRow
+                    currentValues={currentValues}
+                    id={event.id}
+                    key={event.id} />);
+              })
             }
           </TableBody>
         </Table>

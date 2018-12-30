@@ -23,8 +23,14 @@ class PerformanceDialog extends React.Component {
   };
 
   render() {
-    const { collectionName, formType, performanceId } = this.props;
+    const {
+      currentValues,
+      eventId,
+      formType,
+      performanceId
+    } = this.props;
     const { open } = this.state;
+    const collectionName = `events/${eventId}/performances`;
     const shouldShowDropdown = formType === 'edit';
     const dialogTitle = formType === 'edit' ? 'Edit' : 'New';
     const buttonTitle = formType === 'edit' ? 'EDIT'
@@ -48,22 +54,27 @@ class PerformanceDialog extends React.Component {
           shouldShowDropdown={shouldShowDropdown}
           title={title} />
         <PerformanceForm
-          {...this.props}
-          onModalClose={this.handleClose} />
+          collectionName={collectionName}
+          currentValues={currentValues}
+          formType={formType}
+          onModalClose={this.handleClose}
+          performanceId={performanceId} />
       </DFDialog>
     );
   }
 }
 
 PerformanceDialog.propTypes = {
-  collectionName: PropTypes.string.isRequired,
-  currentValues: PropTypes.shape().isRequired,
+  currentValues: PropTypes.shape(),
+  eventId: PropTypes.string.isRequired,
   formType: PropTypes.oneOf(['edit', 'new']),
-  performanceId: PropTypes.string.isRequired
+  performanceId: PropTypes.string
 };
 
 PerformanceDialog.defaultProps = {
-  formType: 'edit'
+  currentValues: undefined,
+  formType: 'edit',
+  performanceId: null
 };
 
 

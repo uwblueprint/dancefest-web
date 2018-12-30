@@ -11,19 +11,19 @@ class EventTableRow extends React.Component {
 
   render() {
     const {
-      id,
-      eventTitle,
-      eventDate,
-      numDancers,
-      numPerformances,
-      numJudges
+      currentValues,
+      id
     } = this.props;
 
-    const currentValues = {
+    const {
       eventTitle,
       eventDate,
       numJudges
-    };
+    } = currentValues;
+
+    // TODO: fix this
+    const numDancers = 0;
+    const numPerformances = 0;
 
     return (
       <TableRow>
@@ -51,22 +51,13 @@ class EventTableRow extends React.Component {
 }
 
 EventTableRow.propTypes = {
-  id: PropTypes.string,
-  eventTitle: PropTypes.string,
-  eventDate: PropTypes.string,
-  numDancers: PropTypes.string,
-  numPerformances: PropTypes.string,
-  numJudges: PropTypes.string
+  currentValues: PropTypes.shape(),
+  id: PropTypes.string
 };
 
-
 EventTableRow.defaultProps = {
-  id: null,
-  eventTitle: null,
-  eventDate: null,
-  numDancers: null,
-  numPerformances: null,
-  numJudges: null
+  currentValues: null,
+  id: null
 };
 
 export default EventTableRow;

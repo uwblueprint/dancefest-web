@@ -12,33 +12,23 @@ class PerformanceTableRow extends React.Component {
   render() {
     const {
       id,
-      entryId,
-      collectionName,
-      danceTitle,
-      school,
-      academicLevel,
-      competitionLevel,
-      danceStyle,
-      performers,
-      choreographers,
-      groupSize,
+      currentValues,
       eventId
     } = this.props;
-    const currentValues = {
+    const {
+      danceEntry,
       danceTitle,
-      performers,
       danceStyle,
       competitionLevel,
-      choreographers,
       academicLevel,
       school,
       groupSize
-    };
+    } = currentValues;
 
     return (
       <TableRow style={{}}>
         <TableCell><Link to={`performance/${id}/adjudications`}>{danceTitle}</Link></TableCell>
-        <TableCell>{entryId}</TableCell>
+        <TableCell>{danceEntry}</TableCell>
         <TableCell>{school}</TableCell>
         <TableCell>{academicLevel}</TableCell>
         <TableCell>{competitionLevel}</TableCell>
@@ -46,7 +36,6 @@ class PerformanceTableRow extends React.Component {
         <TableCell>{groupSize}</TableCell>
         <TableCell>
           <PerformanceDialog
-            collectionName={collectionName}
             currentValues={currentValues}
             eventId={eventId}
             formType="edit"
@@ -58,31 +47,9 @@ class PerformanceTableRow extends React.Component {
 }
 
 PerformanceTableRow.propTypes = {
-  id: PropTypes.string,
-  collectionName: PropTypes.string.isRequired,
-  entryId: PropTypes.string,
+  currentValues: PropTypes.shape().isRequired,
   eventId: PropTypes.string.isRequired,
-  danceTitle: PropTypes.string,
-  school: PropTypes.string,
-  academicLevel: PropTypes.string,
-  competitionLevel: PropTypes.string,
-  danceStyle: PropTypes.string,
-  performers: PropTypes.string,
-  choreographers: PropTypes.string,
-  groupSize: PropTypes.string
-};
-
-PerformanceTableRow.defaultProps = {
-  id: null,
-  entryId: '',
-  danceTitle: '',
-  school: '',
-  academicLevel: '',
-  competitionLevel: '',
-  performers: null,
-  choreographers: null,
-  danceStyle: null,
-  groupSize: ''
+  id: PropTypes.string.isRequired
 };
 
 export default PerformanceTableRow;

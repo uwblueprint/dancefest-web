@@ -1,14 +1,8 @@
 import db from '../firebase';
 
-const addData = (collectionName, data, onSuccess) => {
+const addData = async (collectionName, data) => {
   db.collection(collectionName).add(data)
-    .then((docRef) => {
-      console.log('Document successfully added!');
-      if (onSuccess) {
-        onSuccess();
-      }
-      return docRef.id;
-    })
+    .then(() => console.log('Document successfully added!'))
     .catch((error) => {
       console.error('Error writing document: ', error);
       return false;

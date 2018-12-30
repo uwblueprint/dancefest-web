@@ -28,7 +28,7 @@ class EventDialog extends React.Component {
   };
 
   render() {
-    const { eventId, formType } = this.props;
+    const { currentValues, eventId, formType } = this.props;
     const { open } = this.state;
     const dialogTitle = formType === 'edit' ? 'Edit' : 'New';
     const newButtonTitle = (
@@ -46,18 +46,24 @@ class EventDialog extends React.Component {
         onClick={this.handleClickOpen}
         onClose={this.handleClose}>
         <DialogHeader collectionName="events" docId={eventId} title={`${dialogTitle} Event`} />
-        <EventForm {...this.props} onModalClose={this.handleClose} />
+        <EventForm
+          currentValues={currentValues}
+          eventId={eventId}
+          onModalClose={this.handleClose} />
       </DFDialog>
     );
   }
 }
 
 EventDialog.propTypes = {
-  currentValues: PropTypes.shape().isRequired,
+  currentValues: PropTypes.shape(),
+  eventId: PropTypes.string,
   formType: PropTypes.oneOf(['edit', 'new'])
 };
 
 EventDialog.defaultProps = {
+  currentValues: {},
+  eventId: null,
   formType: 'edit'
 };
 

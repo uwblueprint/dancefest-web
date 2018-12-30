@@ -44,12 +44,12 @@ class EventForm extends React.Component {
     const collectionName = 'events';
     const data = _.omit(this.state, 'disabled');
 
-
     if (formType === 'new') {
-      await addData(collectionName, data, this.handleModalClose);
+      await addData(collectionName, data);
     } else {
-      await updateData(collectionName, eventId, data, this.handleModalClose);
+      await updateData(collectionName, eventId, data);
     }
+    this.handleModalClose();
   }
 
   handleModalClose = () => {
@@ -97,7 +97,7 @@ EventForm.propTypes = {
 };
 
 EventForm.defaultProps = {
-  currentValues: [],
+  currentValues: {},
   formType: 'edit'
 };
 
