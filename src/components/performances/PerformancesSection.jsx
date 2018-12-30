@@ -6,6 +6,7 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 
 import db from '../../firebase/firebase';
+import Loading from '../interface/Loading';
 import TableHeader from '../interface/TableHeader';
 import TableSettings from '../interface/TableSettings';
 import PerformanceTableRow from './PerformanceTableRow';
@@ -17,6 +18,7 @@ class PerformancesSection extends React.Component {
     super(props);
 
     this.state = {
+      fetching: true,
       performances: null
     };
   }
@@ -34,12 +36,12 @@ class PerformancesSection extends React.Component {
         };
         performances.push(performance);
       });
-      this.setState({ performances });
+      this.setState({ performances, fetching: false });
     });
   }
 
   render() {
-    const { performances } = this.state;
+    const { fetching, performances } = this.state;
     const { match: { params: { eventId }}} = this.props;
     const headings = ['Dance Title', 'Dance Entry', 'School', 'Acaademic Level', 'Level of Competition', 'Dance Style', 'Dance Size'];
     const showPerformances = Array.isArray(performances) && performances.length > 0;
@@ -51,7 +53,7 @@ class PerformancesSection extends React.Component {
         <Table>
           <TableHeader headings={headings} />
           <TableBody>
-            {showPerformances && performances.map((performance) => {
+            {!fetching && showPerformances && performances.map((performance) => {
               const keys = ['danceEntry', 'danceTitle', 'performers', 'danceStyle', 'competitionLevel', 'choreographers', 'academicLevel', 'school', 'size'];
               const currentValues = pick(performance, keys);
               return (
@@ -65,11 +67,11 @@ class PerformancesSection extends React.Component {
           </TableBody>
         </Table>
         {
-          (!showPerformances) && (
+          fetching ? <Loading /> : ((!showPerformances) && (
             <div style={{ display: 'flex', justifyContent: 'center' }}>
               <EmptyState type="performance" title="Empty Performances Page" subtitle="Create your first Performance" />
             </div>
-          )
+          ))
         }
       </React.Fragment>
     );

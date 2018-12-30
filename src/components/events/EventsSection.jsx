@@ -5,6 +5,7 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 
 import db from '../../firebase/firebase';
+import Loading from '../interface/Loading';
 import TableHeader from '../interface/TableHeader';
 import EventTableRow from './EventTableRow';
 import EmptyState from '../interface/EmptyStates';
@@ -15,7 +16,8 @@ class EventsSection extends React.Component {
     super(props);
 
     this.state = {
-      events: null
+      events: null,
+      fetching: true
     };
   }
 
@@ -35,7 +37,7 @@ class EventsSection extends React.Component {
         };
         events.push(event);
       });
-      this.setState({ events });
+      this.setState({ events, fetching: false });
     });
   }
 
@@ -46,7 +48,7 @@ class EventsSection extends React.Component {
   // TODO: create a method for getting total number of performances
 
   render() {
-    const { events } = this.state;
+    const { events, fetching } = this.state;
     const headings = ['Event Title', 'Event Date', 'No. Dancers', 'No. Performances', 'No. Judges'];
     const showEvents = Array.isArray(events) && events.length > 0;
     return (
@@ -55,7 +57,7 @@ class EventsSection extends React.Component {
         <Table>
           <TableHeader headings={headings} />
           <TableBody>
-            {showEvents && events.map((event) => {
+            {!fetching && showEvents && events.map((event) => {
               const keys = ['eventTitle', 'eventDate', 'numJudges'];
               const currentValues = pick(event, keys);
               return (
@@ -67,11 +69,11 @@ class EventsSection extends React.Component {
           }
           </TableBody>
         </Table>
-        {!showEvents && (
+        {fetching ? <Loading /> : (!showEvents && (
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <EmptyState type="event" title="Empty Events Page" subtitle="Create your first event" />
           </div>
-        )}
+        ))}
       </React.Fragment>
     );
   }
