@@ -10,6 +10,7 @@ const DialogSelect = ({
   label,
   helperText,
   fullWidth,
+  name,
   options,
   value,
   style
@@ -22,6 +23,7 @@ const DialogSelect = ({
     id="filled-select-currency"
     select
     label={label}
+    name={name}
     SelectProps={{
       MenuProps: {
         getContentAnchorEl: null,
@@ -48,6 +50,7 @@ DialogSelect.propTypes = {
   className: PropTypes.string,
   label: PropTypes.string,
   helperText: PropTypes.string,
+  name: PropTypes.string.isRequired,
   options: PropTypes.arrayOf(PropTypes.shape()),
   onChange: PropTypes.func,
   fullWidth: PropTypes.bool,

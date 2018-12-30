@@ -7,49 +7,53 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-class AlertDialog extends React.Component {
-  constructor(props) {
-    super(props);
+import updateSettings from '../../../firebase/utils/updateSettings';
+import constants from '../../../constants';
 
-    this.state = {
-      open: true
-    };
-  }
-
-  handleClose = () => {
-    this.setState({ open: false });
+const AlertDialog = ({
+  category,
+  onClose,
+  showAlert,
+  optionName
+}) => {
+  const handleClose = () => {
+    onClose();
   };
 
-  render() {
-    const { open } = this.state;
-    const { optionName } = this.props;
-    return (
-      <Dialog
-        open={open}
-        onClose={this.handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description">
-        <DialogTitle id="alert-dialog-title">
-          {`Delete ${optionName}?`}
-        </DialogTitle>
-        <DialogContent>
-          <p>Deleted categories cannot be restored.</p>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={this.handleClose} color="secondary">
-            Cancel
-          </Button>
-          <Button onClick={this.handleClose} color="primary" autoFocus>
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
-  }
-}
+  const handleDelete = async () => {
+    await updateSettings(category, optionName, constants.DELETE_DATA);
+    handleClose();
+  };
+
+  return (
+    <Dialog
+      open={showAlert}
+      onClose={handleClose}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description">
+      <DialogTitle id="alert-dialog-title">
+        {`Delete ${optionName}?`}
+      </DialogTitle>
+      <DialogContent>
+        <p>Deleted categories cannot be restored.</p>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose} color="secondary">
+          Cancel
+        </Button>
+        <Button onClick={handleDelete} color="primary" autoFocus>
+          Delete
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
 
 AlertDialog.propTypes = {
-  optionName: PropTypes.string.isRequired
+  category: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired,
+  optionName: PropTypes.string.isRequired,
+  showAlert: PropTypes.bool.isRequired
 };
 
 

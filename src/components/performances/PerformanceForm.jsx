@@ -5,6 +5,7 @@ import omit from 'lodash/omit';
 import { withStyles } from '@material-ui/core/styles';
 import DialogActions from '@material-ui/core/DialogActions';
 
+import db from '../../firebase/firebase';
 import updateData from '../../firebase/utils/updateData';
 import addData from '../../firebase/utils/addData';
 import DialogInput from '../interface/dialog/DialogInput';
@@ -27,8 +28,23 @@ class PerformanceForm extends React.Component {
       academicLevel: currentValues.academicLevel || '',
       school: currentValues.school || '',
       size: currentValues.size || '',
-      disabled: false
+      disabled: false,
+      options: {}
     };
+  }
+
+  componentDidMount() {
+    this.subscribe = db.collection('settings').onSnapshot((querySnapshot) => {
+      const options = {};
+      querySnapshot.forEach((doc) => {
+        options[doc.id] = Object.keys(doc.data());
+      });
+      this.setState({ options });
+    });
+  }
+
+  componentWillUnmount() {
+    this.subscribe();
   }
 
   handleChange = (e) => {
@@ -49,13 +65,20 @@ class PerformanceForm extends React.Component {
 
   handleSubmit = async () => {
     const { collectionName, performanceId, formType } = this.props;
-    const data = omit(this.state, 'disabled');
+    const data = omit(this.state, ['disabled', 'options']);
     if (formType === 'new') {
       await addData(collectionName, data);
     } else {
       await updateData(collectionName, performanceId, data);
     }
     this.handleModalClose();
+  }
+
+  renderOptions = (option) => {
+    if (!option) {
+      return [];
+    }
+    return option.map(o => ({ value: o }));
   }
 
   render() {
@@ -69,7 +92,8 @@ class PerformanceForm extends React.Component {
       choreographers,
       academicLevel,
       school,
-      size
+      size,
+      options
     } = this.state;
     return (
       <React.Fragment>
@@ -77,21 +101,21 @@ class PerformanceForm extends React.Component {
           <div className={classes.flex}>
             <DialogInput className={classes.flex_default} type="number" name="danceEntry" label="Dance Entry" value={danceEntry} onChange={this.handleChange} />
             <div className={classes.flex_default}>
-              <DialogSelect fullWidth label="School" name="school" value={school} />
-              <DialogSelect fullWidth label="Level" name="academicLevel" value={academicLevel} />
+              <DialogSelect fullWidth onChange={this.handleChange} label="School" name="school" options={this.renderOptions(options.school)} value={school} />
+              <DialogSelect fullWidth onChange={this.handleChange} label="Level" name="academicLevel" options={this.renderOptions(options.academicLevel)} value={academicLevel} />
             </div>
           </div>
           <div className={classes.flex}>
-            <DialogInput className={classes.flex_default} name="danceTitle" label="Dance Title" value={danceTitle} onChange={this.handleChange} />
-            <DialogSelect className={classes.flex_default} name="competitionLevel" label="Competition Level" value={competitionLevel} />
+            <DialogInput className={classes.flex_default} onChange={this.handleChange} name="danceTitle" label="Dance Title" value={danceTitle} />
+            <DialogSelect className={classes.flex_default} onChange={this.handleChange} name="competitionLevel" label="Competition Level" options={this.renderOptions(options.competitionLevel)} value={competitionLevel} />
           </div>
           <div className={classes.flex}>
-            <DialogInput className={classes.flex_default} name="performers" label="Performers" helperText="Comma separated, eg. John Smith, Jane Doe" value={performers} onChange={this.handleChange} />
-            <DialogSelect className={classes.flex_default} name="danceStyle" label="Dance Style" value={danceStyle} />
+            <DialogInput className={classes.flex_default} onChange={this.handleChange} name="performers" label="Performers" helperText="Comma separated, eg. John Smith, Jane Doe" value={performers} />
+            <DialogSelect className={classes.flex_default} onChange={this.handleChange} name="danceStyle" label="Dance Style" options={this.renderOptions(options.danceStyle)} value={danceStyle} />
           </div>
           <div className={classes.flex}>
-            <DialogInput className={classes.flex_default} name="choreographers" label="Choreographers" helperText="Comma separated, eg. John Smith, Jane Doe" value={choreographers} onChange={this.handleChange} />
-            <DialogSelect className={classes.flex_default} name="size" label="Size" value={size} />
+            <DialogInput className={classes.flex_default} onChange={this.handleChange} name="choreographers" label="Choreographers" helperText="Comma separated, eg. John Smith, Jane Doe" value={choreographers} />
+            <DialogSelect className={classes.flex_default} onChange={this.handleChange} name="size" label="Size" options={this.renderOptions(options.danceSize)} value={size} />
           </div>
         </div>
         <div className={classes.dfdialog_footer}>
