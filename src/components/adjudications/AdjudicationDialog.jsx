@@ -32,17 +32,17 @@ class AdjudicationDialog extends React.Component {
 
   render() {
     const { adjudicationId, collectionName, currentValues } = this.props;
+    const { open, view } = this.state;
     const {
       artisticMark,
-      technicalMark,
+      audio,
+      choreoAward,
       cumulativeMark,
       judgeName,
       notes,
-      audio,
       specialAward,
-      choreoAward
+      technicalMark
     } = currentValues;
-    const { open, view } = this.state;
 
     const viewForm = (
       <React.Fragment>

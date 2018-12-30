@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import pick from 'lodash/pick';
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -49,11 +50,16 @@ class AdjudicationsSection extends React.Component {
           <TableHeader headings={headings} />
           <TableBody>
             {Array.isArray(adjudications) && adjudications.length
-              && adjudications.map(rowProps => (
-                <AdjudicationTableRow
-                  collectionName={collectionName}
-                  key={rowProps.id}
-                  {...rowProps} />))}
+              && adjudications.map((rowProps) => {
+                const keys = ['artisticMark', 'audio', 'choreoAward', 'cumulativeMark', 'notes', 'judgeName', 'sepcialAward', 'technicalMark'];
+                const currentValues = pick(rowProps, keys);
+                return (
+                  <AdjudicationTableRow
+                    collectionName={collectionName}
+                    currentValues={currentValues}
+                    key={rowProps.id}
+                    id={rowProps.id} />);
+              })}
           </TableBody>
         </Table>
         {!adjudications && (
