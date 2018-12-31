@@ -23,7 +23,7 @@ class SettingData extends React.Component {
   }
 
   render() {
-    const { optionName } = this.props;
+    const { category, optionName } = this.props;
     const { showAlert } = this.state;
 
     return (
@@ -33,7 +33,11 @@ class SettingData extends React.Component {
         </div>
         <div style={{ float: 'right', width: 'auto' }}>
           <CancelIcon fontSize="inherit" style={{ cursor: 'pointer', color: '#99999', verticalAlign: 'middle' }} onClick={this.handleShowAlert} />
-          <AlertDialog showAlert={showAlert} {...this.props} onClose={this.handleCloseAlert} />
+          <AlertDialog
+            category={category}
+            optionName={optionName}
+            onClose={this.handleCloseAlert}
+            showAlert={showAlert} />
         </div>
       </div>
     );
@@ -41,6 +45,7 @@ class SettingData extends React.Component {
 }
 
 SettingData.propTypes = {
+  category: PropTypes.string.isRequired,
   optionName: PropTypes.string.isRequired
 };
 

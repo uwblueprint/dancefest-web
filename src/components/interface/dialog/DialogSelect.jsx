@@ -6,14 +6,14 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 const DialogSelect = ({
   className,
-  onChange,
-  label,
   helperText,
   fullWidth,
+  label,
   name,
+  onChange,
   options,
-  value,
-  style
+  style,
+  value
 }) => (
   <TextField
     className={className}
@@ -48,23 +48,23 @@ export default DialogSelect;
 
 DialogSelect.propTypes = {
   className: PropTypes.string,
-  label: PropTypes.string,
   helperText: PropTypes.string,
+  fullWidth: PropTypes.bool,
+  label: PropTypes.string,
   name: PropTypes.string.isRequired,
   options: PropTypes.arrayOf(PropTypes.shape()),
   onChange: PropTypes.func,
-  fullWidth: PropTypes.bool,
   style: PropTypes.shape(),
   value: PropTypes.string
 };
 
 DialogSelect.defaultProps = {
   className: null,
-  label: null,
   helperText: null,
+  fullWidth: false,
+  label: null,
   onChange: () => {},
   options: [],
-  fullWidth: false,
   style: null,
   value: ''
 };

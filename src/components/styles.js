@@ -146,6 +146,25 @@ const styles = theme => ({
   subMenuItem: {
     display: 'flex',
     justifyContent: 'space-between'
+  },
+
+  // Settings
+  settings_wrapper: {
+    flex: 1,
+    margin: '0 auto',
+    maxWidth: '700px',
+    textAlign: 'center',
+    width: '80%'
+  },
+  settings_view: {
+    alignItems: 'center',
+    backgroundColor: 'whitesmoke',
+    border: '1px solid #cfcfcf',
+    display: 'flex',
+    flexFlow: 'column',
+    height: 'auto',
+    marginTop: '15px',
+    padding: '15px'
   }
 });
 

@@ -7,18 +7,16 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-import updateSettings from '../../../firebase/utils/updateSettings';
 import constants from '../../../constants';
+import updateSettings from '../../../firebase/utils/updateSettings';
 
 const AlertDialog = ({
   category,
   onClose,
-  showAlert,
-  optionName
+  optionName,
+  showAlert
 }) => {
-  const handleClose = () => {
-    onClose();
-  };
+  const handleClose = () => onClose();
 
   const handleDelete = async () => {
     await updateSettings(category, optionName, constants.DELETE_DATA);
@@ -27,8 +25,8 @@ const AlertDialog = ({
 
   return (
     <Dialog
-      open={showAlert}
       onClose={handleClose}
+      open={showAlert}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description">
       <DialogTitle id="alert-dialog-title">

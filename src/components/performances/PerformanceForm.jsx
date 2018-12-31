@@ -74,12 +74,7 @@ class PerformanceForm extends React.Component {
     this.handleModalClose();
   }
 
-  renderOptions = (option) => {
-    if (!option) {
-      return [];
-    }
-    return option.map(o => ({ value: o }));
-  }
+  renderOptions = option => (option ? [] : option.map(o => ({ value: o })));
 
   render() {
     const { classes, formType } = this.props;
@@ -99,23 +94,76 @@ class PerformanceForm extends React.Component {
       <React.Fragment>
         <div style={{ padding: '25px 25px 0' }}>
           <div className={classes.flex}>
-            <DialogInput className={classes.flex_default} type="number" name="danceEntry" label="Dance Entry" value={danceEntry} onChange={this.handleChange} />
+            <DialogInput
+              className={classes.flex_default}
+              label="Dance Entry"
+              name="danceEntry"
+              onChange={this.handleChange}
+              type="number"
+              value={danceEntry} />
             <div className={classes.flex_default}>
-              <DialogSelect fullWidth onChange={this.handleChange} label="School" name="school" options={this.renderOptions(options.school)} value={school} />
-              <DialogSelect fullWidth onChange={this.handleChange} label="Level" name="academicLevel" options={this.renderOptions(options.academicLevel)} value={academicLevel} />
+              <DialogSelect
+                fullWidth
+                label="School"
+                name="school"
+                onChange={this.handleChange}
+                options={this.renderOptions(options.school)}
+                value={school} />
+              <DialogSelect
+                fullWidth
+                label="Level"
+                name="academicLevel"
+                onChange={this.handleChange}
+                options={this.renderOptions(options.academicLevel)}
+                value={academicLevel} />
             </div>
           </div>
           <div className={classes.flex}>
-            <DialogInput className={classes.flex_default} onChange={this.handleChange} name="danceTitle" label="Dance Title" value={danceTitle} />
-            <DialogSelect className={classes.flex_default} onChange={this.handleChange} name="competitionLevel" label="Competition Level" options={this.renderOptions(options.competitionLevel)} value={competitionLevel} />
+            <DialogInput
+              className={classes.flex_default}
+              label="Dance Title"
+              name="danceTitle"
+              onChange={this.handleChange}
+              value={danceTitle} />
+            <DialogSelect
+              className={classes.flex_default}
+              label="Competition Level"
+              name="competitionLevel"
+              onChange={this.handleChange}
+              options={this.renderOptions(options.competitionLevel)}
+              value={competitionLevel} />
           </div>
           <div className={classes.flex}>
-            <DialogInput className={classes.flex_default} onChange={this.handleChange} name="performers" label="Performers" helperText="Comma separated, eg. John Smith, Jane Doe" value={performers} />
-            <DialogSelect className={classes.flex_default} onChange={this.handleChange} name="danceStyle" label="Dance Style" options={this.renderOptions(options.danceStyle)} value={danceStyle} />
+            <DialogInput
+              className={classes.flex_default}
+              helperText="Comma separated, eg. John Smith, Jane Doe"
+              label="Performers"
+              name="performers"
+              onChange={this.handleChange}
+              value={performers} />
+            <DialogSelect
+              className={classes.flex_default}
+              label="Dance Style"
+              name="danceStyle"
+              onChange={this.handleChange}
+              options={this.renderOptions(options.danceStyle)}
+              value={danceStyle} />
           </div>
           <div className={classes.flex}>
-            <DialogInput className={classes.flex_default} onChange={this.handleChange} name="choreographers" label="Choreographers" helperText="Comma separated, eg. John Smith, Jane Doe" value={choreographers} />
-            <DialogSelect className={classes.flex_default} onChange={this.handleChange} name="size" label="Size" options={this.renderOptions(options.danceSize)} value={size} />
+            <DialogInput
+              className={classes.flex_default}
+              helperText="Comma separated, eg. John Smith, Jane Doe"
+              label="Choreographers"
+              name="choreographers"
+              onChange={this.handleChange}
+              value={choreographers} />
+            <DialogSelect
+              className={classes.flex_default}
+              label="Size"
+              name="size"
+              onChange={this.handleChange}
+              options={this.renderOptions(options.danceSize)}
+              value={size} />
           </div>
         </div>
         <div className={classes.dfdialog_footer}>
