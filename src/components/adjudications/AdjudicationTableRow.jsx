@@ -47,7 +47,16 @@ const AdjudicationTableRow = ({
 };
 
 AdjudicationTableRow.propTypes = {
-  currentValues: PropTypes.shape().isRequired,
+  currentValues: PropTypes.shape({
+    artisticMark: PropTypes.number,
+    audio: PropTypes.bool,
+    choreoAward: PropTypes.number,
+    cumulativeMark: PropTypes.number,
+    notes: PropTypes.string,
+    judgeName: PropTypes.string,
+    specialAward: PropTypes.bool,
+    technicalMark: PropTypes.number
+  }).isRequired,
   collectionName: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired
 };

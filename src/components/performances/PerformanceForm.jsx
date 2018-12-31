@@ -119,7 +119,7 @@ PerformanceForm.propTypes = {
     danceTitle: PropTypes.string,
     performers: PropTypes.string,
     school: PropTypes.string,
-    size: PropTypes.string
+    size: PropTypes.number
   }),
   formType: PropTypes.oneOf(['edit', 'new']),
   onModalClose: PropTypes.func.isRequired
