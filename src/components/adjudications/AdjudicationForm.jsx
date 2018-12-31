@@ -89,7 +89,7 @@ class AdjudicationForm extends React.Component {
               <DialogInput type="number" value={technicalMark} name="technicalMark" label="Technical" onChange={this.handleChange} />
             </div>
           </div>
-          <DialogInput fullWidth disabled multiline name="notes" value={notes || ''} label="Notes" />
+          <DialogInput fullWidth disabled multiline name="notes" value={notes} label="Notes" />
           <CheckBox label="Award Considerations" choices={choices} onChange={this.handleCheckedAward} />
         </div>
         <div className={classes.dfdialog_footer}>

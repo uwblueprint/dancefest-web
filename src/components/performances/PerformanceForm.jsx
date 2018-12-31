@@ -6,7 +6,6 @@ import { withStyles } from '@material-ui/core/styles';
 import DialogActions from '@material-ui/core/DialogActions';
 
 import db from '../../firebase/firebase';
-import updateData from '../../firebase/utils/updateData';
 import addData from '../../firebase/utils/addData';
 import updateData from '../../firebase/utils/updateData';
 import DialogInput from '../interface/dialog/DialogInput';
@@ -27,6 +26,7 @@ class PerformanceForm extends React.Component {
       danceStyle: currentValues.danceStyle || '',
       danceTitle: currentValues.danceTitle || '',
       disabled: false,
+      options: {},
       performers: currentValues.performers || '',
       school: currentValues.school || '',
       size: currentValues.size || 0
