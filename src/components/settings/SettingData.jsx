@@ -14,12 +14,12 @@ class SettingData extends React.Component {
     };
   }
 
-  handleShowAlert = () => {
-    this.setState({ showAlert: true });
-  }
-
   handleCloseAlert = () => {
     this.setState({ showAlert: false });
+  }
+
+  handleShowAlert = () => {
+    this.setState({ showAlert: true });
   }
 
   render() {

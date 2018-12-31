@@ -80,8 +80,8 @@ class PerformanceForm extends React.Component {
     const { classes, formType } = this.props;
     const {
       academicLevel,
-      competitionLevel,
       choreographers,
+      competitionLevel,
       danceEntry,
       danceStyle,
       danceTitle,
