@@ -74,7 +74,7 @@ class PerformanceForm extends React.Component {
     this.handleModalClose();
   }
 
-  renderOptions = option => (option ? [] : option.map(o => ({ value: o })));
+  renderOptions = option => (option ? option.map(o => ({ value: o })) : []);
 
   render() {
     const { classes, formType } = this.props;
