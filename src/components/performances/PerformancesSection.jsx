@@ -65,13 +65,11 @@ class PerformancesSection extends React.Component {
             })}
           </TableBody>
         </Table>
-        {
-          (!showPerformances) && (
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <EmptyState type="performance" title="Empty Performances Page" subtitle="Create your first Performance" />
-            </div>
-          )
-        }
+        {!showPerformances && (
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <EmptyState type="performance" title="Empty Performances Page" subtitle="Create your first Performance" />
+          </div>
+        )}
       </React.Fragment>
     );
   }

@@ -16,10 +16,10 @@ class AdjudicationForm extends React.Component {
     const { currentValues } = props;
 
     this.state = {
-      artisticMark: currentValues.artisticMark || '',
+      artisticMark: currentValues.artisticMark,
       choreoAward: currentValues.choreoAward || false,
       specialAward: currentValues.specialAward || false,
-      technicalMark: currentValues.technicalMark || ''
+      technicalMark: currentValues.technicalMark
     };
   }
 

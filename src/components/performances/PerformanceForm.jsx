@@ -22,12 +22,12 @@ class PerformanceForm extends React.Component {
       choreographers: currentValues.choreographers || '',
       competitionLevel: currentValues.competitionLevel || '',
       danceEntry: currentValues.danceEntry,
-      danceTitle: currentValues.danceTitle || '',
       danceStyle: currentValues.danceStyle || '',
+      danceTitle: currentValues.danceTitle || '',
       disabled: false,
       performers: currentValues.performers || '',
       school: currentValues.school || '',
-      size: currentValues.size || ''
+      size: currentValues.size || 0
     };
   }
 

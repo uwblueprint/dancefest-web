@@ -69,8 +69,8 @@ PerformanceDialog.propTypes = {
     academicLevel: PropTypes.string,
     choreographers: PropTypes.string,
     danceEntry: PropTypes.number,
-    danceTitle: PropTypes.string,
     danceStyle: PropTypes.string,
+    danceTitle: PropTypes.string,
     performers: PropTypes.string,
     school: PropTypes.string,
     size: PropTypes.string

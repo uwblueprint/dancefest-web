@@ -49,6 +49,7 @@ class AdjudicationDialog extends React.Component {
         <div style={{ display: 'flex', flexFlow: 'column', margin: '35px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-around', borderBottom: '1px solid #dcdcdc' }}>
             <div style={{ flex: '1 0 0' }}>
+              <DialogReadOnly defaultValue="hi" label="Dance Entry" />
               <DialogReadOnly defaultValue="hi" label="Dance Title" />
               <DialogReadOnly defaultValue="hi" label="Performers" />
               <DialogReadOnly defaultValue="hi" label="Choreographer" />

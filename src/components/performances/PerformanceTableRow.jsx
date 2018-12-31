@@ -11,16 +11,16 @@ class PerformanceTableRow extends React.Component {
 
   render() {
     const {
-      id,
       currentValues,
-      eventId
+      eventId,
+      id
     } = this.props;
     const {
-      danceEntry,
-      danceTitle,
-      danceStyle,
-      competitionLevel,
       academicLevel,
+      competitionLevel,
+      danceEntry,
+      danceStyle,
+      danceTitle,
       school,
       size
     } = currentValues;

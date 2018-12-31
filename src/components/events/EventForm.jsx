@@ -21,7 +21,7 @@ class EventForm extends React.Component {
       disabled: true,
       eventDate: currentValues.eventDate || '',
       eventTitle: currentValues.eventTitle || '',
-      numJudges: currentValues.numJudges || ''
+      numJudges: currentValues.numJudges || 0
     };
   }
 
