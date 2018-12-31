@@ -39,9 +39,8 @@ class EventsSection extends React.Component {
   // TODO: create a method for getting total number of performances
 
   render() {
-    const { events, loading } = this.state;
-    const headings = ['Event Title', 'Event Date', 'No. Performances', 'No. Judges'];
-    const keys = ['eventDate', 'eventTitle', 'numJudges'];
+    const { events } = this.state;
+    const headings = ['Event Title', 'Event Date', 'No. Dancers', 'No. Performances', 'No. Judges'];
     const showEvents = Array.isArray(events) && events.length > 0;
 
     return (
