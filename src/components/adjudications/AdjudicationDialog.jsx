@@ -86,9 +86,9 @@ class AdjudicationDialog extends React.Component {
           padding: '0',
           margin: '0'
         }}>
-          <Score type="subtotal" score={String(artisticMark)} scoreName="Artistic" />
-          <Score type="subtotal" score={String(technicalMark)} scoreName="Technical" />
-          <Score type="total" score={String(cumulativeMark)} scoreName="Score" />
+          <Score type="subtotal" score={artisticMark} scoreName="Artistic" />
+          <Score type="subtotal" score={technicalMark} scoreName="Technical" />
+          <Score type="total" score={cumulativeMark} scoreName="Score" />
         </DialogActions>
       </React.Fragment>
     );

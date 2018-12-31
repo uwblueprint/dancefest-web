@@ -59,11 +59,12 @@ class EventsSection extends React.Component {
             {showEvents && events.map((event) => {
               const keys = ['eventTitle', 'eventDate', 'numJudges'];
               const currentValues = pick(event, keys);
+              const { id } = event;
               return (
                 <EventTableRow
                   currentValues={currentValues}
-                  id={event.id}
-                  key={event.id} />);
+                  id={id}
+                  key={id} />);
             })
           }
           </TableBody>

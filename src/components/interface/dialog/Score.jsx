@@ -34,6 +34,6 @@ export default Score;
 
 Score.propTypes = {
   type: PropTypes.oneOf(['subtotal', 'total']).isRequired,
-  score: PropTypes.string.isRequired,
+  score: PropTypes.number.isRequired,
   scoreName: PropTypes.string.isRequired
 };
