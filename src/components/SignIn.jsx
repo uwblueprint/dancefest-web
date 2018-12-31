@@ -1,18 +1,47 @@
 import React from 'react';
+import { auth } from '../firebase/firebase';
+import {withRouter} from 'react-router-dom';
 
 class SignInPage extends React.Component {
-  state = {
-    name: ''
+  constructor (props) {
+    super(props);
+
+    this.state = {
+      email: '',
+      password: ''
+    }
   }
 
   handleNameChange = (event) => {
     this.setState({
-      name: event.target.value
+      email: event.target.value
+    });
+  }
+
+  handlePasswordChange = (event) => {
+    this.setState({
+      password: event.target.value
     });
   }
 
   // TODO: Use firebase auth in this component
-
+  handleSubmit = (event) => {
+    auth.onAuthStateChanged((user) => {
+      console.log(user);
+      if (user) {
+        this.props.history.push('/events')
+      }
+    })
+    auth.signInWithEmailAndPassword(this.state.email, this.state.password)
+      .then((user)  => {
+          // Success 
+          console.log(user);
+      }).catch(function(error) {
+        // Handle Errors here.
+        console.log(error);
+      });
+      return false;
+  }
   // handleSubmit = (event) => {
   //   const { name } = this.state;
 
@@ -45,22 +74,24 @@ class SignInPage extends React.Component {
   // }
 
   render() {
-    const { name } = this.state;
+    const { email, password } = this.state;
     return (
       <div className="App">
-        <form onSubmit={this.handleSubmit}>
+        <form >
           <label>
             Name:
-            <input type="text" value={name} onChange={this.handleNameChange} />
+            <input type="text" value={email} onChange={this.handleNameChange} />
+          </label>
+          <label>
+            Password:
+            <input type="password" value={password} onChange={this.handlePasswordChange} />
           </label>
           <br />
-          <input type="submit" value="Submit" />
+          <button type="button" onClick={this.handleSubmit} >
+            Submit
+          </button>
+          <input onClick={() => { auth.signOut() }} />
         </form>
-        <button type="button" onClick={this.handleDataRetrieval}>
-          <label>
-            SMD
-          </label>
-        </button>
       </div>
     );
   }
@@ -75,4 +106,4 @@ class SignInPage extends React.Component {
 //   </div>
 // );
 
-export default SignInPage;
+export default withRouter(SignInPage);

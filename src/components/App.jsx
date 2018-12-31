@@ -13,6 +13,7 @@ import Header from './interface/Header';
 import SignInPage from './SignIn';
 import Landing from './Landing';
 
+import { auth } from '../firebase/firebase';
 import AdjudicationsSection from './adjudications/AdjudicationsSection';
 import EventsSection from './events/EventsSection';
 import PerformancesSection from './performances/PerformancesSection';
@@ -89,42 +90,80 @@ const theme = createMuiTheme({
   }
 });
 
-const PrivateRoutes = () => (
+const ProtectedRoute = (component) => {
+  return auth.currentUser ? component : null;
+}
+
+function PrivateRoute ({component: Component, user, path, ...rest}) {
+  console.log(rest);
+  console.log(user)
+  console.log(rest.match)
+  return (user.loading ? <div> loading </div> :
+    <Route
+      path={path}
+      {...rest}
+      render={(props) => user.user
+        ? <Component {...props} />
+        : <Redirect to={{pathname: '/', state: {from: props.location}}} />}
+    />
+  )
+}
+
+const Routes = ({state}) => (
   <Switch>
-    <Redirect exact from="/" to="/events" />
-    <Route exact path="/events" component={EventsSection} />
-    <Route exact path="/settings" component={SettingsSection} />
-    <Route path="/events/:eventId/performances" component={PerformancesSection} />
-    <Route path="/events/:eventId/performance/:performanceId/adjudications" component={AdjudicationsSection} />
+    <Route exact path="/" component={SignInPage}  />
+    <PrivateRoute user={state.user} path="/events/:eventId/performances" component={PerformancesSection} />
+    <PrivateRoute user={state.user} path="/events/:eventId/performance/:performanceId/adjudications" component={AdjudicationsSection} />
+    <PrivateRoute user={state.user} exact path='/events' component={EventsSection} />
+    <PrivateRoute user={state.user} exact path="/settings" component={SettingsSection} />
     <Route component={Landing} />
   </Switch>
 );
 
 const PublicRoutes = () => (
   <Switch>
-    <Route exact path="/" component={Landing} />
+    <Route exact path="/" component={SignInPage} />
     <Route exact path={routes.SIGN_IN} component={SignInPage} />
     <Route component={Landing} />
   </Switch>
 );
 
 export default class App extends React.Component {
-  state = {};
+  constructor(props) {
+    super(props);
+
+    this.state={
+      user: auth.currentUser,
+      loading: true
+    }
+  }
+
+  componentDidMount() {
+    auth.onAuthStateChanged((user) => {
+      this.setState({ user: user, loading: false });
+    });
+  }
+
 
   render() {
     // TODO: check user login from Redux
-    const authenticated = true;
+    const authenticated = auth.currentUser;
     return (
       <MuiThemeProvider theme={theme}>
         <Router>
-          {authenticated ? (
             <div>
-              <Header />
-              <PrivateRoutes />
+              <Header />{
+                this.state.loading ? <div> loading </div> :
+                <Switch>
+                  <Route exact path="/" component={SignInPage}  />
+                  <PrivateRoute user={this.state} path="/events/:eventId/performances" component={PerformancesSection} />
+                  <PrivateRoute user={this.state} path="/events/:eventId/performance/:performanceId/adjudications" component={AdjudicationsSection} />
+                  <PrivateRoute user={this.state} exact path='/events' component={EventsSection} />
+                  <PrivateRoute user={this.state} exact path="/settings" component={SettingsSection} />
+                  <Route component={Landing} />
+                </Switch>
+              }
             </div>
-          ) : (
-            <PublicRoutes />
-          )}
         </Router>
       </MuiThemeProvider>
     );
