@@ -79,16 +79,16 @@ class PerformanceForm extends React.Component {
   render() {
     const { classes, formType } = this.props;
     const {
-      danceEntry,
-      danceTitle,
-      performers,
-      danceStyle,
+      academicLevel,
       competitionLevel,
       choreographers,
-      academicLevel,
+      danceEntry,
+      danceStyle,
+      danceTitle,
+      options,
+      performers,
       school,
-      size,
-      options
+      size
     } = this.state;
     return (
       <React.Fragment>

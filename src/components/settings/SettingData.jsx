@@ -32,11 +32,14 @@ class SettingData extends React.Component {
           {`${optionName} `}
         </div>
         <div style={{ float: 'right', width: 'auto' }}>
-          <CancelIcon fontSize="inherit" style={{ cursor: 'pointer', color: '#99999', verticalAlign: 'middle' }} onClick={this.handleShowAlert} />
+          <CancelIcon
+            fontSize="inherit"
+            onClick={this.handleShowAlert}
+            style={{ cursor: 'pointer', color: '#99999', verticalAlign: 'middle' }} />
           <AlertDialog
             category={category}
-            optionName={optionName}
             onClose={this.handleCloseAlert}
+            optionName={optionName}
             showAlert={showAlert} />
         </div>
       </div>
