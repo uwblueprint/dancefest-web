@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import SearchIcon from '@material-ui/icons/Search';
-import Input from '@material-ui/core/Input';
 import { withStyles } from '@material-ui/core/styles';
+import Input from '@material-ui/core/Input';
+import SearchIcon from '@material-ui/icons/Search';
 
-import styles from '../styles';
 import Filter from './filter/index';
+import styles from '../styles';
 
 // TODO: implement filter components for award considerations
 const TableFilters = ({ classes }) => (
