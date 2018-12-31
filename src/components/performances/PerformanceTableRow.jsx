@@ -55,7 +55,7 @@ PerformanceTableRow.propTypes = {
     danceTitle: PropTypes.string,
     performers: PropTypes.string,
     school: PropTypes.string,
-    size: PropTypes.string
+    size: PropTypes.number
   }),
   eventId: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired
