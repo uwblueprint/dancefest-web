@@ -8,6 +8,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import db from '../../firebase/firebase';
 import updateData from '../../firebase/utils/updateData';
 import addData from '../../firebase/utils/addData';
+import updateData from '../../firebase/utils/updateData';
 import DialogInput from '../interface/dialog/DialogInput';
 import DialogSelect from '../interface/dialog/DialogSelect';
 import Button from '../interface/Button';
@@ -23,13 +24,12 @@ class PerformanceForm extends React.Component {
       choreographers: currentValues.choreographers || '',
       competitionLevel: currentValues.competitionLevel || '',
       danceEntry: currentValues.danceEntry,
-      danceTitle: currentValues.danceTitle || '',
       danceStyle: currentValues.danceStyle || '',
+      danceTitle: currentValues.danceTitle || '',
       disabled: false,
-      options: {},
       performers: currentValues.performers || '',
       school: currentValues.school || '',
-      size: currentValues.size || ''
+      size: currentValues.size || 0
     };
   }
 
@@ -64,7 +64,7 @@ class PerformanceForm extends React.Component {
   }
 
   handleSubmit = async () => {
-    const { collectionName, performanceId, formType } = this.props;
+    const { collectionName, formType, performanceId } = this.props;
     const data = omit(this.state, ['disabled', 'options']);
     if (formType === 'new') {
       await addData(collectionName, data);
@@ -139,11 +139,11 @@ PerformanceForm.propTypes = {
     academicLevel: PropTypes.string,
     choreographers: PropTypes.string,
     danceEntry: PropTypes.number,
-    danceTitle: PropTypes.string,
     danceStyle: PropTypes.string,
+    danceTitle: PropTypes.string,
     performers: PropTypes.string,
     school: PropTypes.string,
-    size: PropTypes.string
+    size: PropTypes.number
   }),
   formType: PropTypes.oneOf(['edit', 'new']),
   onModalClose: PropTypes.func.isRequired

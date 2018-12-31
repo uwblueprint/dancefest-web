@@ -46,7 +46,7 @@ DialogInput.propTypes = {
   onChange: PropTypes.func,
   style: PropTypes.shape(),
   type: PropTypes.string,
-  value: PropTypes.node.isRequired
+  value: PropTypes.node
 };
 
 DialogInput.defaultProps = {
@@ -58,5 +58,6 @@ DialogInput.defaultProps = {
   label: '',
   onChange: () => {},
   style: null,
-  type: null
+  type: null,
+  value: ''
 };

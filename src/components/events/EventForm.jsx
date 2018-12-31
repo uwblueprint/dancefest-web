@@ -21,7 +21,7 @@ class EventForm extends React.Component {
       disabled: true,
       eventDate: currentValues.eventDate || '',
       eventTitle: currentValues.eventTitle || '',
-      numJudges: currentValues.numJudges || ''
+      numJudges: currentValues.numJudges || 0
     };
   }
 
@@ -43,7 +43,7 @@ class EventForm extends React.Component {
 
   handleSubmit = async () => {
     const { eventId, formType } = this.props;
-    const { eventTitle, eventDate, numJudges } = this.state;
+    const { eventDate, eventTitle, numJudges } = this.state;
     const collectionName = 'events';
     const data = {
       eventDate: new Date(eventDate),
@@ -98,8 +98,8 @@ class EventForm extends React.Component {
 EventForm.propTypes = {
   classes: PropTypes.shape().isRequired,
   currentValues: PropTypes.shape(),
-  onModalClose: PropTypes.func.isRequired,
-  formType: PropTypes.oneOf(['edit', 'new'])
+  formType: PropTypes.oneOf(['edit', 'new']),
+  onModalClose: PropTypes.func.isRequired
 };
 
 EventForm.defaultProps = {
