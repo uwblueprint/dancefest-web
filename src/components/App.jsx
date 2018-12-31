@@ -90,19 +90,12 @@ const theme = createMuiTheme({
   }
 });
 
-const ProtectedRoute = (component) => {
-  return auth.currentUser ? component : null;
-}
-
 function PrivateRoute ({component: Component, user, path, ...rest}) {
-  console.log(rest);
-  console.log(user)
-  console.log(rest.match)
-  return (user.loading ? <div> loading </div> :
+  return (
     <Route
       path={path}
       {...rest}
-      render={(props) => user.user
+      render={(props) => user
         ? <Component {...props} />
         : <Redirect to={{pathname: '/', state: {from: props.location}}} />}
     />
@@ -146,20 +139,19 @@ export default class App extends React.Component {
 
 
   render() {
-    // TODO: check user login from Redux
-    const authenticated = auth.currentUser;
+    const { user, loading } = this.state;
     return (
       <MuiThemeProvider theme={theme}>
         <Router>
             <div>
               <Header />{
-                this.state.loading ? <div> loading </div> :
+                loading ? <div> loading </div> :
                 <Switch>
                   <Route exact path="/" component={SignInPage}  />
-                  <PrivateRoute user={this.state} path="/events/:eventId/performances" component={PerformancesSection} />
-                  <PrivateRoute user={this.state} path="/events/:eventId/performance/:performanceId/adjudications" component={AdjudicationsSection} />
-                  <PrivateRoute user={this.state} exact path='/events' component={EventsSection} />
-                  <PrivateRoute user={this.state} exact path="/settings" component={SettingsSection} />
+                  <PrivateRoute component={EventsSection} exact path='/events' user={user} />
+                  <PrivateRoute component={SettingsSection} exact path="/settings" user={user} />
+                  <PrivateRoute component={PerformancesSection} path="/events/:eventId/performances" user={user} />
+                  <PrivateRoute component={AdjudicationsSection} path="/events/:eventId/performance/:performanceId/adjudications" user={user} />
                   <Route component={Landing} />
                 </Switch>
               }
