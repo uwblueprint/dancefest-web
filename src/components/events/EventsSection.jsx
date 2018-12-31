@@ -1,4 +1,6 @@
 import React from 'react';
+import isObject from 'lodash/isObject';
+import pick from 'lodash/pick';
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -22,16 +24,15 @@ class EventsSection extends React.Component {
     db.collection('events').onSnapshot((querySnapshot) => {
       const events = [];
       querySnapshot.forEach((doc) => {
-        const { eventTitle, numJudges, date } = doc.data();
-        let eventDate;
-        if (date) {
-          eventDate = new Date(date.seconds * 1000).toLocaleDateString();
-        }
+        const { eventTitle, numJudges, eventDate } = doc.data();
+        const date = isObject(eventDate)
+          ? new Date(eventDate.seconds * 1000).toLocaleDateString()
+          : eventDate;
         const event = {
-          id: doc.id,
+          eventDate: date,
           eventTitle,
-          numJudges,
-          eventDate
+          id: doc.id,
+          numJudges
         };
         events.push(event);
       });
@@ -48,18 +49,27 @@ class EventsSection extends React.Component {
   render() {
     const { events } = this.state;
     const headings = ['Event Title', 'Event Date', 'No. Dancers', 'No. Performances', 'No. Judges'];
+    const showEvents = Array.isArray(events) && events.length > 0;
     return (
       <React.Fragment>
         <SectionHeader title="event" />
         <Table>
           <TableHeader headings={headings} />
           <TableBody>
-            {(Array.isArray(events) && events.length)
-              && events.map(event => (<EventTableRow key={event.id} {...event} />))
-            }
+            {showEvents && events.map((event) => {
+              const keys = ['eventTitle', 'eventDate', 'numJudges'];
+              const currentValues = pick(event, keys);
+              const { id } = event;
+              return (
+                <EventTableRow
+                  currentValues={currentValues}
+                  id={id}
+                  key={id} />);
+            })
+          }
           </TableBody>
         </Table>
-        {!events && (
+        {!showEvents && (
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <EmptyState type="event" title="Empty Events Page" subtitle="Create your first event" />
           </div>

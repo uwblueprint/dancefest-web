@@ -16,8 +16,7 @@ const SectionHeader = ({
 }) => (
   <div className={classes.sectionHeaderWrapper}>
     <Typography variant="h3">
-      {title}
-      s
+      {`${title}s`}
     </Typography>
     <div className={classes.sectionHeaderAction}>
       {showNew && (title === 'event'
@@ -29,7 +28,7 @@ const SectionHeader = ({
 );
 
 SectionHeader.propTypes = {
-  classes: PropTypes.string.isRequired,
+  classes: PropTypes.shape().isRequired,
   eventId: PropTypes.string,
   showNew: PropTypes.bool,
   title: PropTypes.string.isRequired

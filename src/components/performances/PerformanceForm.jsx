@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import omit from 'lodash/omit';
+
 import { withStyles } from '@material-ui/core/styles';
 import DialogActions from '@material-ui/core/DialogActions';
-import _ from 'lodash';
-import updateData from '../../firebase/utils/updateData';
 
 import addData from '../../firebase/utils/addData';
+import updateData from '../../firebase/utils/updateData';
 import DialogInput from '../interface/dialog/DialogInput';
 import DialogSelect from '../interface/dialog/DialogSelect';
 import Button from '../interface/Button';
@@ -17,23 +18,17 @@ class PerformanceForm extends React.Component {
     const { currentValues } = props;
 
     this.state = {
-      danceEntry: currentValues.danceEntry || 0,
-      danceTitle: currentValues.danceTitle || '',
-      performers: currentValues.performers || '',
-      danceStyle: currentValues.danceStyle || '',
-      competitionLevel: currentValues.competitionLevel || '',
-      choreographers: currentValues.choreographers || '',
       academicLevel: currentValues.academicLevel || '',
+      choreographers: currentValues.choreographers || '',
+      competitionLevel: currentValues.competitionLevel || '',
+      danceEntry: currentValues.danceEntry,
+      danceStyle: currentValues.danceStyle || '',
+      danceTitle: currentValues.danceTitle || '',
+      disabled: false,
+      performers: currentValues.performers || '',
       school: currentValues.school || '',
-      size: currentValues.size || '',
-      disabled: false
+      size: currentValues.size || 0
     };
-  }
-
-  // disable save button if not all input fields are filled
-  static getDerivedStateFromProps(props, state) {
-    const values = _.omit(state, 'disabled');
-    return { disabled: !(Object.keys(values).every(value => !!state[value])) };
   }
 
   handleChange = (e) => {
@@ -53,14 +48,14 @@ class PerformanceForm extends React.Component {
   }
 
   handleSubmit = async () => {
-    const { performanceId, formType, eventId } = this.props;
-    const collectionName = `events/${eventId}/performances`;
-    const data = _.omit(this.state, 'disabled');
+    const { collectionName, formType, performanceId } = this.props;
+    const data = omit(this.state, 'disabled');
     if (formType === 'new') {
-      await addData(collectionName, data, this.handleModalClose);
+      await addData(collectionName, data);
     } else {
-      await updateData(collectionName, performanceId, data, this.handleModalClose);
+      await updateData(collectionName, performanceId, data);
     }
+    this.handleModalClose();
   }
 
   render() {
@@ -115,15 +110,23 @@ class PerformanceForm extends React.Component {
 }
 
 PerformanceForm.propTypes = {
-  classes: PropTypes.string.isRequired,
-  currentValues: PropTypes.shape(),
-  eventId: PropTypes.string.isRequired,
+  classes: PropTypes.shape().isRequired,
+  currentValues: PropTypes.shape({
+    academicLevel: PropTypes.string,
+    choreographers: PropTypes.string,
+    danceEntry: PropTypes.number,
+    danceStyle: PropTypes.string,
+    danceTitle: PropTypes.string,
+    performers: PropTypes.string,
+    school: PropTypes.string,
+    size: PropTypes.number
+  }),
   formType: PropTypes.oneOf(['edit', 'new']),
   onModalClose: PropTypes.func.isRequired
 };
 
 PerformanceForm.defaultProps = {
-  currentValues: [],
+  currentValues: {},
   formType: 'edit'
 };
 

@@ -21,7 +21,7 @@ const EmptyState = ({ type, title, subtitle }) => {
 
   return (
     <div style={{ textAlign: 'center', margin: '50px' }}>
-      <img src={image} alt="" auto />
+      <img src={image} alt="" />
       <p>{title}</p>
       <p>{subtitle}</p>
     </div>
@@ -29,9 +29,9 @@ const EmptyState = ({ type, title, subtitle }) => {
 };
 
 EmptyState.propTypes = {
-  type: PropTypes.oneOf(['event', 'adjudication', 'performance']).isRequired,
+  subtitle: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  subtitle: PropTypes.string.isRequired
+  type: PropTypes.oneOf(['adjudication', 'event', 'performance']).isRequired
 };
 
 export default EmptyState;

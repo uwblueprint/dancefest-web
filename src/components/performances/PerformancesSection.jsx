@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import pick from 'lodash/pick';
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 
 import db from '../../firebase/firebase';
 import TableHeader from '../interface/TableHeader';
+import TableFilters from '../interface/TableFilters';
 import PerformanceTableRow from './PerformanceTableRow';
 import EmptyState from '../interface/EmptyStates';
 import SectionHeader from '../interface/SectionHeader';
@@ -37,34 +39,37 @@ class PerformancesSection extends React.Component {
   }
 
   render() {
-    const headings = ['Dance Title', 'Dance Entry', 'School', 'Acaademic Level', 'Level of Competition', 'Dance Style', 'Dance Size'];
     const { performances } = this.state;
     const { match: { params: { eventId }}} = this.props;
-    const collectionName = `events/${eventId}/performances`;
+    const headings = ['Dance Title', 'Dance Entry', 'School', 'Academic Level', 'Level of Competition', 'Dance Style', 'Dance Size'];
+    const showPerformances = Array.isArray(performances) && performances.length > 0;
 
     return (
       <React.Fragment>
         <SectionHeader eventId={eventId} title="performance" />
+        <TableFilters />
         <Table>
           <TableHeader headings={headings} />
           <TableBody>
-            {(Array.isArray(performances) && performances.length)
-              && performances.map(performance => (
+            {showPerformances && performances.map((performance) => {
+              const keys = ['academicLevel', 'choreographers', 'competitionLevel', 'danceEntry', 'danceStyle', 'danceTitle', 'performers', 'school', 'size'];
+              const currentValues = pick(performance, keys);
+              const { id } = performance;
+              return (
                 <PerformanceTableRow
-                  key={performance.id}
-                  {...performance}
+                  currentValues={currentValues}
                   eventId={eventId}
-                  collectionName={collectionName} />
-              ))}
+                  id={id}
+                  key={id} />
+              );
+            })}
           </TableBody>
         </Table>
-        {
-          (!performances) && (
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <EmptyState type="performance" title="Empty Performances Page" subtitle="Create your first Performance" />
-            </div>
-          )
-        }
+        {!showPerformances && (
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <EmptyState type="performance" title="Empty Performances Page" subtitle="Create your first Performance" />
+          </div>
+        )}
       </React.Fragment>
     );
   }

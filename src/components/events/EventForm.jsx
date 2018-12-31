@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import pick from 'lodash/pick';
+
 import { withStyles } from '@material-ui/core/styles';
 import DialogActions from '@material-ui/core/DialogActions';
-import _ from 'lodash';
+
 import addData from '../../firebase/utils/addData';
 import updateData from '../../firebase/utils/updateData';
 
@@ -16,16 +18,16 @@ class EventForm extends React.Component {
     const { currentValues } = props;
 
     this.state = {
-      eventTitle: currentValues.eventTitle || '',
+      disabled: true,
       eventDate: currentValues.eventDate || '',
-      numJudges: currentValues.numJudges || '',
-      disabled: true
+      eventTitle: currentValues.eventTitle || '',
+      numJudges: currentValues.numJudges || 0
     };
   }
 
   // disable save button if not all input fields are filled
   static getDerivedStateFromProps(props, state) {
-    const values = _.omit(state, 'disabled');
+    const values = pick(state, ['eventDate', 'eventTitle', 'numJudges']);
     return { disabled: !(Object.keys(values).every(value => !!state[value])) };
   }
 
@@ -41,15 +43,19 @@ class EventForm extends React.Component {
 
   handleSubmit = async () => {
     const { eventId, formType } = this.props;
+    const { eventDate, eventTitle, numJudges } = this.state;
     const collectionName = 'events';
-    const data = _.omit(this.state, 'disabled');
-
-
+    const data = {
+      eventDate: new Date(eventDate),
+      eventTitle,
+      numJudges
+    };
     if (formType === 'new') {
-      await addData(collectionName, data, this.handleModalClose);
+      await addData(collectionName, data);
     } else {
-      await updateData(collectionName, eventId, data, this.handleModalClose);
+      await updateData(collectionName, eventId, data);
     }
+    this.handleModalClose();
   }
 
   handleModalClose = () => {
@@ -90,14 +96,14 @@ class EventForm extends React.Component {
 }
 
 EventForm.propTypes = {
-  classes: PropTypes.string.isRequired,
+  classes: PropTypes.shape().isRequired,
   currentValues: PropTypes.shape(),
-  onModalClose: PropTypes.func.isRequired,
-  formType: PropTypes.oneOf(['edit', 'new'])
+  formType: PropTypes.oneOf(['edit', 'new']),
+  onModalClose: PropTypes.func.isRequired
 };
 
 EventForm.defaultProps = {
-  currentValues: [],
+  currentValues: {},
   formType: 'edit'
 };
 

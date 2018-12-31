@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import pick from 'lodash/pick';
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -36,8 +38,11 @@ class AdjudicationsSection extends React.Component {
   }
 
   render() {
-    const headings = ['Judge', 'Audio', 'Cummulative Score', 'Awards'];
+    const { match: { params: { eventId, performanceId }}} = this.props;
     const { adjudications } = this.state;
+    const collectionName = `events/${eventId}/performances/${performanceId}/adjudications`;
+    const headings = ['Judge', 'Audio', 'Cumulative Score', 'Awards'];
+    const showAdjudications = Array.isArray(adjudications) && adjudications.length > 0;
 
     return (
       <React.Fragment>
@@ -45,12 +50,19 @@ class AdjudicationsSection extends React.Component {
         <Table>
           <TableHeader headings={headings} />
           <TableBody>
-            {Array.isArray(adjudications) && adjudications.length
-              && adjudications.map(rowProps => (
-                <AdjudicationTableRow key={rowProps.id} {...rowProps} />))}
+            {showAdjudications && adjudications.map((rowProps) => {
+              const keys = ['artisticMark', 'audio', 'choreoAward', 'cumulativeMark', 'notes', 'judgeName', 'specialAward', 'technicalMark'];
+              const currentValues = pick(rowProps, keys);
+              return (
+                <AdjudicationTableRow
+                  collectionName={collectionName}
+                  currentValues={currentValues}
+                  key={rowProps.id}
+                  id={rowProps.id} />);
+            })}
           </TableBody>
         </Table>
-        {!adjudications && (
+        {!showAdjudications && (
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <EmptyState type="adjudication" title="Empty Adjudications Page" subtitle="Create your first Adjudication" />
           </div>
@@ -59,4 +71,9 @@ class AdjudicationsSection extends React.Component {
     );
   }
 }
+
+AdjudicationsSection.propTypes = {
+  match: PropTypes.shape().isRequired
+};
+
 export default AdjudicationsSection;
