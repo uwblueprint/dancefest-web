@@ -2,6 +2,8 @@ import React from 'react';
 import { auth } from '../firebase/firebase';
 import {withRouter} from 'react-router-dom';
 
+import BackgroundImage from '../assets/background.jpg'; // Import using relative path
+
 class SignInPage extends React.Component {
   constructor (props) {
     super(props);
@@ -27,22 +29,24 @@ class SignInPage extends React.Component {
   handleSubmit = (event) => {
     auth.onAuthStateChanged((user) => {
       if (user) {
-        this.props.history.push('/events');
+        this.props.history.push("/events");
       }
     })
     auth.signInWithEmailAndPassword(this.state.email, this.state.password)
-      .then((user)  => {
-      }).catch(function(error) {
-        // Handle Errors here.
-        console.log(error);
-      });
-      return false;
+    return false;
   }
 
   render() {
     const { email, password } = this.state;
+    const imageStyle = {
+      height: '100%',
+      backgroundImage: `url(${BackgroundImage})`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat'
+    }
     return (
-      <div className="App">
+      <div style={imageStyle}>
         <form >
           <label>
             Name:
@@ -56,7 +60,6 @@ class SignInPage extends React.Component {
           <button type="button" onClick={this.handleSubmit} >
             Submit
           </button>
-          <input onClick={() => { auth.signOut() }} />
         </form>
       </div>
     );
