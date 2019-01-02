@@ -148,7 +148,7 @@ const styles = theme => ({
     justifyContent: 'space-between'
   },
 
-  // Settings
+  // Settings Styling
   settings_wrapper: {
     flex: 1,
     margin: '0 auto',
@@ -165,6 +165,30 @@ const styles = theme => ({
     height: 'auto',
     marginTop: '15px',
     padding: '15px'
+  },
+
+  // Loading Styling
+  loading_wrapper: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: '10%'
+  },
+
+  // EmptyState Image Wrapper Styling
+  emptyState_wrapper: {
+    display: 'flex',
+    justifyContent: 'center'
+  },
+  emptyState_content: {
+    marginTop: '100px',
+    textAlign: 'center'
+  },
+  emptyState_title: {
+    fontSize: '20px',
+    textAlign: 'center'
+  },
+  emptyState_subtitle: {
+    textAlign: 'center'
   }
 });
 
