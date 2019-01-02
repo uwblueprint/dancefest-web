@@ -1,5 +1,4 @@
 import React from 'react';
-
 import isObject from 'lodash/isObject';
 import pick from 'lodash/pick';
 

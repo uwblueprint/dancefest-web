@@ -49,6 +49,7 @@ class AdjudicationDialog extends React.Component {
         <div style={{ display: 'flex', flexFlow: 'column', margin: '35px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-around', borderBottom: '1px solid #dcdcdc' }}>
             <div style={{ flex: '1 0 0' }}>
+              <DialogReadOnly defaultValue="hi" label="Dance Entry" />
               <DialogReadOnly defaultValue="hi" label="Dance Title" />
               <DialogReadOnly defaultValue="hi" label="Performers" />
               <DialogReadOnly defaultValue="hi" label="Choreographer" />
@@ -86,9 +87,9 @@ class AdjudicationDialog extends React.Component {
           padding: '0',
           margin: '0'
         }}>
-          <Score type="subtotal" score={String(artisticMark)} scoreName="Artistic" />
-          <Score type="subtotal" score={String(technicalMark)} scoreName="Technical" />
-          <Score type="total" score={String(cumulativeMark)} scoreName="Score" />
+          <Score type="subtotal" score={artisticMark} scoreName="Artistic" />
+          <Score type="subtotal" score={technicalMark} scoreName="Technical" />
+          <Score type="total" score={cumulativeMark} scoreName="Score" />
         </DialogActions>
       </React.Fragment>
     );
