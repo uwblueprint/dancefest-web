@@ -1,15 +1,9 @@
 import React from 'react';
 import pick from 'lodash/pick';
 
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-
 import db from '../../firebase/firebase';
-import Loading from '../interface/Loading';
-import TableHeader from '../interface/TableHeader';
 import EventTableRow from './EventTableRow';
-import EmptyState from '../interface/EmptyStates';
-import SectionHeader from '../interface/SectionHeader';
+import Section from '../interface/Section';
 
 class EventsSection extends React.Component {
   constructor(props) {
@@ -17,7 +11,7 @@ class EventsSection extends React.Component {
 
     this.state = {
       events: null,
-      fetching: true
+      loading: true
     };
   }
 
@@ -37,7 +31,7 @@ class EventsSection extends React.Component {
         };
         events.push(event);
       });
-      this.setState({ events, fetching: false });
+      this.setState({ events, loading: false });
     });
   }
 
@@ -48,33 +42,22 @@ class EventsSection extends React.Component {
   // TODO: create a method for getting total number of performances
 
   render() {
-    const { events, fetching } = this.state;
+    const { events, loading } = this.state;
     const headings = ['Event Title', 'Event Date', 'No. Dancers', 'No. Performances', 'No. Judges'];
     const showEvents = Array.isArray(events) && events.length > 0;
+
     return (
-      <React.Fragment>
-        <SectionHeader title="event" />
-        <Table>
-          <TableHeader headings={headings} />
-          <TableBody>
-            {!fetching && showEvents && events.map((event) => {
-              const keys = ['eventTitle', 'eventDate', 'numJudges'];
-              const currentValues = pick(event, keys);
-              return (
-                <EventTableRow
-                  currentValues={currentValues}
-                  id={event.id}
-                  key={event.id} />);
-            })
-          }
-          </TableBody>
-        </Table>
-        {fetching ? <Loading /> : (!showEvents && (
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <EmptyState type="event" title="Empty Events Page" subtitle="Create your first event" />
-          </div>
-        ))}
-      </React.Fragment>
+      <Section headings={headings} loading={loading} showContent={showEvents} type="event">
+        {showEvents && events.map((event) => {
+          const keys = ['eventTitle', 'eventDate', 'numJudges'];
+          const currentValues = pick(event, keys);
+          return (
+            <EventTableRow
+              currentValues={currentValues}
+              id={event.id}
+              key={event.id} />);
+        })}
+      </Section>
     );
   }
 }

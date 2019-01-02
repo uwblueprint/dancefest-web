@@ -146,6 +146,26 @@ const styles = theme => ({
   subMenuItem: {
     display: 'flex',
     justifyContent: 'space-between'
+  },
+
+  // Loading styling
+  loading_wrapper: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: '10%'
+  },
+
+  // emptystate
+  emptyState_wrapper: {
+    display: 'flex',
+    justifyContent: 'center'
+  },
+  emptyState_content: {
+    marginTop: '100px',
+    textAlign: 'center'
+  },
+  emptyState_title: {
+    fontSize: '20px'
   }
 });
 

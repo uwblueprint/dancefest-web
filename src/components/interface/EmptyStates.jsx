@@ -1,37 +1,50 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import EventEmptyImage from '../images/Events_empty.jpg';
-import AdjEmptyImage from '../images/Adjudications_empty.jpg';
-import performanceEmptyImage from '../images/Performances_empty.jpg';
 
-const EmptyState = ({ type, title, subtitle }) => {
+import { withStyles } from '@material-ui/core/styles';
+
+import AdjEmptyImage from '../images/Adjudications_empty.png';
+import EventEmptyImage from '../images/Events_empty.png';
+import performanceEmptyImage from '../images/Performances_empty.png';
+import styles from '../styles';
+
+const EmptyState = ({ classes, type }) => {
   let image;
+  let title;
+  let subtitle;
   switch (type) {
     case 'event':
       image = EventEmptyImage;
+      title = 'Empty Events Page';
+      subtitle = 'Create your first event';
       break;
     case 'adjudication':
       image = AdjEmptyImage;
+      title = 'Empty Adjudications Page';
+      subtitle = 'Adjudications will be synced following the event';
       break;
     case 'performance':
     default:
       image = performanceEmptyImage;
+      title = 'Empty Performances Page';
+      subtitle = 'Create your first Performance';
       break;
   }
 
   return (
-    <div style={{ textAlign: 'center', margin: '50px' }}>
-      <img src={image} alt="" />
-      <p>{title}</p>
-      <p>{subtitle}</p>
+    <div className={classes.emptyState_wrapper}>
+      <div className={classes.emptyState_content}>
+        <img src={image} alt="" width="300" />
+        <p className={classes.emptyState_title}>{title}</p>
+        <p>{subtitle}</p>
+      </div>
     </div>
   );
 };
 
 EmptyState.propTypes = {
-  subtitle: PropTypes.string.isRequired,
-  type: PropTypes.oneOf(['event', 'adjudication', 'performance']).isRequired,
-  title: PropTypes.string.isRequired
+  classes: PropTypes.shape().isRequired,
+  type: PropTypes.oneOf(['event', 'adjudication', 'performance']).isRequired
 };
 
-export default EmptyState;
+export default withStyles(styles)(EmptyState);

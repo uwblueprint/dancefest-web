@@ -2,13 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactLoading from 'react-loading';
 
+import { withStyles } from '@material-ui/core/styles';
+
+import styles from '../styles';
+
 const Loading = ({
+  classes,
   color,
   height,
   type,
   width
 }) => (
-  <div style={{ display: 'flex', justifyContent: 'center', marginTop: '50px' }}>
+  <div className={classes.loading_wrapper}>
     <ReactLoading color={color} height={height} type={type} width={width} />
   </div>
 );
@@ -27,4 +32,8 @@ Loading.defaultProps = {
   width: 50
 };
 
-export default Loading;
+Loading.propTypes = {
+  classes: PropTypes.shape().isRequired
+};
+
+export default withStyles(styles)(Loading);
