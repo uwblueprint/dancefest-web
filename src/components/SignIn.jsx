@@ -33,8 +33,15 @@ class SignInPage extends React.Component {
   }
 
   handleSubmit = () => {
+    const { history } = this.props;
     const { email, password } = this.state;
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        history.push('events');
+      }
+    });
     auth.signInWithEmailAndPassword(email, password);
+    return false;
   }
 
   render() {
@@ -54,7 +61,7 @@ class SignInPage extends React.Component {
             label="password"
             onChange={this.handleChange} />
           <br />
-          <Button type="button" onClick={this.handleSubmit}>
+          <Button buttonType="button" onClick={this.handleSubmit} type="default">
             Submit
           </Button>
         </form>
@@ -64,7 +71,7 @@ class SignInPage extends React.Component {
 }
 
 SignInPage.propTypes = {
-  history: PropTypes.arrayOf(PropTypes.string).isRequired,
+  history: PropTypes.shape().isRequired,
   user: PropTypes.shape()
 };
 

@@ -6,7 +6,7 @@ import MUIButton from '@material-ui/core/Button';
 import styles from '../styles';
 
 const Button = ({
-  classes, children, disabled, type, onClick
+  buttonType, classes, children, disabled, type, onClick
 }) => {
   let customClasses;
   switch (type) {
@@ -30,7 +30,7 @@ const Button = ({
     <MUIButton
       disabled={disabled}
       onClick={() => onClick && onClick()}
-      type="submit"
+      type={buttonType}
       classes={{ root: classnames(disabledClasss, classes.button, customClasses) }}>
       {children}
     </MUIButton>
@@ -38,6 +38,7 @@ const Button = ({
 };
 
 Button.propTypes = {
+  buttonType: PropTypes.string,
   classes: PropTypes.shape().isRequired,
   children: PropTypes.node.isRequired,
   disabled: PropTypes.bool,
@@ -46,6 +47,7 @@ Button.propTypes = {
 };
 
 Button.defaultProps = {
+  buttonType: 'submit',
   disabled: false
 };
 
