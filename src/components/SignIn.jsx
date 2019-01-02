@@ -57,7 +57,7 @@ class SignInPage extends React.Component {
           type="password"
           value={password}
           name="password"
-          label="password"
+          label="Password"
           onChange={this.handleChange} />
         <br />
         <Button buttonType="button" onClick={this.handleSubmit} type="default">
