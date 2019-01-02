@@ -90,15 +90,15 @@ const theme = createMuiTheme({
 
 const PrivateRoute = ({
   component: Component,
-  user,
   path,
+  user,
   ...rest
 }) => (
   <Route
     path={path}
-    {...rest}
     render={props => (user ? <Component {...props} />
-      : <Redirect to={{ pathname: '/', state: { from: props.location }}} />)} />
+      : <Redirect to={{ pathname: '/', state: { from: props.location }}} />)}
+    {...rest} />
 );
 
 export default class App extends React.Component {

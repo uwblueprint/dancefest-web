@@ -10,15 +10,15 @@ class SignInPage extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      email: '',
-      password: ''
-    };
-
     const {
       user,
       history
     } = props;
+
+    this.state = {
+      email: '',
+      password: ''
+    };
 
     if (user) {
       history.push('/events');
@@ -34,13 +34,7 @@ class SignInPage extends React.Component {
 
   handleSubmit = () => {
     const { email, password } = this.state;
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        window.location('/events');
-      }
-    });
     auth.signInWithEmailAndPassword(email, password);
-    return false;
   }
 
   render() {
