@@ -9,8 +9,8 @@ import styles from '../styles';
 import EmptyState from './EmptyStates';
 import Loading from './Loading';
 import SectionHeader from './SectionHeader';
-import TableHeader from './TableHeader';
 import TableFilters from './TableFilters';
+import TableHeader from './TableHeader';
 
 const Section = ({
   children,
@@ -19,7 +19,7 @@ const Section = ({
   showContent,
   type
 }) => {
-  const showNewButton = type !== 'adjudication';
+  const isAdjudication = type === 'adjudication';
   const renderTableContents = showContent ? (
     <Table>
       <TableHeader headings={headings} />
@@ -29,7 +29,7 @@ const Section = ({
 
   return (
     <React.Fragment>
-      <SectionHeader title={type} showNew={showNewButton} />
+      <SectionHeader title={type} showNew={!isAdjudication} />
       {type === 'performance' && (<TableFilters />)}
       {loading ? <Loading /> : renderTableContents}
     </React.Fragment>

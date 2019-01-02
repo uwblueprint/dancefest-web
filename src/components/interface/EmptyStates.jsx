@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import AdjEmptyImage from '../images/Adjudications_empty.png';
 import EventEmptyImage from '../images/Events_empty.png';
-import performanceEmptyImage from '../images/Performances_empty.png';
+import PerformanceEmptyImage from '../images/Performances_empty.png';
 import styles from '../styles';
 
 const EmptyState = ({ classes, type }) => {
@@ -25,7 +25,7 @@ const EmptyState = ({ classes, type }) => {
       break;
     case 'performance':
     default:
-      image = performanceEmptyImage;
+      image = PerformanceEmptyImage;
       title = 'Empty Performances Page';
       subtitle = 'Create your first Performance';
       break;
@@ -34,9 +34,9 @@ const EmptyState = ({ classes, type }) => {
   return (
     <div className={classes.emptyState_wrapper}>
       <div className={classes.emptyState_content}>
-        <img src={image} alt="" width="300" />
+        <img src={image} alt={`Empty ${type} Section`} width="300" />
         <p className={classes.emptyState_title}>{title}</p>
-        <p>{subtitle}</p>
+        <p className={classes.emptyState_subtitle}>{subtitle}</p>
       </div>
     </div>
   );

@@ -174,17 +174,20 @@ const styles = theme => ({
     marginTop: '10%'
   },
 
-  // emptyState Styling
+  // EmptyState Image Wrapper Styling
   emptyState_wrapper: {
     display: 'flex',
     justifyContent: 'center'
   },
   emptyState_content: {
-    marginTop: '100px',
-    textAlign: 'center'
+    marginTop: '100px'
   },
   emptyState_title: {
-    fontSize: '20px'
+    fontSize: '20px',
+    textAlign: 'center'
+  },
+  emptyState_subtitle: {
+    textAlign: 'center'
   }
 });
 

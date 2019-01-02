@@ -11,8 +11,8 @@ class AdjudicationsSection extends React.Component {
     super(props);
 
     this.state = {
-      loading: true,
-      adjudications: []
+      adjudications: [],
+      loading: true
     };
   }
 
@@ -38,19 +38,20 @@ class AdjudicationsSection extends React.Component {
     const { adjudications, loading } = this.state;
     const collectionName = `events/${eventId}/performances/${performanceId}/adjudications`;
     const headings = ['Judge', 'Audio', 'Cumulative Score', 'Awards'];
+    const keys = ['artisticMark', 'audio', 'choreoAward', 'cumulativeMark', 'notes', 'judgeName', 'specialAward', 'technicalMark'];
     const showAdjudications = Array.isArray(adjudications) && adjudications.length > 0;
 
     return (
       <Section headings={headings} loading={loading} showContent={showAdjudications} type="adjudication">
         {showAdjudications && adjudications.map((rowProps) => {
-          const keys = ['artisticMark', 'audio', 'choreoAward', 'cumulativeMark', 'notes', 'judgeName', 'specialAward', 'technicalMark'];
           const currentValues = pick(rowProps, keys);
+          const { id } = rowProps;
           return (
             <AdjudicationTableRow
               collectionName={collectionName}
               currentValues={currentValues}
-              key={rowProps.id}
-              id={rowProps.id} />);
+              key={id}
+              id={id} />);
         })}
       </Section>
     );
