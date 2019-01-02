@@ -47,25 +47,23 @@ class SignInPage extends React.Component {
   render() {
     const { email, password } = this.state;
     return (
-      <div>
-        <form>
-          <DialogInput
-            value={email}
-            name="email"
-            label="Email"
-            onChange={this.handleChange} />
-          <DialogInput
-            type="password"
-            value={password}
-            name="password"
-            label="password"
-            onChange={this.handleChange} />
-          <br />
-          <Button buttonType="button" onClick={this.handleSubmit} type="default">
-            Submit
-          </Button>
-        </form>
-      </div>
+      <form>
+        <DialogInput
+          value={email}
+          name="email"
+          label="Email"
+          onChange={this.handleChange} />
+        <DialogInput
+          type="password"
+          value={password}
+          name="password"
+          label="password"
+          onChange={this.handleChange} />
+        <br />
+        <Button buttonType="button" onClick={this.handleSubmit} type="default">
+          Submit
+        </Button>
+      </form>
     );
   }
 }
