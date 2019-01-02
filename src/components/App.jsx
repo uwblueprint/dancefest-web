@@ -106,8 +106,8 @@ export default class App extends React.Component {
     super(props);
 
     this.state = {
-      user: auth.currentUser,
-      loading: true
+      loading: true,
+      user: auth.currentUser
     };
   }
 
