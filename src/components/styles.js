@@ -1,7 +1,5 @@
 import { fade } from '@material-ui/core/styles/colorManipulator';
 
-import BackgroundImage from '../assets/background.jpg';
-
 const styles = theme => ({
   // flex
   flex: {

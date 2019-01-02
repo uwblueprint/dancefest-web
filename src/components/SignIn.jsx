@@ -2,10 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 
-import { withStyles } from '@material-ui/core/styles';
-
 import { auth } from '../firebase/firebase';
-import styles from './styles';
+import Button from './interface/Button';
+import DialogInput from './interface/dialog/DialogInput';
 
 class SignInPage extends React.Component {
   constructor(props) {
@@ -26,15 +25,10 @@ class SignInPage extends React.Component {
     }
   }
 
-  handleNameChange = (event) => {
+  handleChange = (event) => {
+    const { target: { name, value }} = event;
     this.setState({
-      email: event.target.value
-    });
-  }
-
-  handlePasswordChange = (event) => {
-    this.setState({
-      password: event.target.value
+      [name]: value
     });
   }
 
@@ -51,22 +45,24 @@ class SignInPage extends React.Component {
 
   render() {
     const { email, password } = this.state;
-    const { classes } = this.props;
     return (
       <div>
         <form>
-          <label>
-            Name:
-            <input type="text" value={email} onChange={this.handleNameChange} />
-          </label>
-          <label>
-            Password:
-            <input type="password" value={password} onChange={this.handlePasswordChange} />
-          </label>
+          <DialogInput
+            value={email}
+            name="email"
+            label="Email"
+            onChange={this.handleChange} />
+          <DialogInput
+            type="password"
+            value={password}
+            name="password"
+            label="password"
+            onChange={this.handleChange} />
           <br />
-          <button type="button" onClick={this.handleSubmit} >
+          <Button type="button" onClick={this.handleSubmit}>
             Submit
-          </button>
+          </Button>
         </form>
       </div>
     );
@@ -74,7 +70,6 @@ class SignInPage extends React.Component {
 }
 
 SignInPage.propTypes = {
-  classes: PropTypes.shape().isRequired,
   history: PropTypes.arrayOf(PropTypes.string).isRequired,
   user: PropTypes.shape()
 };
@@ -83,4 +78,4 @@ SignInPage.defaultProps = {
   user: null
 };
 
-export default withRouter(withStyles(styles)(SignInPage));
+export default withRouter(SignInPage);
