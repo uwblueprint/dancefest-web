@@ -114,18 +114,17 @@ export default class App extends React.Component {
 
   componentDidMount() {
     auth.onAuthStateChanged((user) => {
-      this.setState({ user, loading: false });
+      this.setState({ loading: false, user });
     });
   }
 
 
   render() {
-    const { user, loading } = this.state;
+    const { loading, user } = this.state;
     return (
       <MuiThemeProvider theme={theme}>
         <Router>
           {
-            // TODO: Once we merge in PR#27, we'll swap this with the react loading icon
             loading ? (<Loading />) : (
               <React.Fragment>
                 { user && <Header /> }
