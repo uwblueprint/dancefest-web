@@ -36,7 +36,7 @@ class PerformancesSection extends React.Component {
   render() {
     const { loading, performances } = this.state;
     const { match: { params: { eventId }}} = this.props;
-    const headings = ['Dance Title', 'Dance Entry', 'School', 'Acaademic Level', 'Level of Competition', 'Dance Style', 'Dance Size'];
+    const headings = ['Dance Title', 'Dance Entry', 'School', 'Academic Level', 'Level of Competition', 'Dance Style', 'Dance Size'];
     const showPerformances = Array.isArray(performances) && performances.length > 0;
 
     return (
