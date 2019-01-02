@@ -38,6 +38,8 @@ class SignIn extends React.Component {
     auth.onAuthStateChanged((user) => {
       if (user) {
         history.push('events');
+      } else {
+        history.push('/');
       }
     });
     auth.signInWithEmailAndPassword(email, password);
