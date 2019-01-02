@@ -41,7 +41,7 @@ class EventsSection extends React.Component {
   render() {
     const { events, loading } = this.state;
     const headings = ['Event Title', 'Event Date', 'No. Performances', 'No. Judges'];
-    const keys = ['eventTitle', 'eventDate', 'numJudges'];
+    const keys = ['eventDate', 'eventTitle', 'numJudges'];
     const showEvents = Array.isArray(events) && events.length > 0;
 
     return (
