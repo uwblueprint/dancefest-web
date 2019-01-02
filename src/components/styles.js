@@ -148,14 +148,33 @@ const styles = theme => ({
     justifyContent: 'space-between'
   },
 
-  // Loading styling
+  // Settings Styling
+  settings_wrapper: {
+    flex: 1,
+    margin: '0 auto',
+    maxWidth: '700px',
+    textAlign: 'center',
+    width: '80%'
+  },
+  settings_view: {
+    alignItems: 'center',
+    backgroundColor: 'whitesmoke',
+    border: '1px solid #cfcfcf',
+    display: 'flex',
+    flexFlow: 'column',
+    height: 'auto',
+    marginTop: '15px',
+    padding: '15px'
+  },
+
+  // Loading Styling
   loading_wrapper: {
     display: 'flex',
     justifyContent: 'center',
     marginTop: '10%'
   },
 
-  // emptystate
+  // emptyState Styling
   emptyState_wrapper: {
     display: 'flex',
     justifyContent: 'center'

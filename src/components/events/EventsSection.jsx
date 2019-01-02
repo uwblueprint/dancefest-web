@@ -1,4 +1,6 @@
 import React from 'react';
+
+import isObject from 'lodash/isObject';
 import pick from 'lodash/pick';
 
 import db from '../../firebase/firebase';
@@ -20,7 +22,7 @@ class EventsSection extends React.Component {
       const events = [];
       querySnapshot.forEach((doc) => {
         const { eventTitle, numJudges, eventDate } = doc.data();
-        const date = typeof eventDate === 'object'
+        const date = isObject(eventDate)
           ? new Date(eventDate.seconds * 1000).toLocaleDateString()
           : eventDate;
         const event = {

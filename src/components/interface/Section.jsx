@@ -10,6 +10,7 @@ import EmptyState from './EmptyStates';
 import Loading from './Loading';
 import SectionHeader from './SectionHeader';
 import TableHeader from './TableHeader';
+import TableFilters from './TableFilters';
 
 const Section = ({
   children,
@@ -29,6 +30,7 @@ const Section = ({
   return (
     <React.Fragment>
       <SectionHeader title={type} showNew={showNewButton} />
+      {type === 'performance' && (<TableFilters />)}
       {loading ? <Loading /> : renderTableContents}
     </React.Fragment>
   );

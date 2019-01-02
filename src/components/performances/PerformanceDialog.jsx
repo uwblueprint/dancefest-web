@@ -65,7 +65,16 @@ class PerformanceDialog extends React.Component {
 }
 
 PerformanceDialog.propTypes = {
-  currentValues: PropTypes.shape(),
+  currentValues: PropTypes.shape({
+    academicLevel: PropTypes.string,
+    choreographers: PropTypes.string,
+    danceEntry: PropTypes.number,
+    danceStyle: PropTypes.string,
+    danceTitle: PropTypes.string,
+    performers: PropTypes.string,
+    school: PropTypes.string,
+    size: PropTypes.number
+  }),
   eventId: PropTypes.string.isRequired,
   formType: PropTypes.oneOf(['edit', 'new']),
   performanceId: PropTypes.string

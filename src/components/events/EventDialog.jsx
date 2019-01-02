@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import { withStyles } from '@material-ui/core/styles';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 
@@ -57,7 +58,11 @@ class EventDialog extends React.Component {
 }
 
 EventDialog.propTypes = {
-  currentValues: PropTypes.shape(),
+  currentValues: PropTypes.shape({
+    eventDate: PropTypes.string,
+    eventTitle: PropTypes.string,
+    numJudges: PropTypes.number
+  }),
   eventId: PropTypes.string,
   formType: PropTypes.oneOf(['edit', 'new'])
 };

@@ -16,10 +16,10 @@ class AdjudicationForm extends React.Component {
     const { currentValues } = props;
 
     this.state = {
-      artisticMark: currentValues.artisticMark || '',
+      artisticMark: currentValues.artisticMark,
       choreoAward: currentValues.choreoAward || false,
       specialAward: currentValues.specialAward || false,
-      technicalMark: currentValues.technicalMark || ''
+      technicalMark: currentValues.technicalMark
     };
   }
 
@@ -47,7 +47,7 @@ class AdjudicationForm extends React.Component {
   handleSubmit = async () => {
     const { adjudicationId, collectionName } = this.props;
     const { artisticMark, technicalMark } = this.state;
-    const cumulativeMark = (Number(artisticMark) + Number(technicalMark)) / 2;
+    const cumulativeMark = (artisticMark + technicalMark) / 2;
     const data = {
       cumulativeMark,
       ...this.state

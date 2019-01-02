@@ -73,13 +73,12 @@ class AdjudicationDialog extends React.Component {
               Special Award
             </div>
           )}
-          {choreoAward
-            && (
-              <div>
-                <LensIcon fontSize="inherit" color="inherit" style={{ color: 'purple' }} />
-                Choreography Award
-              </div>
-            )}
+          {choreoAward && (
+            <div>
+              <LensIcon fontSize="inherit" color="inherit" style={{ color: 'purple' }} />
+              Choreography Award
+            </div>
+          )}
         </div>
         <DialogActions style={{
           display: 'flex',
@@ -122,7 +121,16 @@ class AdjudicationDialog extends React.Component {
 AdjudicationDialog.propTypes = {
   adjudicationId: PropTypes.string.isRequired,
   collectionName: PropTypes.string.isRequired,
-  currentValues: PropTypes.shape().isRequired
+  currentValues: PropTypes.shape({
+    artisticMark: PropTypes.number,
+    audio: PropTypes.bool,
+    choreoAward: PropTypes.number,
+    cumulativeMark: PropTypes.number,
+    notes: PropTypes.string,
+    judgeName: PropTypes.string,
+    specialAward: PropTypes.bool,
+    technicalMark: PropTypes.number
+  }).isRequired
 };
 
 export default withStyles(styles)(AdjudicationDialog);
