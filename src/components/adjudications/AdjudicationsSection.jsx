@@ -44,8 +44,8 @@ class AdjudicationsSection extends React.Component {
     return (
       <Section headings={headings} loading={loading} showContent={showAdjudications} type="adjudication">
         {showAdjudications && adjudications.map((rowProps) => {
-          const currentValues = pick(rowProps, keys);
           const { id } = rowProps;
+          const currentValues = pick(rowProps, keys);
           return (
             <AdjudicationTableRow
               collectionName={collectionName}

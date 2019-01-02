@@ -29,7 +29,7 @@ class PerformancesSection extends React.Component {
         };
         performances.push(performance);
       });
-      this.setState({ performances, loading: false });
+      this.setState({ loading: false, performances });
     });
   }
 
@@ -43,8 +43,8 @@ class PerformancesSection extends React.Component {
     return (
       <Section headings={headings} loading={loading} showContent={showPerformances} type="performance">
         {showPerformances && performances.map((performance) => {
-          const currentValues = pick(performance, keys);
           const { id } = performance;
+          const currentValues = pick(performance, keys);
           return (
             <PerformanceTableRow
               currentValues={currentValues}

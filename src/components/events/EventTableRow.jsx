@@ -22,7 +22,6 @@ class EventTableRow extends React.Component {
     } = currentValues;
 
     // TODO: fix this
-    const numDancers = 0;
     const numPerformances = 0;
 
     return (
@@ -32,9 +31,6 @@ class EventTableRow extends React.Component {
         </TableCell>
         <TableCell>
           {eventDate}
-        </TableCell>
-        <TableCell>
-          {numDancers}
         </TableCell>
         <TableCell>
           {numPerformances}

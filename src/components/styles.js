@@ -180,7 +180,8 @@ const styles = theme => ({
     justifyContent: 'center'
   },
   emptyState_content: {
-    marginTop: '100px'
+    marginTop: '100px',
+    textAlign: 'center'
   },
   emptyState_title: {
     fontSize: '20px',

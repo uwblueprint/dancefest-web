@@ -10,24 +10,24 @@ import styles from '../styles';
 
 const EmptyState = ({ classes, type }) => {
   let image;
-  let title;
   let subtitle;
+  let title;
   switch (type) {
     case 'event':
       image = EventEmptyImage;
-      title = 'Empty Events Page';
       subtitle = 'Create your first event';
+      title = 'Empty Events Page';
       break;
     case 'adjudication':
       image = AdjEmptyImage;
-      title = 'Empty Adjudications Page';
       subtitle = 'Adjudications will be synced following the event';
+      title = 'Empty Adjudications Page';
       break;
     case 'performance':
     default:
       image = PerformanceEmptyImage;
+      subtitle = 'Create your first performance';
       title = 'Empty Performances Page';
-      subtitle = 'Create your first Performance';
       break;
   }
 

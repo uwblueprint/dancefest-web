@@ -5,9 +5,9 @@ import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 
-import styles from '../styles';
 import EmptyState from './EmptyStates';
 import Loading from './Loading';
+import styles from '../styles';
 import SectionHeader from './SectionHeader';
 import TableFilters from './TableFilters';
 import TableHeader from './TableHeader';
