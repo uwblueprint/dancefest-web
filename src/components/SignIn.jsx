@@ -1,16 +1,28 @@
 import React from 'react';
-import { auth } from '../firebase/firebase';
-import {withRouter} from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 
-import BackgroundImage from '../assets/background.jpg'; // Import using relative path
+import { withStyles } from '@material-ui/core/styles';
+
+import { auth } from '../firebase/firebase';
+import styles from './styles';
 
 class SignInPage extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     this.state = {
       email: '',
       password: ''
+    };
+
+    const {
+      user,
+      history
+    } = props;
+
+    if (user) {
+      history.push('/events');
     }
   }
 
@@ -26,28 +38,23 @@ class SignInPage extends React.Component {
     });
   }
 
-  handleSubmit = (event) => {
+  handleSubmit = () => {
+    const { email, password } = this.state;
     auth.onAuthStateChanged((user) => {
       if (user) {
-        this.props.history.push("/events");
+        window.location('/events');
       }
-    })
-    auth.signInWithEmailAndPassword(this.state.email, this.state.password)
+    });
+    auth.signInWithEmailAndPassword(email, password);
     return false;
   }
 
   render() {
     const { email, password } = this.state;
-    const imageStyle = {
-      height: '100%',
-      backgroundImage: `url(${BackgroundImage})`,
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat'
-    }
+    const { classes } = this.props;
     return (
-      <div style={imageStyle}>
-        <form >
+      <div>
+        <form>
           <label>
             Name:
             <input type="text" value={email} onChange={this.handleNameChange} />
@@ -66,4 +73,14 @@ class SignInPage extends React.Component {
   }
 }
 
-export default withRouter(SignInPage);
+SignInPage.propTypes = {
+  classes: PropTypes.shape().isRequired,
+  history: PropTypes.arrayOf(PropTypes.string).isRequired,
+  user: PropTypes.shape()
+};
+
+SignInPage.defaultProps = {
+  user: null
+};
+
+export default withRouter(withStyles(styles)(SignInPage));

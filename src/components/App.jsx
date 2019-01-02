@@ -19,8 +19,6 @@ import EventsSection from './events/EventsSection';
 import PerformancesSection from './performances/PerformancesSection';
 import SettingsSection from './settings/SettingsSection';
 
-import * as routes from '../constants/routes';
-
 const palette = createPalette({
   primary: {
     main: '#de2706'
@@ -90,50 +88,32 @@ const theme = createMuiTheme({
   }
 });
 
-function PrivateRoute ({component: Component, user, path, ...rest}) {
-  return (
-    <Route
-      path={path}
-      {...rest}
-      render={(props) => user
-        ? <Component {...props} />
-        : <Redirect to={{pathname: '/', state: {from: props.location}}} />}
-    />
-  )
-}
-
-const Routes = ({state}) => (
-  <Switch>
-    <Route exact path="/" component={SignInPage}  />
-    <PrivateRoute user={state.user} path="/events/:eventId/performances" component={PerformancesSection} />
-    <PrivateRoute user={state.user} path="/events/:eventId/performance/:performanceId/adjudications" component={AdjudicationsSection} />
-    <PrivateRoute user={state.user} exact path='/events' component={EventsSection} />
-    <PrivateRoute user={state.user} exact path="/settings" component={SettingsSection} />
-    <Route component={Landing} />
-  </Switch>
-);
-
-const PublicRoutes = () => (
-  <Switch>
-    <Route exact path="/" component={SignInPage} />
-    <Route exact path={routes.SIGN_IN} component={SignInPage} />
-    <Route component={Landing} />
-  </Switch>
+const PrivateRoute = ({
+  component: Component,
+  user,
+  path,
+  ...rest
+}) => (
+  <Route
+    path={path}
+    {...rest}
+    render={props => (user ? <Component {...props} />
+      : <Redirect to={{ pathname: '/', state: { from: props.location }}} />)} />
 );
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state={
+    this.state = {
       user: auth.currentUser,
       loading: true
-    }
+    };
   }
 
   componentDidMount() {
     auth.onAuthStateChanged((user) => {
-      this.setState({ user: user, loading: false });
+      this.setState({ user, loading: false });
     });
   }
 
@@ -143,21 +123,23 @@ export default class App extends React.Component {
     return (
       <MuiThemeProvider theme={theme}>
         <Router>
-            <div>
-              { !loading && false && <Header /> }
-              {
-                // TODO: Once we merge in PR#27, we'll swap this with the react loading icon
-                loading ? <div> loading </div> :
-                <Switch>
-                  <Route exact path="/" render={(props) => (<SignInPage {...props} user={user} />)} />
-                  <PrivateRoute component={EventsSection} exact path="/events" user={user} />
-                  <PrivateRoute component={SettingsSection} exact path="/settings" user={user} />
-                  <PrivateRoute component={PerformancesSection} path="/events/:eventId/performances" user={user} />
-                  <PrivateRoute component={AdjudicationsSection} path="/events/:eventId/performance/:performanceId/adjudications" user={user} />
-                  <Route component={Landing} />
-                </Switch>
-              }
-            </div>
+          <div>
+            { !loading && user && <Header /> }
+            {
+              // TODO: Once we merge in PR#27, we'll swap this with the react loading icon
+              loading ? <div> loading </div>
+                : (
+                  <Switch>
+                    <Route exact path="/" render={props => (<SignInPage {...props} user={user} />)} />
+                    <PrivateRoute component={EventsSection} exact path="/events" user={user} />
+                    <PrivateRoute component={SettingsSection} exact path="/settings" user={user} />
+                    <PrivateRoute component={PerformancesSection} path="/events/:eventId/performances" user={user} />
+                    <PrivateRoute component={AdjudicationsSection} path="/events/:eventId/performance/:performanceId/adjudications" user={user} />
+                    <Route component={Landing} />
+                  </Switch>
+                )
+            }
+          </div>
         </Router>
       </MuiThemeProvider>
     );
