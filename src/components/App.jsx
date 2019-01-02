@@ -124,11 +124,11 @@ export default class App extends React.Component {
       <MuiThemeProvider theme={theme}>
         <Router>
           <div>
-            { !loading && user && <Header /> }
             {
               // TODO: Once we merge in PR#27, we'll swap this with the react loading icon
-              loading ? <div> loading </div>
-                : (
+              loading ? (<div> loading </div>) : (
+                <React.Fragment>
+                  { user && <Header /> }
                   <Switch>
                     <Route exact path="/" render={props => (<SignInPage {...props} user={user} />)} />
                     <PrivateRoute component={EventsSection} exact path="/events" user={user} />
@@ -137,7 +137,8 @@ export default class App extends React.Component {
                     <PrivateRoute component={AdjudicationsSection} path="/events/:eventId/performance/:performanceId/adjudications" user={user} />
                     <Route component={Landing} />
                   </Switch>
-                )
+                </React.Fragment>
+              )
             }
           </div>
         </Router>
