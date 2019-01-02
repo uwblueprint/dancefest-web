@@ -6,23 +6,23 @@ import { auth } from '../firebase/firebase';
 import Button from './interface/Button';
 import DialogInput from './interface/dialog/DialogInput';
 
-class SignInPage extends React.Component {
+class SignIn extends React.Component {
   constructor(props) {
     super(props);
 
     const {
-      user,
-      history
+      history,
+      user
     } = props;
+
+    if (user) {
+      history.push('/events');
+    }
 
     this.state = {
       email: '',
       password: ''
     };
-
-    if (user) {
-      history.push('/events');
-    }
   }
 
   handleChange = (event) => {
@@ -68,13 +68,13 @@ class SignInPage extends React.Component {
   }
 }
 
-SignInPage.propTypes = {
+SignIn.propTypes = {
   history: PropTypes.shape().isRequired,
   user: PropTypes.shape()
 };
 
-SignInPage.defaultProps = {
+SignIn.defaultProps = {
   user: null
 };
 
-export default withRouter(SignInPage);
+export default withRouter(SignIn);

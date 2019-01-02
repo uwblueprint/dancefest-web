@@ -10,7 +10,7 @@ import createPalette from '@material-ui/core/styles/createPalette';
 
 // import Navigation from './Navigation';
 import Header from './interface/Header';
-import SignInPage from './SignIn';
+import SignIn from './SignIn';
 import Landing from './Landing';
 
 import { auth } from '../firebase/firebase';
@@ -129,7 +129,7 @@ export default class App extends React.Component {
               <React.Fragment>
                 { user && <Header /> }
                 <Switch>
-                  <Route exact path="/" render={props => (<SignInPage {...props} user={user} />)} />
+                  <Route exact path="/" render={props => (<SignIn {...props} user={user} />)} />
                   <PrivateRoute component={EventsSection} exact path="/events" user={user} />
                   <PrivateRoute component={SettingsSection} exact path="/settings" user={user} />
                   <PrivateRoute component={PerformancesSection} path="/events/:eventId/performances" user={user} />
