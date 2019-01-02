@@ -16,6 +16,7 @@ import Landing from './Landing';
 import { auth } from '../firebase/firebase';
 import AdjudicationsSection from './adjudications/AdjudicationsSection';
 import EventsSection from './events/EventsSection';
+import Loading from './interface/Loading';
 import PerformancesSection from './performances/PerformancesSection';
 import SettingsSection from './settings/SettingsSection';
 
@@ -125,7 +126,7 @@ export default class App extends React.Component {
         <Router>
           {
             // TODO: Once we merge in PR#27, we'll swap this with the react loading icon
-            loading ? (<div> loading </div>) : (
+            loading ? (<Loading />) : (
               <React.Fragment>
                 { user && <Header /> }
                 <Switch>
