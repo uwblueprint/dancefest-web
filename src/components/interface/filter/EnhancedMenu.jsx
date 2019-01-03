@@ -22,7 +22,7 @@ export default class EnhancedMenu extends React.Component {
           <SubMenu
             key={menuItem.key}
             caption={menuItem.caption}
-            menuItems={menuItem.options} />
+            choices={menuItem.options} />
         ))}
         <hr />
         <MenuItem onClick={() => {}}>Clear All Filters</MenuItem>

@@ -36,7 +36,7 @@ class SubMenu extends React.Component {
   };
 
   render() {
-    const { caption, classes } = this.props;
+    const { caption, classes, choices } = this.props;
     const { anchorElement, menuOpen } = this.state;
 
     return (
@@ -55,6 +55,7 @@ class SubMenu extends React.Component {
             vertical: 'top',
             horizontal: 'left'
           }}
+          choices={choices}
           open={menuOpen}
           anchorElement={anchorElement}
           onClose={this.handleSubMenuClose} />
@@ -65,6 +66,7 @@ class SubMenu extends React.Component {
 
 SubMenu.propTypes = {
   caption: PropTypes.string.isRequired,
+  choices: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   classes: PropTypes.node.isRequired
 };
 

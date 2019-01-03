@@ -9,6 +9,7 @@ export default class FilterItem extends React.Component {
   render() {
     const {
       anchorElement,
+      choices,
       open,
       onClose,
       ...others
@@ -18,7 +19,7 @@ export default class FilterItem extends React.Component {
       <Menu {...others} anchorEl={anchorElement} open={open} onClose={onClose}>
         <div style={{ padding: '15px', outline: 'none' }}>
           <CheckBoxLabels
-            choices={[{ value: 'test', label: 'test' }, { value: 'test', label: 'test' }]} />
+            choices={choices} />
         </div>
       </Menu>
     );

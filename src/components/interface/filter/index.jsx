@@ -1,12 +1,33 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import FilterIcon from '@material-ui/icons/PlaylistAdd';
+
+import db from '../../../firebase/firebase';
+
 import EnhancedMenu from './EnhancedMenu';
 
 class Filter extends React.Component {
-  state = {
-    anchorEl: null
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      anchorEl: null,
+      options: {}
+    };
+  }
+
+  componentDidMount() {
+    this.subscribe = db.collection('settings').onSnapshot((querySnapshot) => {
+      const options = {};
+      querySnapshot.forEach((doc) => {
+        options[doc.id] = Object.keys(doc.data());
+      });
+      this.setState({ options });
+    });
+  }
+
+  componentWillUnmount() {
+    this.subscribe();
+  }
 
   handleClick = (event) => {
     this.setState({ anchorEl: event.currentTarget });
@@ -23,29 +44,18 @@ class Filter extends React.Component {
   };
 
   render() {
-    const { anchorEl } = this.state;
-    const menuItems = [
-      {
-        key: 1,
-        caption: 'Academic Level',
-        options: [{ value: 'test', label: 'test' }, { value: 'test', label: 'test' }]
-      },
-      {
-        key: 2,
-        caption: 'Level of Competition',
-        options: [{ value: 'test', label: 'test' }, { value: 'test', label: 'test' }]
-      },
-      {
-        key: 3,
-        caption: 'Dance Style',
-        options: [{ value: 'test', label: 'test' }, { value: 'test', label: 'test' }]
-      },
-      {
-        key: 4,
-        caption: 'Dance Size',
-        options: [{ value: 'test', label: 'test' }, { value: 'test', label: 'test' }]
-      }
-    ];
+    const { anchorEl, options } = this.state;
+    const categories = Object.keys(options);
+    const renderOptions = opt => opt.map(o => ({ value: o, label: o }));
+
+    const menuItems = options ? categories.map((name, index) => {
+      const values = renderOptions(options[name]);
+      return {
+        key: `${name}-${index}`,
+        caption: name,
+        options: values
+      };
+    }) : [];
 
     return (
       <React.Fragment>
