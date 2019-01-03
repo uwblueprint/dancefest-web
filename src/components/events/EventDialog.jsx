@@ -46,7 +46,7 @@ class EventDialog extends React.Component {
         formType={formType}
         onClick={this.handleClickOpen}
         onClose={this.handleClose}>
-        <DialogHeader collectionName="events" docId={eventId} title={`${dialogTitle} Event`} shouldShowDropdown />
+        <DialogHeader collectionName="events" docId={eventId} shouldShowDropdown title={`${dialogTitle} Event`} />
         <EventForm
           currentValues={currentValues}
           eventId={eventId}

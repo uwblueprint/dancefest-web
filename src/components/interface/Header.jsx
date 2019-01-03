@@ -19,15 +19,6 @@ const Header = () => (
         </Typography>
       </Link>
       <SettingsDropdown />
-      {
-        /*
-          <div style={{ marginLeft: '92%', cursor: 'pointer', color: 'white' }}>
-            <Link to="/settings" style={{ color: 'white' }}>
-              <SettingsIcon />
-            </Link>
-          </div>
-        */
-      }
     </Toolbar>
   </AppBar>
 );
