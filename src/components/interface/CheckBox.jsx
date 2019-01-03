@@ -25,7 +25,7 @@ const CheckBox = ({
           control={(
             <Checkbox
               color="primary"
-              name={choice.value}
+              name={choice.name}
               checked={choice.checked}
               onChange={onChange}
               value={choice.value} />)}
