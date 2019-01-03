@@ -3,6 +3,7 @@ import isObject from 'lodash/isObject';
 import pick from 'lodash/pick';
 
 import db from '../../firebase/firebase';
+import EventDialog from './EventDialog';
 import EventTableRow from './EventTableRow';
 import Section from '../interface/Section';
 
@@ -42,10 +43,11 @@ class EventsSection extends React.Component {
     const { events, loading } = this.state;
     const headings = ['Event Title', 'Event Date', 'No. Performances', 'No. Judges'];
     const keys = ['eventDate', 'eventTitle', 'numJudges'];
+    const renderNewButton = (<EventDialog formType="new" />);
     const showEvents = Array.isArray(events) && events.length > 0;
 
     return (
-      <Section headings={headings} loading={loading} showContent={showEvents} type="event">
+      <Section headings={headings} loading={loading} renderNewButton={renderNewButton} showContent={showEvents} type="event">
         {showEvents && events.map((event) => {
           const { id } = event;
           const currentValues = pick(event, keys);

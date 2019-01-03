@@ -17,20 +17,22 @@ const Section = ({
   headings,
   loading,
   showContent,
+  renderNewButton,
   type
 }) => {
-  const isAdjudication = type === 'adjudication';
   const renderTableContents = showContent ? (
-    <Table>
-      <TableHeader headings={headings} />
-      <TableBody>{children}</TableBody>
-    </Table>
+    <React.Fragment>
+      {type === 'performance' && (<TableFilters />)}
+      <Table>
+        <TableHeader headings={headings} />
+        <TableBody>{children}</TableBody>
+      </Table>
+    </React.Fragment>
   ) : <EmptyState type={type} />;
 
   return (
     <React.Fragment>
-      <SectionHeader title={type} showNew={!isAdjudication} />
-      {type === 'performance' && (<TableFilters />)}
+      <SectionHeader renderNewButton={renderNewButton} title={type} />
       {loading ? <Loading /> : renderTableContents}
     </React.Fragment>
   );
@@ -41,7 +43,12 @@ Section.propTypes = {
   headings: PropTypes.arrayOf(PropTypes.string).isRequired,
   loading: PropTypes.bool.isRequired,
   showContent: PropTypes.bool.isRequired,
+  renderNewButton: PropTypes.node,
   type: PropTypes.oneOf(['event', 'adjudication', 'performance']).isRequired
+};
+
+Section.defaultProps = {
+  renderNewButton: null
 };
 
 export default withStyles(styles)(Section);
