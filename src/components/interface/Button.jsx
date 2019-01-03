@@ -39,8 +39,8 @@ const Button = ({
 
 Button.propTypes = {
   buttonType: PropTypes.string,
-  classes: PropTypes.shape().isRequired,
   children: PropTypes.node.isRequired,
+  classes: PropTypes.shape().isRequired,
   disabled: PropTypes.bool,
   onClick: PropTypes.func.isRequired,
   type: PropTypes.oneOf(['outline', 'primary', 'secondary', 'default']).isRequired
