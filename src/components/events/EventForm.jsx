@@ -1,8 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import pick from 'lodash/pick';
+
 import { withStyles } from '@material-ui/core/styles';
 import DialogActions from '@material-ui/core/DialogActions';
-import { createEvent, retrieveEventData } from '../../firebase/database';
+
+import addData from '../../firebase/utils/addData';
+import updateData from '../../firebase/utils/updateData';
 
 import DialogInput from '../interface/dialog/DialogInput';
 import Button from '../interface/Button';
@@ -11,14 +15,20 @@ import styles from '../styles';
 class EventForm extends React.Component {
   constructor(props) {
     super(props);
-    const { defaultValues } = props;
+    const { currentValues } = props;
 
     this.state = {
-      eventTitle: defaultValues.eventTitle || '',
-      eventDate: defaultValues.eventDate || '',
-      numJudges: defaultValues.numJudges || '',
-      disabled: true
+      disabled: true,
+      eventDate: currentValues.eventDate || '',
+      eventTitle: currentValues.eventTitle || '',
+      numJudges: currentValues.numJudges || 0
     };
+  }
+
+  // disable save button if not all input fields are filled
+  static getDerivedStateFromProps(props, state) {
+    const values = pick(state, ['eventDate', 'eventTitle', 'numJudges']);
+    return { disabled: !(Object.keys(values).every(value => !!state[value])) };
   }
 
   handleChange = (e) => {
@@ -28,27 +38,24 @@ class EventForm extends React.Component {
 
   handleCancel = () => {
     // TODO: ask are you sure?
-    const { onModalClose } = this.props;
-    onModalClose();
+    this.handleModalClose();
   }
 
-  // TODO: create validation form method
-  validateData = () => {
-    const validate = false;
-
-    // TODO: different validation cases depending on adding new vs editing
-    this.setState({ disabled: validate });
-  }
-
-  // TODO: handle submmission of the form
-  handleSubmit = () => {
-    const { eventTitle, eventDate, numJudges } = this.state;
-    const item = { eventTitle, eventDate, numJudges };
-    createEvent(item);
-  }
-
-  handleDataRetrieval = () => {
-    retrieveEventData();
+  handleSubmit = async () => {
+    const { eventId, formType } = this.props;
+    const { eventDate, eventTitle, numJudges } = this.state;
+    const collectionName = 'events';
+    const data = {
+      eventDate: new Date(eventDate),
+      eventTitle,
+      numJudges
+    };
+    if (formType === 'new') {
+      await addData(collectionName, data);
+    } else {
+      await updateData(collectionName, eventId, data);
+    }
+    this.handleModalClose();
   }
 
   handleModalClose = () => {
@@ -57,7 +64,7 @@ class EventForm extends React.Component {
   }
 
   render() {
-    const { classes, type } = this.props;
+    const { classes, formType } = this.props;
     const {
       eventTitle,
       eventDate,
@@ -70,13 +77,13 @@ class EventForm extends React.Component {
           <DialogInput fullWidth name="eventTitle" label="Event Title" onChange={this.handleChange} value={eventTitle} />
           <div style={{ display: 'flex' }}>
             <DialogInput style={{ marginRight: '5px' }} fullWidth name="eventDate" label="Event Date" onChange={this.handleChange} value={eventDate} />
-            <DialogInput fullWidth name="numJudges" label="No. Judges" onChange={this.handleChange} value={numJudges} />
+            <DialogInput fullWidth name="numJudges" label="No. Judges" onChange={this.handleChange} type="number" value={numJudges} />
           </div>
         </div>
         <div className={classes.dfdialog_footer}>
           <DialogActions>
             <Button type="default" onClick={this.handleCancel}>
-              {type === 'edit' ? 'cancel' : 'discard'}
+              {formType === 'edit' ? 'cancel' : 'discard'}
             </Button>
             <Button disabled={disabled} type="primary" onClick={this.handleSubmit}>
               Save
@@ -89,15 +96,15 @@ class EventForm extends React.Component {
 }
 
 EventForm.propTypes = {
-  classes: PropTypes.string.isRequired,
-  defaultValues: PropTypes.shape(),
-  onModalClose: PropTypes.func.isRequired,
-  type: PropTypes.oneOf(['edit', 'new'])
+  classes: PropTypes.shape().isRequired,
+  currentValues: PropTypes.shape(),
+  formType: PropTypes.oneOf(['edit', 'new']),
+  onModalClose: PropTypes.func.isRequired
 };
 
 EventForm.defaultProps = {
-  defaultValues: [],
-  type: 'edit'
+  currentValues: {},
+  formType: 'edit'
 };
 
 export default withStyles(styles)(EventForm);

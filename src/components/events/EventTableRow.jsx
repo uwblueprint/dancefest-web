@@ -11,30 +11,26 @@ class EventTableRow extends React.Component {
 
   render() {
     const {
-      id,
-      name,
-      date,
-      numDancers,
-      numPerformances,
-      numJudges
+      currentValues,
+      id
     } = this.props;
 
-    const defaultValues = {
-      eventTitle: name,
-      eventDate: date,
+    const {
+      eventTitle,
+      eventDate,
       numJudges
-    };
+    } = currentValues;
+
+    // TODO: fix this
+    const numPerformances = 0;
 
     return (
       <TableRow>
         <TableCell>
-          <Link to={`/events/${id}/performances`}>{name}</Link>
+          <Link to={`/events/${id}/performances`}>{eventTitle}</Link>
         </TableCell>
         <TableCell>
-          {date}
-        </TableCell>
-        <TableCell>
-          {numDancers}
+          {eventDate}
         </TableCell>
         <TableCell>
           {numPerformances}
@@ -43,7 +39,7 @@ class EventTableRow extends React.Component {
           {numJudges}
         </TableCell>
         <TableCell>
-          <EventDialog type="edit" defaultValues={defaultValues} />
+          <EventDialog formType="edit" eventId={id} currentValues={currentValues} />
         </TableCell>
       </TableRow>
     );
@@ -51,22 +47,17 @@ class EventTableRow extends React.Component {
 }
 
 EventTableRow.propTypes = {
-  id: PropTypes.number,
-  name: PropTypes.string,
-  date: PropTypes.string,
-  numDancers: PropTypes.number,
-  numPerformances: PropTypes.number,
-  numJudges: PropTypes.number
+  currentValues: PropTypes.shape({
+    eventTitle: PropTypes.string,
+    eventDate: PropTypes.string,
+    numJudges: PropTypes.number
+  }),
+  id: PropTypes.string
 };
 
-
 EventTableRow.defaultProps = {
-  id: 1,
-  name: '',
-  date: '',
-  numDancers: 1,
-  numPerformances: 1,
-  numJudges: 1
+  currentValues: {},
+  id: null
 };
 
 export default EventTableRow;

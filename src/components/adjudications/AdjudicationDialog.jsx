@@ -14,20 +14,7 @@ import AdjudicationForm from './AdjudicationForm';
 import Score from '../interface/dialog/Score';
 
 class AdjudicationDialog extends React.Component {
-  state = {
-    open: false,
-    view: true,
-    artistic: '',
-    technical: '',
-    notes: '',
-    audio: '',
-    awardsConsideration: null
-  };
-
-  handleChange = (e) => {
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
-  }
+  state = { open: false, view: true };
 
   handleClickOpen = () => {
     this.setState({ open: true });
@@ -44,16 +31,18 @@ class AdjudicationDialog extends React.Component {
   }
 
   render() {
-    const { currentValues } = this.props;
+    const { adjudicationId, collectionName, currentValues } = this.props;
+    const { open, view } = this.state;
     const {
-      open,
-      view,
-      artistic,
-      technical,
-      notes,
+      artisticMark,
       audio,
-      awardsConsideration,
-    } = this.state;
+      choreoAward,
+      cumulativeMark,
+      judgeName,
+      notes,
+      specialAward,
+      technicalMark
+    } = currentValues;
 
     const viewForm = (
       <React.Fragment>
@@ -76,17 +65,21 @@ class AdjudicationDialog extends React.Component {
               <DialogReadOnly label="Size" />
             </div>
           </div>
-          <DialogReadOnly fullWidth label="Notes" />
-          <AudioPlay fileName="file_test.mp3" time={34} />
+          <DialogReadOnly fullWidth label="Notes" defaultValue={notes} />
+          {audio && <AudioPlay fileName="file_test.mp3" time="3:07" />}
           <FormHelperText>Award Considerations</FormHelperText>
-          <div>
-            <LensIcon fontSize="inherit" color="inherit" style={{ color: 'purple' }} />
-           Special Award
-          </div>
-          <div>
-            <LensIcon fontSize="inherit" color="primary" />
-           Choreography Award
-          </div>
+          {specialAward && (
+            <div>
+              <LensIcon fontSize="inherit" color="primary" />
+              Special Award
+            </div>
+          )}
+          {choreoAward && (
+            <div>
+              <LensIcon fontSize="inherit" color="inherit" style={{ color: 'purple' }} />
+              Choreography Award
+            </div>
+          )}
         </div>
         <DialogActions style={{
           display: 'flex',
@@ -94,36 +87,51 @@ class AdjudicationDialog extends React.Component {
           padding: '0',
           margin: '0'
         }}>
-          <Score type="subtotal" score={88} scoreName="artistic" />
-          <Score type="subtotal" score={90} scoreName="technical" />
-          <Score type="total" score={89} scoreName="score" />
+          <Score type="subtotal" score={artisticMark} scoreName="Artistic" />
+          <Score type="subtotal" score={technicalMark} scoreName="Technical" />
+          <Score type="total" score={cumulativeMark} scoreName="Score" />
         </DialogActions>
       </React.Fragment>
     );
 
     const editForm = (
       <AdjudicationForm
-        view={view}
-        defaultValues={[]}
+        adjudicationId={adjudicationId}
+        collectionName={collectionName}
+        currentValues={currentValues}
+        handleView={this.handleView}
         onModalClose={this.handleClose}
-        handleView={this.handleView} />
+        view={view} />
     );
 
     return (
       <DFDialog open={open} formType="edit" buttonTitle="edit" onClick={this.handleClickOpen} onClose={this.handleClose}>
         <DialogHeader
+          collectionName={collectionName}
+          docId={adjudicationId}
           edit={view}
-          title={currentValues.judge}
           onEditClick={this.handleView}
-          onMoreClick={() => {}} />
-        { view ? (viewForm) : (editForm)}
+          shouldShowDropdown
+          title={judgeName || ''} />
+        {view ? (viewForm) : (editForm)}
       </DFDialog>
     );
   }
 }
 
 AdjudicationDialog.propTypes = {
-  currentValues: PropTypes.shape().isRequired
+  adjudicationId: PropTypes.string.isRequired,
+  collectionName: PropTypes.string.isRequired,
+  currentValues: PropTypes.shape({
+    artisticMark: PropTypes.number,
+    audio: PropTypes.bool,
+    choreoAward: PropTypes.number,
+    cumulativeMark: PropTypes.number,
+    notes: PropTypes.string,
+    judgeName: PropTypes.string,
+    specialAward: PropTypes.bool,
+    technicalMark: PropTypes.number
+  }).isRequired
 };
 
 export default withStyles(styles)(AdjudicationDialog);

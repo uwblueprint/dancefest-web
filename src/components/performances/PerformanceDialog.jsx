@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import { withStyles } from '@material-ui/core/styles';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 
@@ -22,15 +23,23 @@ class PerformanceDialog extends React.Component {
   };
 
   render() {
-    const { classes, currentValues, formType } = this.props;
+    const {
+      currentValues,
+      eventId,
+      formType,
+      performanceId
+    } = this.props;
     const { open } = this.state;
-    const dialogTitle = formType === 'edit' ? 'Edit' : 'New'
+    const collectionName = `events/${eventId}/performances`;
+    const shouldShowDropdown = formType === 'edit';
+    const dialogTitle = formType === 'edit' ? 'Edit' : 'New';
     const buttonTitle = formType === 'edit' ? 'EDIT'
       : (
         <React.Fragment>
           <CalendarTodayIcon style={{ color: 'gray', marginRight: '5px' }} />
           NEW PERFORMANCE
         </React.Fragment>);
+    const title = `${dialogTitle} Performance`;
 
     return (
       <DFDialog
@@ -39,21 +48,42 @@ class PerformanceDialog extends React.Component {
         formType={formType}
         onClick={this.handleClickOpen}
         onClose={this.handleClose}>
-        <DialogHeader title={`${dialogTitle} Performance`} onMoreClick={() => {}} />
-        <PerformanceForm type="edit" onModalClose={this.handleClose} />
+        <DialogHeader
+          collectionName={collectionName}
+          docId={performanceId}
+          shouldShowDropdown={shouldShowDropdown}
+          title={title} />
+        <PerformanceForm
+          collectionName={collectionName}
+          currentValues={currentValues}
+          formType={formType}
+          onModalClose={this.handleClose}
+          performanceId={performanceId} />
       </DFDialog>
     );
   }
 }
 
 PerformanceDialog.propTypes = {
-  classes: PropTypes.string.isRequired,
-  currentValues: PropTypes.shape().isRequired,
-  formType: PropTypes.oneOf(['edit', 'new'])
+  currentValues: PropTypes.shape({
+    academicLevel: PropTypes.string,
+    choreographers: PropTypes.string,
+    danceEntry: PropTypes.number,
+    danceStyle: PropTypes.string,
+    danceTitle: PropTypes.string,
+    performers: PropTypes.string,
+    school: PropTypes.string,
+    size: PropTypes.number
+  }),
+  eventId: PropTypes.string.isRequired,
+  formType: PropTypes.oneOf(['edit', 'new']),
+  performanceId: PropTypes.string
 };
 
 PerformanceDialog.defaultProps = {
-  formType: 'edit'
+  currentValues: {},
+  formType: 'edit',
+  performanceId: null
 };
 
 

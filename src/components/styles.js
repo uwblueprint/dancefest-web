@@ -88,12 +88,6 @@ const styles = theme => ({
     margin: '0 35px',
     padding: '35px 0 15px 0px'
   },
-  dfdialog_editIcon: {
-    marginRight: '10px',
-    '&:hover': {
-      cursor: 'pointer'
-    }
-  },
   dfdialog_moreIcon: {
     '&:hover': {
       cursor: 'pointer'
@@ -152,6 +146,49 @@ const styles = theme => ({
   subMenuItem: {
     display: 'flex',
     justifyContent: 'space-between'
+  },
+
+  // Settings Styling
+  settings_wrapper: {
+    flex: 1,
+    margin: '0 auto',
+    maxWidth: '700px',
+    textAlign: 'center',
+    width: '80%'
+  },
+  settings_view: {
+    alignItems: 'center',
+    backgroundColor: 'whitesmoke',
+    border: '1px solid #cfcfcf',
+    display: 'flex',
+    flexFlow: 'column',
+    height: 'auto',
+    marginTop: '15px',
+    padding: '15px'
+  },
+
+  // Loading Styling
+  loading_wrapper: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: '10%'
+  },
+
+  // EmptyState Image Wrapper Styling
+  emptyState_wrapper: {
+    display: 'flex',
+    justifyContent: 'center'
+  },
+  emptyState_content: {
+    marginTop: '100px',
+    textAlign: 'center'
+  },
+  emptyState_title: {
+    fontSize: '20px',
+    textAlign: 'center'
+  },
+  emptyState_subtitle: {
+    textAlign: 'center'
   }
 });
 

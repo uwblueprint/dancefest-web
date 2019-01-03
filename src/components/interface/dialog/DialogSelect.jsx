@@ -6,11 +6,14 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 const DialogSelect = ({
   className,
-  label,
-  helperText,
   fullWidth,
+  helperText,
+  label,
+  name,
+  onChange,
   options,
-  style
+  style,
+  value
 }) => (
   <TextField
     className={className}
@@ -20,30 +23,48 @@ const DialogSelect = ({
     id="filled-select-currency"
     select
     label={label}
-    SelectProps={{ MenuProps: {}}}
+    name={name}
+    SelectProps={{
+      MenuProps: {
+        getContentAnchorEl: null,
+        anchorOrigin: {
+          vertical: 'bottom',
+          horizontal: 'left'
+        }
+      }
+    }}
+    value={value}
+    onChange={onChange}
     margin="normal"
     variant="filled">
     {options.map(option => (
-      <MenuItem {...option} />
+      <MenuItem key={option.value} value={option.value}>{option.value}</MenuItem>
     ))}
-  </TextField>);
+  </TextField>
+);
+
 
 export default DialogSelect;
 
 DialogSelect.propTypes = {
   className: PropTypes.string,
-  label: PropTypes.string,
-  helperText: PropTypes.string,
-  options: PropTypes.arrayOf(PropTypes.shape()),
   fullWidth: PropTypes.bool,
-  style: PropTypes.shape()
+  helperText: PropTypes.string,
+  label: PropTypes.string,
+  name: PropTypes.string.isRequired,
+  onChange: PropTypes.func,
+  options: PropTypes.arrayOf(PropTypes.shape()),
+  style: PropTypes.shape(),
+  value: PropTypes.string
 };
 
 DialogSelect.defaultProps = {
   className: null,
-  label: null,
-  helperText: null,
-  options: [],
   fullWidth: false,
-  style: null
+  helperText: null,
+  label: null,
+  onChange: () => {},
+  options: [],
+  style: null,
+  value: ''
 };

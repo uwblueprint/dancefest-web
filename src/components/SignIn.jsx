@@ -1,78 +1,82 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 
-class SignInPage extends React.Component {
-  state = {
-    name: ''
+import { auth } from '../firebase/firebase';
+import Button from './interface/Button';
+import DialogInput from './interface/dialog/DialogInput';
+
+class SignIn extends React.Component {
+  constructor(props) {
+    super(props);
+
+    const {
+      history,
+      user
+    } = props;
+
+    if (user) {
+      history.push('/events');
+    }
+
+    this.state = {
+      email: '',
+      password: ''
+    };
   }
 
-  handleNameChange = (event) => {
+  handleChange = (event) => {
+    const { target: { name, value }} = event;
     this.setState({
-      name: event.target.value
+      [name]: value
     });
   }
 
-  // TODO: Use firebase auth in this component
-
-  // handleSubmit = (event) => {
-  //   const { name } = this.state;
-
-  //   const item = {
-  //     name
-  //   };
-
-  //   try {
-  //     this.db.push(item);
-  //   } catch (e) {
-  //     alert(e);
-  //   }
-  //   alert(`submit worked: ${name}`);
-
-  //   event.preventDefault();
-  // }
-
-  // handleDataRetrieval = () => {
-  //   alert('suck it');
-  //   const vals = [];
-  //   this.db.once('value', (snapshot) => {
-  //     snapshot.forEach((data) => {
-  //       const value = {
-  //         name: data.val().name
-  //       };
-  //       vals.push(value);
-  //     });
-  //   });
-  //   console.log(vals);
-  // }
+  handleSubmit = () => {
+    const { history } = this.props;
+    const { email, password } = this.state;
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        history.push('events');
+      } else {
+        history.push('/');
+      }
+    });
+    auth.signInWithEmailAndPassword(email, password);
+    return false;
+  }
 
   render() {
-    const { name } = this.state;
+    const { email, password } = this.state;
     return (
-      <div className="App">
-        <form onSubmit={this.handleSubmit}>
-          <label>
-            Name:
-            <input type="text" value={name} onChange={this.handleNameChange} />
-          </label>
-          <br />
-          <input type="submit" value="Submit" />
-        </form>
-        <button type="button" onClick={this.handleDataRetrieval}>
-          <label>
-            SMD
-          </label>
-        </button>
-      </div>
+      <form>
+        <DialogInput
+          value={email}
+          name="email"
+          label="Email"
+          onChange={this.handleChange} />
+        <DialogInput
+          type="password"
+          value={password}
+          name="password"
+          label="Password"
+          onChange={this.handleChange} />
+        <br />
+        <Button buttonType="button" onClick={this.handleSubmit} type="default">
+          Submit
+        </Button>
+      </form>
     );
   }
 }
 
+SignIn.propTypes = {
+  history: PropTypes.shape().isRequired,
+  user: PropTypes.shape()
+};
 
-// const SignInPage = () => (
-//   <div>
-//     <h1>
-//       Sign In
-//     </h1>
-//   </div>
-// );
+SignIn.defaultProps = {
+  user: null
+};
 
-export default SignInPage;
+export default withRouter(SignIn);

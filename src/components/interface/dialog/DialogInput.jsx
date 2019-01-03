@@ -6,6 +6,7 @@ import TextField from '@material-ui/core/TextField';
 const DialogInput = ({
   name,
   className,
+  disabled,
   fullWidth,
   helperText,
   label,
@@ -17,6 +18,7 @@ const DialogInput = ({
 }) => (
   <TextField
     className={className}
+    disabled={disabled}
     style={{ margin: '0 5px 25px 5px', ...style }}
     helperText={helperText}
     multiline={multiline}
@@ -35,6 +37,7 @@ export default DialogInput;
 
 DialogInput.propTypes = {
   className: PropTypes.string,
+  disabled: PropTypes.bool,
   name: PropTypes.string.isRequired,
   fullWidth: PropTypes.bool,
   helperText: PropTypes.string,
@@ -43,16 +46,18 @@ DialogInput.propTypes = {
   onChange: PropTypes.func,
   style: PropTypes.shape(),
   type: PropTypes.string,
-  value: PropTypes.node.isRequired
+  value: PropTypes.node
 };
 
 DialogInput.defaultProps = {
   className: null,
+  disabled: false,
   fullWidth: false,
   helperText: null,
   multiline: false,
   label: '',
   onChange: () => {},
   style: null,
-  type: null
+  type: null,
+  value: ''
 };

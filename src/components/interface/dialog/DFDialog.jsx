@@ -18,12 +18,12 @@ class DFDialog extends React.Component {
       open,
       width
     } = this.props;
-    const type = formType === 'edit' ? 'default' : 'outline'
+    const type = formType === 'edit' ? 'default' : 'outline';
     return (
       <div>
-        {<Button type={type} onClick={onClick}>
+        <Button type={type} onClick={onClick}>
           {buttonTitle}
-         </Button>}
+        </Button>
         <Dialog
           fullWidth
           maxWidth={width}

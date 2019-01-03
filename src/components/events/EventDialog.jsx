@@ -1,26 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import { withStyles } from '@material-ui/core/styles';
-import DialogActions from '@material-ui/core/DialogActions';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 
+import EventForm from './EventForm';
 import DFDialog from '../interface/dialog/DFDialog';
 import DialogHeader from '../interface/dialog/DialogHeader';
-import DialogInput from '../interface/dialog/DialogInput';
-import Button from '../interface/Button';
 import styles from '../styles';
 
 class EventDialog extends React.Component {
   constructor(props) {
     super(props);
-    const { defaultValues } = props;
-
-    this.state = {
-      eventTitle: defaultValues.eventTitle || '',
-      eventDate: defaultValues.eventDate || '',
-      numJudges: defaultValues.numJudges || '',
-      open: false
-    };
+    this.state = { open: false };
   }
 
   handleChange = (e) => {
@@ -36,12 +28,10 @@ class EventDialog extends React.Component {
     this.setState({ open: false });
   };
 
-  handleSubmit = () => {}
-
   render() {
-    const { classes, formType } = this.props;
-    const { eventTitle, eventDate, numJudges, open } = this.state;
-    const dialogTitle = formType === 'edit' ? 'Edit' : 'New'
+    const { currentValues, eventId, formType } = this.props;
+    const { open } = this.state;
+    const dialogTitle = formType === 'edit' ? 'Edit' : 'New';
     const newButtonTitle = (
       <React.Fragment>
         <CalendarTodayIcon fontSize="small" style={{ color: 'gray', marginRight: '5px' }} />
@@ -56,35 +46,30 @@ class EventDialog extends React.Component {
         formType={formType}
         onClick={this.handleClickOpen}
         onClose={this.handleClose}>
-        <DialogHeader title={`${dialogTitle} Event`} onMoreClick={() => {}} />
-        <div style={{ margin: '25px' }}>
-          <DialogInput fullWidth name="eventTitle" label="Event Title" onChange={this.handleChange} value={eventTitle} />
-          <div style={{ display: 'flex' }}>
-            <DialogInput style={{ marginRight: '5px' }} fullWidth name="eventDate" label="Event Date" onChange={this.handleChange} value={eventDate} />
-            <DialogInput fullWidth name="numJudges" label="No. Judges" onChange={this.handleChange} value={numJudges} />
-          </div>
-        </div>
-        <div className={classes.dfdialog_footer}>
-          <DialogActions>
-            <Button type="default" onClick={this.handleClose}>
-              Cancel
-            </Button>
-            <Button type="primary" onClick={this.handleClose}>
-              Save
-            </Button>
-          </DialogActions>
-        </div>
+        <DialogHeader collectionName="events" docId={eventId} title={`${dialogTitle} Event`} />
+        <EventForm
+          currentValues={currentValues}
+          eventId={eventId}
+          formType={formType}
+          onModalClose={this.handleClose} />
       </DFDialog>
     );
   }
 }
 
 EventDialog.propTypes = {
-  defaultValues: PropTypes.shape().isRequired,
+  currentValues: PropTypes.shape({
+    eventDate: PropTypes.string,
+    eventTitle: PropTypes.string,
+    numJudges: PropTypes.number
+  }),
+  eventId: PropTypes.string,
   formType: PropTypes.oneOf(['edit', 'new'])
 };
 
 EventDialog.defaultProps = {
+  currentValues: {},
+  eventId: null,
   formType: 'edit'
 };
 

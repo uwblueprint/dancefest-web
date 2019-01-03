@@ -1,41 +1,67 @@
 import React from 'react';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
+import PropTypes from 'prop-types';
+import pick from 'lodash/pick';
 
-import TableHeader from '../interface/TableHeader';
+import db from '../../firebase/firebase';
+import PerformanceDialog from './PerformanceDialog';
 import PerformanceTableRow from './PerformanceTableRow';
-import EmptyState from '../interface/EmptyStates';
-import SectionHeader from '../interface/SectionHeader';
-
-// Testing Data
-import PerformanceTestData from './PerformanceTestData';
+import Section from '../interface/Section';
 
 class PerformancesSection extends React.Component {
-  state = {};
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      loading: true,
+      performances: null
+    };
+  }
+
+  componentDidMount() {
+    const { match: { params: { eventId }}} = this.props;
+    const collectionName = `events/${eventId}/performances`;
+
+    db.collection(collectionName).onSnapshot((querySnapshot) => {
+      const performances = [];
+      querySnapshot.forEach((doc) => {
+        const performance = {
+          id: doc.id,
+          ...doc.data()
+        };
+        performances.push(performance);
+      });
+      this.setState({ loading: false, performances });
+    });
+  }
 
   render() {
-    const headings = ['Dance Entry', 'Dance Title', 'School', 'Acaademic Level', 'Level of Competition', 'Dance Style', 'Dance Size'];
+    const { loading, performances } = this.state;
+    const { match: { params: { eventId }}} = this.props;
+    const headings = ['Dance Title', 'Dance Entry', 'School', 'Academic Level', 'Level of Competition', 'Dance Style', 'Dance Size'];
+    const keys = ['academicLevel', 'choreographers', 'competitionLevel', 'danceEntry', 'danceStyle', 'danceTitle', 'performers', 'school', 'size'];
+    const renderNewButton = (<PerformanceDialog eventId={eventId} formType="new" />);
+    const showPerformances = Array.isArray(performances) && performances.length > 0;
 
     return (
-      <React.Fragment>
-        <SectionHeader title="performance" showWinner />
-        <Table>
-          <TableHeader headings={headings} />
-          <TableBody>
-            {PerformanceTestData
-              && PerformanceTestData.map(rowProps => (<PerformanceTableRow {...rowProps} />))
-            }
-          </TableBody>
-        </Table>
-        {
-          !PerformanceTestData && (
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <EmptyState type="performance" title="Empty Performances Page" subtitle="Create your first Performance" />
-            </div>
-          )
-        }
-      </React.Fragment>
+      <Section headings={headings} loading={loading} showContent={showPerformances} renderNewButton={renderNewButton} type="performance">
+        {showPerformances && performances.map((performance) => {
+          const { id } = performance;
+          const currentValues = pick(performance, keys);
+          return (
+            <PerformanceTableRow
+              currentValues={currentValues}
+              eventId={eventId}
+              id={id}
+              key={id} />
+          );
+        })}
+      </Section>
     );
   }
 }
+
+PerformancesSection.propTypes = {
+  match: PropTypes.shape().isRequired
+};
+
 export default PerformancesSection;

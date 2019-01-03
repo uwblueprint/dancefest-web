@@ -22,7 +22,9 @@ const Score = ({ type, score, scoreName }) => {
         <span style={{ fontSize: '36px', fontWeight: 'bold' }}>
           {score}
         </span>
-        {scoreName}
+        <span style={{ color: '#99999' }}>
+          {scoreName}
+        </span>
       </div>
     </div>
   );
