@@ -42,7 +42,7 @@ class AdjudicationsSection extends React.Component {
     const showAdjudications = Array.isArray(adjudications) && adjudications.length > 0;
 
     return (
-      <Section eventId={eventId} headings={headings} loading={loading} showContent={showAdjudications} type="adjudication">
+      <Section headings={headings} loading={loading} showContent={showAdjudications} type="adjudication">
         {showAdjudications && adjudications.map((rowProps) => {
           const { id } = rowProps;
           const currentValues = pick(rowProps, keys);

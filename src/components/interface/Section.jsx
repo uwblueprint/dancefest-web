@@ -22,7 +22,7 @@ const Section = ({
 }) => {
   const renderTableContents = showContent ? (
     <React.Fragment>
-      {type === 'performance' && (<TableFilters />)}
+      { type === 'performance' && <TableFilters /> }
       <Table>
         <TableHeader headings={headings} />
         <TableBody>{children}</TableBody>
@@ -33,7 +33,7 @@ const Section = ({
   return (
     <React.Fragment>
       <SectionHeader renderNewButton={renderNewButton} title={type} />
-      {loading ? <Loading /> : renderTableContents}
+      { loading ? <Loading /> : renderTableContents }
     </React.Fragment>
   );
 };
