@@ -69,6 +69,12 @@ const styles = theme => ({
     top: '5px',
     right: '25px'
   },
+  sectionHeaderBackButton: {
+    display: 'flex',
+    position: 'absolute',
+    top: '5px',
+    left: '25px'
+  },
   title: {
     textTransform: 'uppercase',
     fontSize: 36,
