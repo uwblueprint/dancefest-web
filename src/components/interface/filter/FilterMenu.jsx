@@ -4,7 +4,8 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import SubMenu from './SubMenu';
 
-export default class EnhancedMenu extends React.Component {
+export default class FilterMenu extends React.Component {
+  // THIS HSOULD HANDLE STATE
   state = {}
 
   render() {
@@ -12,6 +13,7 @@ export default class EnhancedMenu extends React.Component {
       anchorElement,
       open,
       onClose,
+      onChange,
       menuItems,
       ...others
     } = this.props;
@@ -20,9 +22,10 @@ export default class EnhancedMenu extends React.Component {
       <Menu {...others} anchorEl={anchorElement} open={open} onClose={onClose}>
         {menuItems.map(menuItem => (
           <SubMenu
-            key={menuItem.key}
             caption={menuItem.caption}
-            choices={menuItem.options} />
+            choices={menuItem.options}
+            key={menuItem.key}
+            onChange={onChange} />
         ))}
         <hr />
         <MenuItem onClick={() => {}}>Clear All Filters</MenuItem>
@@ -31,7 +34,8 @@ export default class EnhancedMenu extends React.Component {
   }
 }
 
-EnhancedMenu.propTypes = {
+FilterMenu.propTypes = {
   onClose: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired
 };

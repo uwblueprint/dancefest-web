@@ -147,6 +147,12 @@ const styles = theme => ({
     display: 'flex',
     justifyContent: 'space-between'
   },
+  subMenuOptions: {
+    padding: '15px;',
+    outline: 'none',
+    maxHeight: '500px',
+    overflowY: 'scroll'
+  },
 
   // Settings Styling
   settings_wrapper: {

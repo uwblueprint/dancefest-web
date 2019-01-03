@@ -4,14 +4,21 @@ import FilterIcon from '@material-ui/icons/PlaylistAdd';
 
 import db from '../../../firebase/firebase';
 
-import EnhancedMenu from './EnhancedMenu';
+import FilterMenu from './FilterMenu';
 
 class Filter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       anchorEl: null,
-      options: {}
+      options: {},
+      filtered: {
+        academicLevel: [],
+        competitionLevel: [],
+        danceSize: [],
+        danceStyle: [],
+        school: []
+      }
     };
   }
 
@@ -37,6 +44,29 @@ class Filter extends React.Component {
     this.setState({ anchorEl: null });
   };
 
+  handleFilterChecked = (e) => {
+    const { filtered } = this.state;
+    const { name, value, checked } = e.target;
+    console.log(e.target);
+    console.log(name, value, checked, '@@');
+
+    if (!checked) {
+      this.setState(prevState => ({
+        filtered: {
+          [name]: prevState.filtered[name].filter(v => v !== value),
+          ...prevState.filtered
+        }
+      }));
+    } else {
+      this.setState(prevState => ({
+        filtered: {
+          [name]: prevState.filtered[name].push(value),
+          ...prevState.filtered
+        }
+      }));
+    }
+  };
+
   handleMenuClose = () => {
     this.setState({
       anchorEl: null
@@ -44,12 +74,12 @@ class Filter extends React.Component {
   };
 
   render() {
-    const { anchorEl, options } = this.state;
+    const { anchorEl, filtered, options } = this.state;
     const categories = Object.keys(options);
-    const renderOptions = opt => opt.map(o => ({ value: o, label: o }));
+    const renderOptions = (name, opt) => opt.map(o => ({ label: o, name, value: o }));
 
     const menuItems = options ? categories.map((name, index) => {
-      const values = renderOptions(options[name]);
+      const values = renderOptions(name, options[name]);
       return {
         key: `${name}-${index}`,
         caption: name,
@@ -57,19 +87,22 @@ class Filter extends React.Component {
       };
     }) : [];
 
+    console.log(filtered);
+
     return (
       <React.Fragment>
         <Button onClick={this.handleClick}>
           Filter
           <FilterIcon />
         </Button>
-        <EnhancedMenu
-          getContentAnchorEl={null}
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-          transformOrigin={{ vertical: 'top', horizontal: 'left' }}
-          open={Boolean(anchorEl)}
-          menuItems={menuItems}
+        <FilterMenu
           anchorElement={anchorEl}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+          getContentAnchorEl={null}
+          transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+          menuItems={menuItems}
+          open={Boolean(anchorEl)}
+          onChange={this.handleFilterChecked}
           onClose={this.handleMenuClose} />
       </React.Fragment>
     );
