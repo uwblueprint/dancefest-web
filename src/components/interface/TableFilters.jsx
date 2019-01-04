@@ -9,7 +9,7 @@ import Filter from './filter/index';
 import styles from '../styles';
 
 // TODO: implement filter components for award considerations
-const TableFilters = ({ classes }) => (
+const TableFilters = ({ classes, handleFilters }) => (
   <div style={{ display: 'flex', margin: '5px' }}>
     <div className={classes.header_search}>
       <div className={classes.header_searchIcon}>
@@ -23,12 +23,13 @@ const TableFilters = ({ classes }) => (
           input: classes.header_inputInput
         }} />
     </div>
-    <Filter />
+    <Filter handleFilters={handleFilters} />
   </div>
 );
 
 TableFilters.propTypes = {
-  classes: PropTypes.shape().isRequired
+  classes: PropTypes.shape().isRequired,
+  handleFilters: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(TableFilters);

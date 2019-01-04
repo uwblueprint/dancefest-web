@@ -1,9 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import Button from '@material-ui/core/Button';
 import FilterIcon from '@material-ui/icons/PlaylistAdd';
 
 import db from '../../../firebase/firebase';
-
 import FilterMenu from './FilterMenu';
 
 class Filter extends React.Component {
@@ -44,27 +45,33 @@ class Filter extends React.Component {
     this.setState({ anchorEl: null });
   };
 
-  handleFilterChecked = (e) => {
-    const { filtered } = this.state;
-    const { name, value, checked } = e.target;
-    console.log(e.target);
-    console.log(name, value, checked, '@@');
-
-    if (!checked) {
-      this.setState(prevState => ({
-        filtered: {
-          [name]: prevState.filtered[name].filter(v => v !== value),
-          ...prevState.filtered
-        }
-      }));
-    } else {
-      this.setState(prevState => ({
-        filtered: {
-          [name]: prevState.filtered[name].push(value),
-          ...prevState.filtered
-        }
-      }));
+  handleFilterClearAll = () => this.setState({
+    filtered: {
+      academicLevel: [],
+      competitionLevel: [],
+      danceSize: [],
+      danceStyle: [],
+      school: []
     }
+  })
+
+  handleFilterChecked = (e) => {
+    const { name, value, checked } = e.target;
+    const { handleFilters } = this.props;
+    const { filtered } = this.state;
+
+    this.setState((prevState) => {
+      const category = prevState.filtered[name];
+      const filteredValues = checked ? category.concat(value) : category.filter(v => v !== value);
+      return {
+        filtered: {
+          ...prevState.filtered,
+          [name]: filteredValues
+        }
+      };
+    });
+
+    handleFilters(filtered);
   };
 
   handleMenuClose = () => {
@@ -75,19 +82,24 @@ class Filter extends React.Component {
 
   render() {
     const { anchorEl, filtered, options } = this.state;
+    const anchorOrigin = { vertical: 'bottom', horizontal: 'left' };
+    const transformOrigin = { vertical: 'top', horizontal: 'left' };
     const categories = Object.keys(options);
-    const renderOptions = (name, opt) => opt.map(o => ({ label: o, name, value: o }));
+    const renderOptions = (name, opt) => (opt.map(o => ({
+      checked: filtered[name].includes(o),
+      label: o,
+      name,
+      value: o
+    })));
 
     const menuItems = options ? categories.map((name, index) => {
       const values = renderOptions(name, options[name]);
       return {
-        key: `${name}-${index}`,
         caption: name,
+        key: `${name}-${index}`,
         options: values
       };
     }) : [];
-
-    console.log(filtered);
 
     return (
       <React.Fragment>
@@ -97,9 +109,9 @@ class Filter extends React.Component {
         </Button>
         <FilterMenu
           anchorElement={anchorEl}
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+          anchorOrigin={anchorOrigin}
           getContentAnchorEl={null}
-          transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+          transformOrigin={transformOrigin}
           menuItems={menuItems}
           open={Boolean(anchorEl)}
           onChange={this.handleFilterChecked}
@@ -108,5 +120,9 @@ class Filter extends React.Component {
     );
   }
 }
+
+Filter.propTypes = {
+  handleFilters: PropTypes.func.isRequired
+};
 
 export default Filter;

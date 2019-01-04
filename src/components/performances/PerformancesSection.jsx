@@ -6,12 +6,14 @@ import db from '../../firebase/firebase';
 import PerformanceDialog from './PerformanceDialog';
 import PerformanceTableRow from './PerformanceTableRow';
 import Section from '../interface/Section';
+import TableFilters from '../interface/TableFilters';
 
 class PerformancesSection extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      filters: {},
       loading: true,
       performances: null
     };
@@ -34,6 +36,8 @@ class PerformancesSection extends React.Component {
     });
   }
 
+  handleFilters = filters => this.setState({ filters })
+
   render() {
     const { loading, performances } = this.state;
     const { match: { params: { eventId }}} = this.props;
@@ -41,9 +45,10 @@ class PerformancesSection extends React.Component {
     const keys = ['academicLevel', 'choreographers', 'competitionLevel', 'danceEntry', 'danceStyle', 'danceTitle', 'performers', 'school', 'size'];
     const renderNewButton = (<PerformanceDialog eventId={eventId} formType="new" />);
     const showPerformances = Array.isArray(performances) && performances.length > 0;
+    const tableFilters = <TableFilters handleFilters={this.handleFilters} />;
 
     return (
-      <Section headings={headings} loading={loading} showContent={showPerformances} renderNewButton={renderNewButton} type="performance">
+      <Section headings={headings} loading={loading} renderNewButton={renderNewButton} showContent={showPerformances} tableFilters={tableFilters} type="performance">
         {showPerformances && performances.map((performance) => {
           const { id } = performance;
           const currentValues = pick(performance, keys);
