@@ -6,7 +6,7 @@ import db from '../../firebase/firebase';
 import PerformanceDialog from './PerformanceDialog';
 import PerformanceTableRow from './PerformanceTableRow';
 import Section from '../interface/Section';
-import TableFilters from '../interface/TableFilters';
+import Filter from '../interface/filter';
 
 class PerformancesSection extends React.Component {
   constructor(props) {
@@ -45,7 +45,7 @@ class PerformancesSection extends React.Component {
     const keys = ['academicLevel', 'choreographers', 'competitionLevel', 'danceEntry', 'danceStyle', 'danceTitle', 'performers', 'school', 'size'];
     const renderNewButton = (<PerformanceDialog eventId={eventId} formType="new" />);
     const showPerformances = Array.isArray(performances) && performances.length > 0;
-    const tableFilters = <TableFilters handleFilters={this.handleFilters} />;
+    const tableFilters = <Filter handleFilters={this.handleFilters} />;
 
     return (
       <Section headings={headings} loading={loading} renderNewButton={renderNewButton} showContent={showPerformances} tableFilters={tableFilters} type="performance">

@@ -1,20 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Button from '@material-ui/core/Button';
-import FilterIcon from '@material-ui/icons/PlaylistAdd';
+import { withStyles } from '@material-ui/core/styles';
+import Input from '@material-ui/core/Input';
+import LensIcon from '@material-ui/icons/Lens';
+import SearchIcon from '@material-ui/icons/Search';
 
+import CheckBox from '../CheckBox';
 import db from '../../../firebase/firebase';
 import FilterMenu from './FilterMenu';
+import styles from '../../styles';
 
 class Filter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      anchorEl: null,
       options: {},
       filtered: {
         academicLevel: [],
+        awardConsideration: [],
         competitionLevel: [],
         danceSize: [],
         danceStyle: [],
@@ -37,17 +41,10 @@ class Filter extends React.Component {
     this.subscribe();
   }
 
-  handleClick = (event) => {
-    this.setState({ anchorEl: event.currentTarget });
-  };
-
-  handleClose = () => {
-    this.setState({ anchorEl: null });
-  };
-
   handleFilterClearAll = () => this.setState({
     filtered: {
       academicLevel: [],
+      awardConsideration: [],
       competitionLevel: [],
       danceSize: [],
       danceStyle: [],
@@ -74,55 +71,63 @@ class Filter extends React.Component {
     handleFilters(filtered);
   };
 
-  handleMenuClose = () => {
-    this.setState({
-      anchorEl: null
-    });
-  };
-
   render() {
-    const { anchorEl, filtered, options } = this.state;
-    const anchorOrigin = { vertical: 'bottom', horizontal: 'left' };
-    const transformOrigin = { vertical: 'top', horizontal: 'left' };
-    const categories = Object.keys(options);
-    const renderOptions = (name, opt) => (opt.map(o => ({
-      checked: filtered[name].includes(o),
-      label: o,
-      name,
-      value: o
-    })));
-
-    const menuItems = options ? categories.map((name, index) => {
-      const values = renderOptions(name, options[name]);
-      return {
-        caption: name,
-        key: `${name}-${index}`,
-        options: values
-      };
-    }) : [];
+    const { filtered, options } = this.state;
+    const { awardConsideration } = filtered;
+    const { classes } = this.props;
+    const choices = [
+      {
+        checked: awardConsideration.includes('specialAward'),
+        name: 'awardConsideration',
+        value: 'specialAward',
+        label: (
+          <React.Fragment>
+            {'Special Award Only   '}
+            <LensIcon fontSize="inherit" color="primary" />
+          </React.Fragment>
+        )
+      },
+      {
+        checked: awardConsideration.includes('choreoAward'),
+        name: 'awardConsideration',
+        value: 'choreoAward',
+        label: (
+          <React.Fragment>
+            {'Choreography Awards Only   '}
+            <LensIcon fontSize="inherit" style={{ color: 'purple' }} />
+          </React.Fragment>
+        )
+      }
+    ];
 
     return (
-      <React.Fragment>
-        <Button onClick={this.handleClick}>
-          Filter
-          <FilterIcon />
-        </Button>
+      <div style={{ display: 'flex', height: '40px' }}>
+        <div className={classes.header_search}>
+          <div className={classes.header_searchIcon}>
+            <SearchIcon />
+          </div>
+          <Input
+            placeholder="Search"
+            disableUnderline
+            classes={{
+              root: classes.header_inputRoot,
+              input: classes.header_inputInput
+            }} />
+        </div>
         <FilterMenu
-          anchorElement={anchorEl}
-          anchorOrigin={anchorOrigin}
-          getContentAnchorEl={null}
-          transformOrigin={transformOrigin}
-          menuItems={menuItems}
-          open={Boolean(anchorEl)}
-          onChange={this.handleFilterChecked}
-          onClose={this.handleMenuClose} />
-      </React.Fragment>
+          filtered={filtered}
+          handleFilterClearAll={this.handleFilterClearAll}
+          handleFilterChecked={this.handleFilterChecked}
+          options={options} />
+        <CheckBox row choices={choices} onChange={this.handleFilterChecked} />
+      </div>
     );
   }
 }
 
 Filter.propTypes = {
+  classes: PropTypes.shape().isRequired,
   handleFilters: PropTypes.func.isRequired
 };
 
-export default Filter;
+export default withStyles(styles)(Filter);

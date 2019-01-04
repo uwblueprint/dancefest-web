@@ -37,14 +37,14 @@ const CheckBox = ({
 
 CheckBox.propTypes = {
   choices: PropTypes.PropTypes.arrayOf(PropTypes.shape()).isRequired,
+  label: PropTypes.oneOf([PropTypes.node, PropTypes.string]),
   onChange: PropTypes.func,
-  row: PropTypes.bool,
-  label: PropTypes.string
+  row: PropTypes.bool
 };
 
 CheckBox.defaultProps = {
-  onChange: () => {},
   label: null,
+  onChange: () => {},
   row: false
 };
 
