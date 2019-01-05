@@ -195,6 +195,14 @@ const styles = theme => ({
   },
   emptyState_subtitle: {
     textAlign: 'center'
+  },
+
+  // Settings Dropdown
+  settingsDropdown_wrapper: {
+    display: 'inline',
+    marginLeft: '92%',
+    cursor: 'pointer',
+    color: 'white'
   }
 });
 

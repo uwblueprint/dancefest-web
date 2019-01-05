@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -31,20 +31,11 @@ class SettingsDropdown extends React.Component {
     auth.signOut();
   };
 
-  handleSettingsRedirect = (event) => {
-    const { history } = this.props;
-    history.push('/settings');
-  };
-
   render() {
     const { anchorEl } = this.state;
+    const { classes } = this.props;
     return (
-      <div style={{
-        display: 'inline',
-        marginLeft: '92%',
-        cursor: 'pointer',
-        color: 'white'
-      }}>
+      <div className={classes.settingsDropdown_wrapper}>
         <SettingsIcon
           aria-owns={anchorEl && 'simple-menu'}
           aria-haspopup="true"
@@ -66,7 +57,7 @@ class SettingsDropdown extends React.Component {
 }
 
 SettingsDropdown.propTypes = {
-  history: PropTypes.shape().isRequired
+  classes: PropTypes.shape.isRequired
 };
 
-export default withRouter(withStyles(styles)(SettingsDropdown));
+export default withStyles(styles)(SettingsDropdown);
