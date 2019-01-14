@@ -80,10 +80,17 @@ class FilterMenu extends React.Component {
 }
 
 FilterMenu.propTypes = {
-  filtered: PropTypes.shape.isRequired,
+  filtered: PropTypes.shape({
+    academicLevel: PropTypes.arrayOf(PropTypes.string),
+    awardConsideration: PropTypes.arrayOf(PropTypes.string),
+    competitionLevel: PropTypes.arrayOf(PropTypes.string),
+    danceSize: PropTypes.arrayOf(PropTypes.string),
+    danceStyle: PropTypes.arrayOf(PropTypes.string),
+    school: PropTypes.arrayOf(PropTypes.string)
+  }).isRequired,
   handleFilterChecked: PropTypes.func.isRequired,
   handleFilterClearAll: PropTypes.func.isRequired,
-  options: PropTypes.shape.isRequired
+  options: PropTypes.shape({}).isRequired
 };
 
 export default FilterMenu;

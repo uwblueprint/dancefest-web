@@ -37,6 +37,15 @@ class Filter extends React.Component {
     });
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    const { filtered: prevFiltered } = prevState;
+    const { filtered: currFiltered } = this.state;
+    const { handleFilters } = this.props;
+    if (JSON.stringify(prevFiltered) !== JSON.stringify(currFiltered)) {
+      handleFilters(currFiltered);
+    }
+  }
+
   componentWillUnmount() {
     this.subscribe();
   }
@@ -54,9 +63,6 @@ class Filter extends React.Component {
 
   handleFilterChecked = (e) => {
     const { name, value, checked } = e.target;
-    const { handleFilters } = this.props;
-    const { filtered } = this.state;
-
     this.setState((prevState) => {
       const category = prevState.filtered[name];
       const filteredValues = checked ? category.concat(value) : category.filter(v => v !== value);
@@ -67,8 +73,6 @@ class Filter extends React.Component {
         }
       };
     });
-
-    handleFilters(filtered);
   };
 
   render() {

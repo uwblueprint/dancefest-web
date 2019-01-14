@@ -13,7 +13,7 @@ class PerformancesSection extends React.Component {
     super(props);
 
     this.state = {
-      filters: {},
+      filteredPerformances: null,
       loading: true,
       performances: null
     };
@@ -32,14 +32,31 @@ class PerformancesSection extends React.Component {
         };
         performances.push(performance);
       });
-      this.setState({ loading: false, performances });
+      this.setState({ loading: false, filteredPerformances: performances, performances });
     });
   }
 
-  handleFilters = filters => this.setState({ filters })
+  getFilterKeys = filters => Object.keys(filters)
+    .reduce((res, value) => {
+      if (filters[value].length > 0) {
+        res.push(value);
+      }
+      return res;
+    }, []);
+
+  // TODO: implement filters for award considerations and search
+  handleFilters = (filters) => {
+    const { performances } = this.state;
+    const keys = this.getFilterKeys(filters);
+    const filteredPerformances = performances.filter(
+      performance => keys.every(key => filters[key].includes(performance[key]))
+    );
+    this.setState({ filteredPerformances });
+  }
+
 
   render() {
-    const { loading, performances } = this.state;
+    const { filteredPerformances, loading, performances } = this.state;
     const { match: { params: { eventId }}} = this.props;
     const headings = ['Dance Title', 'Dance Entry', 'School', 'Academic Level', 'Level of Competition', 'Dance Style', 'Dance Size'];
     const keys = ['academicLevel', 'choreographers', 'competitionLevel', 'danceEntry', 'danceStyle', 'danceTitle', 'performers', 'school', 'size'];
@@ -49,7 +66,7 @@ class PerformancesSection extends React.Component {
 
     return (
       <Section headings={headings} loading={loading} renderNewButton={renderNewButton} showContent={showPerformances} tableFilters={tableFilters} type="performance">
-        {showPerformances && performances.map((performance) => {
+        {showPerformances && filteredPerformances.map((performance) => {
           const { id } = performance;
           const currentValues = pick(performance, keys);
           return (
