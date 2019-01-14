@@ -5,8 +5,8 @@ import pick from 'lodash/pick';
 import db from '../../firebase/firebase';
 import PerformanceDialog from './PerformanceDialog';
 import PerformanceTableRow from './PerformanceTableRow';
-import Section from '../interface/Section';
 import Filter from '../interface/filter';
+import Section from '../interface/Section';
 
 class PerformancesSection extends React.Component {
   constructor(props) {

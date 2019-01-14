@@ -37,7 +37,7 @@ const CheckBox = ({
 
 CheckBox.propTypes = {
   choices: PropTypes.PropTypes.arrayOf(PropTypes.shape()).isRequired,
-  label: PropTypes.oneOf([PropTypes.node, PropTypes.string]),
+  label: PropTypes.node,
   onChange: PropTypes.func,
   row: PropTypes.bool
 };

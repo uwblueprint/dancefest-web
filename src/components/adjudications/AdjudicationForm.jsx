@@ -76,15 +76,15 @@ class AdjudicationForm extends React.Component {
     const choices = [
       {
         checked: specialAward,
+        label: 'Special Award',
         name: 'specialAward',
-        value: 'specialAward',
-        label: 'Special Award'
+        value: 'specialAward'
       },
       {
         checked: choreoAward,
+        label: 'Choreography Award',
         name: 'choreoAward',
-        value: 'choreoAward',
-        label: 'Choreography Award'
+        value: 'choreoAward'
       }
     ];
 

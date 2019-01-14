@@ -148,10 +148,10 @@ const styles = theme => ({
     justifyContent: 'space-between'
   },
   subMenuOptions: {
-    padding: '15px;',
-    outline: 'none',
     maxHeight: '500px',
-    overflowY: 'scroll'
+    overflowY: 'scroll',
+    outline: 'none',
+    padding: '15px;'
   },
 
   // Settings Styling

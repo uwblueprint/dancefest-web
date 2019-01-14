@@ -41,13 +41,13 @@ class SubMenu extends React.Component {
   render() {
     const {
       caption,
-      classes,
       choices,
+      classes,
       onChange
     } = this.props;
     const { anchorElement, menuOpen } = this.state;
-    const anchorOrgin = { vertical: 'top', horizontal: 'right' };
-    const transformOrigin = { vertical: 'top', horizontal: 'left' };
+    const anchorOrgin = { horizontal: 'right', vertical: 'top' };
+    const transformOrigin = { horizontal: 'left', vertical: 'top' };
 
     return (
       <React.Fragment>

@@ -11,6 +11,7 @@ import SubMenu from './SubMenu';
 class FilterMenu extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       anchorEl: null
     };
@@ -21,37 +22,38 @@ class FilterMenu extends React.Component {
   };
 
   handleMenuClose = () => {
-    this.setState({
-      anchorEl: null
-    });
+    this.setState({ anchorEl: null });
   };
 
-  render() {
-    const { anchorEl } = this.state;
-    const {
-      filtered,
-      handleFilterChecked,
-      handleFilterClearAll,
-      options
-    } = this.props;
-    const anchorOrigin = { vertical: 'bottom', horizontal: 'left' };
-    const transformOrigin = { vertical: 'top', horizontal: 'left' };
-    const categories = Object.keys(options);
-    const renderOptions = (name, opt) => (opt.map(o => ({
+  renderChoices = (name, opt) => {
+    const { filtered } = this.props;
+    return opt.map(o => ({
       checked: filtered[name].includes(o),
       label: o,
       name,
       value: o
-    })));
+    }));
+  };
 
-    const menuItems = options ? categories.map((name, index) => {
-      const choices = renderOptions(name, options[name]);
-      return {
-        caption: name,
-        key: `${name}-${index}`,
-        choices
-      };
-    }) : [];
+  renderMenuItems = options => Object.keys(options).map((name, index) => {
+    const { handleFilterChecked } = this.props;
+    const choices = this.renderChoices(name, options[name]);
+    const key = `${name}-${index}`;
+    return (
+      <SubMenu
+        caption={name}
+        choices={choices}
+        key={key}
+        onChange={handleFilterChecked} />
+    );
+  })
+
+  render() {
+    const { anchorEl } = this.state;
+    const { handleFilterClearAll, options } = this.props;
+    const anchorOrigin = { horizontal: 'left', vertical: 'bottom' };
+    const transformOrigin = { horizontal: 'left', vertical: 'top' };
+    const menuItems = options ? this.renderMenuItems(options) : [];
 
     return (
       <React.Fragment>
@@ -66,16 +68,7 @@ class FilterMenu extends React.Component {
           transformOrigin={transformOrigin}
           onClose={this.handleMenuClose}
           open={Boolean(anchorEl)}>
-          {menuItems.map((menuItem) => {
-            const { caption, key, choices } = menuItem;
-            return (
-              <SubMenu
-                caption={caption}
-                choices={choices}
-                key={key}
-                onChange={handleFilterChecked} />
-            );
-          })}
+          {menuItems}
           <hr />
           <MenuItem onClick={handleFilterClearAll}>
             Clear All Filters

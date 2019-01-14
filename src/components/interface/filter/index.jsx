@@ -82,8 +82,8 @@ class Filter extends React.Component {
         value: 'specialAward',
         label: (
           <React.Fragment>
-            {'Special Award Only   '}
-            <LensIcon fontSize="inherit" color="primary" />
+            Special Award Only
+            <LensIcon color="primary" fontSize="inherit" style={{ marginLeft: '5px', verticalAlign: 'middle' }} />
           </React.Fragment>
         )
       },
@@ -93,8 +93,8 @@ class Filter extends React.Component {
         value: 'choreoAward',
         label: (
           <React.Fragment>
-            {'Choreography Awards Only   '}
-            <LensIcon fontSize="inherit" style={{ color: 'purple' }} />
+            Choreography Awards Only
+            <LensIcon fontSize="inherit" style={{ color: 'purple', marginLeft: '5px', verticalAlign: 'middle' }} />
           </React.Fragment>
         )
       }
