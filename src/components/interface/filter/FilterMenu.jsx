@@ -25,8 +25,9 @@ class FilterMenu extends React.Component {
     this.setState({ anchorEl: null });
   };
 
-  renderChoices = (name, opt) => {
+  aggregateChoices = (name, opt) => {
     const { filtered } = this.props;
+
     return opt.map(o => ({
       checked: filtered[name].includes(o),
       label: o,
@@ -37,8 +38,9 @@ class FilterMenu extends React.Component {
 
   renderMenuItems = options => Object.keys(options).map((name, index) => {
     const { handleFilterChecked } = this.props;
-    const choices = this.renderChoices(name, options[name]);
+    const choices = this.aggregateChoices(name, options[name]);
     const key = `${name}-${index}`;
+
     return (
       <SubMenu
         caption={name}
@@ -53,7 +55,7 @@ class FilterMenu extends React.Component {
     const { handleFilterClearAll, options } = this.props;
     const anchorOrigin = { horizontal: 'left', vertical: 'bottom' };
     const transformOrigin = { horizontal: 'left', vertical: 'top' };
-    const menuItems = options ? this.renderMenuItems(options) : [];
+    const menuItems = options && this.renderMenuItems(options);
 
     return (
       <React.Fragment>

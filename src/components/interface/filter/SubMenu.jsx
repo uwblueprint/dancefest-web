@@ -46,7 +46,7 @@ class SubMenu extends React.Component {
       onChange
     } = this.props;
     const { anchorElement, menuOpen } = this.state;
-    const anchorOrgin = { horizontal: 'right', vertical: 'top' };
+    const anchorOrigin = { horizontal: 'right', vertical: 'top' };
     const transformOrigin = { horizontal: 'left', vertical: 'top' };
 
     return (
@@ -57,7 +57,7 @@ class SubMenu extends React.Component {
         </MenuItem>
         <Menu
           anchorEl={anchorElement}
-          anchorOrigin={anchorOrgin}
+          anchorOrigin={anchorOrigin}
           classes={{ paper: classes.subMenuOptions }}
           getContentAnchorEl={null}
           onClose={this.handleSubMenuClose}

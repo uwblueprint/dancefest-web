@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import isEqual from 'lodash/isEqual';
 
 import { withStyles } from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
@@ -14,6 +15,7 @@ import styles from '../../styles';
 class Filter extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       options: {},
       filtered: {
@@ -41,7 +43,7 @@ class Filter extends React.Component {
     const { filtered: prevFiltered } = prevState;
     const { filtered: currFiltered } = this.state;
     const { handleFilters } = this.props;
-    if (JSON.stringify(prevFiltered) !== JSON.stringify(currFiltered)) {
+    if (!isEqual(prevFiltered, currFiltered)) {
       handleFilters(currFiltered);
     }
   }

@@ -32,7 +32,7 @@ class PerformancesSection extends React.Component {
         };
         performances.push(performance);
       });
-      this.setState({ loading: false, filteredPerformances: performances, performances });
+      this.setState({ filteredPerformances: performances, loading: false, performances });
     });
   }
 
