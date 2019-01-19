@@ -46,7 +46,7 @@ class SettingsDropdown extends React.Component {
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
           onClose={this.handleClose}>
-          <Link to="/settings">
+          <Link style={{ outline: 'none', textDecoration: 'none' }} to="/settings">
             <MenuItem onClick={this.handleClose}>Settings</MenuItem>
           </Link>
           <MenuItem onClick={this.handleLogout}>Logout</MenuItem>

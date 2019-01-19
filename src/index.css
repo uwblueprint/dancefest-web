@@ -13,7 +13,3 @@ a{
 a:hover {
    color: grey;
 }
-
-a:focus {
-  outline: none;
-}
