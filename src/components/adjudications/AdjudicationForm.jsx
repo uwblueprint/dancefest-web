@@ -25,7 +25,10 @@ class AdjudicationForm extends React.Component {
 
   handleChange = (e) => {
     const { name, value } = e.target;
-    this.setState({ [name]: value });
+    const keys = ['artisticMark', 'technicalMark'];
+    this.setState({
+      [name]: keys.includes(name) ? parseInt(value, 10) : value
+    });
   }
 
   handleCheckedAward = (e) => {
@@ -47,7 +50,7 @@ class AdjudicationForm extends React.Component {
   handleSubmit = async () => {
     const { adjudicationId, collectionName } = this.props;
     const { artisticMark, technicalMark } = this.state;
-    const cumulativeMark = (artisticMark + technicalMark) / 2;
+    const cumulativeMark = (parseInt(artisticMark, 10) + parseInt(technicalMark, 10)) / 2;
     const data = {
       cumulativeMark,
       ...this.state
