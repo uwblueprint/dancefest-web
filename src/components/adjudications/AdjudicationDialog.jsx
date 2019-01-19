@@ -13,6 +13,8 @@ import DialogHeader from '../interface/dialog/DialogHeader';
 import AdjudicationForm from './AdjudicationForm';
 import Score from '../interface/dialog/Score';
 
+
+
 class AdjudicationDialog extends React.Component {
   state = { open: false, view: true };
 
@@ -66,7 +68,8 @@ class AdjudicationDialog extends React.Component {
             </div>
           </div>
           <DialogReadOnly fullWidth label="Notes" defaultValue={notes} />
-          {audio && <AudioPlay fileName="file_test.mp3" time="3:07" />}
+          {/*audio && <AudioPlay fileName="file_test.mp3" time="3:07" />*/}
+          {audio && <AudioPlay currentValues={currentValues}/>}
           <FormHelperText>Award Considerations</FormHelperText>
           {specialAward && (
             <div>
