@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Menu from '@material-ui/core/Menu';
+import PropTypes from 'prop-types';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -11,17 +12,24 @@ import deleteData from '../../../firebase/utils/deleteData';
 class EditDropdown extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       anchorEl: undefined
     };
   }
 
+
   handleClick = (event) => {
     this.setState({ anchorEl: event.currentTarget });
   };
 
+
+  handleDuplicate = async () => {
+    this.props.handleDup();
+    this.handleClose();
+  };
+
   handleClose = () => {
+    console.log('closed')
     this.setState({ anchorEl: undefined });
   };
 
@@ -45,7 +53,7 @@ class EditDropdown extends React.Component {
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
           onClose={this.handleClose}>
-          <MenuItem onClick={this.handleClose}>Duplicate</MenuItem>
+          <MenuItem onClick={this.handleDuplicate}>Duplicate</MenuItem>
           <MenuItem onClick={this.handleDelete}>Delete</MenuItem>
         </Menu>
       </div>
@@ -55,3 +63,11 @@ class EditDropdown extends React.Component {
 
 
 export default withStyles(styles)(EditDropdown);
+
+EditDropdown.propTypes = {
+  handleDup: PropTypes.func
+};
+
+EditDropdown.defaultProps = {
+  handleDup: () => {}
+};
