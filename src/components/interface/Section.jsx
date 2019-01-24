@@ -9,7 +9,6 @@ import EmptyState from './EmptyStates';
 import Loading from './Loading';
 import styles from '../styles';
 import SectionHeader from './SectionHeader';
-import TableFilters from './TableFilters';
 import TableHeader from './TableHeader';
 
 const Section = ({
@@ -18,11 +17,12 @@ const Section = ({
   loading,
   showContent,
   renderNewButton,
+  tableFilters,
   type
 }) => {
   const renderTableContents = showContent ? (
     <React.Fragment>
-      { type === 'performance' && <TableFilters /> }
+      {tableFilters}
       <Table>
         <TableHeader headings={headings} />
         <TableBody>{children}</TableBody>
@@ -44,11 +44,13 @@ Section.propTypes = {
   loading: PropTypes.bool.isRequired,
   showContent: PropTypes.bool.isRequired,
   renderNewButton: PropTypes.node,
+  tableFilters: PropTypes.node,
   type: PropTypes.oneOf(['event', 'adjudication', 'performance']).isRequired
 };
 
 Section.defaultProps = {
-  renderNewButton: null
+  renderNewButton: null,
+  tableFilters: null
 };
 
 export default withStyles(styles)(Section);

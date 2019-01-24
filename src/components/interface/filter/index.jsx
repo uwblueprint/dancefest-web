@@ -1,69 +1,139 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
-import FilterIcon from '@material-ui/icons/PlaylistAdd';
-import EnhancedMenu from './EnhancedMenu';
+import PropTypes from 'prop-types';
+import isEqual from 'lodash/isEqual';
+
+import { withStyles } from '@material-ui/core/styles';
+import Input from '@material-ui/core/Input';
+import LensIcon from '@material-ui/icons/Lens';
+import SearchIcon from '@material-ui/icons/Search';
+
+import CheckBox from '../CheckBox';
+import db from '../../../firebase/firebase';
+import FilterMenu from './FilterMenu';
+import styles from '../../styles';
 
 class Filter extends React.Component {
-  state = {
-    anchorEl: null
-  };
+  constructor(props) {
+    super(props);
 
-  handleClick = (event) => {
-    this.setState({ anchorEl: event.currentTarget });
-  };
+    this.state = {
+      options: {},
+      filtered: {
+        academicLevel: [],
+        awardConsideration: [],
+        competitionLevel: [],
+        danceSize: [],
+        danceStyle: [],
+        school: []
+      }
+    };
+  }
 
-  handleClose = () => {
-    this.setState({ anchorEl: null });
-  };
+  componentDidMount() {
+    this.subscribe = db.collection('settings').onSnapshot((querySnapshot) => {
+      const options = {};
+      querySnapshot.forEach((doc) => {
+        options[doc.id] = Object.keys(doc.data());
+      });
+      this.setState({ options });
+    });
+  }
 
-  handleMenuClose = () => {
-    this.setState({
-      anchorEl: null
+  componentDidUpdate(prevProps, prevState) {
+    const { filtered: prevFiltered } = prevState;
+    const { filtered: currFiltered } = this.state;
+    const { handleFilters } = this.props;
+    if (!isEqual(prevFiltered, currFiltered)) {
+      handleFilters(currFiltered);
+    }
+  }
+
+  componentWillUnmount() {
+    this.subscribe();
+  }
+
+  handleFilterClearAll = () => this.setState({
+    filtered: {
+      academicLevel: [],
+      awardConsideration: [],
+      competitionLevel: [],
+      danceSize: [],
+      danceStyle: [],
+      school: []
+    }
+  })
+
+  handleFilterChecked = (e) => {
+    const { name, value, checked } = e.target;
+    this.setState((prevState) => {
+      const category = prevState.filtered[name];
+      const filteredValues = checked ? category.concat(value) : category.filter(v => v !== value);
+      return {
+        filtered: {
+          ...prevState.filtered,
+          [name]: filteredValues
+        }
+      };
     });
   };
 
   render() {
-    const { anchorEl } = this.state;
-    const menuItems = [
+    const { filtered, options } = this.state;
+    const { awardConsideration } = filtered;
+    const { classes } = this.props;
+    const choices = [
       {
-        key: 1,
-        caption: 'Academic Level',
-        options: [{ value: 'test', label: 'test' }, { value: 'test', label: 'test' }]
+        checked: awardConsideration.includes('specialAward'),
+        name: 'awardConsideration',
+        value: 'specialAward',
+        label: (
+          <React.Fragment>
+            Special Award Only
+            <LensIcon color="primary" fontSize="inherit" style={{ marginLeft: '5px', verticalAlign: 'middle' }} />
+          </React.Fragment>
+        )
       },
       {
-        key: 2,
-        caption: 'Level of Competition',
-        options: [{ value: 'test', label: 'test' }, { value: 'test', label: 'test' }]
-      },
-      {
-        key: 3,
-        caption: 'Dance Style',
-        options: [{ value: 'test', label: 'test' }, { value: 'test', label: 'test' }]
-      },
-      {
-        key: 4,
-        caption: 'Dance Size',
-        options: [{ value: 'test', label: 'test' }, { value: 'test', label: 'test' }]
+        checked: awardConsideration.includes('choreoAward'),
+        name: 'awardConsideration',
+        value: 'choreoAward',
+        label: (
+          <React.Fragment>
+            Choreography Awards Only
+            <LensIcon fontSize="inherit" style={{ color: 'purple', marginLeft: '5px', verticalAlign: 'middle' }} />
+          </React.Fragment>
+        )
       }
     ];
 
     return (
-      <React.Fragment>
-        <Button onClick={this.handleClick}>
-          Filter
-          <FilterIcon />
-        </Button>
-        <EnhancedMenu
-          getContentAnchorEl={null}
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-          transformOrigin={{ vertical: 'top', horizontal: 'left' }}
-          open={Boolean(anchorEl)}
-          menuItems={menuItems}
-          anchorElement={anchorEl}
-          onClose={this.handleMenuClose} />
-      </React.Fragment>
+      <div style={{ display: 'flex', height: '40px' }}>
+        <div className={classes.header_search}>
+          <div className={classes.header_searchIcon}>
+            <SearchIcon />
+          </div>
+          <Input
+            placeholder="Search"
+            disableUnderline
+            classes={{
+              root: classes.header_inputRoot,
+              input: classes.header_inputInput
+            }} />
+        </div>
+        <FilterMenu
+          filtered={filtered}
+          handleFilterClearAll={this.handleFilterClearAll}
+          handleFilterChecked={this.handleFilterChecked}
+          options={options} />
+        <CheckBox row choices={choices} onChange={this.handleFilterChecked} />
+      </div>
     );
   }
 }
 
-export default Filter;
+Filter.propTypes = {
+  classes: PropTypes.shape().isRequired,
+  handleFilters: PropTypes.func.isRequired
+};
+
+export default withStyles(styles)(Filter);

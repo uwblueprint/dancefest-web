@@ -1,10 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
+import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import withStyles from '@material-ui/core/styles/withStyles';
+
 import classNames from 'classnames';
-import FilterItem from './FilterItem';
+import CheckBox from '../CheckBox';
 import styles from '../../styles';
 
 class SubMenu extends React.Component {
@@ -36,8 +39,15 @@ class SubMenu extends React.Component {
   };
 
   render() {
-    const { caption, classes } = this.props;
+    const {
+      caption,
+      choices,
+      classes,
+      onChange
+    } = this.props;
     const { anchorElement, menuOpen } = this.state;
+    const anchorOrigin = { horizontal: 'right', vertical: 'top' };
+    const transformOrigin = { horizontal: 'left', vertical: 'top' };
 
     return (
       <React.Fragment>
@@ -45,19 +55,18 @@ class SubMenu extends React.Component {
           {caption}
           <ArrowRightIcon />
         </MenuItem>
-        <FilterItem
+        <Menu
+          anchorEl={anchorElement}
+          anchorOrigin={anchorOrigin}
+          classes={{ paper: classes.subMenuOptions }}
           getContentAnchorEl={null}
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'right'
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'left'
-          }}
+          onClose={this.handleSubMenuClose}
           open={menuOpen}
-          anchorElement={anchorElement}
-          onClose={this.handleSubMenuClose} />
+          transformOrigin={transformOrigin}>
+          <CheckBox
+            choices={choices}
+            onChange={onChange} />
+        </Menu>
       </React.Fragment>
     );
   }
@@ -65,7 +74,9 @@ class SubMenu extends React.Component {
 
 SubMenu.propTypes = {
   caption: PropTypes.string.isRequired,
-  classes: PropTypes.node.isRequired
+  choices: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+  classes: PropTypes.shape().isRequired,
+  onChange: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(SubMenu);

@@ -77,8 +77,18 @@ class AdjudicationForm extends React.Component {
       technicalMark
     } = this.state;
     const choices = [
-      { checked: specialAward, value: 'specialAward', label: 'Special Award' },
-      { checked: choreoAward, value: 'choreoAward', label: 'Choreography Award' }
+      {
+        checked: specialAward,
+        label: 'Special Award',
+        name: 'specialAward',
+        value: 'specialAward'
+      },
+      {
+        checked: choreoAward,
+        label: 'Choreography Award',
+        name: 'choreoAward',
+        value: 'choreoAward'
+      }
     ];
 
     return (

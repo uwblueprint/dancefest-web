@@ -25,7 +25,7 @@ const CheckBox = ({
           control={(
             <Checkbox
               color="primary"
-              name={choice.value}
+              name={choice.name}
               checked={choice.checked}
               onChange={onChange}
               value={choice.value} />)}
@@ -37,14 +37,14 @@ const CheckBox = ({
 
 CheckBox.propTypes = {
   choices: PropTypes.PropTypes.arrayOf(PropTypes.shape()).isRequired,
+  label: PropTypes.node,
   onChange: PropTypes.func,
-  row: PropTypes.bool,
-  label: PropTypes.string
+  row: PropTypes.bool
 };
 
 CheckBox.defaultProps = {
-  onChange: () => {},
   label: null,
+  onChange: () => {},
   row: false
 };
 
