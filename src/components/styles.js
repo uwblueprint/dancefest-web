@@ -69,6 +69,12 @@ const styles = theme => ({
     top: '5px',
     right: '25px'
   },
+  sectionHeaderBackButton: {
+    display: 'flex',
+    position: 'absolute',
+    top: '5px',
+    left: '25px'
+  },
   title: {
     textTransform: 'uppercase',
     fontSize: 36,
@@ -195,6 +201,14 @@ const styles = theme => ({
   },
   emptyState_subtitle: {
     textAlign: 'center'
+  },
+
+  // Settings Dropdown
+  settingsDropdown_wrapper: {
+    display: 'inline',
+    marginLeft: '92%',
+    cursor: 'pointer',
+    color: 'white'
   }
 });
 
