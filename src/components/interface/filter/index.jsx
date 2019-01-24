@@ -25,7 +25,8 @@ class Filter extends React.Component {
         danceSize: [],
         danceStyle: [],
         school: []
-      }
+      },
+      search: undefined
     };
   }
 
@@ -40,11 +41,11 @@ class Filter extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { filtered: prevFiltered } = prevState;
-    const { filtered: currFiltered } = this.state;
+    const { filtered: prevFiltered, search: prevSearch } = prevState;
+    const { filtered: currFiltered, search: currSearch } = this.state;
     const { handleFilters } = this.props;
-    if (!isEqual(prevFiltered, currFiltered)) {
-      handleFilters(currFiltered);
+    if (!isEqual(prevFiltered, currFiltered) || prevSearch !== currSearch) {
+      handleFilters(currFiltered, currSearch);
     }
   }
 
@@ -60,7 +61,8 @@ class Filter extends React.Component {
       danceSize: [],
       danceStyle: [],
       school: []
-    }
+    },
+    search: undefined
   })
 
   handleFilterChecked = (e) => {
@@ -77,8 +79,13 @@ class Filter extends React.Component {
     });
   };
 
+  handleInputChange = (e) => {
+    const { value } = e.target;
+    this.setState({ search: value });
+  }
+
   render() {
-    const { filtered, options } = this.state;
+    const { filtered, options, search } = this.state;
     const { awardConsideration } = filtered;
     const { classes } = this.props;
     const choices = [
@@ -118,7 +125,10 @@ class Filter extends React.Component {
             classes={{
               root: classes.header_inputRoot,
               input: classes.header_inputInput
-            }} />
+            }}
+            name="search"
+            onChange={this.handleInputChange}
+            value={search} />
         </div>
         <FilterMenu
           filtered={filtered}

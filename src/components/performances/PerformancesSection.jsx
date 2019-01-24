@@ -44,13 +44,22 @@ class PerformancesSection extends React.Component {
       return res;
     }, []);
 
-  // TODO: implement filters for award considerations and search
-  handleFilters = (filters) => {
+  // TODO: implement filters for award considerations
+  handleFilters = (filters, search) => {
     const { performances } = this.state;
     const keys = this.getFilterKeys(filters);
-    const filteredPerformances = performances.filter(
-      performance => keys.every(key => filters[key].includes(performance[key]))
-    );
+    const filterFunction = (performance) => {
+      const danceTitle = performance.danceTitle.toLowerCase();
+      const passFilter = keys.every(key => filters[key].includes(performance[key]));
+
+      if (search && search.length > 0) {
+        const query = search.toLowerCase();
+        return passFilter && danceTitle.search(query) !== -1;
+      }
+      return passFilter;
+    };
+
+    const filteredPerformances = performances.filter(filterFunction);
     this.setState({ filteredPerformances });
   }
 
