@@ -148,8 +148,8 @@ const styles = theme => ({
     color: '#fff!important'
   },
   button_transparent: {
-    backgroundColor: 'transparent',
-    borderColor: 'transparent'
+    backgroundColor: 'white',
+    borderColor: 'white'
   },
 
   // Filter SubMenu Item Styling
