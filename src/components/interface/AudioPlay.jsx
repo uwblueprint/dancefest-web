@@ -12,9 +12,6 @@ class AudioPlayer extends React.Component {
     super(props);
 
     this.state = {
-      disabled: false,
-      playing: false,
-      loading: false,
       audioFile: undefined
     };
   }
@@ -36,58 +33,60 @@ class AudioPlayer extends React.Component {
 
 
   componentDidMount() {
-    const {
-      artisticMark,
-      audio,
-      choreoAward,
-      cumulativeMark,
-      judgeName,
-      notes,
-      specialAward,
-      technicalMark
-    } = this.props.currentValues;
+    const {audio} = this.props;
+    const {audioFile} = this.state;
 
     this.pathRef = firebase.storage().ref().child(audio);
-    if (this.state.audioFile == undefined) {
+    if (audioFile == undefined) {
       this.loadAudio();
     }
   }
 
   componentWillUnmount(){
-    if (this.state.audioFile != undefined){
-      this.state.audioFile.pause();
+    const {audioFile} = this.state;
+    if (audioFile != undefined){
+      audioFile.pause();
     }
   }
+
   handleClick = () => {
-    if (this.state.audioFile.paused) {
-      this.state.audioFile.play();
+    const {audioFile} = this.state;
+    if (audioFile.paused) {
+      audioFile.play();
     }
     else {
-      this.state.audioFile.pause();
+      audioFile.pause();
     }
   }
 
-  getAudioDuration = () => {
-    let secs = this.state.audioFile.duration;
+  formattedAudioDuration = () => {
+    const {audioFile} = this.state;
+    //console.log(audioFile.src);
+    //console.log(audioFile.readyState);
+    //audioFile.play();
+    //console.log(audioFile.readyState);
+    let secs = audioFile.duration;
+    console.log(secs);
     return secs/60 + ":" + secs%60;
   }
-
+  
   render() {
-    const {
-      artisticMark,
-      audio,
-      choreoAward,
-      cumulativeMark,
-      judgeName,
-      notes,
-      specialAward,
-      technicalMark
-    } = this.props.currentValues;
+    const {audio} = this.props;
+    const{audioFile} = this.state;
 
     const fileName = firebase.storage().ref().child(audio).name;
     //const fileName = 'PLACEHOLDER';
-    const time = 'X:XX';
-    const { disabled } = this.state;
+    let time = 'X:XX';
+    if (audioFile != undefined){
+      audioFile.preload = "auto";
+      audioFile.load().then(function(){console.log(audioFile.duration)});
+      //this.reloadAudio();
+      
+
+      console.log(this.state.audioFile.readyState);
+      time = this.formattedAudioDuration();
+      console.log(time);
+    }
 
     return (
       <div style={{
@@ -106,7 +105,7 @@ class AudioPlayer extends React.Component {
         <div>
 
           {
-            this.state.audioFile == undefined ?
+            audioFile == undefined ?
               <Button>Audio not loaded</Button>
               : <Button type='transparent' onClick={this.handleClick}>
                 <PlayCircleOutlineIcon style={{ float: 'right', marginLeft: '25px' }} color="primary" />
@@ -120,16 +119,7 @@ class AudioPlayer extends React.Component {
 }
 
 AudioPlayer.propTypes = {
-  currentValues: PropTypes.shape({
-    artisticMark: PropTypes.number,
-    audio: PropTypes.bool,
-    choreoAward: PropTypes.number,
-    cumulativeMark: PropTypes.number,
-    notes: PropTypes.string,
-    judgeName: PropTypes.string,
-    specialAward: PropTypes.bool,
-    technicalMark: PropTypes.number
-  }).isRequired
+  audio: PropTypes.bool.isRequired
 };
 
 export default withStyles(styles)(AudioPlayer);
