@@ -41,7 +41,7 @@ DialogInput.propTypes = {
   name: PropTypes.string.isRequired,
   fullWidth: PropTypes.bool,
   helperText: PropTypes.string,
-  label: PropTypes.string,
+  label: PropTypes.node,
   multiline: PropTypes.bool,
   onChange: PropTypes.func,
   style: PropTypes.shape(),

@@ -1,10 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-
 import { auth } from '../firebase/firebase';
 import Button from './interface/Button';
 import DialogInput from './interface/dialog/DialogInput';
+import Background from '../background.jpg';
+import Typography from '@material-ui/core/Typography';
+
+const sectionStyle = {
+  width: "100%",
+  height: "100%",
+  backgroundImage: `url(${Background})`,
+  backgroundSize: "cover",
+};
 
 class SignIn extends React.Component {
   constructor(props) {
@@ -49,17 +57,21 @@ class SignIn extends React.Component {
   render() {
     const { email, password } = this.state;
     return (
-      <form>
+      <form style={sectionStyle}>
+        <Typography variant="h3">
+          {"OSSDF DANCEFEST"}
+        </Typography>
         <DialogInput
           value={email}
           name="email"
-          label="Email"
+          label={<div style={{color: "white"}}>Email</div>}
           onChange={this.handleChange} />
+        <br />
         <DialogInput
           type="password"
           value={password}
           name="password"
-          label="Password"
+          label={<div style={{color: "white"}}>Password</div>}
           onChange={this.handleChange} />
         <br />
         <Button buttonType="button" onClick={this.handleSubmit} type="default">
