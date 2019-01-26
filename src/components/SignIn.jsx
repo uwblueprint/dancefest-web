@@ -58,10 +58,13 @@ class SignIn extends React.Component {
     const { email, password } = this.state;
     return (
       <form style={sectionStyle}>
-        <Typography variant="h3">
-          {"OSSDF DANCEFEST"}
-        </Typography>
+        <div style={{textAlign: "center", paddingTop: "10px"}}>
+          <Typography variant="h3">
+            {"OSSDF DANCEFEST"}
+          </Typography>
+        </div>
         <DialogInput
+          style={{marginTop: "50px"}}
           value={email}
           name="email"
           label={<div style={{color: "white"}}>Email</div>}
