@@ -16,25 +16,24 @@ class PerformanceDialog extends React.Component {
     this.state = { open: false };
   }
 
+  handleClose = () => {
+    this.setState({ open: false });
+  };
+
 
   handleDup = async () => {
     let vals = this.props.currentValues;
-    let counter = 1;
-    vals.danceTitle = vals.danceTitle + counter;
-    counter = counter +1;
+    vals.danceTitle = vals.danceTitle + "Duplicate";
     const { eventId } = this.props;
     const collectionName = `events/${eventId}/performances`;
 
     await addData(collectionName, vals);
     // this.setState({ anchorEl: undefined });
+    this.handleClose();
   }
 
   handleClickOpen = () => {
     this.setState({ open: true });
-  };
-
-  handleClose = () => {
-    this.setState({ open: false });
   };
 
   render() {
