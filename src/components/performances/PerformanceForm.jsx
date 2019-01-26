@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import omit from 'lodash/omit';
+import pick from 'lodash/pick';
 
 import { withStyles } from '@material-ui/core/styles';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -19,18 +20,26 @@ class PerformanceForm extends React.Component {
     const { currentValues } = props;
 
     this.state = {
+      disabled: true,
       academicLevel: currentValues.academicLevel || '',
       choreographers: currentValues.choreographers || '',
       competitionLevel: currentValues.competitionLevel || '',
       danceEntry: currentValues.danceEntry,
       danceStyle: currentValues.danceStyle || '',
       danceTitle: currentValues.danceTitle || '',
-      disabled: false,
       options: {},
       performers: currentValues.performers || '',
       school: currentValues.school || '',
       size: currentValues.size || 0
     };
+  }
+
+  // disable save button if not all input fields are filled
+  static getDerivedStateFromProps(props, state) {
+    const values = pick(state, 
+      ['academicLevel', 'choreographers', 'competitionLevel', 'danceEntry', 
+      'danceStyle', 'danceTitle', 'performers', 'school', 'size']);
+    return { disabled: !(Object.keys(values).every(value => !!state[value])) };
   }
 
   componentDidMount() {
@@ -79,6 +88,7 @@ class PerformanceForm extends React.Component {
   render() {
     const { classes, formType } = this.props;
     const {
+      disabled,
       academicLevel,
       choreographers,
       competitionLevel,
@@ -171,7 +181,7 @@ class PerformanceForm extends React.Component {
             <Button type="default" onClick={this.handleCancel}>
               {formType === 'edit' ? 'cancel' : 'discard'}
             </Button>
-            <Button disabled={false} type="primary" onClick={this.handleSubmit}>
+            <Button disabled={disabled} type="primary" onClick={this.handleSubmit}>
               Save
             </Button>
           </DialogActions>
