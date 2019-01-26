@@ -37,7 +37,7 @@ class AdjudicationDialog extends React.Component {
     const { open, view } = this.state;
     const {
       artisticMark,
-      audio,
+      audioURL,
       choreoAward,
       cumulativeMark,
       judgeName,
@@ -69,7 +69,7 @@ class AdjudicationDialog extends React.Component {
           </div>
           <DialogReadOnly fullWidth label="Notes" defaultValue={notes} />
           {/*audio && <AudioPlay fileName="file_test.mp3" time="3:07" />*/}
-          {audio && <AudioPlay audio={audio}/>}
+          {audioURL !== "" && <AudioPlay audioURL={audioURL}/>}
           <FormHelperText>Award Considerations</FormHelperText>
           {specialAward && (
             <div>
@@ -127,7 +127,7 @@ AdjudicationDialog.propTypes = {
   collectionName: PropTypes.string.isRequired,
   currentValues: PropTypes.shape({
     artisticMark: PropTypes.number,
-    audio: PropTypes.string,
+    audioURL: PropTypes.string,
     choreoAward: PropTypes.bool,
     cumulativeMark: PropTypes.number,
     notes: PropTypes.string,

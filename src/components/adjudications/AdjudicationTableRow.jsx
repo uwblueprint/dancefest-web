@@ -12,7 +12,7 @@ const AdjudicationTableRow = ({
   id
 }) => {
   const {
-    audio,
+    audioURL,
     choreoAward,
     cumulativeMark,
     judgeName,
@@ -26,7 +26,7 @@ const AdjudicationTableRow = ({
       </TableCell>
       <TableCell>
         <p>
-          {audio ? 'yes' : 'no'}
+          {audioURL !== "" ? 'yes' : 'no'}
         </p>
       </TableCell>
       <TableCell>
@@ -49,7 +49,7 @@ const AdjudicationTableRow = ({
 AdjudicationTableRow.propTypes = {
   currentValues: PropTypes.shape({
     artisticMark: PropTypes.number,
-    audio: PropTypes.string,
+    audioURL: PropTypes.string,
     choreoAward: PropTypes.bool,
     cumulativeMark: PropTypes.number,
     notes: PropTypes.string,

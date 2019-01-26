@@ -45,10 +45,12 @@ class AudioPlayer extends React.Component {
   }
 
   componentDidMount() {
-    const { audio } = this.props;
+    const { audioURL } = this.props;
     const { audioFile } = this.state;
 
-    this.pathRef = firebase.storage().ref().child(audio);
+    console.log("HERE");
+
+    this.pathRef = firebase.storage().ref().child(audioURL);
     if (audioFile == undefined) {
       this.loadAudio();
     }
@@ -80,10 +82,10 @@ class AudioPlayer extends React.Component {
   }
 
   render() {
-    const { audio } = this.props;
+    const { audioURL } = this.props;
     const { audioFile, metadataLoaded } = this.state;
 
-    const fileName = firebase.storage().ref().child(audio).name;
+    const fileName = firebase.storage().ref().child(audioURL).name;
 
     let time = 'X:XX';
     if(audioFile != undefined && metadataLoaded){
@@ -121,7 +123,7 @@ class AudioPlayer extends React.Component {
 }
 
 AudioPlayer.propTypes = {
-  audio: PropTypes.string.isRequired
+  audioURL: PropTypes.string.isRequired
 };
 
 export default withStyles(styles)(AudioPlayer);
