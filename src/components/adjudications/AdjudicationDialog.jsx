@@ -127,8 +127,8 @@ AdjudicationDialog.propTypes = {
   collectionName: PropTypes.string.isRequired,
   currentValues: PropTypes.shape({
     artisticMark: PropTypes.number,
-    audio: PropTypes.bool,
-    choreoAward: PropTypes.number,
+    audio: PropTypes.string,
+    choreoAward: PropTypes.bool,
     cumulativeMark: PropTypes.number,
     notes: PropTypes.string,
     judgeName: PropTypes.string,

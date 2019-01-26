@@ -12,17 +12,22 @@ class AudioPlayer extends React.Component {
     super(props);
 
     this.state = {
-      audioFile: undefined
+      audioFile: undefined,
+      metadataLoaded: false
     };
   }
 
   loadAudio = () => {
+    //const {audioFile} = this.state;
     this.pathRef.getDownloadURL().then(function (url) {
       var xhr = new XMLHttpRequest();
       xhr.responseType = 'blob';
       xhr.onload = async function (event) {
         var blob = xhr.response;
         this.setState({ audioFile: new Audio(url) });
+        this.state.audioFile.addEventListener('loadeddata', () => {
+          this.setState({ metadataLoaded: true});
+        })
       }.bind(this);
       xhr.open('GET', url);
       xhr.send();
@@ -31,10 +36,17 @@ class AudioPlayer extends React.Component {
     });;
   }
 
+  loadMetadata = () => {
+    const { audioFile } = this.state;
+
+    audioFile.preload = "auto";
+    audioFile.load();
+    //this.setState({metadataLoaded: true});
+  }
 
   componentDidMount() {
-    const {audio} = this.props;
-    const {audioFile} = this.state;
+    const { audio } = this.props;
+    const { audioFile } = this.state;
 
     this.pathRef = firebase.storage().ref().child(audio);
     if (audioFile == undefined) {
@@ -42,15 +54,15 @@ class AudioPlayer extends React.Component {
     }
   }
 
-  componentWillUnmount(){
-    const {audioFile} = this.state;
-    if (audioFile != undefined){
+  componentWillUnmount() {
+    const { audioFile } = this.state;
+    if (audioFile != undefined) {
       audioFile.pause();
     }
   }
 
   handleClick = () => {
-    const {audioFile} = this.state;
+    const { audioFile } = this.state;
     if (audioFile.paused) {
       audioFile.play();
     }
@@ -60,32 +72,22 @@ class AudioPlayer extends React.Component {
   }
 
   formattedAudioDuration = () => {
-    const {audioFile} = this.state;
-    //console.log(audioFile.src);
-    //console.log(audioFile.readyState);
-    //audioFile.play();
-    //console.log(audioFile.readyState);
+    const { audioFile } = this.state;
+
     let secs = audioFile.duration;
-    console.log(secs);
-    return secs/60 + ":" + secs%60;
+    let formattedTime = Math.floor(secs / 60) + ":" + Math.floor(secs % 60);
+    return formattedTime;
   }
-  
+
   render() {
-    const {audio} = this.props;
-    const{audioFile} = this.state;
+    const { audio } = this.props;
+    const { audioFile, metadataLoaded } = this.state;
 
     const fileName = firebase.storage().ref().child(audio).name;
-    //const fileName = 'PLACEHOLDER';
-    let time = 'X:XX';
-    if (audioFile != undefined){
-      audioFile.preload = "auto";
-      audioFile.load().then(function(){console.log(audioFile.duration)});
-      //this.reloadAudio();
-      
 
-      console.log(this.state.audioFile.readyState);
+    let time = 'X:XX';
+    if(audioFile != undefined && metadataLoaded){
       time = this.formattedAudioDuration();
-      console.log(time);
     }
 
     return (
@@ -99,19 +101,19 @@ class AudioPlayer extends React.Component {
         <div style={{ alignSelf: 'center', flex: 3 }}>
           {fileName}
         </div>
-        <div style={{ alignSelf: 'center', flex: 2 }}>
+        <div style={{ alignSelf: 'center', flex: 0 }}>
           {time}
         </div>
-        <div>
-
+        <div style={{flex: 0}}>
           {
-            audioFile == undefined ?
-              <Button>Audio not loaded</Button>
+            audioFile == undefined 
+              ? <Button disabled={true} type='transparent' onClick={this.handleClick}>
+                <PlayCircleOutlineIcon style={{ float: 'right', marginLeft: '25px' }} color="primary" />
+              </Button>
               : <Button type='transparent' onClick={this.handleClick}>
                 <PlayCircleOutlineIcon style={{ float: 'right', marginLeft: '25px' }} color="primary" />
               </Button>
           }
-
         </div>
       </div>
     );
@@ -119,7 +121,7 @@ class AudioPlayer extends React.Component {
 }
 
 AudioPlayer.propTypes = {
-  audio: PropTypes.bool.isRequired
+  audio: PropTypes.string.isRequired
 };
 
 export default withStyles(styles)(AudioPlayer);
