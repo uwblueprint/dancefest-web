@@ -70,7 +70,6 @@ class EventForm extends React.Component {
       eventTitle,
       eventDate,
       numJudges,
-
     } = this.state;
     return (
       <React.Fragment>
@@ -83,10 +82,10 @@ class EventForm extends React.Component {
         </div>
         <div className={classes.dfdialog_footer}>
           <DialogActions>
-            <Button type="default" onClick={this.handleCancel}>
+            <Button onClick={this.handleCancel} type="default">
               {formType === 'edit' ? 'cancel' : 'discard'}
             </Button>
-            <Button type="primary" disabled={disabledSave} onClick={this.handleSubmit}>
+            <Button disabled={disabledSave} onClick={this.handleSubmit} type="primary">
               Save
             </Button>
           </DialogActions>
