@@ -20,13 +20,13 @@ class PerformanceForm extends React.Component {
     const { currentValues } = props;
 
     this.state = {
-      disabled: true,
       academicLevel: currentValues.academicLevel || '',
       choreographers: currentValues.choreographers || '',
       competitionLevel: currentValues.competitionLevel || '',
       danceEntry: currentValues.danceEntry,
       danceStyle: currentValues.danceStyle || '',
       danceTitle: currentValues.danceTitle || '',
+      disabledSave: true,
       options: {},
       performers: currentValues.performers || '',
       school: currentValues.school || '',
@@ -34,12 +34,13 @@ class PerformanceForm extends React.Component {
     };
   }
 
-  // disable save button if not all input fields are filled
+  // Disable save button if not all input fields are filled.
   static getDerivedStateFromProps(props, state) {
-    const values = pick(state, 
-      ['academicLevel', 'choreographers', 'competitionLevel', 'danceEntry', 
-      'danceStyle', 'danceTitle', 'performers', 'school', 'size']);
-    return { disabled: !(Object.keys(values).every(value => !!state[value])) };
+  //shouldComponentUpdate(props, state){
+    const fields = ['academicLevel', 'choreographers', 'competitionLevel',
+      'danceEntry', 'danceStyle', 'danceTitle', 'performers', 'school', 'size'];
+    const values = pick(state, fields);
+    return { disabledSave: !(Object.keys(values).every(value => !!state[value])) };
   }
 
   componentDidMount() {
@@ -74,7 +75,7 @@ class PerformanceForm extends React.Component {
 
   handleSubmit = async () => {
     const { collectionName, formType, performanceId } = this.props;
-    const data = omit(this.state, ['disabled', 'options']);
+    const data = omit(this.state, ['disabledSave', 'options']);
     if (formType === 'new') {
       await addData(collectionName, data);
     } else {
@@ -88,13 +89,13 @@ class PerformanceForm extends React.Component {
   render() {
     const { classes, formType } = this.props;
     const {
-      disabled,
       academicLevel,
       choreographers,
       competitionLevel,
       danceEntry,
       danceStyle,
       danceTitle,
+      disabledSave,
       options,
       performers,
       school,
@@ -181,7 +182,7 @@ class PerformanceForm extends React.Component {
             <Button type="default" onClick={this.handleCancel}>
               {formType === 'edit' ? 'cancel' : 'discard'}
             </Button>
-            <Button disabled={disabled} type="primary" onClick={this.handleSubmit}>
+            <Button type="primary" disabled={disabledSave} onClick={this.handleSubmit}>
               Save
             </Button>
           </DialogActions>
@@ -213,3 +214,4 @@ PerformanceForm.defaultProps = {
 };
 
 export default withStyles(styles)(PerformanceForm);
+
