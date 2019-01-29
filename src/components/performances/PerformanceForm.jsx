@@ -36,7 +36,6 @@ class PerformanceForm extends React.Component {
 
   // Disable save button if not all input fields are filled.
   static getDerivedStateFromProps(props, state) {
-  //shouldComponentUpdate(props, state){
     const fields = ['academicLevel', 'choreographers', 'competitionLevel',
       'danceEntry', 'danceStyle', 'danceTitle', 'performers', 'school', 'size'];
     const values = pick(state, fields);
