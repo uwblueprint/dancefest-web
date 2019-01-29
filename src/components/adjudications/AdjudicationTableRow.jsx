@@ -26,7 +26,7 @@ const AdjudicationTableRow = ({
       </TableCell>
       <TableCell>
         <p>
-          {audioURL !== "" ? 'yes' : 'no'}
+          {audioURL ? 'yes' : 'no'}
         </p>
       </TableCell>
       <TableCell>
