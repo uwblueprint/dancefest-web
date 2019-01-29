@@ -13,6 +13,11 @@ class AudioPlayer extends React.Component {
     };
   }
 
+  // TODO: handle audio playing file
+
+
+  // TODO: create method to convert time to XX:XX format
+
   render() {
     const { fileName, time } = this.props;
     const { disabled } = this.state;

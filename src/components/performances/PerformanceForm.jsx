@@ -39,6 +39,7 @@ class PerformanceForm extends React.Component {
     const fields = ['academicLevel', 'choreographers', 'competitionLevel',
       'danceEntry', 'danceStyle', 'danceTitle', 'performers', 'school', 'size'];
     const values = pick(state, fields);
+    0
     return { disabledSave: !(Object.keys(values).every(value => !!state[value])) };
   }
 
@@ -181,7 +182,7 @@ class PerformanceForm extends React.Component {
             <Button type="default" onClick={this.handleCancel}>
               {formType === 'edit' ? 'cancel' : 'discard'}
             </Button>
-            <Button type="primary" disabled={disabledSave} onClick={this.handleSubmit}>
+            <Button disabled={disabledSave} onClick={this.handleSubmit} type="primary" >
               Save
             </Button>
           </DialogActions>
@@ -213,4 +214,3 @@ PerformanceForm.defaultProps = {
 };
 
 export default withStyles(styles)(PerformanceForm);
-
