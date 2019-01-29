@@ -9,6 +9,7 @@ const DialogInput = ({
   disabled,
   fullWidth,
   helperText,
+  InputProps,
   label,
   multiline = false,
   onChange,
@@ -21,6 +22,7 @@ const DialogInput = ({
     disabled={disabled}
     style={{ margin: '0 5px 25px 5px', ...style }}
     helperText={helperText}
+    InputProps={InputProps}
     multiline={multiline}
     fullWidth={fullWidth}
     onChange={onChange}
@@ -41,6 +43,7 @@ DialogInput.propTypes = {
   name: PropTypes.string.isRequired,
   fullWidth: PropTypes.bool,
   helperText: PropTypes.string,
+  InputProps: PropTypes.node,
   label: PropTypes.node,
   multiline: PropTypes.bool,
   onChange: PropTypes.func,

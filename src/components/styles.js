@@ -209,6 +209,10 @@ const styles = theme => ({
     marginLeft: '92%',
     cursor: 'pointer',
     color: 'white'
+  },
+
+  multilineColor: {
+    color: 'white'
   }
 });
 
