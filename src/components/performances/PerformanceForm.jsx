@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import omit from 'lodash/omit';
+import pick from 'lodash/pick';
 
 import { withStyles } from '@material-ui/core/styles';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -25,12 +26,21 @@ class PerformanceForm extends React.Component {
       danceEntry: currentValues.danceEntry,
       danceStyle: currentValues.danceStyle || '',
       danceTitle: currentValues.danceTitle || '',
-      disabled: false,
+      disabledSave: true,
       options: {},
       performers: currentValues.performers || '',
       school: currentValues.school || '',
       size: currentValues.size || 0
     };
+  }
+
+  // Disable save button if not all input fields are filled.
+  static getDerivedStateFromProps(props, state) {
+    const fields = ['academicLevel', 'choreographers', 'competitionLevel',
+      'danceEntry', 'danceStyle', 'danceTitle', 'performers', 'school', 'size'];
+    const values = pick(state, fields);
+    
+    return { disabledSave: !(Object.keys(values).every(value => !!state[value])) };
   }
 
   componentDidMount() {
@@ -65,7 +75,7 @@ class PerformanceForm extends React.Component {
 
   handleSubmit = async () => {
     const { collectionName, formType, performanceId } = this.props;
-    const data = omit(this.state, ['disabled', 'options']);
+    const data = omit(this.state, ['disabledSave', 'options']);
     if (formType === 'new') {
       await addData(collectionName, data);
     } else {
@@ -85,6 +95,7 @@ class PerformanceForm extends React.Component {
       danceEntry,
       danceStyle,
       danceTitle,
+      disabledSave,
       options,
       performers,
       school,
@@ -171,7 +182,7 @@ class PerformanceForm extends React.Component {
             <Button type="default" onClick={this.handleCancel}>
               {formType === 'edit' ? 'cancel' : 'discard'}
             </Button>
-            <Button disabled={false} type="primary" onClick={this.handleSubmit}>
+            <Button disabled={disabledSave} onClick={this.handleSubmit} type="primary" >
               Save
             </Button>
           </DialogActions>

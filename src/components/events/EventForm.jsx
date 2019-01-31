@@ -18,17 +18,17 @@ class EventForm extends React.Component {
     const { currentValues } = props;
 
     this.state = {
-      disabled: true,
+      disabledSave: true,
       eventDate: currentValues.eventDate || '',
       eventTitle: currentValues.eventTitle || '',
       numJudges: currentValues.numJudges || 0
     };
   }
 
-  // disable save button if not all input fields are filled
+  // Disable save button if not all input fields are filled.
   static getDerivedStateFromProps(props, state) {
     const values = pick(state, ['eventDate', 'eventTitle', 'numJudges']);
-    return { disabled: !(Object.keys(values).every(value => !!state[value])) };
+    return { disabledSave: !(Object.keys(values).every(value => !!state[value])) };
   }
 
   handleChange = (e) => {
@@ -66,10 +66,10 @@ class EventForm extends React.Component {
   render() {
     const { classes, formType } = this.props;
     const {
+      disabledSave,
       eventTitle,
       eventDate,
       numJudges,
-      disabled
     } = this.state;
     return (
       <React.Fragment>
@@ -82,10 +82,10 @@ class EventForm extends React.Component {
         </div>
         <div className={classes.dfdialog_footer}>
           <DialogActions>
-            <Button type="default" onClick={this.handleCancel}>
+            <Button onClick={this.handleCancel} type="default">
               {formType === 'edit' ? 'cancel' : 'discard'}
             </Button>
-            <Button disabled={disabled} type="primary" onClick={this.handleSubmit}>
+            <Button disabled={disabledSave} onClick={this.handleSubmit} type="primary">
               Save
             </Button>
           </DialogActions>
