@@ -46,7 +46,7 @@ Button.propTypes = {
   classes: PropTypes.shape().isRequired,
   disabled: PropTypes.bool,
   onClick: PropTypes.func.isRequired,
-  type: PropTypes.oneOf(['outline', 'primary', 'secondary', 'default']).isRequired
+  type: PropTypes.oneOf(['outline', 'primary', 'secondary', 'transparent', 'default']).isRequired
 };
 
 Button.defaultProps = {

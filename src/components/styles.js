@@ -148,7 +148,6 @@ const styles = theme => ({
     color: '#fff!important'
   },
   button_transparent: {
-    backgroundColor: 'white',
     borderColor: 'white'
   },
 
