@@ -14,28 +14,57 @@ class AudioPlayer extends React.Component {
 
     this.state = {
       audioFile: undefined,
+      fileName: '',
       metadataLoaded: false
     };
   }
 
+  formattedAudioDuration = () => {
+    const { audioFile } = this.state;
+
+    const secs = audioFile.duration;
+    const formattedTime = Math.floor(secs / 60) + ":" + Math.floor(secs % 60);
+
+    return formattedTime;
+  }
+
+  handleClick = () => {
+    const { audioFile } = this.state;
+
+    if (audioFile.paused) {
+      audioFile.play();
+    } else {
+      audioFile.pause();
+    }
+  }
+
   loadAudio = () => {
-    this.pathRef.getDownloadURL().then((url) => {
-      fetch(url).then(() => {
-        this.setState({ audioFile: new Audio(url) });
-        this.state.audioFile.addEventListener('loadeddata', () => {
-          this.setState({ metadataLoaded: true });
+    const { audioURL } = this.props;
+
+    firebase.storage().ref().child(audioURL).getDownloadURL()
+      .then((url) => {
+        fetch(url).then(() => {
+          const audioFile = new Audio(url);
+          audioFile.addEventListener('loadeddata', () => {
+            this.setState({ metadataLoaded: true });
+          })
+          this.setState({ audioFile });
         })
-      })
-    }).catch(function () {
-      console.log("ERROR. Firebase audio file failed to load.");
-    });;
+      }).catch(function () {
+        console.log("ERROR. Firebase audio file failed to load.");
+      });
+  }
+
+  loadFileName = () => {
+    const { audioURL } = this.props;
+
+    this.setState({ fileName: firebase.storage().ref().child(audioURL).name });
   }
 
   componentDidMount() {
-    const { audioURL } = this.props;
     const { audioFile } = this.state;
 
-    this.pathRef = firebase.storage().ref().child(audioURL);
+    this.loadFileName();
     if (!audioFile) {
       this.loadAudio();
     }
@@ -49,29 +78,8 @@ class AudioPlayer extends React.Component {
     }
   }
 
-  handleClick = () => {
-    const { audioFile } = this.state;
-
-    if (audioFile.paused) {
-      audioFile.play();
-    } else {
-      audioFile.pause();
-    }
-  }
-
-  formattedAudioDuration = () => {
-    const { audioFile } = this.state;
-
-    const secs = audioFile.duration;
-    const formattedTime = Math.floor(secs / 60) + ":" + Math.floor(secs % 60);
-
-    return formattedTime;
-  }
-
   render() {
-    const { audioURL } = this.props;
-    const { audioFile, metadataLoaded } = this.state;
-    const fileName = firebase.storage().ref().child(audioURL).name;
+    const { audioFile, fileName, metadataLoaded } = this.state;
     const time = (audioFile && metadataLoaded) ? this.formattedAudioDuration() : 'X:XX';
 
     return (
@@ -89,11 +97,9 @@ class AudioPlayer extends React.Component {
           {time}
         </div>
         <div style={{ flex: 0 }}>
-          {
-            <Button disabled={audioFile === undefined} onClick={this.handleClick} type='transparent' >
-              <PlayCircleOutlineIcon color="primary" style={{ float: 'right', marginLeft: '25px' }} />
-            </Button>
-          }
+          <Button disabled={audioFile === undefined} onClick={this.handleClick} type='transparent' >
+            <PlayCircleOutlineIcon color="primary" style={{ float: 'right', marginLeft: '25px' }} />
+          </Button>
         </div>
       </div>
     );
