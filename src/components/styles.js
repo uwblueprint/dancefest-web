@@ -147,6 +147,9 @@ const styles = theme => ({
     cursor: 'no-drop',
     color: '#fff!important'
   },
+  button_transparent: {
+    borderColor: 'white'
+  },
 
   // Filter SubMenu Item Styling
   subMenuItem: {
