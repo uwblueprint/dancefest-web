@@ -19,6 +19,9 @@ const Button = ({
     case 'primary':
       customClasses = classes.button_primary;
       break;
+    case 'transparent':
+      customClasses = classes.button_transparent;
+      break;
     case 'default':
     default:
       customClasses = classes.button_default;
@@ -43,7 +46,7 @@ Button.propTypes = {
   classes: PropTypes.shape().isRequired,
   disabled: PropTypes.bool,
   onClick: PropTypes.func.isRequired,
-  type: PropTypes.oneOf(['outline', 'primary', 'secondary', 'default']).isRequired
+  type: PropTypes.oneOf(['outline', 'primary', 'secondary', 'transparent', 'default']).isRequired
 };
 
 Button.defaultProps = {
