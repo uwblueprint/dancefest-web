@@ -1,4 +1,5 @@
 import { fade } from '@material-ui/core/styles/colorManipulator';
+import Background from '../background.jpg';
 
 const styles = theme => ({
   // flex
@@ -125,6 +126,13 @@ const styles = theme => ({
     borderRadius: '40px',
     margin: 'auto 5px'
   },
+  button_login: {
+    border: '1px solid red',
+    borderRadius: '5px',
+    margin: 'auto 5px',
+    backgroundColor: 'red',
+    color:'white'
+  },
   button_default: {
     backgroundColor: '#d4d44',
     borderColor: '#cfcfcf'
@@ -211,6 +219,16 @@ const styles = theme => ({
     color: 'white'
   },
 
+  // Sign in
+   loginSectionStyle: {
+    width: "100%",
+    height: "100%",
+    backgroundImage: `url(${Background})`,
+    backgroundSize: "cover" 
+  },
+  loginDialogInput: {
+    borderBottom: "1px solid white"
+  },
   multilineColor: {
     color: 'white'
   }

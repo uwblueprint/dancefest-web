@@ -7,15 +7,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import DialogInput from './interface/dialog/DialogInput';
 import Button from './interface/Button';
-import Background from '../background.jpg';
 import styles from './styles';
-
-const sectionStyle = {
-  width: "100%",
-  height: "100%",
-  backgroundImage: `url(${Background})`,
-  backgroundSize: "cover" 
-};
 
 const inputLabel = (textLabel) => (<div style={{color: "white"}}>{textLabel}</div>);  
 
@@ -64,7 +56,7 @@ class SignIn extends React.Component {
     const { email, password } = this.state;
     const { classes } = this.props;
     return (
-      <form style={sectionStyle}>
+      <form className={classes.loginSectionStyle}>
         <div style={{textAlign: "center", paddingTop: "50px"}}>
           <h4 style={{fontFamily: "Fjalla One", color: "white", fontSize: "25px"}}>
             OSSDF DANCEFEST
@@ -72,7 +64,7 @@ class SignIn extends React.Component {
         </div>
         <div style={{marginTop: "100px", marginLeft: "139px"}}>
           <DialogInput
-            style={{marginTop: "px"}}
+            className={classes.loginDialogInput}
             value={email}
             name="email"
             InputProps={{
@@ -84,6 +76,7 @@ class SignIn extends React.Component {
             onChange={this.handleChange} />
           <br />
           <DialogInput
+            className={classes.loginDialogInput}
             type="password"
             value={password}
             name="password"
@@ -95,8 +88,8 @@ class SignIn extends React.Component {
             label={inputLabel("Password")}
             onChange={this.handleChange} />
           <br />
-          <Button buttonType="button" onClick={this.handleSubmit} type="default">
-            Submit
+          <Button buttonType="button" type="login" onClick={this.handleSubmit}>
+            Log In
           </Button>
         </div>
       </form>

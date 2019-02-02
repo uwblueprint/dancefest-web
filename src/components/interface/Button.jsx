@@ -19,6 +19,9 @@ const Button = ({
     case 'primary':
       customClasses = classes.button_primary;
       break;
+    case 'login':
+        customClasses = classes.button_login;
+        break;
     case 'default':
     default:
       customClasses = classes.button_default;
