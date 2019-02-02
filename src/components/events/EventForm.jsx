@@ -4,6 +4,7 @@ import pick from 'lodash/pick';
 
 import { withStyles } from '@material-ui/core/styles';
 import DialogActions from '@material-ui/core/DialogActions';
+import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 
 import addData from '../../firebase/utils/addData';
 import updateData from '../../firebase/utils/updateData';
@@ -11,6 +12,11 @@ import updateData from '../../firebase/utils/updateData';
 import DialogInput from '../interface/dialog/DialogInput';
 import Button from '../interface/Button';
 import styles from '../styles';
+
+import 'react-dates/initialize';
+import { SingleDatePicker } from 'react-dates';
+import Moment from 'react-moment';
+import moment from 'moment';
 
 class EventForm extends React.Component {
   constructor(props) {
@@ -23,6 +29,8 @@ class EventForm extends React.Component {
       eventTitle: currentValues.eventTitle || '',
       numJudges: currentValues.numJudges || 0
     };
+
+    console.log(this.state.eventDate.replace("/","-").replace("/","-"));
   }
 
   // Disable save button if not all input fields are filled.
@@ -63,6 +71,11 @@ class EventForm extends React.Component {
     onModalClose();
   }
 
+  //Format of date must be DD/MM/YYYY
+  convertToISOFormat = (date) =>{
+    return date.substring(6,10) + "-" + date.substring(3,5) + "-" + date.substring(0,2);
+  }
+
   render() {
     const { classes, formType } = this.props;
     const {
@@ -76,7 +89,23 @@ class EventForm extends React.Component {
         <div style={{ margin: '25px' }}>
           <DialogInput fullWidth name="eventTitle" label="Event Title" onChange={this.handleChange} value={eventTitle} />
           <div style={{ display: 'flex' }}>
+            <SingleDatePicker
+              date={eventDate ? moment(this.convertToISOFormat(eventDate)) : null} // momentPropTypes.momentObj or null
+              onDateChange={date => this.setState({ date })} // PropTypes.func.isRequired
+              //onDateChange={this.handleChange} // PropTypes.func.isRequired
+              focused={true}
+              visibility="hidden"
+              orientation="vertical"
+              openDirection="down"
+              anchorDirection="right"
+              onFocusChange={({ focused }) => this.setState({ focused })} // PropTypes.func.isRequired
+              id="your_unique_id" // PropTypes.string.isRequired,
+              customInputIcon={<CalendarTodayIcon fontSize="small" style={{ color: 'gray', marginRight: '5px' }} />}
+              w
+            />
+            {/*
             <DialogInput style={{ marginRight: '5px' }} fullWidth name="eventDate" label="Event Date" onChange={this.handleChange} value={eventDate} />
+            */}
             <DialogInput fullWidth name="numJudges" label="No. Judges" onChange={this.handleChange} type="number" value={numJudges} />
           </div>
         </div>
