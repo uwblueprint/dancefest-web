@@ -40,10 +40,12 @@ class FilterMenu extends React.Component {
     const { handleFilterChecked } = this.props;
     const choices = this.aggregateChoices(name, options[name]);
     const key = `${name}-${index}`;
+    const result = name.replace( /([A-Z])/g, " $1" );
+    const finalResult = result.charAt(0).toUpperCase() + result.slice(1);
 
     return (
       <SubMenu
-        caption={name}
+        caption={finalResult}
         choices={choices}
         key={key}
         onChange={handleFilterChecked} />
