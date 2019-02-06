@@ -12,6 +12,7 @@ const DialogInput = ({
   label,
   multiline = false,
   onChange,
+  placeholder,
   style,
   type,
   value
@@ -27,6 +28,7 @@ const DialogInput = ({
     id={name}
     label={label}
     name={name}
+    placeholder={placeholder}
     type={type}
     value={value}
     margin="normal"
@@ -44,6 +46,7 @@ DialogInput.propTypes = {
   label: PropTypes.string,
   multiline: PropTypes.bool,
   onChange: PropTypes.func,
+  placeholder: PropTypes.string,
   style: PropTypes.shape(),
   type: PropTypes.string,
   value: PropTypes.node
@@ -57,6 +60,7 @@ DialogInput.defaultProps = {
   multiline: false,
   label: '',
   onChange: () => {},
+  placeholder: '',
   style: null,
   type: null,
   value: ''
