@@ -39,7 +39,7 @@ class PerformanceForm extends React.Component {
     const fields = ['academicLevel', 'choreographers', 'competitionLevel',
       'danceEntry', 'danceStyle', 'danceTitle', 'performers', 'school', 'size'];
     const values = pick(state, fields);
-    
+
     return { disabledSave: !(Object.keys(values).every(value => !!state[value])) };
   }
 

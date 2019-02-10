@@ -1,8 +1,8 @@
 import db, { firebaseField } from '../firebase';
-import constants from '../../constants';
+import { settingsConstants } from '../../constants';
 
-const updateSettings = async (category, value, type = constants.ADD_DATA) => {
-  const handleUpdate = type === constants.ADD_DATA ? value : firebaseField.delete();
+const updateSettings = async (category, value, type = settingsConstants.ADD_DATA) => {
+  const handleUpdate = type === settingsConstants.ADD_DATA ? value : firebaseField.delete();
   db.collection('settings').doc(category).set({
     [value]: handleUpdate
   }, { merge: true })

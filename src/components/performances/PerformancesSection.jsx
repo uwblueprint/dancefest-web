@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import includes from 'lodash/includes';
 import pick from 'lodash/pick';
 
 import db from '../../firebase/firebase';
@@ -77,7 +78,14 @@ class PerformancesSection extends React.Component {
         // awardConiderations need to be checked differently as it's a Number rather
         // than a String
         if (key === 'awardConsideration') {
-          return performance.choreoAwardEnum > 0 || performance.specialAwardEnum > 0;
+          if (includes(filtersObj[key], 'choreoAward')) {
+            return performance.choreoAwardEnum > 0;
+          }
+          if (includes(filtersObj[key], 'specialAward')) {
+            return performance.specialAwardEnum > 0;
+          }
+
+          return false;
         }
         return filtersObj[key].includes(performance[key]);
       });

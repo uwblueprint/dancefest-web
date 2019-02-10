@@ -6,7 +6,7 @@ import { withStyles } from '@material-ui/core/styles';
 import db from '../../firebase/firebase';
 import updateSettings from '../../firebase/utils/updateSettings';
 
-import constants from '../../constants';
+import { settingsConstants } from '../../constants';
 import Button from '../interface/Button';
 import DialogInput from '../interface/dialog/DialogInput';
 import DialogSelect from '../interface/dialog/DialogSelect';
@@ -43,7 +43,7 @@ class SettingsSection extends React.Component {
   handleSubmit = async () => {
     const { selectedCategory, value } = this.state;
     const selectedCategoryCamelCase = this.toCamelCase(selectedCategory);
-    await updateSettings(selectedCategoryCamelCase, value, constants.ADD_DATA);
+    await updateSettings(selectedCategoryCamelCase, value, settingsConstants.ADD_DATA);
     this.setState({ value: '' });
   }
 
