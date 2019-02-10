@@ -17,7 +17,6 @@ class Filter extends React.Component {
     super(props);
 
     this.state = {
-      options: {},
       filtered: {
         academicLevel: [],
         awardConsideration: [],
@@ -26,6 +25,7 @@ class Filter extends React.Component {
         danceStyle: [],
         school: []
       },
+      options: {},
       search: undefined
     };
   }
@@ -44,7 +44,7 @@ class Filter extends React.Component {
     const { filtered: prevFiltered, search: prevSearch } = prevState;
     const { filtered: currFiltered, search: currSearch } = this.state;
     const { handleFilters } = this.props;
-    if (!isEqual(prevFiltered, currFiltered) || prevSearch !== currSearch) {
+    if (!isEqual(prevFiltered, currFiltered) || !isEqual(prevSearch, currSearch)) {
       handleFilters(currFiltered, currSearch);
     }
   }
