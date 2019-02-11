@@ -4,8 +4,13 @@ export const awardConsiderationEnum = {
   DECREMENT: 'DECREMENT'
 };
 
-export const settingsConstants = {
+export const dataAction = {
   ADD_DATA: 'ADD_DATA',
   UPDATE_DATA: 'UPDATE_DATA',
   DELETE_DATA: 'DELETE_DATA'
+};
+
+export const dialogType = {
+  NEW: 'new',
+  EDIT: 'edit'
 };

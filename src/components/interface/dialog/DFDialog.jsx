@@ -1,7 +1,10 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+
+import { withStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
+
+import { dialogType } from '../../../constants';
 import Button from '../Button';
 import styles from '../../styles';
 
@@ -18,7 +21,7 @@ class DFDialog extends React.Component {
       open,
       width
     } = this.props;
-    const type = formType === 'edit' ? 'default' : 'outline';
+    const type = formType === dialogType.EDIT ? 'default' : 'outline';
     return (
       <div>
         <Button type={type} onClick={onClick}>
@@ -43,7 +46,7 @@ DFDialog.propTypes = {
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node
   ]).isRequired,
-  formType: PropTypes.oneOf(['edit', 'new']).isRequired,
+  formType: PropTypes.oneOf([dialogType.EDIT, dialogType.NEW]).isRequired,
   onClick: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,

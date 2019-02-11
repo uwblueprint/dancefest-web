@@ -6,6 +6,7 @@ import pick from 'lodash/pick';
 import { withStyles } from '@material-ui/core/styles';
 import DialogActions from '@material-ui/core/DialogActions';
 
+import { dialogType } from '../../constants';
 import db from '../../firebase/firebase';
 import addData from '../../firebase/utils/addData';
 import updateData from '../../firebase/utils/updateData';
@@ -76,7 +77,7 @@ class PerformanceForm extends React.Component {
   handleSubmit = async () => {
     const { collectionName, formType, performanceId } = this.props;
     const data = omit(this.state, ['disabledSave', 'options']);
-    if (formType === 'new') {
+    if (formType === dialogType.NEW) {
       await addData(collectionName, data);
     } else {
       await updateData(collectionName, performanceId, data);
@@ -180,9 +181,9 @@ class PerformanceForm extends React.Component {
         <div className={classes.dfdialog_footer}>
           <DialogActions>
             <Button type="default" onClick={this.handleCancel}>
-              {formType === 'edit' ? 'cancel' : 'discard'}
+              {formType === dialogType.EDIT ? 'cancel' : 'discard'}
             </Button>
-            <Button disabled={disabledSave} onClick={this.handleSubmit} type="primary" >
+            <Button disabled={disabledSave} onClick={this.handleSubmit} type="primary">
               Save
             </Button>
           </DialogActions>
@@ -204,13 +205,13 @@ PerformanceForm.propTypes = {
     school: PropTypes.string,
     size: PropTypes.number
   }),
-  formType: PropTypes.oneOf(['edit', 'new']),
+  formType: PropTypes.oneOf([dialogType.EDIT, dialogType.NEW]),
   onModalClose: PropTypes.func.isRequired
 };
 
 PerformanceForm.defaultProps = {
   currentValues: {},
-  formType: 'edit'
+  formType: dialogType.EDIT
 };
 
 export default withStyles(styles)(PerformanceForm);

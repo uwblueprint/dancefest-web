@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 
+import { dialogType } from '../../constants';
 import EventForm from './EventForm';
 import DFDialog from '../interface/dialog/DFDialog';
 import DialogHeader from '../interface/dialog/DialogHeader';
@@ -31,13 +32,13 @@ class EventDialog extends React.Component {
   render() {
     const { currentValues, eventId, formType } = this.props;
     const { open } = this.state;
-    const dialogTitle = formType === 'edit' ? 'Edit' : 'New';
+    const dialogTitle = formType === dialogType.EDIT ? 'Edit' : 'New';
     const newButtonTitle = (
       <React.Fragment>
         <CalendarTodayIcon fontSize="small" style={{ color: 'gray', marginRight: '5px' }} />
         NEW EVENT
       </React.Fragment>);
-    const buttonTitle = formType === 'edit' ? 'EDIT' : newButtonTitle;
+    const buttonTitle = formType === dialogType.EDIT ? 'EDIT' : newButtonTitle;
 
     return (
       <DFDialog
@@ -64,13 +65,13 @@ EventDialog.propTypes = {
     numJudges: PropTypes.number
   }),
   eventId: PropTypes.string,
-  formType: PropTypes.oneOf(['edit', 'new'])
+  formType: PropTypes.oneOf([dialogType.EDIT, dialogType.NEW])
 };
 
 EventDialog.defaultProps = {
   currentValues: {},
   eventId: null,
-  formType: 'edit'
+  formType: dialogType.EDIT
 };
 
 export default withStyles(styles)(EventDialog);

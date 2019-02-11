@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import includes from 'lodash/includes';
 import pick from 'lodash/pick';
 
 import db from '../../firebase/firebase';
@@ -24,7 +23,7 @@ class PerformancesSection extends React.Component {
     const { match: { params: { eventId }}} = this.props;
     const collectionName = `events/${eventId}/performances`;
 
-    db.collection(collectionName).onSnapshot((querySnapshot) => {
+    this.subscribe = db.collection(collectionName).onSnapshot((querySnapshot) => {
       let performances = [];
       querySnapshot.forEach((doc) => {
         const performance = {
@@ -36,6 +35,10 @@ class PerformancesSection extends React.Component {
       performances = performances.sort((a, b) => Number(a.danceEntry) - Number(b.danceEntry));
       this.setState({ filteredPerformances: performances, loading: false, performances });
     });
+  }
+
+  componentWillUnmount() {
+    this.subscribe();
   }
 
   getFilterKeys = filters => Object.keys(filters)
@@ -71,17 +74,17 @@ class PerformancesSection extends React.Component {
     // Filter function that accepts a performance object and returns true
     // if this performance passes the filter (i.e should be included)
     const filterFunction = (performance) => {
-      const danceTitle = performance.danceTitle.toLowerCase();
+      const danceTitle = performance.danceTitle ? performance.danceTitle.toLowerCase() : '';
       // Iterates through each performance metadata/key (i.e. academicLevel) and then
       // iterates through each string in the array (i.e. secondary, primary)
       const isFilterSuccess = keys.every((key) => {
         // awardConiderations need to be checked differently as it's a Number rather
         // than a String
         if (key === 'awardConsideration') {
-          if (includes(filtersObj[key], 'choreoAward')) {
+          if (filtersObj[key].includes('choreoAward')) {
             return performance.choreoAwardEnum > 0;
           }
-          if (includes(filtersObj[key], 'specialAward')) {
+          if (filtersObj[key].includes('specialAward')) {
             return performance.specialAwardEnum > 0;
           }
 
