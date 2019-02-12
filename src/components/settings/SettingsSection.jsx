@@ -19,7 +19,7 @@ class SettingsSection extends React.Component {
     super(props);
     this.state = {
       settings: {},
-      selectedCategory: 'danceStyle',
+      selectedCategory: 'Dance Style',
       value: ''
     };
   }
@@ -28,7 +28,9 @@ class SettingsSection extends React.Component {
     db.collection('settings').onSnapshot((querySnapshot) => {
       const settings = {};
       querySnapshot.forEach((doc) => {
-        settings[doc.id] = Object.keys(doc.data());
+        const spacedOutName = doc.id.replace( /([A-Z])/g, " $1" );
+        const capitalizedSecondWord = doc.id.charAt(0).toUpperCase() + spacedOutName.slice(1);
+        settings[capitalizedSecondWord] = Object.keys(doc.data());
       });
       this.setState({ settings });
     });
@@ -40,7 +42,8 @@ class SettingsSection extends React.Component {
 
   handleSubmit = async () => {
     const { selectedCategory, value } = this.state;
-    await updateSettings(selectedCategory, value, constants.ADD_DATA);
+    const selectedCategoryCamelCase = selectedCategory.charAt(0).toLowerCase() + selectedCategory.replace(/ /g,'').slice(1);
+    await updateSettings(selectedCategoryCamelCase, value, constants.ADD_DATA);
     this.setState({ value: '' });
   }
 
