@@ -131,7 +131,8 @@ const styles = theme => ({
     borderRadius: '5px',
     margin: 'auto 5px',
     backgroundColor: 'red',
-    color:'white'
+    color: 'white',
+    width: '192px'
   },
   button_default: {
     backgroundColor: '#d4d44',
@@ -234,6 +235,10 @@ const styles = theme => ({
   },
   multilineColor: {
     color: 'white'
+  },
+  dialogSection: {
+    marginTop: "100px",
+    marginLeft: "139px"
   }
 });
 
