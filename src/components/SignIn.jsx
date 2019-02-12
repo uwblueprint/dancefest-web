@@ -1,16 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-
 import { auth } from '../firebase/firebase';
-import Button from './interface/Button';
+import { withStyles } from '@material-ui/core/styles';
+
 import DialogInput from './interface/dialog/DialogInput';
+import Button from './interface/Button';
+import styles from './styles';
+
+const inputLabel = (textLabel) => (<div style={{color: "white"}}>{textLabel}</div>);  
 
 class SignIn extends React.Component {
   constructor(props) {
     super(props);
 
     const {
+      classes,
       history,
       user
     } = props;
@@ -48,29 +53,48 @@ class SignIn extends React.Component {
 
   render() {
     const { email, password } = this.state;
+    const { classes } = this.props;
+    const inputPropsStyle = {
+      classes: {
+        input: classes.multilineColor,
+      }
+    };
     return (
-      <form>
-        <DialogInput
-          value={email}
-          name="email"
-          label="Email"
-          onChange={this.handleChange} />
-        <DialogInput
-          type="password"
-          value={password}
-          name="password"
-          label="Password"
-          onChange={this.handleChange} />
-        <br />
-        <Button buttonType="button" onClick={this.handleSubmit} type="default">
-          Submit
-        </Button>
+      <form className={classes.loginSectionStyle}>
+        <div style={{textAlign: "center", paddingTop: "50px"}}>
+          <h4 style={{fontFamily: "Fjalla One", color: "white", fontSize: "25px"}}>
+            OSSDF DANCEFEST
+          </h4>
+        </div>
+        <div className={classes.dialogSection}>
+          <DialogInput
+            className={classes.loginDialogInput}
+            value={email}
+            name="email"
+            InputProps={inputPropsStyle}
+            label={inputLabel("Email")}
+            onChange={this.handleChange} />
+          <br />
+          <DialogInput
+            className={classes.loginDialogInput}
+            type="password"
+            value={password}
+            name="password"
+            InputProps={inputPropsStyle}
+            label={inputLabel("Password")}
+            onChange={this.handleChange} />
+          <br />
+          <Button buttonType="button" type="login" onClick={this.handleSubmit}>
+            Log In
+          </Button>
+        </div>
       </form>
     );
   }
 }
 
 SignIn.propTypes = {
+  classes: PropTypes.shape().isRequired,
   history: PropTypes.shape().isRequired,
   user: PropTypes.shape()
 };
@@ -79,4 +103,4 @@ SignIn.defaultProps = {
   user: null
 };
 
-export default withRouter(SignIn);
+export default withRouter(withStyles(styles)(SignIn));
