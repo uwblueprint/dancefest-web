@@ -76,7 +76,7 @@ class EventForm extends React.Component {
         <div style={{ margin: '25px' }}>
           <DialogInput fullWidth name="eventTitle" label="Event Title" onChange={this.handleChange} value={eventTitle} />
           <div style={{ display: 'flex' }}>
-            <DialogInput style={{ marginRight: '5px' }} fullWidth name="eventDate" label="Event Date" onChange={this.handleChange} value={eventDate} />
+            <DialogInput style={{ marginRight: '5px' }} fullWidth name="eventDate" label="Event Date" onChange={this.handleChange} placeholder="DD/MM/YYYY" value={eventDate} />
             <DialogInput fullWidth name="numJudges" label="No. Judges" onChange={this.handleChange} type="number" value={numJudges} />
           </div>
         </div>
