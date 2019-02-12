@@ -63,7 +63,7 @@ DialogInput.defaultProps = {
   multiline: false,
   label: '',
   onChange: () => {},
-  placeholder: 'DD/MM/YYYY',
+  placeholder: '',
   style: null,
   type: null,
   value: ''
