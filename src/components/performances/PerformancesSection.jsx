@@ -87,7 +87,7 @@ class PerformancesSection extends React.Component {
 
     const filteredPerformances = performances
       .filter(filterFunction)
-      .sort((a, b) => Number(a.danceEntry) < Number(b.danceEntry));
+      .sort((a, b) => Number(a.danceEntry) - Number(b.danceEntry));
     this.setState({ filteredPerformances });
   }
 
