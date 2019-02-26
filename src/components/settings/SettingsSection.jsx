@@ -72,8 +72,10 @@ class SettingsSection extends React.Component {
           <DialogInput label="Enter an Option" name="option" value={value} onChange={this.handleOptionChange} fullWidth style={{ backgroundColor: 'rgb(255, 209, 217)' }} />
           <Button onClick={this.handleSubmit} type="secondary">ADD OPTION</Button>
           <div className={classes.settings_view} elevation={0}>
-            {shouldShowOptions && settings[selectedCategory].map(option => (
-              <SettingData key={option} category={selectedCategory} optionName={option} />))}
+            {shouldShowOptions && settings[selectedCategory].map(option => {
+              const selectedCategoryCamelCase = selectedCategory.charAt(0).toLowerCase() + selectedCategory.replace(/ /g,'').slice(1);
+              return <SettingData key={option} category={selectedCategoryCamelCase} optionName={option} />;
+              })}
           </div>
         </div>
       </React.Fragment>
