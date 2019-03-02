@@ -70,7 +70,8 @@ class PerformancesSection extends React.Component {
     // Filter function that accepts a performance object and returns true
     // if this performance passes the filter (i.e should be included)
     const filterFunction = (performance) => {
-      const danceTitle = performance.danceTitle.toLowerCase();
+      const { danceTitle, performers, choreographers } = performance;
+      const fields = [danceTitle, performers, choreographers];
       // Iterates through each performance metadata/key (i.e. academicLevel) and then
       // iterates through each string in the array (i.e. secondary, primary)
       const isFilterSuccess = keys.every(key => filtersObj[key].includes(performance[key]));
@@ -79,7 +80,8 @@ class PerformancesSection extends React.Component {
       // in our filter logic
       if (searchQuery && searchQuery.length > 0) {
         const query = searchQuery.toLowerCase();
-        return isFilterSuccess && danceTitle.search(query) !== -1;
+        //return isFilterSuccess && fields.every(field => field.toLowerCase().search(query) !== -1);
+        return isFilterSuccess && fields.find(field => field.toLowerCase().search(query) !== -1);
       }
       return isFilterSuccess;
     };
