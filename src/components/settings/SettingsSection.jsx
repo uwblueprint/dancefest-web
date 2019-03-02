@@ -42,9 +42,13 @@ class SettingsSection extends React.Component {
 
   handleSubmit = async () => {
     const { selectedCategory, value } = this.state;
-    const selectedCategoryCamelCase = selectedCategory.charAt(0).toLowerCase() + selectedCategory.replace(/ /g,'').slice(1);
+    const selectedCategoryCamelCase = this.toCamelCase(selectedCategory);
     await updateSettings(selectedCategoryCamelCase, value, constants.ADD_DATA);
     this.setState({ value: '' });
+  }
+
+  toCamelCase = text => {
+    return text.charAt(0).toLowerCase() + text.replace(/ /g,'').slice(1);
   }
 
   render() {
@@ -73,7 +77,7 @@ class SettingsSection extends React.Component {
           <Button onClick={this.handleSubmit} type="secondary">ADD OPTION</Button>
           <div className={classes.settings_view} elevation={0}>
             {shouldShowOptions && settings[selectedCategory].map(option => {
-              const selectedCategoryCamelCase = selectedCategory.charAt(0).toLowerCase() + selectedCategory.replace(/ /g,'').slice(1);
+              const selectedCategoryCamelCase = this.toCamelCase(selectedCategory);
               return <SettingData key={option} category={selectedCategoryCamelCase} optionName={option} />;
               })}
           </div>
