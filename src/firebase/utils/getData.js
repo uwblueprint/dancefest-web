@@ -5,7 +5,6 @@ const getData = async (collectionName, data) => {
     .then(() => console.log('Document successfully added!'))
     .catch((error) => {
       console.error('Error writing document: ', error);
-      return false;
     });
 };
 

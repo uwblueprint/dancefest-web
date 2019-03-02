@@ -13,16 +13,16 @@ const DialogHeader = ({
   collectionName,
   docId,
   edit,
+  handleDup,
   onEditClick,
   shouldShowDropdown,
-  title,
-  handleDup
+  title
 }) => (
   <DialogTitle classes={{ root: classes.dfdialog_title }} disableTypography id="form-dialog-title">
     {title}
     <div style={{ float: 'right', color: 'black' }}>
       {edit && <EditIcon classes={{ root: classes.dfdialog_editIcon }} onClick={onEditClick} />}
-      {shouldShowDropdown && <EditDropDown handleDup={handleDup} collectionName={collectionName} docId={docId} />}
+      {shouldShowDropdown && <EditDropDown collectionName={collectionName} docId={docId} handleDup={handleDup} />}
     </div>
   </DialogTitle>
 );
@@ -43,7 +43,7 @@ DialogHeader.propTypes = {
 DialogHeader.defaultProps = {
   docId: '',
   edit: false,
-  onEditClick: null,
   handleDup: () => {},
+  onEditClick: null,
   shouldShowDropdown: false
 };

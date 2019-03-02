@@ -22,8 +22,13 @@ class PerformanceDialog extends React.Component {
 
 
   handleDup = async () => {
-    let vals = this.props.currentValues;
-    vals.danceTitle = vals.danceTitle + "Duplicate";
+    const {
+      currentValues
+  } = this.props;
+    const vals = {
+      ... currentValues,
+      danceTitle: `${currentValues.danceTitle} Duplicate`
+  };
     const { eventId } = this.props;
     const collectionName = `events/${eventId}/performances`;
 
@@ -58,15 +63,15 @@ class PerformanceDialog extends React.Component {
 
     return (
       <DFDialog
-        open={open}
         buttonTitle={buttonTitle}
         formType={formType}
         onClick={this.handleClickOpen}
-        onClose={this.handleClose}>
+        onClose={this.handleClose}
+        open={open}>
         <DialogHeader
-          handleDup={this.handleDup}
           collectionName={collectionName}
           docId={performanceId}
+          handleDup={this.handleDup}
           shouldShowDropdown={shouldShowDropdown}
           title={title} />
         <PerformanceForm
@@ -91,17 +96,17 @@ PerformanceDialog.propTypes = {
     school: PropTypes.string,
     size: PropTypes.number
   }),
+  collectionName: PropTypes.string,
   eventId: PropTypes.string.isRequired,
   formType: PropTypes.oneOf(['edit', 'new']),
   performanceId: PropTypes.string,
-  collectionName: PropTypes.string
 };
 
 PerformanceDialog.defaultProps = {
+  collectionName: '',
   currentValues: {},
   formType: 'edit',
-  performanceId: null,
-  collectionName: ''
+  performanceId: null
 };
 
 
