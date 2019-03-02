@@ -47,9 +47,7 @@ class SettingsSection extends React.Component {
     this.setState({ value: '' });
   }
 
-  toCamelCase = text => {
-    return text.charAt(0).toLowerCase() + text.replace(/ /g,'').slice(1);
-  }
+  toCamelCase = text => text.charAt(0).toLowerCase() + text.replace(/ /g,'').slice(1);
 
   render() {
     const { classes } = this.props;
