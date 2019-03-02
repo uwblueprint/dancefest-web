@@ -46,15 +46,17 @@ class AdjudicationForm extends React.Component {
     }
   }
 
-  // TODO: handle submmission of the form
   handleSubmit = async () => {
     const { 
       adjudicationId, 
       collectionName, 
-      currentValues : {audioURL, judgeName, notes} 
+      currentValues : {
+        audioURL, 
+        judgeName, 
+        notes
+      } 
     } = this.props;
     const { artisticMark, technicalMark } = this.state;
-
     const cumulativeMark = (parseInt(artisticMark, 10) + parseInt(technicalMark, 10)) / 2;
     const data = {
       audioURL,
