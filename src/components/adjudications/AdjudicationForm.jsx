@@ -33,7 +33,7 @@ class AdjudicationForm extends React.Component {
 
   handleCheckedAward = (e) => {
     const { name, checked } = e.target;
-    this.setState({ [ name]: checked });
+    this.setState({ [name]: checked });
   }
 
   handleCancel = () => {
