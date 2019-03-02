@@ -33,7 +33,7 @@ class AdjudicationForm extends React.Component {
 
   handleCheckedAward = (e) => {
     const { name, checked } = e.target;
-    this.setState({ [name]: checked });
+    this.setState({ [ name]: checked });
   }
 
   handleCancel = () => {
@@ -48,11 +48,16 @@ class AdjudicationForm extends React.Component {
 
   // TODO: handle submmission of the form
   handleSubmit = async () => {
-    const { adjudicationId, collectionName } = this.props;
+    const { adjudicationId, collectionName, currentValues } = this.props;
     const { artisticMark, technicalMark } = this.state;
+    const { audioURL, judgeName, notes } = currentValues;
+
     const cumulativeMark = (parseInt(artisticMark, 10) + parseInt(technicalMark, 10)) / 2;
     const data = {
+      audioURL,
       cumulativeMark,
+      judgeName,
+      notes,
       ...this.state
     };
     await updateData(
