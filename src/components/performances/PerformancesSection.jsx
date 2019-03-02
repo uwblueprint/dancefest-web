@@ -24,7 +24,7 @@ class PerformancesSection extends React.Component {
     const collectionName = `events/${eventId}/performances`;
 
     db.collection(collectionName).onSnapshot((querySnapshot) => {
-      const performances = [];
+      let performances = [];
       querySnapshot.forEach((doc) => {
         const performance = {
           id: doc.id,
@@ -32,6 +32,7 @@ class PerformancesSection extends React.Component {
         };
         performances.push(performance);
       });
+      performances = performances.sort((a, b) => Number(a.danceEntry) - Number(b.danceEntry));
       this.setState({ filteredPerformances: performances, loading: false, performances });
     });
   }
@@ -84,7 +85,9 @@ class PerformancesSection extends React.Component {
       return isFilterSuccess;
     };
 
-    const filteredPerformances = performances.filter(filterFunction);
+    const filteredPerformances = performances
+      .filter(filterFunction)
+      .sort((a, b) => Number(a.danceEntry) - Number(b.danceEntry));
     this.setState({ filteredPerformances });
   }
 
