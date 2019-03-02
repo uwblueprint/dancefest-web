@@ -19,7 +19,7 @@ class SettingsSection extends React.Component {
     super(props);
     this.state = {
       settings: {},
-      selectedCategory: 'danceStyle',
+      selectedCategory: 'Dance Style',
       value: ''
     };
   }
@@ -28,7 +28,9 @@ class SettingsSection extends React.Component {
     db.collection('settings').onSnapshot((querySnapshot) => {
       const settings = {};
       querySnapshot.forEach((doc) => {
-        settings[doc.id] = Object.keys(doc.data());
+        const spacedOutName = doc.id.replace( /([A-Z])/g, " $1" );
+        const capitalizedSecondWord = doc.id.charAt(0).toUpperCase() + spacedOutName.slice(1);
+        settings[capitalizedSecondWord] = Object.keys(doc.data());
       });
       this.setState({ settings });
     });
@@ -40,9 +42,12 @@ class SettingsSection extends React.Component {
 
   handleSubmit = async () => {
     const { selectedCategory, value } = this.state;
-    await updateSettings(selectedCategory, value, constants.ADD_DATA);
+    const selectedCategoryCamelCase = this.toCamelCase(selectedCategory);
+    await updateSettings(selectedCategoryCamelCase, value, constants.ADD_DATA);
     this.setState({ value: '' });
   }
+
+  toCamelCase = text => text.charAt(0).toLowerCase() + text.replace(/ /g,'').slice(1);
 
   render() {
     const { classes } = this.props;
@@ -69,8 +74,10 @@ class SettingsSection extends React.Component {
           <DialogInput label="Enter an Option" name="option" value={value} onChange={this.handleOptionChange} fullWidth style={{ backgroundColor: 'rgb(255, 209, 217)' }} />
           <Button onClick={this.handleSubmit} type="secondary">ADD OPTION</Button>
           <div className={classes.settings_view} elevation={0}>
-            {shouldShowOptions && settings[selectedCategory].map(option => (
-              <SettingData key={option} category={selectedCategory} optionName={option} />))}
+            {shouldShowOptions && settings[selectedCategory].map(option => {
+              const selectedCategoryCamelCase = this.toCamelCase(selectedCategory);
+              return <SettingData key={option} category={selectedCategoryCamelCase} optionName={option} />;
+              })}
           </div>
         </div>
       </React.Fragment>
