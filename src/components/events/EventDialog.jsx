@@ -32,13 +32,14 @@ class EventDialog extends React.Component {
   render() {
     const { currentValues, eventId, formType } = this.props;
     const { open } = this.state;
-    const dialogTitle = formType === dialogType.EDIT ? 'Edit' : 'New';
+    const { EDIT } = dialogType;
+    const dialogTitle = formType === EDIT ? 'Edit' : 'New';
     const newButtonTitle = (
       <React.Fragment>
         <CalendarTodayIcon fontSize="small" style={{ color: 'gray', marginRight: '5px' }} />
         NEW EVENT
       </React.Fragment>);
-    const buttonTitle = formType === dialogType.EDIT ? 'EDIT' : newButtonTitle;
+    const buttonTitle = formType === EDIT ? 'EDIT' : newButtonTitle;
 
     return (
       <DFDialog

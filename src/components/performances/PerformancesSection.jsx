@@ -78,7 +78,7 @@ class PerformancesSection extends React.Component {
       // Iterates through each performance metadata/key (i.e. academicLevel) and then
       // iterates through each string in the array (i.e. secondary, primary)
       const isFilterSuccess = keys.every((key) => {
-        // awardConiderations need to be checked differently as it's a Number rather
+        // awardConsiderations need to be checked differently as it's a Number rather
         // than a String
         if (key === 'awardConsideration') {
           if (filtersObj[key].includes('choreoAward')) {

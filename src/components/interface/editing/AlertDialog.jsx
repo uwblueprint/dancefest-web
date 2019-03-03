@@ -19,7 +19,8 @@ const AlertDialog = ({
   const handleClose = () => onClose();
 
   const handleDelete = async () => {
-    await updateSettings(category, optionName, dataAction.DELETE_DATA);
+    const { DELETE_DATA } = dataAction;
+    await updateSettings(category, optionName, DELETE_DATA);
     handleClose();
   };
 

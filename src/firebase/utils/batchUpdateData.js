@@ -2,10 +2,10 @@ import db from '../firebase';
 import { awardConsiderationEnum } from '../../constants';
 
 /*
-* This batchUpdateData method is written explicitly for handling
-* a batch transaction of updating performance and adjudications collection.
-* This can be refactored to handled batch updates and transactions if needed.
-*/
+ * This batchUpdateData method is written explicitly for handling
+ * a batch transaction of updating performance and adjudications collection.
+ * This can be refactored to handled batch updates and transactions if needed.
+ */
 const batchUpdateData = async (
   collectionName,
   docName,
@@ -13,41 +13,52 @@ const batchUpdateData = async (
   choreoAwardAction,
   specialAwardAction,
 ) => {
+  /* example of collectionName:
+   *    "events/8cIC1iEVYUCDzokoNkfe/performances/EKE7Vxpaa5elH1n97ALp/adjudication"
+   * example of performanceCollection:
+   *    "events/8cIC1iEVYUCDzokoNkfe/performances"
+   */
   const performanceCollection = collectionName.match(/events\/\w{20}\/performances/)[0];
+  // length of characters in performanceCollection string can help us determine
+  // the index at which performanceDocName i.e. "EKE7Vxpaa5elH1n97ALp" is
   const { length } = performanceCollection;
   const performanceDocName = collectionName.substring(length + 1, length + 21);
 
   const ajudicationRef = db.collection(collectionName).doc(docName);
   const performanceRef = db.collection(performanceCollection).doc(performanceDocName);
 
-  db.runTransaction(transaction => transaction.get(performanceRef).then((performanceDoc) => {
-    const awardData = {};
+  const { DECREMENT, NO_CHANGE } = awardConsiderationEnum;
 
-    if (choreoAwardAction !== awardConsiderationEnum.NO_CHANGE) {
-      let idx;
-      if (choreoAwardAction === awardConsiderationEnum.DECREMENT) {
-        idx = performanceDoc.data().choreoAwardEnum ? -1 : 0;
-      } else {
-        idx = 1;
+  db.runTransaction(transaction => transaction
+    .get(performanceRef)
+    .then((performanceDoc) => {
+      const awardData = {};
+
+      if (choreoAwardAction !== NO_CHANGE) {
+        let idx;
+        if (choreoAwardAction === DECREMENT) {
+          idx = performanceDoc.data().choreoAwardEnum ? -1 : 0;
+        } else {
+          idx = 1;
+        }
+        const choreoAwardEnum = performanceDoc.data().choreoAwardEnum || 0;
+        awardData.choreoAwardEnum = choreoAwardEnum + idx;
       }
-      const choreoAwardEnum = performanceDoc.data().choreoAwardEnum || 0;
-      awardData.choreoAwardEnum = choreoAwardEnum + idx;
-    }
 
-    if (specialAwardAction !== awardConsiderationEnum.NO_CHANGE) {
-      let idx;
-      if (specialAwardAction === awardConsiderationEnum.DECREMENT) {
-        idx = performanceDoc.data().specialAwardEnum ? -1 : 0;
-      } else {
-        idx = 1;
+      if (specialAwardAction !== NO_CHANGE) {
+        let idx;
+        if (specialAwardAction === DECREMENT) {
+          idx = performanceDoc.data().specialAwardEnum ? -1 : 0;
+        } else {
+          idx = 1;
+        }
+        const specialAwardEnum = performanceDoc.data().specialAwardEnum || 0;
+        awardData.specialAwardEnum = specialAwardEnum + idx;
       }
-      const specialAwardEnum = performanceDoc.data().specialAwardEnum || 0;
-      awardData.specialAwardEnum = specialAwardEnum + idx;
-    }
 
-    transaction.update(performanceRef, awardData);
-    transaction.set(ajudicationRef, data, { merge: true });
-  })).then(() => console.log('Batch Document successfully written!'))
+      transaction.update(performanceRef, awardData);
+      transaction.set(ajudicationRef, data, { merge: true });
+    })).then(() => console.log('Batch Document successfully written!'))
     .catch((error) => {
       console.error('Error writing document: ', error);
       return false;
