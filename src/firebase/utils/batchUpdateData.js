@@ -1,6 +1,18 @@
 import db from '../firebase';
 import { awardConsiderationEnum } from '../../constants';
 
+const getIndex = (action, performanceDocDataEnum) => {
+  const { DECREMENT } = awardConsiderationEnum;
+  let idx;
+  if (action === DECREMENT) {
+    idx = performanceDocDataEnum ? -1 : 0;
+  } else {
+    idx = 1;
+  }
+  const currEnum = performanceDocDataEnum || 0;
+  return currEnum + idx;
+};
+
 /*
  * This batchUpdateData method is written explicitly for handling
  * a batch transaction of updating performance and adjudications collection.
@@ -27,7 +39,7 @@ const batchUpdateData = async (
   const ajudicationRef = db.collection(collectionName).doc(docName);
   const performanceRef = db.collection(performanceCollection).doc(performanceDocName);
 
-  const { DECREMENT, NO_CHANGE } = awardConsiderationEnum;
+  const { NO_CHANGE } = awardConsiderationEnum;
 
   db.runTransaction(transaction => transaction
     .get(performanceRef)
@@ -35,25 +47,13 @@ const batchUpdateData = async (
       const awardData = {};
 
       if (choreoAwardAction !== NO_CHANGE) {
-        let idx;
-        if (choreoAwardAction === DECREMENT) {
-          idx = performanceDoc.data().choreoAwardEnum ? -1 : 0;
-        } else {
-          idx = 1;
-        }
-        const choreoAwardEnum = performanceDoc.data().choreoAwardEnum || 0;
-        awardData.choreoAwardEnum = choreoAwardEnum + idx;
+        awardData.choreoAwardEnum = getIndex(choreoAwardAction,
+          performanceDoc.data().choreoAwardEnum);
       }
 
       if (specialAwardAction !== NO_CHANGE) {
-        let idx;
-        if (specialAwardAction === DECREMENT) {
-          idx = performanceDoc.data().specialAwardEnum ? -1 : 0;
-        } else {
-          idx = 1;
-        }
-        const specialAwardEnum = performanceDoc.data().specialAwardEnum || 0;
-        awardData.specialAwardEnum = specialAwardEnum + idx;
+        awardData.specialAwardEnum = getIndex(specialAwardAction,
+          performanceDoc.data().specialAwardEnum);
       }
 
       transaction.update(performanceRef, awardData);
