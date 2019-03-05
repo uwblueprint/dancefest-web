@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 
 const DialogInput = ({
+  autoFocus,
   name,
   className,
   disabled,
@@ -19,6 +20,7 @@ const DialogInput = ({
   value
 }) => (
   <TextField
+    autoFocus={autoFocus}
     className={className}
     disabled={disabled}
     style={{ margin: '0 5px 25px 5px', ...style }}
@@ -40,6 +42,7 @@ const DialogInput = ({
 export default DialogInput;
 
 DialogInput.propTypes = {
+  autoFocus: PropTypes.bool,
   className: PropTypes.string,
   disabled: PropTypes.bool,
   name: PropTypes.string.isRequired,
@@ -56,6 +59,7 @@ DialogInput.propTypes = {
 };
 
 DialogInput.defaultProps = {
+  autoFocus: false,
   className: null,
   disabled: false,
   fullWidth: false,
