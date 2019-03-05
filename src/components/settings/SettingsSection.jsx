@@ -71,7 +71,7 @@ class SettingsSection extends React.Component {
             options={categories}
             value={selectedCategory} />
           )}
-          <DialogInput label="Enter an Option" name="option" value={value} onChange={this.handleOptionChange} fullWidth style={{ backgroundColor: 'rgb(255, 209, 217)' }} />
+          <DialogInput autoFocus label="Enter an Option" name="option" value={value} onChange={this.handleOptionChange} fullWidth style={{ backgroundColor: 'rgb(255, 209, 217)' }} />
           <Button onClick={this.handleSubmit} type="secondary">ADD OPTION</Button>
           <div className={classes.settings_view} elevation={0}>
             {shouldShowOptions && settings[selectedCategory].map(option => {
