@@ -51,10 +51,11 @@ class AdjudicationForm extends React.Component {
   }
 
   getAwardConsderationEnumAction = (currAwardState, prevAwardState) => {
+    const { DECREMENT, INCREMENT, NO_CHANGE } = awardConsiderationEnum;
     if (!isEqual(currAwardState, prevAwardState)) {
-      return currAwardState ? awardConsiderationEnum.INCREMENT : awardConsiderationEnum.DECREMENT;
+      return currAwardState ? INCREMENT : DECREMENT;
     }
-    return awardConsiderationEnum.NO_CHANGE;
+    return NO_CHANGE;
   }
 
   // TODO: handle submmission of the form
@@ -89,8 +90,10 @@ class AdjudicationForm extends React.Component {
       ...this.state
     };
 
-    if (choreoAwardAction !== awardConsiderationEnum.NO_CHANGE
-      || specialAwardAction !== awardConsiderationEnum.NO_CHANGE) {
+    const { NO_CHANGE } = awardConsiderationEnum;
+
+    if (choreoAwardAction !== NO_CHANGE
+      || specialAwardAction !== NO_CHANGE) {
       await batchUpdateData(
         collectionName,
         adjudicationId,
