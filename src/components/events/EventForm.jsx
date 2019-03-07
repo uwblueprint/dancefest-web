@@ -10,7 +10,7 @@ import updateData from '../../firebase/utils/updateData';
 
 import DialogInput from '../interface/dialog/DialogInput';
 import Button from '../interface/Button';
-import styles from '../styles';
+import styles from '../styles'; 
 import TextField from '@material-ui/core/TextField';
 
 class EventForm extends React.Component {
