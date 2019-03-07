@@ -4,7 +4,6 @@ import pick from 'lodash/pick';
 
 import { withStyles } from '@material-ui/core/styles';
 import DialogActions from '@material-ui/core/DialogActions';
-import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 
 import addData from '../../firebase/utils/addData';
 import updateData from '../../firebase/utils/updateData';
@@ -12,16 +11,7 @@ import updateData from '../../firebase/utils/updateData';
 import DialogInput from '../interface/dialog/DialogInput';
 import Button from '../interface/Button';
 import styles from '../styles';
-
-import 'react-dates/initialize';
-import { SingleDatePicker } from 'react-dates';
-import Moment from 'react-moment';
-import moment from 'moment';
-import { DateFormatInput } from 'material-ui-next-pickers'
-
 import TextField from '@material-ui/core/TextField';
-import DayPickerRangeControllerWrapper from '../interface/DayPickerRangeControllerWrapper.jsx';
-import { DayPickerRangeController } from 'react-dates';
 
 class EventForm extends React.Component {
   constructor(props) {
@@ -30,7 +20,7 @@ class EventForm extends React.Component {
 
     this.state = {
       disabledSave: true,
-      eventDate: currentValues.eventDate || '',
+      eventDate: currentValues.eventDate || (new Date()).toLocaleDateString(),
       eventTitle: currentValues.eventTitle || '',
       numJudges: currentValues.numJudges || 0,
       focused: false
@@ -45,8 +35,12 @@ class EventForm extends React.Component {
 
   handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(name);
-    this.setState({ [name]: value });
+    if (name === 'eventDate') {
+      this.setState({ eventDate: value.substring(8,10) + '/' + value.substring(5,7) + '/' + value.substring(0,4)});
+    }
+    else {
+      this.setState({ [name]: value });
+    }
   }
 
   handleCancel = () => {
@@ -59,7 +53,7 @@ class EventForm extends React.Component {
     const { eventDate, eventTitle, numJudges } = this.state;
     const collectionName = 'events';
     const data = {
-      eventDate: new Date(eventDate),
+      eventDate: new Date(parseInt(eventDate.substring(6, 10)), parseInt(eventDate.substring(3, 5)) - 1, parseInt(eventDate.substring(0, 2)), 4, 0, 0),
       eventTitle,
       numJudges
     };
@@ -96,50 +90,7 @@ class EventForm extends React.Component {
         <div style={{ margin: '25px' }}>
           <DialogInput fullWidth name="eventTitle" label="Event Title" onChange={this.handleChange} value={eventTitle} />
           <div style={{ display: 'flex' }}>
-
-            {/*<DayPickerRangeControllerWrapper />*/}
-
-            {/*<DialogInput style={{ marginRight: '5px' }} fullWidth name="eventDate" label="Event Date" onChange={this.handleChange} value={eventDate} />*/}
-            <DayPickerRangeController
-              //{...props}
-              onDatesChange={date => this.setState({ eventDate: date.format('DD/MM/YYYY') })}
-              onFocusChange={({ focused }) => this.setState({ focused })}
-              //focusedInput={focusedInput}
-              startDate={eventDate ? moment(this.convertDateToISOFormat(eventDate)) : null}
-              endDate={eventDate ? moment(this.convertDateToISOFormat(eventDate)) : null}
-              numberOfMonths={1}
-              isRTL={true}
-              onDateChange={date => this.setState({ eventDate: date.format('DD/MM/YYYY') })} // PropTypes.func.isRequired
-              //onDateChange={this.handleChange} // PropTypes.func.isRequired
-              orientation="vertical"
-              openDirection="down"
-              anchorDirection="right"
-            />
-
-            {/*<DialogInput style={{ marginRight: '5px' }} fullWidth name="eventDate" label="Event Date" onChange={this.handleChange} placeholder="dd/mm/yyyy" required type="date" value={eventDate ? this.convertDateToISOFormat(eventDate) : null} />*/}
-            {/*<SingleDatePicker
-              //{...props}
-              date={eventDate ? moment(this.convertDateToISOFormat(eventDate)) : null} // momentPropTypes.momentObj or null
-              onDateChange={date => this.setState({ eventDate: date.format('DD/MM/YYYY') })} // PropTypes.func.isRequired
-              //onDateChange={this.handleChange} // PropTypes.func.isRequired
-              focused={focused}
-              orientation="vertical"
-              openDirection="down"
-              anchorDirection="right"
-              onFocusChange={({ focused }) => this.setState({ focused })} // PropTypes.func.isRequired
-              id="your_unique_id" // PropTypes.string.isRequired,
-              customInputIcon={<CalendarTodayIcon fontSize="small" style={{ color: 'gray', marginRight: '5px' }} />}
-              //inputIconPosition="ICON_AFTER_POSITION"
-              numberOfMonths={1}
-              isRTL={true}
-    />*/}
-
-            {/*<DatePickerWrapper />*/}
-
-            {/*<DateFormatInput style={{ marginRight: '5px' }} fullWidth name='eventDate' onChange={this.handleChange} label='Event Date' okToConfirm margin="normal" type="date" value={eventDate ? new Date(this.convertToISOFormat(eventDate)) : null} variant="filled"/>*/}
-
-            {/*<DialogInput style={{ marginRight: '5px' }} fullWidth name="eventDate" label="Event Date" onChange={this.handleChange} value={eventDate} />*/}
-
+            <TextField  fullWidth name='eventDate' label='Event Date' onChange={this.handleChange} style={{ marginRight: '5px' }} type="date" value={eventDate ? this.convertDateToISOFormat(eventDate) : ''} variant="filled" />
             <DialogInput fullWidth name="numJudges" label="No. Judges" onChange={this.handleChange} type="number" value={numJudges} />
           </div>
         </div>
