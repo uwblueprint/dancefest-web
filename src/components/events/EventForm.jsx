@@ -10,7 +10,8 @@ import updateData from '../../firebase/utils/updateData';
 
 import DialogInput from '../interface/dialog/DialogInput';
 import Button from '../interface/Button';
-import styles from '../styles';
+import styles from '../styles'; 
+import TextField from '@material-ui/core/TextField';
 
 class EventForm extends React.Component {
   constructor(props) {
@@ -19,9 +20,10 @@ class EventForm extends React.Component {
 
     this.state = {
       disabledSave: true,
-      eventDate: currentValues.eventDate || '',
+      eventDate: currentValues.eventDate || (new Date()).toLocaleDateString(),
       eventTitle: currentValues.eventTitle || '',
-      numJudges: currentValues.numJudges || 0
+      numJudges: currentValues.numJudges || 0,
+      focused: false
     };
   }
 
@@ -33,7 +35,12 @@ class EventForm extends React.Component {
 
   handleChange = (e) => {
     const { name, value } = e.target;
-    this.setState({ [name]: value });
+    if (name === 'eventDate') {
+      this.setState({ eventDate: value.substring(8,10) + '/' + value.substring(5,7) + '/' + value.substring(0,4)});
+    }
+    else {
+      this.setState({ [name]: value });
+    }
   }
 
   handleCancel = () => {
@@ -46,7 +53,7 @@ class EventForm extends React.Component {
     const { eventDate, eventTitle, numJudges } = this.state;
     const collectionName = 'events';
     const data = {
-      eventDate: new Date(eventDate),
+      eventDate: new Date(parseInt(eventDate.substring(6, 10)), parseInt(eventDate.substring(3, 5)) - 1, parseInt(eventDate.substring(0, 2)), 4, 0, 0),
       eventTitle,
       numJudges
     };
@@ -63,6 +70,12 @@ class EventForm extends React.Component {
     onModalClose();
   }
 
+  //Format of date must be DD/MM/YYYY
+  //Transforms DD/MM/YYYY to YYYY-MM-DD
+  convertDateToISOFormat = (date) => {
+    return date.substring(6, 10) + "-" + date.substring(3, 5) + "-" + date.substring(0, 2);
+  }
+
   render() {
     const { classes, formType } = this.props;
     const {
@@ -76,7 +89,7 @@ class EventForm extends React.Component {
         <div style={{ margin: '25px' }}>
           <DialogInput fullWidth name="eventTitle" label="Event Title" onChange={this.handleChange} value={eventTitle} />
           <div style={{ display: 'flex' }}>
-            <DialogInput style={{ marginRight: '5px' }} fullWidth name="eventDate" label="Event Date" onChange={this.handleChange} placeholder="DD/MM/YYYY" value={eventDate} />
+            <TextField  fullWidth name='eventDate' label='Event Date' onChange={this.handleChange} style={{ marginRight: '5px' }} type="date" value={eventDate ? this.convertDateToISOFormat(eventDate) : ''} variant="filled" />
             <DialogInput fullWidth name="numJudges" label="No. Judges" onChange={this.handleChange} type="number" value={numJudges} />
           </div>
         </div>
