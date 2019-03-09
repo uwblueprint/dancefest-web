@@ -13,6 +13,7 @@ import addData from '../../firebase/utils/addData';
 class PerformanceDialog extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = { open: false };
   }
 
@@ -20,20 +21,18 @@ class PerformanceDialog extends React.Component {
     this.setState({ open: false });
   };
 
-
   handleDup = async () => {
     const {
       currentValues
-  } = this.props;
+    } = this.props;
     const vals = {
       ... currentValues,
       danceTitle: `${currentValues.danceTitle} Duplicate`
-  };
+    };
     const { eventId } = this.props;
     const collectionName = `events/${eventId}/performances`;
 
     await addData(collectionName, vals);
-    // this.setState({ anchorEl: undefined });
     this.handleClose();
   }
 
