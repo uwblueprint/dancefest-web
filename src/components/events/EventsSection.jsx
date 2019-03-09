@@ -23,8 +23,9 @@ class EventsSection extends React.Component {
       querySnapshot.forEach((doc) => {
         const { eventTitle, numJudges, eventDate } = doc.data();
         const date = isObject(eventDate)
-          ? new Date(eventDate.seconds * 1000).toLocaleDateString()
+          ? new Date(eventDate.seconds * 1000).toLocaleDateString('en-GB')
           : eventDate;
+          console.log(date);
         const event = {
           eventDate: date,
           eventTitle,
