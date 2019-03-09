@@ -11,7 +11,7 @@ import updateData from '../../firebase/utils/updateData';
 
 import DialogInput from '../interface/dialog/DialogInput';
 import Button from '../interface/Button';
-import styles from '../styles'; 
+import styles from '../styles';
 
 class EventForm extends React.Component {
   constructor(props) {
@@ -20,7 +20,6 @@ class EventForm extends React.Component {
 
     this.state = {
       disabledSave: true,
-      //eventDate: currentValues.eventDate || (new Date()).toLocaleDateString('en-US'),
       eventDate: currentValues.eventDate || moment().format('DD/MM/YYYY'),
       eventTitle: currentValues.eventTitle || '',
       numJudges: currentValues.numJudges || 0,
@@ -36,7 +35,7 @@ class EventForm extends React.Component {
 
   handleChange = (e) => {
     const { name, value } = e.target;
-    this.setState({ [name]: name === 'eventDate' ? moment(value, 'MM/DD/YYYY').format('DD/MM/YYYY') : value });
+    this.setState({ [name]: name === 'eventDate' ? (value.search(/-/) === -1 ? moment(value, 'MM/DD/YYYY').format('DD/MM/YYYY') : moment(value, 'YYYY-MM-DD').format('DD/MM/YYYY')) : value });
   }
 
   handleCancel = () => {
@@ -79,7 +78,7 @@ class EventForm extends React.Component {
         <div style={{ margin: '25px' }}>
           <DialogInput fullWidth name="eventTitle" label="Event Title" onChange={this.handleChange} value={eventTitle} />
           <div style={{ display: 'flex' }}>
-          <DialogInput fullWidth name='eventDate' label='Event Date' onChange={this.handleChange} style={{ marginRight: '5px' }} type="date" value={eventDate ? moment(eventDate, 'DD/MM/YYYY').format('YYYY-MM-DD') : ''} variant="filled" />
+            <DialogInput fullWidth name='eventDate' label='Event Date' onChange={this.handleChange} style={{ marginRight: '5px' }} type="date" value={eventDate ? moment(eventDate, 'DD/MM/YYYY').format('YYYY-MM-DD') : ''} variant="filled" />
             <DialogInput fullWidth name="numJudges" label="No. Judges" onChange={this.handleChange} type="number" value={numJudges} />
           </div>
         </div>
