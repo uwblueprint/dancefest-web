@@ -83,12 +83,15 @@ class AdjudicationForm extends React.Component {
     const specialAwardAction = this.getAwardConsderationEnumAction(specialAward, prevSpecialAward);
 
     const data = {
-      audioURL,
       cumulativeMark,
-      judgeName,
+      judgeName: judgeName || '',
       notes,
       ...this.state
     };
+
+    if (audioURL) {
+      Object.assign(data, audioURL);
+    }
 
     const { NO_CHANGE } = awardConsiderationEnum;
 

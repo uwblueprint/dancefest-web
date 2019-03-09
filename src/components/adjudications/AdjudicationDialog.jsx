@@ -66,7 +66,7 @@ class AdjudicationDialog extends React.Component {
             </div>
           </div>
           <DialogReadOnly fullWidth label="Notes" defaultValue={notes} />
-          {audioURL && <AudioPlay audioURL={audioURL}/>}
+          {audioURL && <AudioPlay audioURL={audioURL} />}
           <FormHelperText>Award Considerations</FormHelperText>
           {specialAward && (
             <div>
