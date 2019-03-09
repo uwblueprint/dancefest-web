@@ -4,7 +4,6 @@ import pick from 'lodash/pick';
 
 import { withStyles } from '@material-ui/core/styles';
 import DialogActions from '@material-ui/core/DialogActions';
-import TextField from '@material-ui/core/TextField';
 
 import addData from '../../firebase/utils/addData';
 import updateData from '../../firebase/utils/updateData';
