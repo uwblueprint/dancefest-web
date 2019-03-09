@@ -35,7 +35,8 @@ class EventForm extends React.Component {
 
   handleChange = (e) => {
     const { name, value } = e.target;
-    this.setState({ [name]: name === 'eventDate' ? (value.search(/-/) === -1 ? moment(value, 'MM/DD/YYYY').format('DD/MM/YYYY') : moment(value, 'YYYY-MM-DD').format('DD/MM/YYYY')) : value });
+    console.log(value);
+    this.setState({ [name]: name === 'eventDate' && value ? (value.search(/-/) === -1 ? moment(value, 'MM/DD/YYYY').format('DD/MM/YYYY') : moment(value, 'YYYY-MM-DD').format('DD/MM/YYYY')) : value });
   }
 
   handleCancel = () => {
