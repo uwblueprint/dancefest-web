@@ -23,13 +23,13 @@ class PerformanceDialog extends React.Component {
 
   handleDup = async () => {
     const {
-      currentValues
+      currentValues,
+      eventId
     } = this.props;
     const vals = {
-      ... currentValues,
+      ...currentValues,
       danceTitle: `${currentValues.danceTitle} Duplicate`
     };
-    const { eventId } = this.props;
     const collectionName = `events/${eventId}/performances`;
 
     await addData(collectionName, vals);
