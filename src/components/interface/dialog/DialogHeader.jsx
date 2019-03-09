@@ -32,9 +32,9 @@ export default withStyles(styles)(DialogHeader);
 DialogHeader.propTypes = {
   classes: PropTypes.shape().isRequired,
   collectionName: PropTypes.string.isRequired,
+  docId: PropTypes.string,
   edit: PropTypes.bool,
   handleDup: PropTypes.func,
-  docId: PropTypes.string,
   onEditClick: PropTypes.func,
   shouldShowDropdown: PropTypes.bool,
   title: PropTypes.string.isRequired

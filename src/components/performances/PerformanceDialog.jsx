@@ -42,7 +42,6 @@ class PerformanceDialog extends React.Component {
   };
 
   render() {
-    console.log('test props', this.props);
     const {
       currentValues,
       eventId,
@@ -99,7 +98,7 @@ PerformanceDialog.propTypes = {
   collectionName: PropTypes.string,
   eventId: PropTypes.string.isRequired,
   formType: PropTypes.oneOf(['edit', 'new']),
-  performanceId: PropTypes.string,
+  performanceId: PropTypes.string
 };
 
 PerformanceDialog.defaultProps = {

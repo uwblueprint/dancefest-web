@@ -17,11 +17,9 @@ class EditDropdown extends React.Component {
     };
   }
 
-
   handleClick = (event) => {
     this.setState({ anchorEl: event.currentTarget });
   };
-
 
   handleDuplicate = async () => {
     this.props.handleDup();
@@ -29,7 +27,6 @@ class EditDropdown extends React.Component {
   };
 
   handleClose = () => {
-    console.log('closed')
     this.setState({ anchorEl: undefined });
   };
 
@@ -60,7 +57,6 @@ class EditDropdown extends React.Component {
     );
   }
 }
-
 
 export default withStyles(styles)(EditDropdown);
 
