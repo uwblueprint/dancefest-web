@@ -35,7 +35,7 @@ class EventForm extends React.Component {
 
   handleChange = (e) => {
     const { name, value } = e.target;
-    // If name is 'eventDate', then the format of value is 'DD/MM/YYYY'.
+    // If name is 'eventDate', then the format of value is 'YYYY-MM-DD'.
     this.setState({ [name]: name === 'eventDate' ? value.replace(/(\d{4})\-(\d{2})\-(\d{2})/, '$3/$2/$1') : value });
   }
 
