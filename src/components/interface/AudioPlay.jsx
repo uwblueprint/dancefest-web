@@ -35,7 +35,7 @@ class AudioPlayer extends React.Component {
       audioFile.pause();
     }
 
-    this.subscribe();
+    this.loadAudio();
   }
 
   formattedAudioDuration = () => {
@@ -60,7 +60,7 @@ class AudioPlayer extends React.Component {
   loadAudio = () => {
     const { audioURL } = this.props;
 
-    this.subscribe = firebase.storage().ref().child(audioURL).getDownloadURL()
+    firebase.storage().ref().child(audioURL).getDownloadURL()
       .then((url) => {
         fetch(url).then(() => {
           const audioFile = new Audio(url);
