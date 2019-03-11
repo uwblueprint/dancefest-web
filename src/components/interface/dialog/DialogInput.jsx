@@ -10,6 +10,7 @@ const DialogInput = ({
   disabled,
   fullWidth,
   helperText,
+  InputLabelProps,
   InputProps,
   label,
   multiline = false,
@@ -25,6 +26,7 @@ const DialogInput = ({
     disabled={disabled}
     style={{ margin: '0 5px 25px 5px', ...style }}
     helperText={helperText}
+    InputLabelProps = {InputLabelProps}
     InputProps={InputProps}
     multiline={multiline}
     fullWidth={fullWidth}

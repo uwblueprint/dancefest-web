@@ -79,7 +79,7 @@ class EventForm extends React.Component {
         <div style={{ margin: '25px' }}>
           <DialogInput fullWidth name="eventTitle" label="Event Title" onChange={this.handleChange} value={eventTitle} />
           <div style={{ display: 'flex' }}>
-            <DialogInput fullWidth name='eventDate' label='Event Date' onChange={this.handleChange} style={{ marginRight: '5px' }} type="date" value={eventDate ? moment(eventDate, 'DD/MM/YYYY').format('YYYY-MM-DD') : ''} variant="filled" />
+            <DialogInput fullWidth InputLabelProps={{ shrink: true }} name='eventDate' label='Event Date' onChange={this.handleChange} style={{ marginRight: '5px' }} type="date" value={eventDate ? moment(eventDate, 'DD/MM/YYYY').format('YYYY-MM-DD') : ''} variant="filled" />
             <DialogInput fullWidth name="numJudges" label="No. Judges" onChange={this.handleChange} type="number" value={numJudges} />
           </div>
         </div>
