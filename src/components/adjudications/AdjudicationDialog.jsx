@@ -31,7 +31,7 @@ class AdjudicationDialog extends React.Component {
   }
 
   render() {
-    const { adjudicationId, collectionName, currentValues } = this.props;
+    const { adjudicationId, collectionName, currentValues, performanceValues } = this.props;
     const { open, view } = this.state;
     const {
       artisticMark,
@@ -44,25 +44,38 @@ class AdjudicationDialog extends React.Component {
       technicalMark
     } = currentValues;
 
+    const {
+      academicLevel,
+      choreographers,
+      danceEntry,
+      danceStyle,
+      danceTitle,
+      performers,
+      school,
+      size
+    } = performanceValues;
+
+    console.log(performanceValues);
+
     const viewForm = (
       <React.Fragment>
         <div style={{ display: 'flex', flexFlow: 'column', margin: '35px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-around', borderBottom: '1px solid #dcdcdc' }}>
             <div style={{ flex: '1 0 0' }}>
-              <DialogReadOnly defaultValue="hi" label="Dance Entry" />
-              <DialogReadOnly defaultValue="hi" label="Dance Title" />
-              <DialogReadOnly defaultValue="hi" label="Performers" />
-              <DialogReadOnly defaultValue="hi" label="Choreographer" />
+              <DialogReadOnly defaultValue={danceEntry ? danceEntry : "N/A"} label="Dance Entry" />
+              <DialogReadOnly defaultValue={danceTitle ? danceTitle : "N/A"} label="Dance Title" />
+              <DialogReadOnly defaultValue={performers ? performers : "N/A"} label="Performers" />
+              <DialogReadOnly defaultValue={choreographers ? choreographers : "N/A"} label="Choreographer" />
             </div>
 
             <div style={{ flex: '1 0 0' }}>
               <div style={{ display: 'flex' }}>
-                <DialogReadOnly label="School" />
-                <DialogReadOnly label="Level" />
+                <DialogReadOnly defaultValue={school ? school : "N/A"} label="School" />
+                <DialogReadOnly defaultValue={academicLevel ? academicLevel : "N/A"} label="Level" />
               </div>
-              <DialogReadOnly label="Competition Level" />
-              <DialogReadOnly label="Dance Style" helperText="  " />
-              <DialogReadOnly label="Size" />
+              <DialogReadOnly defaultValue={school ? school : "N/A"} label="Competition Level" />
+              <DialogReadOnly defaultValue={danceStyle ? danceStyle : "N/A"} label="Dance Style" helperText="  " />
+              <DialogReadOnly defaultValue={size ? size : "N/A"} label="Size" />
             </div>
           </div>
           <DialogReadOnly fullWidth label="Notes" defaultValue={notes} />
@@ -87,9 +100,9 @@ class AdjudicationDialog extends React.Component {
           padding: '0',
           margin: '0'
         }}>
-          <Score type="subtotal" score={artisticMark} scoreName="Artistic" />
-          <Score type="subtotal" score={technicalMark} scoreName="Technical" />
-          <Score type="total" score={cumulativeMark} scoreName="Score" />
+          <Score type="subtotal" score={artisticMark ? artisticMark : "N/A"} scoreName="Artistic" />
+          <Score type="subtotal" score={technicalMark ? technicalMark : "N/A"} scoreName="Technical" />
+          <Score type="total" score={cumulativeMark ? cumulativeMark : "N/A"} scoreName="Score" />
         </DialogActions>
       </React.Fragment>
     );
@@ -131,7 +144,8 @@ AdjudicationDialog.propTypes = {
     judgeName: PropTypes.string,
     specialAward: PropTypes.bool,
     technicalMark: PropTypes.number
-  }).isRequired
+  }).isRequired,
+  performanceValues: PropTypes.shape().isRequired
 };
 
 export default withStyles(styles)(AdjudicationDialog);

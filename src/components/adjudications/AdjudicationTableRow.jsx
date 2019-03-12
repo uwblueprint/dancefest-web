@@ -9,7 +9,8 @@ import AdjudicationDialog from './AdjudicationDialog';
 const AdjudicationTableRow = ({
   collectionName,
   currentValues,
-  id
+  id,
+  performanceValues
 }) => {
   const {
     audioURL,
@@ -40,7 +41,8 @@ const AdjudicationTableRow = ({
         <AdjudicationDialog
           adjudicationId={id}
           collectionName={collectionName}
-          currentValues={currentValues} />
+          currentValues={currentValues}
+          performanceValues={performanceValues} />
       </TableCell>
     </TableRow>
   );
@@ -58,7 +60,8 @@ AdjudicationTableRow.propTypes = {
     technicalMark: PropTypes.number
   }).isRequired,
   collectionName: PropTypes.string.isRequired,
-  id: PropTypes.string.isRequired
+  id: PropTypes.string.isRequired,
+  performanceValues: PropTypes.shape().isRequired
 };
 
 export default AdjudicationTableRow;
