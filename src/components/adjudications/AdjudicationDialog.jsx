@@ -55,8 +55,6 @@ class AdjudicationDialog extends React.Component {
       size
     } = performanceValues;
 
-    console.log(performanceValues);
-
     const viewForm = (
       <React.Fragment>
         <div style={{ display: 'flex', flexFlow: 'column', margin: '35px' }}>
@@ -73,7 +71,7 @@ class AdjudicationDialog extends React.Component {
                 <DialogReadOnly defaultValue={school ? school : "N/A"} label="School" />
                 <DialogReadOnly defaultValue={academicLevel ? academicLevel : "N/A"} label="Level" />
               </div>
-              <DialogReadOnly defaultValue={school ? school : "N/A"} label="Competition Level" />
+              <DialogReadOnly defaultValue={academicLevel ? academicLevel : "N/A"} label="Competition Level" />
               <DialogReadOnly defaultValue={danceStyle ? danceStyle : "N/A"} label="Dance Style" helperText="  " />
               <DialogReadOnly defaultValue={size ? size : "N/A"} label="Size" />
             </div>
