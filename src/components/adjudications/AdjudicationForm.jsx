@@ -50,19 +50,14 @@ class AdjudicationForm extends React.Component {
     const { 
       adjudicationId, 
       collectionName, 
-      currentValues : {
-        audioURL, 
-        judgeName, 
-        notes
-      } 
+      currentValues
     } = this.props;
     const { artisticMark, technicalMark } = this.state;
     const cumulativeMark = (parseInt(artisticMark, 10) + parseInt(technicalMark, 10)) / 2;
+
     const data = {
-      audioURL,
       cumulativeMark,
-      judgeName,
-      notes,
+      ...currentValues,
       ...this.state
     };
     await updateData(
