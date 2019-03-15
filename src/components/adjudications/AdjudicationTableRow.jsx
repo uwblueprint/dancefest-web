@@ -15,14 +15,14 @@ const AdjudicationTableRow = ({
     audioURL,
     choreoAward,
     cumulativeMark,
-    judgeName,
-    specialAward
+    specialAward,
+    tabletID
   } = currentValues;
 
   return (
     <TableRow key={id}>
       <TableCell>
-        {judgeName}
+        {tabletID}
       </TableCell>
       <TableCell>
         <p>
@@ -53,8 +53,8 @@ AdjudicationTableRow.propTypes = {
     choreoAward: PropTypes.bool,
     cumulativeMark: PropTypes.number,
     notes: PropTypes.string,
-    judgeName: PropTypes.string,
     specialAward: PropTypes.bool,
+    tabletID: PropTypes.number,
     technicalMark: PropTypes.number
   }).isRequired,
   collectionName: PropTypes.string.isRequired,

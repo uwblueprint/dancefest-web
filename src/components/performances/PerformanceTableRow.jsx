@@ -19,10 +19,10 @@ class PerformanceTableRow extends React.Component {
       academicLevel,
       competitionLevel,
       danceEntry,
+      danceSize,
       danceStyle,
       danceTitle,
-      school,
-      size
+      school
     } = currentValues;
 
     return (
@@ -33,7 +33,7 @@ class PerformanceTableRow extends React.Component {
         <TableCell>{academicLevel}</TableCell>
         <TableCell>{competitionLevel}</TableCell>
         <TableCell>{danceStyle}</TableCell>
-        <TableCell>{size}</TableCell>
+        <TableCell>{danceSize}</TableCell>
         <TableCell>
           <PerformanceDialog
             currentValues={currentValues}
@@ -51,11 +51,11 @@ PerformanceTableRow.propTypes = {
     academicLevel: PropTypes.string,
     choreographers: PropTypes.string,
     danceEntry: PropTypes.number,
+    danceSize: PropTypes.number,
     danceStyle: PropTypes.string,
     danceTitle: PropTypes.string,
     performers: PropTypes.string,
-    school: PropTypes.string,
-    size: PropTypes.number
+    school: PropTypes.string
   }),
   eventId: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired

@@ -38,12 +38,12 @@ class AdjudicationDialog extends React.Component {
       audioURL,
       choreoAward,
       cumulativeMark,
-      judgeName,
       notes,
       specialAward,
+      tabletID,
       technicalMark
     } = currentValues;
-
+  
     const viewForm = (
       <React.Fragment>
         <div style={{ display: 'flex', flexFlow: 'column', margin: '35px' }}>
@@ -112,7 +112,7 @@ class AdjudicationDialog extends React.Component {
           edit={view}
           onEditClick={this.handleView}
           shouldShowDropdown
-          title={judgeName || ''} />
+          title={tabletID || ''} />
         {view ? (viewForm) : (editForm)}
       </DFDialog>
     );
@@ -128,8 +128,8 @@ AdjudicationDialog.propTypes = {
     choreoAward: PropTypes.bool,
     cumulativeMark: PropTypes.number,
     notes: PropTypes.string,
-    judgeName: PropTypes.string,
     specialAward: PropTypes.bool,
+    tabletID: PropTypes.number,
     technicalMark: PropTypes.number
   }).isRequired
 };
