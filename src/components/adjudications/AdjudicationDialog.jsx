@@ -43,7 +43,7 @@ class AdjudicationDialog extends React.Component {
       tabletID,
       technicalMark
     } = currentValues;
-
+  
     const viewForm = (
       <React.Fragment>
         <div style={{ display: 'flex', flexFlow: 'column', margin: '35px' }}>
@@ -112,7 +112,7 @@ class AdjudicationDialog extends React.Component {
           edit={view}
           onEditClick={this.handleView}
           shouldShowDropdown
-          title={tabletID || ''} />
+          title={tabletID || 'N/A'} />
         {view ? (viewForm) : (editForm)}
       </DFDialog>
     );
