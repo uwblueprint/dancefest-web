@@ -37,7 +37,11 @@ class EventForm extends React.Component {
     const { name, value } = e.target;
     console.log(value);
     if(name === 'eventDate' && value){
-      this.setState({ [name]: value.search(/-/) === -1 ? moment(value, 'MM/DD/YYYY').format('DD/MM/YYYY') : moment(value, 'YYYY-MM-DD').format('DD/MM/YYYY') });
+      this.setState({ 
+        [name]: value.includes("-") 
+        ? moment(value, 'YYYY-MM-DD').format('DD/MM/YYYY') 
+        : moment(value, 'MM/DD/YYYY').format('DD/MM/YYYY') 
+      });
     }
     else{
       this.setState({ [name]: value });
@@ -86,7 +90,7 @@ class EventForm extends React.Component {
           <div style={{ display: 'flex' }}>
             <DialogInput 
               fullWidth 
-              InputLabelProps={{ shrink: true }} 
+              inputLabelProps={{ shrink: true }} 
               name='eventDate' 
               label='Event Date' 
               onChange={this.handleChange} 
