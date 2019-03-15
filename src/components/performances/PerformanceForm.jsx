@@ -198,11 +198,11 @@ PerformanceForm.propTypes = {
     academicLevel: PropTypes.string,
     choreographers: PropTypes.string,
     danceEntry: PropTypes.number,
+    danceSize: PropTypes.number,
     danceStyle: PropTypes.string,
     danceTitle: PropTypes.string,
     performers: PropTypes.string,
-    school: PropTypes.string,
-    danceSize: PropTypes.number
+    school: PropTypes.string
   }),
   formType: PropTypes.oneOf(['edit', 'new']),
   onModalClose: PropTypes.func.isRequired
