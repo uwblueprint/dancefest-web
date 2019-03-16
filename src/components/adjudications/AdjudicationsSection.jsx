@@ -25,7 +25,7 @@ class AdjudicationsSection extends React.Component {
       this.setState({ performanceValues: querySnapshot.data() });
     });
 
-    const collectionName = docName + '/adjudications';
+    const collectionName = `${docName}/adjudications`;
 
     db.collection(collectionName).onSnapshot((querySnapshot) => {
       const adjudications = [];
