@@ -61,7 +61,17 @@ AdjudicationTableRow.propTypes = {
   }).isRequired,
   collectionName: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
-  performanceValues: PropTypes.shape().isRequired
+  performanceValues: PropTypes.shape({
+    academicLevel: PropTypes.string,
+    choreographers: PropTypes.string,
+    competitionLevel: PropTypes.string,
+    danceEntry: PropTypes.string,
+    danceStyle: PropTypes.string,
+    danceTitle: PropTypes.string,
+    performers: PropTypes.string,
+    school: PropTypes.string,
+    size: PropTypes.string
+  }).isRequired
 };
 
 export default AdjudicationTableRow;
