@@ -56,9 +56,9 @@ class AdjudicationForm extends React.Component {
     const cumulativeMark = (parseInt(artisticMark, 10) + parseInt(technicalMark, 10)) / 2;
 
     const data = {
-      cumulativeMark,
       ...currentValues,
-      ...this.state
+      ...this.state,
+      cumulativeMark
     };
     await updateData(
       collectionName,
