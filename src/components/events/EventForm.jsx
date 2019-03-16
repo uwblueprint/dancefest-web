@@ -23,7 +23,6 @@ class EventForm extends React.Component {
       eventDate: currentValues.eventDate || moment().format('DD/MM/YYYY'),
       eventTitle: currentValues.eventTitle || '',
       numJudges: currentValues.numJudges || 0,
-      focused: false
     };
   }
 
