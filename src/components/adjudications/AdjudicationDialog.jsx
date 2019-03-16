@@ -67,23 +67,23 @@ class AdjudicationDialog extends React.Component {
         <div style={{ display: 'flex', flexFlow: 'column', margin: '35px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-around', borderBottom: '1px solid #dcdcdc' }}>
             <div style={{ flex: '1 0 0' }}>
-              <DialogReadOnly defaultValue={getDisplayValues(danceEntry)} label="Dance Entry" />
-              <DialogReadOnly defaultValue={getDisplayValues(danceTitle)} label="Dance Title" />
-              <DialogReadOnly defaultValue={getDisplayValues(performers)} label="Performers" />
+              <DialogReadOnly value={getDisplayValues(danceEntry)} label="Dance Entry" />
+              <DialogReadOnly value={getDisplayValues(danceTitle)} label="Dance Title" />
+              <DialogReadOnly value={getDisplayValues(performers)} label="Performers" />
               <DialogReadOnly value={getDisplayValues(choreographers)} label="Choreographer" />
             </div>
 
             <div style={{ flex: '1 0 0' }}>
               <div style={{ display: 'flex' }}>
-                <DialogReadOnly defaultValue={getDisplayValues(school)} label="School" />
-                <DialogReadOnly defaultValue={getDisplayValues(academicLevel)} label="Level" />
+                <DialogReadOnly value={getDisplayValues(school)} label="School" />
+                <DialogReadOnly value={getDisplayValues(academicLevel)} label="Level" />
               </div>
-              <DialogReadOnly defaultValue={getDisplayValues(competitionLevel)} label="Competition Level" />
-              <DialogReadOnly defaultValue={getDisplayValues(danceStyle)} label="Dance Style" helperText="  " />
-              <DialogReadOnly defaultValue={getDisplayValues(size)} label="Size" />
+              <DialogReadOnly value={getDisplayValues(competitionLevel)} label="Competition Level" />
+              <DialogReadOnly value={getDisplayValues(danceStyle)} label="Dance Style" helperText="  " />
+              <DialogReadOnly value={getDisplayValues(size)} label="Size" />
             </div>
           </div>
-          <DialogReadOnly fullWidth label="Notes" defaultValue={notes} />
+          <DialogReadOnly fullWidth label="Notes" value={notes} />
           {audioURL && <AudioPlay audioURL={audioURL} />}
           <FormHelperText>Award Considerations</FormHelperText>
           {specialAward && (
