@@ -9,7 +9,8 @@ const DialogReadOnly = ({
   classes,
   label,
   defaultValue,
-  fullWidth
+  fullWidth,
+  value
 }) => (
   <TextField
     fullWidth={fullWidth}
@@ -18,7 +19,8 @@ const DialogReadOnly = ({
     defaultValue={defaultValue}
     margin="normal"
     InputLabelProps={{ shrink: true, className: classes.readOnlyLabel }}
-    InputProps={{ readOnly: true, className: classes.readOnlyInput }} />
+    InputProps={{ readOnly: true, className: classes.readOnlyInput }} 
+    value={value} />
 );
 
 export default withStyles(styles)(DialogReadOnly);
@@ -27,7 +29,8 @@ DialogReadOnly.propTypes = {
   classes: PropTypes.shape().isRequired,
   defaultValue: PropTypes.string,
   fullWidth: PropTypes.bool,
-  label: PropTypes.string
+  label: PropTypes.string,
+  value: PropTypes.string
 };
 
 DialogReadOnly.defaultProps = {

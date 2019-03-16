@@ -20,9 +20,9 @@ class AdjudicationsSection extends React.Component {
   componentDidMount() {
     const { match: { params: { eventId, performanceId }}} = this.props;
 
-    const docRef = db.collection('events').doc(eventId).collection('performances').doc(performanceId);
-    docRef.get().then((doc) => {
-      this.setState({ performanceValues: doc.data() });
+    const docRef = db.doc(`events/${eventId}/performances/${performanceId}`);
+    docRef.onSnapshot((querySnapshot) => {
+      this.setState({ performanceValues: querySnapshot.data() });
     });
 
     const collectionName = `events/${eventId}/performances/${performanceId}/adjudications`;
