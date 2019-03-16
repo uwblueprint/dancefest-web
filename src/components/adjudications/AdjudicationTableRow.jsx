@@ -13,10 +13,12 @@ const AdjudicationTableRow = ({
 }) => {
   const {
     audioURL,
+    artisticMark,
     choreoAward,
     cumulativeMark,
     judgeName,
-    specialAward
+    specialAward,
+    technicalMark
   } = currentValues;
 
   return (
@@ -28,6 +30,12 @@ const AdjudicationTableRow = ({
         <p>
           {audioURL ? 'yes' : 'no'}
         </p>
+      </TableCell>
+      <TableCell>
+        {artisticMark}
+      </TableCell>
+      <TableCell>
+        {technicalMark}
       </TableCell>
       <TableCell>
         {cumulativeMark}
