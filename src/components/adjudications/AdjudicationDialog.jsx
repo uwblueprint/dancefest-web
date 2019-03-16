@@ -54,10 +54,10 @@ class AdjudicationDialog extends React.Component {
       competitionLevel,
       danceEntry,
       danceStyle,
+      danceSize,
       danceTitle,
       performers,
-      school,
-      size
+      school
     } = performanceValues;
 
     const getDisplayValues = (value) => value || "N/A";
@@ -80,7 +80,7 @@ class AdjudicationDialog extends React.Component {
               </div>
               <DialogReadOnly value={getDisplayValues(competitionLevel)} label="Competition Level" />
               <DialogReadOnly value={getDisplayValues(danceStyle)} label="Dance Style" helperText="  " />
-              <DialogReadOnly value={getDisplayValues(size)} label="Size" />
+              <DialogReadOnly value={getDisplayValues(danceSize)} label="Dance Size" />
             </div>
           </div>
           <DialogReadOnly fullWidth label="Notes" value={notes} />
@@ -105,9 +105,9 @@ class AdjudicationDialog extends React.Component {
           padding: '0',
           margin: '0'
         }}>
-          <Score type="subtotal" score={artisticMark ? artisticMark : "N/A"} scoreName="Artistic" />
-          <Score type="subtotal" score={technicalMark ? technicalMark : "N/A"} scoreName="Technical" />
-          <Score type="total" score={cumulativeMark ? cumulativeMark : "N/A"} scoreName="Score" />
+          <Score type="subtotal" score={getDisplayValues(artisticMark)} scoreName="Artistic" />
+          <Score type="subtotal" score={getDisplayValues(technicalMark)} scoreName="Technical" />
+          <Score type="total" score={getDisplayValues(cumulativeMark)} scoreName="Score" />
         </DialogActions>
       </React.Fragment>
     );
@@ -155,11 +155,11 @@ AdjudicationDialog.propTypes = {
     choreographers: PropTypes.string,
     competitionLevel: PropTypes.string,
     danceEntry: PropTypes.string,
+    danceSize: PropTypes.string,
     danceStyle: PropTypes.string,
     danceTitle: PropTypes.string,
     performers: PropTypes.string,
-    school: PropTypes.string,
-    size: PropTypes.string
+    school: PropTypes.string
   }).isRequired
 };
 

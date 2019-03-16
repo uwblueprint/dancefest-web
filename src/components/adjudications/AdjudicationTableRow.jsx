@@ -66,11 +66,11 @@ AdjudicationTableRow.propTypes = {
     choreographers: PropTypes.string,
     competitionLevel: PropTypes.string,
     danceEntry: PropTypes.string,
+    danceSize: PropTypes.string,
     danceStyle: PropTypes.string,
     danceTitle: PropTypes.string,
     performers: PropTypes.string,
-    school: PropTypes.string,
-    size: PropTypes.string
+    school: PropTypes.string
   }).isRequired
 };
 

@@ -19,7 +19,7 @@ const DialogReadOnly = ({
     defaultValue={defaultValue}
     margin="normal"
     InputLabelProps={{ shrink: true, className: classes.readOnlyLabel }}
-    InputProps={{ readOnly: true, className: classes.readOnlyInput }} 
+    InputProps={{ className: classes.readOnlyInput, readOnly: true }} 
     value={value} />
 );
 
