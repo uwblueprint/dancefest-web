@@ -31,7 +31,12 @@ class AdjudicationDialog extends React.Component {
   }
 
   render() {
-    const { adjudicationId, collectionName, currentValues } = this.props;
+    const {
+      adjudicationId,
+      collectionName,
+      currentValues,
+      performanceValues
+    } = this.props;
     const { open, view } = this.state;
     const {
       artisticMark,
@@ -43,30 +48,43 @@ class AdjudicationDialog extends React.Component {
       specialAward,
       technicalMark
     } = currentValues;
+    const {
+      academicLevel,
+      choreographers,
+      competitionLevel,
+      danceEntry,
+      danceStyle,
+      danceSize,
+      danceTitle,
+      performers,
+      school
+    } = performanceValues;
+
+    const getDisplayValues = (value) => value || "N/A";
 
     const viewForm = (
       <React.Fragment>
         <div style={{ display: 'flex', flexFlow: 'column', margin: '35px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-around', borderBottom: '1px solid #dcdcdc' }}>
             <div style={{ flex: '1 0 0' }}>
-              <DialogReadOnly defaultValue="hi" label="Dance Entry" />
-              <DialogReadOnly defaultValue="hi" label="Dance Title" />
-              <DialogReadOnly defaultValue="hi" label="Performers" />
-              <DialogReadOnly defaultValue="hi" label="Choreographer" />
+              <DialogReadOnly value={getDisplayValues(danceEntry)} label="Dance Entry" />
+              <DialogReadOnly value={getDisplayValues(danceTitle)} label="Dance Title" />
+              <DialogReadOnly value={getDisplayValues(performers)} label="Performers" />
+              <DialogReadOnly value={getDisplayValues(choreographers)} label="Choreographer" />
             </div>
 
             <div style={{ flex: '1 0 0' }}>
               <div style={{ display: 'flex' }}>
-                <DialogReadOnly label="School" />
-                <DialogReadOnly label="Level" />
+                <DialogReadOnly value={getDisplayValues(school)} label="School" />
+                <DialogReadOnly value={getDisplayValues(academicLevel)} label="Level" />
               </div>
-              <DialogReadOnly label="Competition Level" />
-              <DialogReadOnly label="Dance Style" helperText="  " />
-              <DialogReadOnly label="Size" />
+              <DialogReadOnly value={getDisplayValues(competitionLevel)} label="Competition Level" />
+              <DialogReadOnly value={getDisplayValues(danceStyle)} label="Dance Style" helperText="  " />
+              <DialogReadOnly value={getDisplayValues(danceSize)} label="Dance Size" />
             </div>
           </div>
-          <DialogReadOnly fullWidth label="Notes" defaultValue={notes} />
-          {audioURL && <AudioPlay audioURL={audioURL}/>}
+          <DialogReadOnly fullWidth label="Notes" value={notes} />
+          {audioURL && <AudioPlay audioURL={audioURL} />}
           <FormHelperText>Award Considerations</FormHelperText>
           {specialAward && (
             <div>
@@ -87,9 +105,9 @@ class AdjudicationDialog extends React.Component {
           padding: '0',
           margin: '0'
         }}>
-          <Score type="subtotal" score={artisticMark} scoreName="Artistic" />
-          <Score type="subtotal" score={technicalMark} scoreName="Technical" />
-          <Score type="total" score={cumulativeMark} scoreName="Score" />
+          <Score type="subtotal" score={getDisplayValues(artisticMark)} scoreName="Artistic" />
+          <Score type="subtotal" score={getDisplayValues(technicalMark)} scoreName="Technical" />
+          <Score type="total" score={getDisplayValues(cumulativeMark)} scoreName="Score" />
         </DialogActions>
       </React.Fragment>
     );
@@ -131,6 +149,17 @@ AdjudicationDialog.propTypes = {
     judgeName: PropTypes.string,
     specialAward: PropTypes.bool,
     technicalMark: PropTypes.number
+  }).isRequired,
+  performanceValues: PropTypes.shape({
+    academicLevel: PropTypes.string,
+    choreographers: PropTypes.string,
+    competitionLevel: PropTypes.string,
+    danceEntry: PropTypes.string,
+    danceSize: PropTypes.string,
+    danceStyle: PropTypes.string,
+    danceTitle: PropTypes.string,
+    performers: PropTypes.string,
+    school: PropTypes.string
   }).isRequired
 };
 

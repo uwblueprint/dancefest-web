@@ -12,13 +12,20 @@ class AdjudicationsSection extends React.Component {
 
     this.state = {
       adjudications: [],
-      loading: true
+      loading: true,
+      performanceValues: {}
     };
   }
 
   componentDidMount() {
     const { match: { params: { eventId, performanceId }}} = this.props;
-    const collectionName = `events/${eventId}/performances/${performanceId}/adjudications`;
+
+    const docName = `events/${eventId}/performances/${performanceId}`;
+    db.doc(docName).onSnapshot((querySnapshot) => {
+      this.setState({ performanceValues: querySnapshot.data() });
+    });
+
+    const collectionName = `${docName}/adjudications`;
 
     db.collection(collectionName).onSnapshot((querySnapshot) => {
       const adjudications = [];
@@ -35,7 +42,7 @@ class AdjudicationsSection extends React.Component {
 
   render() {
     const { match: { params: { eventId, performanceId }}} = this.props;
-    const { adjudications, loading } = this.state;
+    const { adjudications, loading, performanceValues } = this.state;
     const collectionName = `events/${eventId}/performances/${performanceId}/adjudications`;
     const headings = ['Judge', 'Audio', 'Artistic Score', 'Technical Score', 'Cumulative Score', 'Awards'];
     const keys = ['artisticMark', 'audioURL', 'choreoAward', 'cumulativeMark', 'judgeName', 'notes', 'specialAward', 'technicalMark'];
@@ -51,6 +58,7 @@ class AdjudicationsSection extends React.Component {
               collectionName={collectionName}
               currentValues={currentValues}
               key={id}
+              performanceValues={performanceValues}
               id={id} />);
         })}
       </Section>
