@@ -198,7 +198,7 @@ PerformanceForm.propTypes = {
     academicLevel: PropTypes.string,
     choreographers: PropTypes.string,
     danceEntry: PropTypes.number,
-    danceSize: PropTypes.number,
+    danceSize: PropTypes.string,
     danceStyle: PropTypes.string,
     danceTitle: PropTypes.string,
     performers: PropTypes.string,
