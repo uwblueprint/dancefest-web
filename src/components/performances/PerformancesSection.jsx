@@ -87,8 +87,7 @@ class PerformancesSection extends React.Component {
           if (filtersObj[key].includes('specialAward')) {
             return performance.specialAwardEnum > 0;
           }
-
-          return false;
+          return true;
         }
         return filtersObj[key].includes(performance[key]);
       });
