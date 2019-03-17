@@ -74,7 +74,6 @@ class PerformancesSection extends React.Component {
     // Filter function that accepts a performance object and returns true
     // if this performance passes the filter (i.e should be included)
     const filterFunction = (performance) => {
-      const danceTitle = performance.danceTitle ? performance.danceTitle.toLowerCase() : '';
       // Iterates through each performance metadata/key (i.e. academicLevel) and then
       // iterates through each string in the array (i.e. secondary, primary)
       const isFilterSuccess = keys.every((key) => {
@@ -95,8 +94,11 @@ class PerformancesSection extends React.Component {
       // If the user is also performing a search query, we want to include this
       // in our filter logic
       if (searchQuery && searchQuery.length > 0) {
+        const { danceTitle, performers, choreographers } = performance;
+        const fields = [danceTitle, performers, choreographers];
         const query = searchQuery.toLowerCase();
-        return isFilterSuccess && danceTitle.search(query) !== -1;
+
+        return isFilterSuccess && fields.find(field => field.toLowerCase().search(query) !== -1);
       }
       return isFilterSuccess;
     };
@@ -111,7 +113,7 @@ class PerformancesSection extends React.Component {
     const { filteredPerformances, loading, performances } = this.state;
     const { match: { params: { eventId }}} = this.props;
     const headings = ['Dance Title', 'Dance Entry', 'School', 'Academic Level', 'Level of Competition', 'Dance Style', 'Dance Size'];
-    const keys = ['academicLevel', 'choreographers', 'competitionLevel', 'danceEntry', 'danceStyle', 'danceTitle', 'performers', 'school', 'size'];
+    const keys = ['academicLevel', 'choreographers', 'competitionLevel', 'danceEntry', 'danceSize', 'danceStyle', 'danceTitle', 'performers', 'school'];
     const renderNewButton = (<PerformanceDialog eventId={eventId} formType="new" />);
     const showPerformances = Array.isArray(performances) && performances.length > 0;
     const tableFilters = <Filter handleFilters={this.handleFilters} />;

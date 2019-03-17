@@ -9,25 +9,34 @@ import AdjudicationDialog from './AdjudicationDialog';
 const AdjudicationTableRow = ({
   collectionName,
   currentValues,
-  id
+  id,
+  performanceValues
 }) => {
   const {
     audioURL,
+    artisticMark,
     choreoAward,
     cumulativeMark,
-    judgeName,
-    specialAward
+    specialAward,
+    tabletID,
+    technicalMark
   } = currentValues;
 
   return (
     <TableRow key={id}>
       <TableCell>
-        {judgeName}
+        {tabletID}
       </TableCell>
       <TableCell>
         <p>
           {audioURL ? 'yes' : 'no'}
         </p>
+      </TableCell>
+      <TableCell>
+        {artisticMark}
+      </TableCell>
+      <TableCell>
+        {technicalMark}
       </TableCell>
       <TableCell>
         {cumulativeMark}
@@ -40,7 +49,8 @@ const AdjudicationTableRow = ({
         <AdjudicationDialog
           adjudicationId={id}
           collectionName={collectionName}
-          currentValues={currentValues} />
+          currentValues={currentValues}
+          performanceValues={performanceValues} />
       </TableCell>
     </TableRow>
   );
@@ -53,12 +63,23 @@ AdjudicationTableRow.propTypes = {
     choreoAward: PropTypes.bool,
     cumulativeMark: PropTypes.number,
     notes: PropTypes.string,
-    judgeName: PropTypes.string,
     specialAward: PropTypes.bool,
+    tabletID: PropTypes.number,
     technicalMark: PropTypes.number
   }).isRequired,
   collectionName: PropTypes.string.isRequired,
-  id: PropTypes.string.isRequired
+  id: PropTypes.string.isRequired,
+  performanceValues: PropTypes.shape({
+    academicLevel: PropTypes.string,
+    choreographers: PropTypes.string,
+    competitionLevel: PropTypes.string,
+    danceEntry: PropTypes.string,
+    danceSize: PropTypes.string,
+    danceStyle: PropTypes.string,
+    danceTitle: PropTypes.string,
+    performers: PropTypes.string,
+    school: PropTypes.string
+  }).isRequired
 };
 
 export default AdjudicationTableRow;

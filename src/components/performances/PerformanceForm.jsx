@@ -25,20 +25,20 @@ class PerformanceForm extends React.Component {
       choreographers: currentValues.choreographers || '',
       competitionLevel: currentValues.competitionLevel || '',
       danceEntry: currentValues.danceEntry,
+      danceSize: currentValues.danceSize || 'N/A',
       danceStyle: currentValues.danceStyle || '',
       danceTitle: currentValues.danceTitle || '',
       disabledSave: true,
       options: {},
       performers: currentValues.performers || '',
-      school: currentValues.school || '',
-      size: currentValues.size || 0
+      school: currentValues.school || ''
     };
   }
 
   // Disable save button if not all input fields are filled.
   static getDerivedStateFromProps(props, state) {
     const fields = ['academicLevel', 'choreographers', 'competitionLevel',
-      'danceEntry', 'danceStyle', 'danceTitle', 'performers', 'school', 'size'];
+      'danceEntry', 'danceSize', 'danceStyle', 'danceTitle', 'performers', 'school'];
     const values = pick(state, fields);
 
     return { disabledSave: !(Object.keys(values).every(value => !!state[value])) };
@@ -94,13 +94,13 @@ class PerformanceForm extends React.Component {
       choreographers,
       competitionLevel,
       danceEntry,
+      danceSize,
       danceStyle,
       danceTitle,
       disabledSave,
       options,
       performers,
-      school,
-      size
+      school
     } = this.state;
     return (
       <React.Fragment>
@@ -172,10 +172,10 @@ class PerformanceForm extends React.Component {
             <DialogSelect
               className={classes.flex_default}
               label="Size"
-              name="size"
+              name="danceSize"
               onChange={this.handleChange}
               options={this.renderOptions(options.danceSize)}
-              value={size} />
+              value={danceSize} />
           </div>
         </div>
         <div className={classes.dfdialog_footer}>
@@ -199,11 +199,11 @@ PerformanceForm.propTypes = {
     academicLevel: PropTypes.string,
     choreographers: PropTypes.string,
     danceEntry: PropTypes.number,
+    danceSize: PropTypes.string,
     danceStyle: PropTypes.string,
     danceTitle: PropTypes.string,
     performers: PropTypes.string,
-    school: PropTypes.string,
-    size: PropTypes.number
+    school: PropTypes.string
   }),
   formType: PropTypes.oneOf([dialogType.EDIT, dialogType.NEW]),
   onModalClose: PropTypes.func.isRequired

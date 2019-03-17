@@ -4,6 +4,7 @@ import pick from 'lodash/pick';
 
 import { withStyles } from '@material-ui/core/styles';
 import DialogActions from '@material-ui/core/DialogActions';
+import moment from 'moment';
 
 import addData from '../../firebase/utils/addData';
 import updateData from '../../firebase/utils/updateData';
@@ -20,9 +21,9 @@ class EventForm extends React.Component {
 
     this.state = {
       disabledSave: true,
-      eventDate: currentValues.eventDate || '',
+      eventDate: currentValues.eventDate || moment().format('DD/MM/YYYY'),
       eventTitle: currentValues.eventTitle || '',
-      numJudges: currentValues.numJudges || 0
+      numJudges: currentValues.numJudges || 0,
     };
   }
 
@@ -34,7 +35,17 @@ class EventForm extends React.Component {
 
   handleChange = (e) => {
     const { name, value } = e.target;
-    this.setState({ [name]: value });
+    console.log(value);
+    if(name === 'eventDate' && value){
+      this.setState({ 
+        [name]: value.includes("-") 
+        ? moment(value, 'YYYY-MM-DD').format('DD/MM/YYYY') 
+        : moment(value, 'MM/DD/YYYY').format('DD/MM/YYYY') 
+      });
+    }
+    else{
+      this.setState({ [name]: value });
+    }
   }
 
   handleCancel = () => {
@@ -47,7 +58,7 @@ class EventForm extends React.Component {
     const { eventDate, eventTitle, numJudges } = this.state;
     const collectionName = 'events';
     const data = {
-      eventDate: new Date(eventDate),
+      eventDate: new Date(moment(eventDate, 'DD/MM/YYYY').format('MM-DD-YYYY')),
       eventTitle,
       numJudges
     };
@@ -77,7 +88,17 @@ class EventForm extends React.Component {
         <div style={{ margin: '25px' }}>
           <DialogInput fullWidth name="eventTitle" label="Event Title" onChange={this.handleChange} value={eventTitle} />
           <div style={{ display: 'flex' }}>
-            <DialogInput style={{ marginRight: '5px' }} fullWidth name="eventDate" label="Event Date" onChange={this.handleChange} placeholder="DD/MM/YYYY" value={eventDate} />
+            <DialogInput 
+              fullWidth 
+              inputLabelProps={{ shrink: true }} 
+              name='eventDate' 
+              label='Event Date' 
+              onChange={this.handleChange} 
+              style={{ marginRight: '5px' }} 
+              type="date" 
+              value={eventDate ? moment(eventDate, 'DD/MM/YYYY').format('YYYY-MM-DD') : ''} 
+              variant="filled"
+            />
             <DialogInput fullWidth name="numJudges" label="No. Judges" onChange={this.handleChange} type="number" value={numJudges} />
           </div>
         </div>

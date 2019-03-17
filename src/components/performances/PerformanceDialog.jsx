@@ -9,18 +9,36 @@ import PerformanceForm from './PerformanceForm';
 import DFDialog from '../interface/dialog/DFDialog';
 import DialogHeader from '../interface/dialog/DialogHeader';
 import styles from '../styles';
+import addData from '../../firebase/utils/addData';
 
 class PerformanceDialog extends React.Component {
-  state = {
-    open: false
-  };
+  constructor(props) {
+    super(props);
 
-  handleClickOpen = () => {
-    this.setState({ open: true });
-  };
+    this.state = { open: false };
+  }
 
   handleClose = () => {
     this.setState({ open: false });
+  };
+
+  handleDup = async () => {
+    const {
+      currentValues,
+      eventId
+    } = this.props;
+    const vals = {
+      ...currentValues,
+      danceTitle: `${currentValues.danceTitle} Duplicate`
+    };
+    const collectionName = `events/${eventId}/performances`;
+
+    await addData(collectionName, vals);
+    this.handleClose();
+  }
+
+  handleClickOpen = () => {
+    this.setState({ open: true });
   };
 
   render() {
@@ -44,14 +62,15 @@ class PerformanceDialog extends React.Component {
 
     return (
       <DFDialog
-        open={open}
         buttonTitle={buttonTitle}
         formType={formType}
         onClick={this.handleClickOpen}
-        onClose={this.handleClose}>
+        onClose={this.handleClose}
+        open={open}>
         <DialogHeader
           collectionName={collectionName}
           docId={performanceId}
+          handleDup={this.handleDup}
           shouldShowDropdown={shouldShowDropdown}
           title={title} />
         <PerformanceForm
@@ -76,12 +95,14 @@ PerformanceDialog.propTypes = {
     school: PropTypes.string,
     size: PropTypes.number
   }),
+  collectionName: PropTypes.string,
   eventId: PropTypes.string.isRequired,
   formType: PropTypes.oneOf([dialogType.EDIT, dialogType.NEW]),
   performanceId: PropTypes.string
 };
 
 PerformanceDialog.defaultProps = {
+  collectionName: '',
   currentValues: {},
   formType: dialogType.EDIT,
   performanceId: null
