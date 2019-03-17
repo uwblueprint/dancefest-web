@@ -43,9 +43,9 @@ class AdjudicationDialog extends React.Component {
       audioURL,
       choreoAward,
       cumulativeMark,
-      judgeName,
       notes,
       specialAward,
+      tabletID,
       technicalMark
     } = currentValues;
     const {
@@ -130,7 +130,7 @@ class AdjudicationDialog extends React.Component {
           edit={view}
           onEditClick={this.handleView}
           shouldShowDropdown
-          title={judgeName || ''} />
+          title={tabletID || 'N/A'} />
         {view ? (viewForm) : (editForm)}
       </DFDialog>
     );
@@ -146,8 +146,8 @@ AdjudicationDialog.propTypes = {
     choreoAward: PropTypes.bool,
     cumulativeMark: PropTypes.number,
     notes: PropTypes.string,
-    judgeName: PropTypes.string,
     specialAward: PropTypes.bool,
+    tabletID: PropTypes.number,
     technicalMark: PropTypes.number
   }).isRequired,
   performanceValues: PropTypes.shape({

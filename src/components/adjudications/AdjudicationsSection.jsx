@@ -44,8 +44,8 @@ class AdjudicationsSection extends React.Component {
     const { match: { params: { eventId, performanceId }}} = this.props;
     const { adjudications, loading, performanceValues } = this.state;
     const collectionName = `events/${eventId}/performances/${performanceId}/adjudications`;
-    const headings = ['Judge', 'Audio', 'Artistic Score', 'Technical Score', 'Cumulative Score', 'Awards'];
-    const keys = ['artisticMark', 'audioURL', 'choreoAward', 'cumulativeMark', 'judgeName', 'notes', 'specialAward', 'technicalMark'];
+    const headings = ['Tablet ID', 'Audio', 'Artistic Score', 'Technical Score', 'Cumulative Score', 'Awards'];
+    const keys = ['artisticMark', 'audioURL', 'choreoAward', 'cumulativeMark', 'notes', 'specialAward', 'tabletID', 'technicalMark'];
     const showAdjudications = Array.isArray(adjudications) && adjudications.length > 0;
 
     return (

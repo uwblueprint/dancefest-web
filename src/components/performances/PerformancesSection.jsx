@@ -98,7 +98,7 @@ class PerformancesSection extends React.Component {
     const { filteredPerformances, loading, performances } = this.state;
     const { match: { params: { eventId }}} = this.props;
     const headings = ['Dance Title', 'Dance Entry', 'School', 'Academic Level', 'Level of Competition', 'Dance Style', 'Dance Size'];
-    const keys = ['academicLevel', 'choreographers', 'competitionLevel', 'danceEntry', 'danceStyle', 'danceTitle', 'performers', 'school', 'size'];
+    const keys = ['academicLevel', 'choreographers', 'competitionLevel', 'danceEntry', 'danceSize', 'danceStyle', 'danceTitle', 'performers', 'school'];
     const renderNewButton = (<PerformanceDialog eventId={eventId} formType="new" />);
     const showPerformances = Array.isArray(performances) && performances.length > 0;
     const tableFilters = <Filter handleFilters={this.handleFilters} />;
