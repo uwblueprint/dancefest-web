@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 
+import { dialogType } from '../../constants';
 import PerformanceForm from './PerformanceForm';
 import DFDialog from '../interface/dialog/DFDialog';
 import DialogHeader from '../interface/dialog/DialogHeader';
@@ -49,9 +50,9 @@ class PerformanceDialog extends React.Component {
     } = this.props;
     const { open } = this.state;
     const collectionName = `events/${eventId}/performances`;
-    const shouldShowDropdown = formType === 'edit';
-    const dialogTitle = formType === 'edit' ? 'Edit' : 'New';
-    const buttonTitle = formType === 'edit' ? 'EDIT'
+    const shouldShowDropdown = formType === dialogType.EDIT;
+    const dialogTitle = formType === dialogType.EDIT ? 'Edit' : 'New';
+    const buttonTitle = formType === dialogType.EDIT ? 'EDIT'
       : (
         <React.Fragment>
           <CalendarTodayIcon style={{ color: 'gray', marginRight: '5px' }} />
@@ -96,14 +97,14 @@ PerformanceDialog.propTypes = {
   }),
   collectionName: PropTypes.string,
   eventId: PropTypes.string.isRequired,
-  formType: PropTypes.oneOf(['edit', 'new']),
+  formType: PropTypes.oneOf([dialogType.EDIT, dialogType.NEW]),
   performanceId: PropTypes.string
 };
 
 PerformanceDialog.defaultProps = {
   collectionName: '',
   currentValues: {},
-  formType: 'edit',
+  formType: dialogType.EDIT,
   performanceId: null
 };
 

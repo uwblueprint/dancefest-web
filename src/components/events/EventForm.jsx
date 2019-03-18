@@ -9,6 +9,7 @@ import moment from 'moment';
 import addData from '../../firebase/utils/addData';
 import updateData from '../../firebase/utils/updateData';
 
+import { dialogType } from '../../constants';
 import DialogInput from '../interface/dialog/DialogInput';
 import Button from '../interface/Button';
 import styles from '../styles';
@@ -61,7 +62,7 @@ class EventForm extends React.Component {
       eventTitle,
       numJudges
     };
-    if (formType === 'new') {
+    if (formType === dialogType.NEW) {
       await addData(collectionName, data);
     } else {
       await updateData(collectionName, eventId, data);
@@ -80,7 +81,7 @@ class EventForm extends React.Component {
       disabledSave,
       eventTitle,
       eventDate,
-      numJudges,
+      numJudges
     } = this.state;
     return (
       <React.Fragment>
@@ -104,7 +105,7 @@ class EventForm extends React.Component {
         <div className={classes.dfdialog_footer}>
           <DialogActions>
             <Button onClick={this.handleCancel} type="default">
-              {formType === 'edit' ? 'cancel' : 'discard'}
+              {formType === dialogType.EDIT ? 'cancel' : 'discard'}
             </Button>
             <Button disabled={disabledSave} onClick={this.handleSubmit} type="primary">
               Save
@@ -119,13 +120,13 @@ class EventForm extends React.Component {
 EventForm.propTypes = {
   classes: PropTypes.shape().isRequired,
   currentValues: PropTypes.shape(),
-  formType: PropTypes.oneOf(['edit', 'new']),
+  formType: PropTypes.oneOf([dialogType.EDIT, dialogType.NEW]),
   onModalClose: PropTypes.func.isRequired
 };
 
 EventForm.defaultProps = {
   currentValues: {},
-  formType: 'edit'
+  formType: dialogType.EDIT
 };
 
 export default withStyles(styles)(EventForm);

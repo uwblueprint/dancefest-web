@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import * as firebase from 'firebase';
 import { withStyles } from '@material-ui/core/styles';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 
 import styles from '../styles';
-import Button from '../interface/Button';
-import * as firebase from 'firebase';
+import Button from './Button';
 
 class AudioPlayer extends React.Component {
   constructor(props) {
@@ -17,6 +17,25 @@ class AudioPlayer extends React.Component {
       fileName: '',
       metadataLoaded: false
     };
+  }
+
+  componentDidMount() {
+    const { audioFile } = this.state;
+
+    this.loadFileName();
+    if (!audioFile) {
+      this.loadAudio();
+    }
+  }
+
+  componentWillUnmount() {
+    const { audioFile } = this.state;
+
+    if (audioFile) {
+      audioFile.pause();
+    }
+
+    this.loadAudio();
   }
 
   formattedAudioDuration = () => {
@@ -47,35 +66,17 @@ class AudioPlayer extends React.Component {
           const audioFile = new Audio(url);
           audioFile.addEventListener('loadeddata', () => {
             this.setState({ metadataLoaded: true });
-          })
+          });
           this.setState({ audioFile });
-        })
-      }).catch(function () {
-        console.log("ERROR. Firebase audio file failed to load.");
-      });
+        });
+      })
+      .catch(() => console.log('ERROR. Firebase audio file failed to load.'));
   }
 
   loadFileName = () => {
     const { audioURL } = this.props;
 
     this.setState({ fileName: firebase.storage().ref().child(audioURL).name });
-  }
-
-  componentDidMount() {
-    const { audioFile } = this.state;
-
-    this.loadFileName();
-    if (!audioFile) {
-      this.loadAudio();
-    }
-  }
-
-  componentWillUnmount() {
-    const { audioFile } = this.state;
-
-    if (audioFile) {
-      audioFile.pause();
-    }
   }
 
   render() {
@@ -97,7 +98,7 @@ class AudioPlayer extends React.Component {
           {time}
         </div>
         <div style={{ flex: 0 }}>
-          <Button disabled={audioFile === undefined} onClick={this.handleClick} type='transparent' >
+          <Button disabled={audioFile === undefined} onClick={this.handleClick} type="transparent">
             <PlayCircleOutlineIcon color="primary" style={{ float: 'right', marginLeft: '25px' }} />
           </Button>
         </div>

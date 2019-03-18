@@ -23,7 +23,7 @@ class PerformancesSection extends React.Component {
     const { match: { params: { eventId }}} = this.props;
     const collectionName = `events/${eventId}/performances`;
 
-    db.collection(collectionName).onSnapshot((querySnapshot) => {
+    this.subscribe = db.collection(collectionName).onSnapshot((querySnapshot) => {
       let performances = [];
       querySnapshot.forEach((doc) => {
         const performance = {
@@ -37,6 +37,10 @@ class PerformancesSection extends React.Component {
     });
   }
 
+  componentWillUnmount() {
+    this.subscribe();
+  }
+
   getFilterKeys = filters => Object.keys(filters)
     .reduce((res, value) => {
       if (filters[value].length > 0) {
@@ -45,7 +49,6 @@ class PerformancesSection extends React.Component {
       return res;
     }, []);
 
-  // TODO: implement filters for award considerations
   /*
   * Method handles the logic on filter and search
   * @param {Object} filtersObj - object with keys as the performances metadata that
@@ -73,7 +76,20 @@ class PerformancesSection extends React.Component {
     const filterFunction = (performance) => {
       // Iterates through each performance metadata/key (i.e. academicLevel) and then
       // iterates through each string in the array (i.e. secondary, primary)
-      const isFilterSuccess = keys.every(key => filtersObj[key].includes(performance[key]));
+      const isFilterSuccess = keys.every((key) => {
+        // awardConsiderations need to be checked differently as it's a Number rather
+        // than a String
+        if (key === 'awardConsideration') {
+          if (filtersObj[key].includes('choreoAward')) {
+            return performance.choreoAwardEnum > 0;
+          }
+          if (filtersObj[key].includes('specialAward')) {
+            return performance.specialAwardEnum > 0;
+          }
+          return true;
+        }
+        return filtersObj[key].includes(performance[key]);
+      });
 
       // If the user is also performing a search query, we want to include this
       // in our filter logic
@@ -92,7 +108,6 @@ class PerformancesSection extends React.Component {
       .sort((a, b) => Number(a.danceEntry) - Number(b.danceEntry));
     this.setState({ filteredPerformances });
   }
-
 
   render() {
     const { filteredPerformances, loading, performances } = this.state;

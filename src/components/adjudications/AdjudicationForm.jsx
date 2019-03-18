@@ -1,9 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import isEqual from 'lodash/isEqual';
+
 import { withStyles } from '@material-ui/core/styles';
 import DialogActions from '@material-ui/core/DialogActions';
 
+import batchUpdateData from '../../firebase/utils/batchUpdateData';
 import updateData from '../../firebase/utils/updateData';
+import { awardConsiderationEnum } from '../../constants';
 
 import DialogInput from '../interface/dialog/DialogInput';
 import Button from '../interface/Button';
@@ -46,25 +50,67 @@ class AdjudicationForm extends React.Component {
     }
   }
 
+  getAwardConsderationEnumAction = (currAwardState, prevAwardState) => {
+    const { DECREMENT, INCREMENT, NO_CHANGE } = awardConsiderationEnum;
+    if (!isEqual(currAwardState, prevAwardState)) {
+      return currAwardState ? INCREMENT : DECREMENT;
+    }
+    return NO_CHANGE;
+  }
+
+  // TODO: handle submmission of the form
   handleSubmit = async () => {
-    const { 
-      adjudicationId, 
-      collectionName, 
-      currentValues
+    const {
+      adjudicationId,
+      collectionName,
+      currentValues: {
+        audioURL,
+        choreoAward: prevChoreoAward,
+        judgeName,
+        notes,
+        specialAward: prevSpecialAward
+      }
     } = this.props;
-    const { artisticMark, technicalMark } = this.state;
+    const {
+      artisticMark,
+      choreoAward,
+      specialAward,
+      technicalMark
+    } = this.state;
     const cumulativeMark = (parseInt(artisticMark, 10) + parseInt(technicalMark, 10)) / 2;
 
+    const choreoAwardAction = this.getAwardConsderationEnumAction(choreoAward, prevChoreoAward);
+    const specialAwardAction = this.getAwardConsderationEnumAction(specialAward, prevSpecialAward);
+
     const data = {
-      ...currentValues,
-      ...this.state,
-      cumulativeMark
+      cumulativeMark,
+      judgeName: judgeName || '',
+      notes,
+      ...this.state
     };
-    await updateData(
-      collectionName,
-      adjudicationId,
-      data
-    );
+
+    if (audioURL) {
+      Object.assign(data, audioURL);
+    }
+
+    const { NO_CHANGE } = awardConsiderationEnum;
+
+    if (choreoAwardAction !== NO_CHANGE
+      || specialAwardAction !== NO_CHANGE) {
+      await batchUpdateData(
+        collectionName,
+        adjudicationId,
+        data,
+        choreoAwardAction,
+        specialAwardAction
+      );
+    } else {
+      await updateData(
+        collectionName,
+        adjudicationId,
+        data,
+      );
+    }
     this.handleModalClose();
   }
 
