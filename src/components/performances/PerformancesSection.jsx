@@ -97,8 +97,13 @@ class PerformancesSection extends React.Component {
         const { danceTitle, performers, choreographers } = performance;
         const fields = [danceTitle, performers, choreographers];
         const query = searchQuery.toLowerCase();
-
-        return isFilterSuccess && fields.find(field => field.toLowerCase().search(query) !== -1);
+        
+        try{
+          return isFilterSuccess && fields.find(field => field.toLowerCase().search(query) !== -1);
+        } 
+        catch(ex) {
+          return isFilterSuccess && fields.find(field => null);
+        }
       }
       return isFilterSuccess;
     };
