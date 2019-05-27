@@ -102,7 +102,8 @@ class PerformancesSection extends React.Component {
           return isFilterSuccess && fields.find(field => field.toLowerCase().search(query) !== -1);
         } 
         catch(ex) {
-          return isFilterSuccess && fields.find(field => null);
+          //if invalid input is given, 0 matching performances will be displayed
+          return isFilterSuccess && fields.find(filter => null);
         }
       }
       return isFilterSuccess;
