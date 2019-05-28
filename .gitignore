@@ -29,3 +29,4 @@ yarn-error.log*
 #backend
 backend/.env.dev
 backend/__pycache__/
+backend/Pipfile.lock

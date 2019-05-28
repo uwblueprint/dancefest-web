@@ -29,27 +29,17 @@ $ sudo docker-compose up -d --force-recreate
 
 Access at: http://0.0.0.0:5000/api/
 
-## Setup (Pipenv)
+## Setup (pipenv)
 
 To create a virtual enviroment type the following commands:
 ```
-$ python -m venv env
-```
-
-To activate and set up the virtual enviroment run:
-```
-$ source env/bin/activate
-$ pip install -r requirements.txt 
-```
-
-Export the following env vars:
-```
-$ export PROJECT_NAME="blah"
+$ pipenv --python 2.7
+$ pipenv install --dev
 ```
 
 Run the app as follows:
 ```
-$ python server.py
+$ pipenv run python server.py
 ```
 
 Access at: http://0.0.0.0:5000/api/
