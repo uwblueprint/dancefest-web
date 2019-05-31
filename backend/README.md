@@ -27,19 +27,27 @@ If you only made code changes run:
 $ sudo docker-compose up -d --force-recreate
 ```
 
-Access at: http://0.0.0.0:5000/api/
-
 ## Setup (pipenv)
 
-To create a virtual enviroment type the following commands:
+To create and enter the virtual enviroment type the following commands:
 ```
-$ pipenv --python 2.7
+$ pipenv --python 3.5
 $ pipenv install --dev
+$ pipenv shell
+```
+
+Run the following commands to initalize env vars:
+```
+export FLASK_APP=server.py
+export PROJECT_NAME="dancefest-backend"
 ```
 
 Run the app as follows:
 ```
-$ pipenv run python server.py
+$ flask run
 ```
 
-Access at: http://0.0.0.0:5000/api/
+To deactivate pipenv run:
+```
+$ exit
+```
