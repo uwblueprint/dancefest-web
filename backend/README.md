@@ -29,6 +29,11 @@ $ sudo docker-compose up -d --force-recreate
 
 ## Setup (pipenv)
 
+BUILD Project from root directory (dancefest-web) before starting backend server using the following command:
+```
+$ npm run build
+```
+
 To create and enter the virtual enviroment type the following commands:
 ```
 $ pipenv --python 3.5
