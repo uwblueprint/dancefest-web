@@ -1,11 +1,14 @@
 [[source]]
+
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 name = "pypi"
-
+ 
+ 
 [packages]
+ 
 click= "==6.7"
-Flask= "==0.12.2"
+Flask= "==1.0.2"
 itsdangerous= "==0.24"
 Jinja2= "==2.10"
 MarkupSafe= "==1.0"
@@ -17,4 +20,4 @@ psycopg2 = "*"
 [dev-packages]
 
 [requires]
-python_version = "2.7"
+python_version = "3.6"
