@@ -1,0 +1,12 @@
+version: '2.1'
+services:
+  dancefest-backend:
+    restart: always
+    build: .
+    ports:
+      - 5000:5000
+    volumes:
+      - .:/dancefest-backend
+    entrypoint:  ["sh", "./entrypoint.sh"]
+    env_file:
+        - .env.dev
