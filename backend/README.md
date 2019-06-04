@@ -34,17 +34,22 @@ BUILD Project from root directory (dancefest-web) before starting backend server
 $ npm run build
 ```
 
-To create and enter the virtual enviroment type the following commands:
+CD into Backend
 ```
-$ pipenv --python 3.5
-$ pipenv install --dev
-$ pipenv shell
+$ cd backend/
 ```
 
-Run the following commands to initalize env vars:
+First time setup run the following commands:
 ```
-export FLASK_APP=server.py
-export PROJECT_NAME="dancefest-backend"
+$ pipenv --python 3.6
+$ pipenv install --dev
+```
+
+Fill in the `.env` file with any needed variables
+
+To create and enter the virtual enviroment type the following commands:
+```
+$ pipenv shell
 ```
 
 Run the app as follows:
