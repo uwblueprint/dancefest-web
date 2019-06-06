@@ -10,7 +10,7 @@
 /build
 
 # vscode
-/.vscode
+.vscode
 
 # misc
 .DS_Store
@@ -25,3 +25,8 @@ yarn-debug.log*
 yarn-error.log*
 
 .DS_Store
+
+#backend
+backend/.env.dev
+backend/__pycache__/
+backend/Pipfile.lock
