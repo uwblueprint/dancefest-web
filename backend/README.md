@@ -45,6 +45,12 @@ $ pipenv --python 3.6
 $ pipenv install --dev
 ```
 
+You need to install `psycopg2-binary`, but it couldn't install for me but you can directly install the binary with:
+
+```
+pip install psycopg2-binary
+```
+
 Fill in the `.env` file with any needed variables
 
 To create and enter the virtual enviroment type the following commands:
@@ -60,4 +66,19 @@ $ flask run
 To deactivate pipenv run:
 ```
 $ exit
+```
+
+## Setup (db)
+
+Start the postgres server, and enter the postgres terminal
+
+```
+pg_ctl -D /usr/local/var/postgres start
+psql postgres
+```
+
+Create the database (first time setup)
+
+```
+postgres=# CREATE DATABASE dancefest;
 ```
