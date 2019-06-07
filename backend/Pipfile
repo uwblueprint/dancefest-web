@@ -1,12 +1,9 @@
 [[source]]
-
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 name = "pypi"
- 
- 
+
 [packages]
- 
 click= "==6.7"
 Flask= "==1.0.2"
 itsdangerous= "==0.24"
@@ -15,7 +12,7 @@ MarkupSafe= "==1.0"
 Werkzeug= "==0.14.1"
 sqlalchemy = "*"
 flask-migrate = "*"
-psycopg2 = "*"
+python-dotenv = "*"
 
 [dev-packages]
 
