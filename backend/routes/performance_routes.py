@@ -1,6 +1,7 @@
 from flask import Blueprint
+from flask import jsonify
 
-blueprint = Blueprint('api', __name__, url_prefix='/api')
+blueprint = Blueprint('performance', __name__, url_prefix='/performances')
 
 @blueprint.route('/')
 def main():
