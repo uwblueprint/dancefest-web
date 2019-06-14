@@ -1,9 +1,16 @@
 from sqlalchemy import inspect
 from sqlalchemy.orm.properties import ColumnProperty
-from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.ext.declarative import declarative_base
 from . import db
 
-class Event(db.Model):
+class Base:
+    def asdict(self):
+        return {c.key: getattr(self, c.key)
+                for c in inspect(self).mapper.column_attrs}
+
+BaseModel = declarative_base(cls=Base)
+
+class Event(BaseModel):
     __tablename__ = 'event'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -12,7 +19,7 @@ class Event(db.Model):
     event_date = db.Column(db.Date)
 
 
-class Performance(db.Model):
+class Performance(BaseModel):
     __tablename__ = 'performance'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -28,7 +35,7 @@ class Performance(db.Model):
     event_id = db.Column(db.Integer, db.ForeignKey('event.id'))
 
 
-class Adjudication(db.Model):
+class Adjudication(BaseModel):
     __tablename__ = 'adjudication'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -40,4 +47,3 @@ class Adjudication(db.Model):
     special_award = db.Column(db.Boolean)
     technical_mark = db.Column(db.Integer)
     performance_id = db.Column(db.Integer, db.ForeignKey('performance.id'))
-
