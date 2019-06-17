@@ -2,9 +2,12 @@ from flask import Blueprint
 from flask import request
 from flask import jsonify
 from ..db.models import Event
-from .. import db
+from ..db import db
+
+from datetime import datetime
 
 blueprint = Blueprint('event', __name__, url_prefix='/events')
+
 
 @blueprint.route('/')
 def main():
@@ -15,7 +18,9 @@ def main():
 def update_event(event_id):
 	event = Event.query.get(event_id)
 
-	event_date = request.args['event_date']
+	str_format = '%Y-%m-%d'
+
+	event_date = datetime.strptime(request.args['event_date'], str_format)
 	event_title = request.args['event_title']
 	num_judges = request.args['num_judges']
 
@@ -25,4 +30,4 @@ def update_event(event_id):
 
 	db.session.commit()
 
-	return jsonify(event)
+	return jsonify(event.to_dict())
