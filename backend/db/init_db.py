@@ -1,5 +1,6 @@
 def _init_postgres_db(app):
     from . import db
+    from .seeds import seed
     from .models import Event, Performance, Adjudication
 
     # See http://flask-sqlalchemy.pocoo.org/latest/contexts/
@@ -14,6 +15,10 @@ def _init_postgres_db(app):
     db.create_all()
 
     db.session.commit()
+
+    # TODO: remove when we have real data
+    # Seed database with sample data
+    seed()
 
 
 def init_db(app):

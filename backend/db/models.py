@@ -1,16 +1,66 @@
 from sqlalchemy import inspect
 from sqlalchemy.orm.properties import ColumnProperty
-from sqlalchemy.ext.declarative import declarative_base
 from . import db
 
-class Base:
-    def asdict(self):
-        return {c.key: getattr(self, c.key)
-                for c in inspect(self).mapper.column_attrs}
 
-BaseModel = declarative_base(cls=Base)
+class BaseMixin:
+    __table_args__ = {'extend_existing': True}
 
-class Event(BaseModel):
+    @classmethod
+    def get(cls, _id):
+        return cls.query.get(int(_id))
+
+    @classmethod
+    def get_by(cls, first=False, **kwargs):
+        rows = cls.query.filter_by(**kwargs)
+        if first:
+            return rows.first()
+        return rows.all()
+
+    @classmethod
+    def create(cls, **kwargs):
+        instance = cls(**kwargs)
+        return instance.save()
+
+    def update(self, commit=True, **kwargs):
+        for attr, value in kwargs.items():
+            setattr(self, attr, value)
+        return self.save() if commit else self
+
+    def save(self, commit=True):
+        db.session.add(self)
+        if commit:
+            try:
+                db.session.commit()
+            except Exception:
+                db.session.rollback()
+                raise
+        return self
+
+    def delete(self, commit=True):
+        db.session.delete(self)
+        return commit and db.session.commit()
+
+    def to_dict(self, include_relationships=False):
+        cls = type(self)
+        # `mapper` allows us to grab the columns of a Model
+        mapper = inspect(cls)
+        formatted = {}
+        for column in mapper.attrs:
+            field = column.key
+            attr = getattr(self, field)
+            # If it's a regular column, extract the value
+            if isinstance(column, ColumnProperty):
+                formatted[field] = attr
+            # Otherwise, it's a relationship field
+            elif include_relationships:
+                # Recursively format the relationship
+                # Don't format the relationship's relationships
+                formatted[field] = [obj.to_dict() for obj in attr]
+        return formatted
+
+
+class Event(db.Model, BaseMixin):
     __tablename__ = 'event'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -19,7 +69,7 @@ class Event(BaseModel):
     event_date = db.Column(db.Date)
 
 
-class Performance(BaseModel):
+class Performance(db.Model, BaseMixin):
     __tablename__ = 'performance'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -35,7 +85,7 @@ class Performance(BaseModel):
     event_id = db.Column(db.Integer, db.ForeignKey('event.id'))
 
 
-class Adjudication(BaseModel):
+class Adjudication(db.Model, BaseMixin):
     __tablename__ = 'adjudication'
 
     id = db.Column(db.Integer, primary_key=True)
