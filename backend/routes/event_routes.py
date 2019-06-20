@@ -1,12 +1,15 @@
 from flask import Blueprint
 from flask import request
 from flask import jsonify
-from ..db.models import Event
-from ..db import db
 
 from datetime import datetime
 
-blueprint = Blueprint('event', __name__, url_prefix='/events')
+from ..db.models import Event
+from ..db import db
+from ..utils.constants import DATE_FORMAT
+
+
+blueprint = Blueprint('events', __name__, url_prefix='/events')
 
 
 @blueprint.route('/')
@@ -18,16 +21,23 @@ def main():
 def update_event(event_id):
 	event = Event.query.get(event_id)
 
-	str_format = '%Y-%m-%d'
-
-	event_date = datetime.strptime(request.args['event_date'], str_format)
-	event_title = request.args['event_title']
-	num_judges = request.args['num_judges']
-
-	event.event_date = event_date
-	event.event_title = event_title
-	event.num_judges = num_judges
+	event.event_date = datetime.strptime(request.args['event_date'], DATE_FORMAT)
+	event.event_title = request.args['event_title']
+	event.num_judges = request.args['num_judges']
 
 	db.session.commit()
 
 	return jsonify(event.to_dict())
+
+
+@blueprint.route('/', methods=['POST'])
+def post_events():
+	event_json = request.get_json()
+
+	event_json['event_date'] = datetime.strptime(event_json['event_date'], DATE_FORMAT)
+	new_event = Event(**event_json)
+
+	db.session.add(new_event)
+	db.session.commit()
+
+	return jsonify(new_event.to_dict())

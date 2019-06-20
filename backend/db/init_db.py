@@ -16,6 +16,7 @@ def _init_postgres_db(app):
 
     db.session.commit()
 
+    # TODO: remove when we have real data
     # Seed database with sample data
     seed()
 
