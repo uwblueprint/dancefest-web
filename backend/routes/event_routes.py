@@ -37,8 +37,8 @@ def create_event():
 
 
 @blueprint.route('/')
-def main():
-    events = Event.query.all()
+def get_events():
+    events = db.session.query(Event)
     all_events = {}
 
     for event in events:
