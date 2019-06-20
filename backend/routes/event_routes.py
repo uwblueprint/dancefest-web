@@ -5,7 +5,6 @@ from flask import jsonify
 from datetime import datetime
 
 from ..db.models import Event
-from ..db import db
 from ..utils.constants import DATE_FORMAT
 
 
@@ -18,12 +17,13 @@ def update_event(event_id):
 
 	event_json = request.get_json()
 	event_json['event_date'] = datetime.strptime(event_json['event_date'], DATE_FORMAT)
+	event.update(**event_json)
 
 	return jsonify(event.to_dict())
 
 
 @blueprint.route('/', methods=['POST'])
-def post_events():
+def create_event():
 	event_json = request.get_json()
 
 	event_json['event_date'] = datetime.strptime(event_json['event_date'], DATE_FORMAT)
