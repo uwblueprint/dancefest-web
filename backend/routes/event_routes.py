@@ -38,15 +38,10 @@ def create_event():
 
 @blueprint.route('/')
 def get_events():
-    events = db.session.query(Event)
+    events = Event.query.all()
     all_events = {}
 
     for event in events:
-        all_events[event.id] = {
-            "eventId": event.id,
-            "eventTitle": event.event_title,
-            "numJudges": event.num_judges,
-            "eventDate": event.event_date
-        }
+        all_events[event.id] = event.to_dict()
 
     return jsonify(all_events)
