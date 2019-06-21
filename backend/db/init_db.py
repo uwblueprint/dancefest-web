@@ -1,7 +1,6 @@
 def _init_postgres_db(app):
     from . import db
     from .seeds import seed
-    from .models import Event, Performance, Adjudication
 
     # See http://flask-sqlalchemy.pocoo.org/latest/contexts/
     app.app_context().push()

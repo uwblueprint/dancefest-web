@@ -1,5 +1,6 @@
 from sqlalchemy import inspect
 from sqlalchemy.orm.properties import ColumnProperty
+
 from . import db
 
 

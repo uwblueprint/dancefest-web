@@ -9,6 +9,9 @@
 # production
 /build
 
+# intellij
+.idea
+
 # vscode
 .vscode
 
