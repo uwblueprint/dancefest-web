@@ -13,7 +13,7 @@ Werkzeug= "==0.14.1"
 sqlalchemy = "*"
 flask-migrate = "*"
 python-dotenv = "*"
-"psycopg2" = "*"
+simplejson = "*"
 
 [dev-packages]
 
