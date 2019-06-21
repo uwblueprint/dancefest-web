@@ -18,10 +18,9 @@ def handle_adjudications(performance_id):
 
 def get_adjudications(performance_id):
 	dictAdj = {}
-	adjudications = Adjudication.query.filter_by(performance_id=performance_id).all()
+	adjudications = Adjudication.get_by(performance_id=performance_id)
 
 	for adjudication in adjudications:
-		dictAdj[adjudication.id] = adjudication
+		dictAdj[adjudication.id] = adjudication.to_dict()
 		
-	print(dictAdj)
 	return jsonify(dictAdj)
