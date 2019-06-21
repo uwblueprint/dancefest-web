@@ -1,6 +1,5 @@
 from flask import Blueprint
 from flask import jsonify, request
-import simplejson as json
 from ..db.models import Performance
 
 blueprint = Blueprint('performance', __name__, url_prefix='/performances')
@@ -12,7 +11,7 @@ def main():
 @blueprint.route('/events/<event_id>/performances/<performance_id>', methods=['POST'])
 def edit_performance_details(event_id, performance_id):
 	'''
-	requires post body in the following format:
+	Requires post body in the following format:
 	{
 		school: <string>,
 		performers: Array<string>,
