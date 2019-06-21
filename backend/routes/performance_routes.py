@@ -2,13 +2,13 @@ from flask import Blueprint
 from flask import jsonify, request
 from ..db.models import Performance
 
-blueprint = Blueprint('performance', __name__, url_prefix='/performances')
+blueprint = Blueprint('performance', __name__, url_prefix='/events')
 
 @blueprint.route('/')
 def main():
 	return 'Welcome to Dancefest Performances Backend!'
 
-@blueprint.route('/events/<event_id>/performances/<performance_id>', methods=['POST'])
+@blueprint.route('/<event_id>/performances/<performance_id>', methods=['POST'])
 def edit_performance_details(event_id, performance_id):
 	'''
 	Requires post body in the following format:
