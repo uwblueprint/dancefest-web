@@ -5,4 +5,5 @@ def seed():
 
     for i in range(10):
         performance = Performance.create(dance_title='test dance {}'.format(i + 1), event_id=event.id)
-        Adjudication.create(performance_id=performance.id)
+        for i in range(3):
+            Adjudication.create(performance_id=performance.id)
