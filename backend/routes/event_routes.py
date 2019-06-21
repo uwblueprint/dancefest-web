@@ -41,8 +41,3 @@ def get_events():
     events = Event.query.all()
     return jsonify({event.id: event.to_dict() for event in events})
 
-
-@blueprint.route('/<event_id>/performances')
-def get_performances(event_id):
-    all_performances = Performance.get_by(**{"event_id": event_id})
-    return jsonify({performance.id: performance.to_dict() for performance in all_performances})
