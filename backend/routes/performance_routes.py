@@ -1,6 +1,8 @@
 from flask import Blueprint
 from flask import jsonify, request
 from ..db.models import Performance
+from flask import abort
+from ..db.models import Adjudication
 
 blueprint = Blueprint('performance', __name__, url_prefix='/events')
 
@@ -42,3 +44,8 @@ def update_performance(event_id, performance_id):
 	performance.update(**performance_json)
 
 	return jsonify(performance.to_dict())
+
+@blueprint.route('/<performance_id>/adjudications', methods=['GET'])
+def get_adjudications(performance_id):
+	adjudications = Adjudication.get_by(performance_id=performance_id)
+	return jsonify({adjudication.id: adjudication.to_dict() for adjudication in adjudications})
