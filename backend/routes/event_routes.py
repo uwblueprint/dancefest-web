@@ -40,4 +40,3 @@ def create_event():
 def get_events():
     events = Event.query.all()
     return jsonify({event.id: event.to_dict() for event in events})
-
