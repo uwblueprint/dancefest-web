@@ -9,7 +9,7 @@ def main():
 	return 'Welcome to Dancefest Performances Backend!'
 
 @blueprint.route('/<event_id>/performances/<performance_id>', methods=['POST'])
-def edit_performance_details(event_id, performance_id):
+def update_performance(event_id, performance_id):
 	'''
 	Requires post body in the following format:
 	{
