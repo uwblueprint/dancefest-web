@@ -4,6 +4,7 @@ from ..db.models import Performance
 
 blueprint = Blueprint('performance', __name__, url_prefix='/events')
 
+
 @blueprint.route('/')
 def main():
 	return 'Welcome to Dancefest Performances Backend!'
@@ -41,5 +42,3 @@ def update_performance(event_id, performance_id):
 	performance.update(**performance_json)
 
 	return jsonify(performance.to_dict())
-
-
