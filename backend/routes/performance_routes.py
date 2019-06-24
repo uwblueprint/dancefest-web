@@ -3,18 +3,18 @@ from flask import jsonify, request
 from ..db.models import Performance
 from ..db.models import Adjudication
 
-blueprint = Blueprint('performance', __name__, url_prefix='/events')
+blueprint = Blueprint('performance', __name__, url_prefix='/performances')
 
 
-@blueprint.route('/<event_id>/performances', methods=['POST'])
-def create_performance(event_id):
+@blueprint.route('/', methods=['POST'])
+def create_performance():
 	performance_json = request.get_json()
 	new_performance = Performance.create(**performance_json)
 	return jsonify(new_performance.to_dict())
 
 
-@blueprint.route('/<event_id>/performances/<performance_id>', methods=['POST'])
-def update_performance(event_id, performance_id):
+@blueprint.route('/<performance_id>', methods=['POST'])
+def update_performance(performance_id):
 	'''
 	Requires post body in the following format:
 	{
