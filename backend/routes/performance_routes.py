@@ -18,27 +18,27 @@ def update_performance(event_id, performance_id):
     '''
     Requires post body in the following format:
     {
-            school: <string>,
-            performers: Array<string>,
-            dance_title: <Int>,
-            dance_style: <string>,
-            dance_entry: <Int>,
-            dance_size: <String>,
-            competition_level: <String>,
-            choreographers: Array<string>,
-            academic_level: <string>	
+                    school: <string>,
+                    performers: Array<string>,
+                    dance_title: <Int>,
+                    dance_style: <string>,
+                    dance_entry: <Int>,
+                    dance_size: <String>,
+                    competition_level: <String>,
+                    choreographers: Array<string>,
+                    academic_level: <string>	
     }
     Returns data in the following format
     {
-            school: <string>,
-            performers: Array<string>,
-            dance_title: <Int>,
-            dance_style: <string>,
-            dance_entry: <Int>,
-            dance_size: <String>,
-            competition_level: <String>,
-            choreographers: Array<string>,
-            academic_level: <string>	
+                    school: <string>,
+                    performers: Array<string>,
+                    dance_title: <Int>,
+                    dance_style: <string>,
+                    dance_entry: <Int>,
+                    dance_size: <String>,
+                    competition_level: <String>,
+                    choreographers: Array<string>,
+                    academic_level: <string>	
     }
     '''
     performance = Performance.query.get(performance_id)
