@@ -56,5 +56,4 @@ def get_adjudications(performance_id):
 
 @blueprint.route('/<event_id>/performances')
 def get_performances(event_id):
-    all_performances = Performance.get_by(**{"event_id": event_id})
-    return jsonify({performance.id: performance.to_dict() for performance in all_performances})
+    return jsonify({performance.id: performance.to_dict() for performance in Performance.get_by(**{"event_id": event_id})})
