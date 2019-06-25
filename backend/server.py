@@ -11,11 +11,12 @@ def create_app():
 
     init_db(app=app)
 
-    from .routes import event_routes, performance_routes, frontend_routes
+    from .routes import event_routes, performance_routes, frontend_routes, adjudication_routes
 
     app.register_blueprint(event_routes.blueprint)
     app.register_blueprint(performance_routes.blueprint)
     app.register_blueprint(frontend_routes.blueprint)
+    app.register_blueprint(adjudication_routes.blueprint)
 
     return app
 

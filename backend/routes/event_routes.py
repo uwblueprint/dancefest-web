@@ -5,7 +5,7 @@ from flask import jsonify
 from flask import request
 
 
-from ..db.models import Event
+from ..db.models import Event, Performance
 from ..utils.constants import DATE_FORMAT
 
 blueprint = Blueprint('events', __name__, url_prefix='/events')
@@ -36,3 +36,9 @@ def create_event():
 def get_events():
     events = Event.query.all()
     return jsonify({event.id: event.to_dict() for event in events})
+
+#TODO: re-org where the endpoints go especially this one and update api specs
+@blueprint.route('/<event_id>/performances')
+def get_performances(event_id):
+	all_performances = Performance.get_by(**{"event_id": event_id})
+	return jsonify({performance.id: performance.to_dict() for performance in all_performances})
