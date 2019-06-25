@@ -64,12 +64,4 @@ def create_adjudication(performance_id):
     adjudication_json['performance_id'] = performance_id
     new_adjudication = Adjudication.create(**adjudication_json)
 
-    return jsonify(new_adjudication.to_dict())
-
-@blueprint.route('/<performance_id>/adjudications/<adjudications_id>', methods=['POST'])
-def update_adjudication(performance_id, adjudications_id):
-	adjudication = Adjudication.get(adjudications_id)
-	adjudication_json = request.get_json()
-	adjudication.update(**adjudication_json)
-
-	return jsonify(adjudication.to_dict())
+    return jsonify(new_adjudication.to_dict())    
