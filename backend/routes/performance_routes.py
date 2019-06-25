@@ -52,11 +52,6 @@ def update_performance(performance_id):
 def get_adjudications(performance_id):
 	adjudications = Adjudication.get_by(performance_id=performance_id)
 	return jsonify({adjudication.id: adjudication.to_dict() for adjudication in adjudications})
-
-@blueprint.route('/<event_id>/performances')
-def get_performances(event_id):
-	all_performances = Performance.get_by(**{"event_id": event_id})
-	return jsonify({performance.id: performance.to_dict() for performance in all_performances})
 	
 @blueprint.route('/<performance_id>/adjudications', methods=['POST'])
 def create_adjudication(performance_id):
