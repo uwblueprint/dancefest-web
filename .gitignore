@@ -30,6 +30,6 @@ yarn-error.log*
 .DS_Store
 
 #backend
-backend/.env.dev
+backend/.env
 backend/__pycache__/
 backend/Pipfile.lock

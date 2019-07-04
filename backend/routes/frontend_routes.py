@@ -2,7 +2,7 @@ from flask import Blueprint, render_template
 
 print(__name__)
 
-blueprint = Blueprint('frontend', __name__, template_folder="../build")
+blueprint = Blueprint('frontend', __name__, template_folder="../../build")
 
 
 @blueprint.route('/')
