@@ -96,7 +96,7 @@ class EventForm extends React.Component {
               onChange={this.handleChange} 
               style={{ marginRight: '5px' }} 
               type="date" 
-              value={eventDate ? moment(eventDate, 'DD/MM/YYYY').format('YYYY-MM-DD') : ''} 
+              value={eventDate ? moment(eventDate).format('YYYY-MM-DD') : ''} 
               variant="filled"
             />
             <DialogInput fullWidth name="numJudges" label="No. Judges" onChange={this.handleChange} type="number" value={numJudges} />
