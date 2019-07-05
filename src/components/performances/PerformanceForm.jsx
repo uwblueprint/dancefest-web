@@ -8,7 +8,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 
 import { dialogType } from '../../constants';
 import db from '../../firebase/firebase';
-import addData from '../../firebase/utils/addData';
+import { createPerformance } from '../../api/performanceApi';
 import updateData from '../../firebase/utils/updateData';
 import DialogInput from '../interface/dialog/DialogInput';
 import DialogSelect from '../interface/dialog/DialogSelect';
@@ -78,7 +78,7 @@ class PerformanceForm extends React.Component {
     const { collectionName, formType, performanceId } = this.props;
     const data = omit(this.state, ['disabledSave', 'options']);
     if (formType === dialogType.NEW) {
-      await addData(collectionName, data);
+      await createPerformance(collectionName, data);
     } else {
       await updateData(collectionName, performanceId, data);
     }
