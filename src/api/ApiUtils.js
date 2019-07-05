@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { baseURL } from './PathConstants';
+
+const baseURL = 'http://localhost:5000';
 
 const get = (url) => {
     let config = {
