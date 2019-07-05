@@ -65,6 +65,7 @@ class EventForm extends React.Component {
       event_title: eventTitle,
       num_judges: numJudges
     };
+    let uri = 'http://127.0.0.1:5000/'
     if (formType === dialogType.NEW) {
       await addNewEvent(data)
     } else {
@@ -76,6 +77,11 @@ class EventForm extends React.Component {
   handleModalClose = () => {
     const { onModalClose } = this.props;
     onModalClose();
+  }
+
+  postEvents = async (url, body) => {
+    let res = await axios.post(url, body);
+    return res.data
   }
 
   render() {
