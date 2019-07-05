@@ -19,23 +19,12 @@ class EventsSection extends React.Component {
   }
 
   componentDidMount() {
-    db.collection('events').onSnapshot((querySnapshot) => {
-      const events = [];
-      querySnapshot.forEach((doc) => {
-        const { eventTitle, numJudges, eventDate } = doc.data();
         const date = isObject(eventDate)
-          ? new Date(eventDate.seconds * 1000).toLocaleDateString('en-GB')
-          : eventDate;
         const event = {
           eventDate: date,
           eventTitle,
-          id: doc.id,
-          numJudges
-        };
         events.push(event);
-      });
       this.setState({ events, loading: false });
-    });
   }
 
   // TODO: create a method for getting total number of performances
