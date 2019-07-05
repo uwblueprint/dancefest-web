@@ -20,28 +20,8 @@ class EventsSection extends React.Component {
   }
 
   componentDidMount() {
-    const events=[];
-    getEvents.then((response) => {
-      for (var key in response.data){
-        const e = response.data[key]
-        const eventTitle = e.event_title;
-        const id = e.id;
-        const numJudges = e.num_judges;
-        const eventDate = e.event_date;
-        
-        // TODO: remove the isObject check
-        const date = isObject(eventDate)
-        ? new Date(eventDate.seconds * 1000).toLocaleDateString('en-GB')
-        : eventDate;
-
-        const event = {
-          eventDate: date,
-          eventTitle,
-          id,
-          numJudges 
-        }
-        events.push(event);
-      }
+    getEvents().then((response) => {
+      const events = Object.values(response.data);
       this.setState({ events, loading: false });
    })
   }
@@ -51,7 +31,7 @@ class EventsSection extends React.Component {
   render() {
     const { events, loading } = this.state;
     const headings = ['Event Title', 'Event Date', 'No. Performances', 'No. Judges'];
-    const keys = ['eventDate', 'eventTitle', 'numJudges'];
+    const keys = ['event_date', 'event_title', 'num_judges'];
     const renderNewButton = (<EventDialog formType="new" />);
     const showEvents = Array.isArray(events) && events.length > 0;
 
