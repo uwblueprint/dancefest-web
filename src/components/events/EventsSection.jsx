@@ -29,6 +29,7 @@ class EventsSection extends React.Component {
         const numJudges = e.num_judges;
         const eventDate = e.event_date;
         
+        // TODO: remove the isObject check
         const date = isObject(eventDate)
         ? new Date(eventDate.seconds * 1000).toLocaleDateString('en-GB')
         : eventDate;
