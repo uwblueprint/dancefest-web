@@ -5,12 +5,7 @@ from flask import jsonify
 from flask import request
 
 
-<<<<<<< HEAD
-from ..db.models import Event
-from ..db.models import Performance
-=======
 from ..db.models import Event, Performance
->>>>>>> a4905a871ac1eea6edc1df322469af7b97443884
 from ..utils.constants import DATE_FORMAT
 
 blueprint = Blueprint('events', __name__, url_prefix='/events')
