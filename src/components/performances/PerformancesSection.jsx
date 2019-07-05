@@ -24,12 +24,11 @@ class PerformancesSection extends React.Component {
 
   componentDidMount() {
 	const { match: { params: { eventId }}} = this.props;
-	let performances = [];
 	
 	getPerformances(eventId)
 	.then(response => {
-		Object.values(response.data).forEach(performance => {
-			performances.push(humps.camelizeKeys(performance));
+		let performances = Object.values(response.data).map(performance => {
+			return humps.camelizeKeys(performance);
 		});
 		performances = performances.sort((a,b) => Number(a.danceEntry) - Number(b.danceEntry));
 		this.setState({ filteredPerformances: performances, loading: false, performances });
