@@ -14,6 +14,7 @@ sqlalchemy = "*"
 flask-migrate = "*"
 python-dotenv = "*"
 "psycopg2" = "*"
+flask-cors = "*"
 
 [dev-packages]
 

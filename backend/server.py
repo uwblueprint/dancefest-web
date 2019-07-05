@@ -1,9 +1,11 @@
 import os
 
 from flask import Flask
+from flask_cors import CORS
 
 def create_app():
     app = Flask(__name__, static_folder = '../build/static')
+    CORS(app)
 
     from .db.init_db import init_db
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
