@@ -7,6 +7,7 @@ import db from '../../firebase/firebase';
 import EventDialog from './EventDialog';
 import EventTableRow from './EventTableRow';
 import Section from '../interface/Section';
+import { getEvents } from '../../api/eventsAPI';
 
 class EventsSection extends React.Component {
   constructor(props) {
@@ -20,14 +21,14 @@ class EventsSection extends React.Component {
 
   componentDidMount() {
     const events=[];
-    axios.get('http://localhost:5000/events').then((response) => {
+    getEvents.then((response) => {
       for (var key in response.data){
         const e = response.data[key]
         const eventTitle = e.event_title;
         const id = e.id;
         const numJudges = e.num_judges;
         const eventDate = e.event_date;
-
+        
         const date = isObject(eventDate)
         ? new Date(eventDate.seconds * 1000).toLocaleDateString('en-GB')
         : eventDate;
