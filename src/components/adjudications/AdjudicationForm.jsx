@@ -8,6 +8,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import batchUpdateData from '../../firebase/utils/batchUpdateData';
 import updateData from '../../firebase/utils/updateData';
 import { awardConsiderationEnum } from '../../constants';
+import { updateAdjudications } from "../../api/AdjudicationAPI";
 
 import DialogInput from '../interface/dialog/DialogInput';
 import Button from '../interface/Button';
@@ -105,8 +106,7 @@ class AdjudicationForm extends React.Component {
         specialAwardAction
       );
     } else {
-      await updateData(
-        collectionName,
+      await updateAdjudications(
         adjudicationId,
         data,
       );
