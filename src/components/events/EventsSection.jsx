@@ -1,11 +1,13 @@
 import React from 'react';
 import isObject from 'lodash/isObject';
 import pick from 'lodash/pick';
+import axios from 'axios';
 
 import db from '../../firebase/firebase';
 import EventDialog from './EventDialog';
 import EventTableRow from './EventTableRow';
 import Section from '../interface/Section';
+import { getEvents } from '../../api/eventsAPI';
 
 class EventsSection extends React.Component {
   constructor(props) {
@@ -18,23 +20,10 @@ class EventsSection extends React.Component {
   }
 
   componentDidMount() {
-    db.collection('events').onSnapshot((querySnapshot) => {
-      const events = [];
-      querySnapshot.forEach((doc) => {
-        const { eventTitle, numJudges, eventDate } = doc.data();
-        const date = isObject(eventDate)
-          ? new Date(eventDate.seconds * 1000).toLocaleDateString('en-GB')
-          : eventDate;
-        const event = {
-          eventDate: date,
-          eventTitle,
-          id: doc.id,
-          numJudges
-        };
-        events.push(event);
-      });
+    getEvents().then((response) => {
+      const events = Object.values(response.data);
       this.setState({ events, loading: false });
-    });
+   })
   }
 
   // TODO: create a method for getting total number of performances
@@ -42,7 +31,7 @@ class EventsSection extends React.Component {
   render() {
     const { events, loading } = this.state;
     const headings = ['Event Title', 'Event Date', 'No. Performances', 'No. Judges'];
-    const keys = ['eventDate', 'eventTitle', 'numJudges'];
+    const keys = ['event_date', 'event_title', 'num_judges'];
     const renderNewButton = (<EventDialog formType="new" />);
     const showEvents = Array.isArray(events) && events.length > 0;
 

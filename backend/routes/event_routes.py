@@ -16,7 +16,8 @@ def update_event(event_id):
     event = Event.query.get(event_id)
 
     event_json = request.get_json()
-    event_json['event_date'] = datetime.strptime(event_json['event_date'], DATE_FORMAT)
+    event_json['event_date'] = datetime.strptime(
+        event_json['event_date'], DATE_FORMAT)
 
     event.update(**event_json)
 
@@ -27,10 +28,12 @@ def update_event(event_id):
 def create_event():
     event_json = request.get_json()
 
-    event_json['event_date'] = datetime.strptime(event_json['event_date'], DATE_FORMAT)
+    event_json['event_date'] = datetime.strptime(
+        event_json['event_date'], DATE_FORMAT)
     new_event = Event.create(**event_json)
 
     return jsonify(new_event.to_dict())
+
 
 @blueprint.route('/')
 def get_events():

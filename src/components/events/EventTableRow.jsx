@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
 
 import EventDialog from './EventDialog';
 
@@ -16,9 +17,9 @@ class EventTableRow extends React.Component {
     } = this.props;
 
     const {
-      eventTitle,
-      eventDate,
-      numJudges
+      event_title,
+      event_date,
+      num_judges
     } = currentValues;
 
     // TODO: fix this
@@ -27,16 +28,16 @@ class EventTableRow extends React.Component {
     return (
       <TableRow>
         <TableCell>
-          <Link to={`/events/${id}/performances`}>{eventTitle}</Link>
+          <Link to={`/events/${id}/performances`}>{event_title}</Link>
         </TableCell>
         <TableCell>
-          {eventDate}
+          {event_date ? moment(event_date).format('YYYY-MM-DD') : ''}
         </TableCell>
         <TableCell>
           {numPerformances}
         </TableCell>
         <TableCell>
-          {numJudges}
+          {num_judges}
         </TableCell>
         <TableCell>
           <EventDialog formType="edit" eventId={id} currentValues={currentValues} />
@@ -48,9 +49,9 @@ class EventTableRow extends React.Component {
 
 EventTableRow.propTypes = {
   currentValues: PropTypes.shape({
-    eventTitle: PropTypes.string,
-    eventDate: PropTypes.string,
-    numJudges: PropTypes.number
+    event_title: PropTypes.string,
+    event_date: PropTypes.string,
+    num_judges: PropTypes.number
   }),
   id: PropTypes.string
 };
