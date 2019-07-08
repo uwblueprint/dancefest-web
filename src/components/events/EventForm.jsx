@@ -67,7 +67,8 @@ class EventForm extends React.Component {
     if (formType === dialogType.NEW) {
       await addData(collectionName, data);
     } else {
-      await await updateEvent(eventId, data);
+	  await updateEvent(eventId, data);
+	  window.location.reload();
     }
     this.handleModalClose();
   }
