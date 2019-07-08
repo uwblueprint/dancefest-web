@@ -79,11 +79,6 @@ class EventForm extends React.Component {
     onModalClose();
   }
 
-  postEvents = async (url, body) => {
-    let res = await axios.post(url, body);
-    return res.data
-  }
-
   render() {
     const { classes, formType } = this.props;
     const {

@@ -8,7 +8,7 @@ def create_app():
     CORS(app)
 
     from .db.init_db import init_db
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost:5432/dancefest'
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     init_db(app=app)
