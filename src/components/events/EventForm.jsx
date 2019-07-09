@@ -8,7 +8,6 @@ import moment from 'moment';
 
 import { updateEvent } from './../../api/eventApi';
 import addData from '../../firebase/utils/addData';
-import updateData from '../../firebase/utils/updateData';
 
 import { dialogType } from '../../constants';
 import DialogInput from '../interface/dialog/DialogInput';
@@ -56,7 +55,7 @@ class EventForm extends React.Component {
   }
 
   handleSubmit = async () => {
-    const { eventId, formType } = this.props;
+    const { eventId, formType, onUpdate } = this.props;
     const { eventDate, eventTitle, numJudges } = this.state;
     const collectionName = 'events';
     const data = {
@@ -67,8 +66,8 @@ class EventForm extends React.Component {
     if (formType === dialogType.NEW) {
       await addData(collectionName, data);
     } else {
-	  await updateEvent(eventId, data);
-	  window.location.reload();
+	  const resp = await updateEvent(eventId, data);
+	  onUpdate(resp.data);
     }
     this.handleModalClose();
   }

@@ -3,7 +3,6 @@ import isObject from 'lodash/isObject';
 import pick from 'lodash/pick';
 import axios from 'axios';
 
-import db from '../../firebase/firebase';
 import EventDialog from './EventDialog';
 import EventTableRow from './EventTableRow';
 import Section from '../interface/Section';
@@ -16,7 +15,9 @@ class EventsSection extends React.Component {
     this.state = {
       events: null,
       loading: true
-    };
+	};
+	
+	this.handleUpdate = this.handleUpdate.bind(this);
   }
 
   componentDidMount() {
@@ -24,6 +25,12 @@ class EventsSection extends React.Component {
       const events = Object.values(response.data);
       this.setState({ events, loading: false });
    })
+  }
+
+  handleUpdate(event) {
+	const events = [...this.state.events.filter(e => e.id != event.id)];
+	events.push(event);
+	this.setState({events});	
   }
 
   // TODO: create a method for getting total number of performances
@@ -44,7 +51,8 @@ class EventsSection extends React.Component {
             <EventTableRow
               currentValues={currentValues}
               id={id}
-              key={id} />);
+			  key={id}
+			  onUpdate={this.handleUpdate}  />);
         })}
       </Section>
     );
