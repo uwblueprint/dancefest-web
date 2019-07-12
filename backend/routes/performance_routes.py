@@ -12,6 +12,10 @@ def create_performance():
 	new_performance = Performance.create(**performance_json)
 	return jsonify(new_performance.to_dict())
 
+@blueprint.route('<performance_id>', methods = ['GET'])
+def get_performance(performance_id):
+	performance = Performance.get(performance_id)
+	return jsonify(performance.to_dict())
 
 @blueprint.route('/<performance_id>', methods=['POST'])
 def update_performance(performance_id):

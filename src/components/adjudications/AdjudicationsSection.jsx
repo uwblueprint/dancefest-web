@@ -5,43 +5,39 @@ import pick from 'lodash/pick';
 import AdjudicationTableRow from './AdjudicationTableRow';
 import db from '../../firebase/firebase';
 import Section from '../interface/Section';
+import { getAdjudications } from '../../api/AdjudicationAPI';
+import { getPerformance } from '../../api/performanceApi';
+import humps from 'humps';
 
 class AdjudicationsSection extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      adjudications: [],
+      adjudications: {},
       loading: true,
       performanceValues: {}
     };
   }
 
   componentDidMount() {
-    const { match: { params: { eventId, performanceId }}} = this.props;
+    const { match: { params: { performanceId }}} = this.props;
 
-    const docName = `events/${eventId}/performances/${performanceId}`;
-    db.doc(docName).onSnapshot((querySnapshot) => {
-      this.setState({ performanceValues: querySnapshot.data() });
+    getPerformance(performanceId)
+    .then(({data}) => {
+      this.setState({ performanceValues: humps.camelizeKeys(data)});
     });
 
-    const collectionName = `${docName}/adjudications`;
-
-    this.subscribe = db.collection(collectionName).onSnapshot((querySnapshot) => {
-      const adjudications = [];
-      querySnapshot.forEach((doc) => {
-        const adjudication = {
-          id: doc.id,
-          ...doc.data()
-        };
-        adjudications.push(adjudication);
-      });
-      this.setState({ adjudications, loading: false });
+    getAdjudications(performanceId)
+    .then(({data}) => {
+      this.setState({ adjudications: data, loading: false});
     });
   }
 
-  componentWillUnmount() {
-    this.subscribe();
+  updateAdjudications = (data) => {
+    const { adjudications } = this.state;
+    const newAdjudications = Object.assign({}, adjudications, {[data.id]: data});
+    this.setState({ adjudications: newAdjudications})
   }
 
   render() {
@@ -49,16 +45,19 @@ class AdjudicationsSection extends React.Component {
     const { adjudications, loading, performanceValues } = this.state;
     const collectionName = `events/${eventId}/performances/${performanceId}/adjudications`;
     const headings = ['Tablet ID', 'Audio', 'Artistic Score', 'Technical Score', 'Cumulative Score', 'Awards'];
-    const keys = ['artisticMark', 'audioURL', 'choreoAward', 'cumulativeMark', 'notes', 'specialAward', 'tabletID', 'technicalMark'];
-    const showAdjudications = Array.isArray(adjudications) && adjudications.length > 0;
+    const keys = ['artisticMark', 'audioUrl', 'choreoAward', 'cumulativeMark', 'notes', 'specialAward', 'tabletId', 'technicalMark'];
+    const adjudicationList = Object.values(adjudications);
+    
+    const showAdjudications = adjudicationList.length > 0;
 
     return (
       <Section headings={headings} loading={loading} showContent={showAdjudications} type="adjudication">
-        {showAdjudications && adjudications.map((rowProps) => {
+        {showAdjudications && adjudicationList.map((rowProps) => {
           const { id } = rowProps;
           const currentValues = pick(rowProps, keys);
           return (
             <AdjudicationTableRow
+              updateData={this.updateAdjudications}
               collectionName={collectionName}
               currentValues={currentValues}
               key={id}
