@@ -13,7 +13,6 @@ import { dialogType } from '../../constants';
 import DialogInput from '../interface/dialog/DialogInput';
 import Button from '../interface/Button';
 import styles from '../styles';
-import axios from 'axios';
 import {editExistingEvent, addNewEvent} from '../../api/EventAPI'
 
 
@@ -39,9 +38,10 @@ class EventForm extends React.Component {
   handleChange = (e) => {
     const { name, value } = e.target;
     console.log(value);
+    const valueIncludes = value.includes("-")
     if(name === 'eventDate' && value){
       this.setState({
-        [name]: value.includes("-")
+        [name]: valueIncludes
         ? moment(value, 'YYYY-MM-DD').format('DD/MM/YYYY')
         : moment(value, 'MM/DD/YYYY').format('DD/MM/YYYY')
       });
