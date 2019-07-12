@@ -15,6 +15,7 @@ flask-migrate = "*"
 python-dotenv = "*"
 "psycopg2" = "*"
 flask-cors = "*"
+py-dateutil = "*"
 flask-mail = "*"
 
 [dev-packages]
