@@ -1,10 +1,11 @@
 def _init_postgres_db(app):
-    from . import db
+    from . import db, migrate
     from .seeds import seed
 
     # See http://flask-sqlalchemy.pocoo.org/latest/contexts/
     app.app_context().push()
     db.init_app(app)
+    migrate.init_app(app, db)
 
     # Clear database tables
     db.reflect()

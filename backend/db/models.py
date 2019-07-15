@@ -98,3 +98,16 @@ class Adjudication(db.Model, BaseMixin):
     special_award = db.Column(db.Boolean)
     technical_mark = db.Column(db.Integer)
     performance_id = db.Column(db.Integer, db.ForeignKey('performance.id'))
+
+
+class School(db.Model, BaseMixin):
+    __tablename__ = 'school'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255))
+    phone = db.Column(db.String(255))
+    address = db.Column(db.String(255))
+    district = db.Column(db.String(255))
+    teacher_contact = db.Column(db.String(255))
+    teacher_email = db.Column(db.String(255))
+    teacher_phone = db.Column(db.String(255))
