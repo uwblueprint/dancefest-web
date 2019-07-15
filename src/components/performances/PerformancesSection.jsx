@@ -1,4 +1,3 @@
-import axios from 'axios';
 import humps from 'humps';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -9,7 +8,7 @@ import PerformanceTableRow from './PerformanceTableRow';
 import Filter from '../interface/filter';
 import Section from '../interface/Section';
 
-import { getPerformances } from './../../api/performancesApi';
+import { getPerformances } from './../../api/performanceApi';
 
 class PerformancesSection extends React.Component {
   constructor(props) {

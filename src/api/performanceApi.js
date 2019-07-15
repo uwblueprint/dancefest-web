@@ -1,5 +1,9 @@
 import humps from 'humps';
-import { post } from './ApiUtils';
+import { get, post } from './ApiUtils';
+
+export const getPerformances = (id) => {
+	return get(`events/${id}/performances`);
+};
 
 export const createPerformance = (data) => {
   return post('performances/', humps.decamelizeKeys(data));
