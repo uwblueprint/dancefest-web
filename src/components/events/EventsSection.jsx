@@ -1,11 +1,12 @@
 import React from 'react';
-import isObject from 'lodash/isObject';
 import pick from 'lodash/pick';
+import humps from 'humps';
 
 import db from '../../firebase/firebase';
 import EventDialog from './EventDialog';
 import EventTableRow from './EventTableRow';
 import Section from '../interface/Section';
+import { getEvents } from '../../api/eventsAPI';
 
 class EventsSection extends React.Component {
   constructor(props) {
@@ -18,23 +19,12 @@ class EventsSection extends React.Component {
   }
 
   componentDidMount() {
-    db.collection('events').onSnapshot((querySnapshot) => {
-      const events = [];
-      querySnapshot.forEach((doc) => {
-        const { eventTitle, numJudges, eventDate } = doc.data();
-        const date = isObject(eventDate)
-          ? new Date(eventDate.seconds * 1000).toLocaleDateString('en-GB')
-          : eventDate;
-        const event = {
-          eventDate: date,
-          eventTitle,
-          id: doc.id,
-          numJudges
-        };
-        events.push(event);
+    getEvents().then((response) => {
+      let events = Object.values(response.data).map(event => {
+        return humps.camelizeKeys(event);
       });
       this.setState({ events, loading: false });
-    });
+   })
   }
 
   // TODO: create a method for getting total number of performances

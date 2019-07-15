@@ -32,6 +32,7 @@ def create_event():
 
     return jsonify(new_event.to_dict())
 
+
 @blueprint.route('/')
 def get_events():
     events = Event.query.all()
