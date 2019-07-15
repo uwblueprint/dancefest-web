@@ -1,6 +1,6 @@
 import React from 'react';
-import isObject from 'lodash/isObject';
 import pick from 'lodash/pick';
+import humps from 'humps';
 
 import db from '../../firebase/firebase';
 import EventDialog from './EventDialog';
@@ -20,7 +20,9 @@ class EventsSection extends React.Component {
 
   componentDidMount() {
     getEvents().then((response) => {
-      const events = Object.values(response.data);
+      let events = Object.values(response.data).map(event => {
+        return humps.camelizeKeys(event);
+      });
       this.setState({ events, loading: false });
    })
   }
