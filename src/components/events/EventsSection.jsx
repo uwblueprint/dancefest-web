@@ -1,7 +1,6 @@
 import React from 'react';
 import isObject from 'lodash/isObject';
 import pick from 'lodash/pick';
-import axios from 'axios';
 
 import db from '../../firebase/firebase';
 import EventDialog from './EventDialog';
