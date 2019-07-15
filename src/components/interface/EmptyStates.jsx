@@ -44,7 +44,7 @@ const EmptyState = ({ classes, type }) => {
 
 EmptyState.propTypes = {
   classes: PropTypes.shape().isRequired,
-  type: PropTypes.oneOf(['event', 'adjudication', 'performance']).isRequired
+  type: PropTypes.oneOf(['event', 'adjudication', 'performance', 'feedback', 'schoolFeedback']).isRequired
 };
 
 export default withStyles(styles)(EmptyState);

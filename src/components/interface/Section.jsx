@@ -45,7 +45,7 @@ Section.propTypes = {
   showContent: PropTypes.bool.isRequired,
   renderNewButton: PropTypes.node,
   tableFilters: PropTypes.node,
-  type: PropTypes.oneOf(['event', 'adjudication', 'performance']).isRequired
+  type: PropTypes.oneOf(['event', 'adjudication', 'performance', 'feedback', 'schoolFeedback']).isRequired
 };
 
 Section.defaultProps = {
