@@ -30,7 +30,7 @@ class EventsSection extends React.Component {
   render() {
     const { events, loading } = this.state;
     const headings = ['Event Title', 'Event Date', 'No. Performances', 'No. Judges'];
-    const keys = ['event_date', 'event_title', 'num_judges'];
+    const keys = ['eventDate', 'eventTitle', 'numJudges'];
     const renderNewButton = (<EventDialog formType="new" />);
     const showEvents = Array.isArray(events) && events.length > 0;
 

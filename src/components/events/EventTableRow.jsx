@@ -17,9 +17,9 @@ class EventTableRow extends React.Component {
     } = this.props;
 
     const {
-      event_title,
-      event_date,
-      num_judges
+      eventTitle,
+      eventDate,
+      numJudges
     } = currentValues;
 
     // TODO: fix this
@@ -28,16 +28,16 @@ class EventTableRow extends React.Component {
     return (
       <TableRow>
         <TableCell>
-          <Link to={`/events/${id}/performances`}>{event_title}</Link>
+          <Link to={`/events/${id}/performances`}>{eventTitle}</Link>
         </TableCell>
         <TableCell>
-          {event_date ? moment(event_date).format('YYYY-MM-DD') : ''}
+          {eventDate ? moment(eventDate).format('YYYY-MM-DD') : ''}
         </TableCell>
         <TableCell>
           {numPerformances}
         </TableCell>
         <TableCell>
-          {num_judges}
+          {numJudges}
         </TableCell>
         <TableCell>
           <EventDialog formType="edit" eventId={id} currentValues={currentValues} />
@@ -49,9 +49,9 @@ class EventTableRow extends React.Component {
 
 EventTableRow.propTypes = {
   currentValues: PropTypes.shape({
-    event_title: PropTypes.string,
-    event_date: PropTypes.string,
-    num_judges: PropTypes.number
+    eventTitle: PropTypes.string,
+    eventDate: PropTypes.string,
+    numJudges: PropTypes.number
   }),
   id: PropTypes.string
 };

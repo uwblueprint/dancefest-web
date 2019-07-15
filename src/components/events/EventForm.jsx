@@ -23,9 +23,9 @@ class EventForm extends React.Component {
 
     this.state = {
       disabledSave: true,
-      eventDate: currentValues.event_date || moment().format('DD/MM/YYYY'),
-      eventTitle: currentValues.event_title || '',
-      numJudges: currentValues.num_judges || 0,
+      eventDate: currentValues.eventDate || moment().format('DD/MM/YYYY'),
+      eventTitle: currentValues.eventTitle || '',
+      numJudges: currentValues.numJudges || 0,
     };
   }
 
