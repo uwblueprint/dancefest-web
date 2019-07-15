@@ -8,8 +8,8 @@ def _init_postgres_db(app):
     migrate.init_app(app, db)
 
     # Clear database tables
-    db.reflect()
-    db.drop_all()
+    # db.reflect()
+    # db.drop_all()
 
     # Init database tables
     # db.create_all()

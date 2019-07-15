@@ -1,4 +1,4 @@
-"""empty message
+"""created initial tables
 
 Revision ID: fc8e77f1d29b
 Revises: e4a7c5df58f5
