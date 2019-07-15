@@ -1,12 +1,14 @@
+import humps from 'humps';
 import React from 'react';
 import PropTypes from 'prop-types';
 import pick from 'lodash/pick';
 
-import db from '../../firebase/firebase';
 import PerformanceDialog from './PerformanceDialog';
 import PerformanceTableRow from './PerformanceTableRow';
 import Filter from '../interface/filter';
 import Section from '../interface/Section';
+
+import { getPerformances } from './../../api/performanceApi';
 
 class PerformancesSection extends React.Component {
   constructor(props) {
@@ -20,25 +22,20 @@ class PerformancesSection extends React.Component {
   }
 
   componentDidMount() {
-    const { match: { params: { eventId }}} = this.props;
-    const collectionName = `events/${eventId}/performances`;
-
-    this.subscribe = db.collection(collectionName).onSnapshot((querySnapshot) => {
-      let performances = [];
-      querySnapshot.forEach((doc) => {
-        const performance = {
-          id: doc.id,
-          ...doc.data()
-        };
-        performances.push(performance);
-      });
-      performances = performances.sort((a, b) => Number(a.danceEntry) - Number(b.danceEntry));
-      this.setState({ filteredPerformances: performances, loading: false, performances });
-    });
-  }
-
-  componentWillUnmount() {
-    this.subscribe();
+	const { match: { params: { eventId }}} = this.props;
+	
+	getPerformances(eventId)
+	.then(response => {
+		let performances = Object.values(response.data).map(performance => {
+			return humps.camelizeKeys(performance);
+		});
+		performances = performances.sort((a,b) => Number(a.danceEntry) - Number(b.danceEntry));
+		this.setState({ filteredPerformances: performances, loading: false, performances });
+	})
+	.catch(err => {
+		console.log(err);
+		this.setState({loading: false});
+	});
   }
 
   getFilterKeys = filters => Object.keys(filters)
