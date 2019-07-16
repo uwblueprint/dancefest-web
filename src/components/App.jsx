@@ -135,6 +135,7 @@ export default class App extends React.Component {
                   <PrivateRoute component={SettingsSection} exact path="/settings" user={user} />
                   <PrivateRoute component={PerformancesSection} path="/events/:eventId/performances" user={user} />
                   <PrivateRoute component={AdjudicationsSection} path="/events/:eventId/performance/:performanceId/adjudications" user={user} />
+                  <PrivateRoute component={FeedbackSection} path="/events/:eventId/feedback" user={user} />
                   <Route component={SchoolFeedbackSection} exact path="/school/:eventId/:token" />
                   <Route component={Landing} />
                 </Switch>
