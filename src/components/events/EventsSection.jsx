@@ -22,9 +22,18 @@ class EventsSection extends React.Component {
     getEvents().then((response) => {
       let events = Object.values(response.data).map(event => {
         return humps.camelizeKeys(event);
-      });
+	  });
+	  console.log(events);
       this.setState({ events, loading: false });
    })
+  }
+
+  handleUpdate = (event) => {
+	
+	let events = [...this.state.events.filter(e => e.id !== event.id)];
+	events.push(event);
+	console.log(events);
+	this.setState({ events });
   }
 
   // TODO: create a method for getting total number of performances
@@ -45,7 +54,9 @@ class EventsSection extends React.Component {
             <EventTableRow
               currentValues={currentValues}
               id={id}
-              key={id} />);
+			  key={id}
+			  onUpdate={this.handleUpdate} />
+			  );
         })}
       </Section>
     );

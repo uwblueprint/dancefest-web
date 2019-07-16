@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import pick from 'lodash/pick';
+import humps from 'humps';
 
 import { withStyles } from '@material-ui/core/styles';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -57,7 +58,7 @@ class EventForm extends React.Component {
   }
 
   handleSubmit = async () => {
-    const { eventId, formType } = this.props;
+    const { eventId, formType, onUpdate } = this.props;
     const { eventDate, eventTitle, numJudges } = this.state;
     const collectionName = 'events';
     const data = {
@@ -67,9 +68,10 @@ class EventForm extends React.Component {
     };
     let uri = 'http://127.0.0.1:5000/'
     if (formType === dialogType.NEW) {
-      await addNewEvent(data)
+      await addNewEvent(data);
     } else {
-      await editExistingEvent(eventId, data)
+	  const resp = await editExistingEvent(eventId, data);
+	  onUpdate(humps.camelizeKeys(resp.data));
     }
     this.handleModalClose();
   }
