@@ -8,8 +8,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 
 import { dialogType } from '../../constants';
 import db from '../../firebase/firebase';
-import { createPerformance, updatePerformance } from '../../api/performanceApi';
-import updateData from '../../firebase/utils/updateData';
+import { createPerformance, updatePerformance } from '../../api/PerformanceAPI';
 import DialogInput from '../interface/dialog/DialogInput';
 import DialogSelect from '../interface/dialog/DialogSelect';
 import Button from '../interface/Button';
