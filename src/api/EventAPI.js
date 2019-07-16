@@ -1,4 +1,8 @@
-import { post } from './ApiUtils';
+import { get, post } from './ApiUtils';
+
+export const getEvents = () => {
+    return get(`events`);
+};
 
 export const addNewEvent = (body) => {
     return post(`/events/`, body);

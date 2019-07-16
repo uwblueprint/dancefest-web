@@ -30,7 +30,7 @@ class EventDialog extends React.Component {
   };
 
   render() {
-    const { currentValues, eventId, formType } = this.props;
+    const { currentValues, eventId, formType, onUpdate } = this.props;
     const { open } = this.state;
     const { EDIT } = dialogType;
     const dialogTitle = formType === EDIT ? 'Edit' : 'New';
@@ -53,7 +53,9 @@ class EventDialog extends React.Component {
           currentValues={currentValues}
           eventId={eventId}
           formType={formType}
-          onModalClose={this.handleClose} />
+          onModalClose={this.handleClose} 
+		  onUpdate={onUpdate}
+		  />
       </DFDialog>
     );
   }

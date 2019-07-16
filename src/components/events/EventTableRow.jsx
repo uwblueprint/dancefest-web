@@ -13,7 +13,8 @@ class EventTableRow extends React.Component {
   render() {
     const {
       currentValues,
-      id
+	  id,
+	  onUpdate
     } = this.props;
 
     const {
@@ -40,7 +41,7 @@ class EventTableRow extends React.Component {
           {numJudges}
         </TableCell>
         <TableCell>
-          <EventDialog formType="edit" eventId={id} currentValues={currentValues} />
+          <EventDialog formType="edit" eventId={id} currentValues={currentValues} onUpdate={onUpdate} />
         </TableCell>
       </TableRow>
     );

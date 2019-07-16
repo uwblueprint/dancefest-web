@@ -6,9 +6,6 @@ import { withStyles } from '@material-ui/core/styles';
 import DialogActions from '@material-ui/core/DialogActions';
 import moment from 'moment';
 
-import addData from '../../firebase/utils/addData';
-import updateData from '../../firebase/utils/updateData';
-
 import { dialogType } from '../../constants';
 import DialogInput from '../interface/dialog/DialogInput';
 import Button from '../interface/Button';
@@ -37,7 +34,6 @@ class EventForm extends React.Component {
 
   handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(value);
     const valueIncludes = value.includes("-")
     if(name === 'eventDate' && value){
       this.setState({
@@ -57,9 +53,8 @@ class EventForm extends React.Component {
   }
 
   handleSubmit = async () => {
-    const { eventId, formType } = this.props;
+    const { eventId, formType, onUpdate } = this.props;
     const { eventDate, eventTitle, numJudges } = this.state;
-    const collectionName = 'events';
     const data = {
       event_date: new Date(moment(eventDate, 'DD/MM/YYYY').format('MM-DD-YYYY')),
       event_title: eventTitle,
@@ -67,9 +62,10 @@ class EventForm extends React.Component {
     };
     let uri = 'http://127.0.0.1:5000/'
     if (formType === dialogType.NEW) {
-      await addNewEvent(data)
+      await addNewEvent(data);
     } else {
-      await editExistingEvent(eventId, data)
+	  const resp = await editExistingEvent(eventId, data);
+	  onUpdate(resp.data);
     }
     this.handleModalClose();
   }
