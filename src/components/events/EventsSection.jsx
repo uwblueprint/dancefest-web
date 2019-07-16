@@ -23,7 +23,6 @@ class EventsSection extends React.Component {
       let events = Object.values(response.data).map(event => {
         return humps.camelizeKeys(event);
 	  });
-	  console.log(events);
       this.setState({ events, loading: false });
    })
   }
@@ -31,8 +30,7 @@ class EventsSection extends React.Component {
   handleUpdate = (event) => {
 	
 	let events = [...this.state.events.filter(e => e.id !== event.id)];
-	events.push(event);
-	console.log(events);
+	events.push(humps.camelizeKeys(event));
 	this.setState({ events });
   }
 

@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import pick from 'lodash/pick';
-import humps from 'humps';
 
 import { withStyles } from '@material-ui/core/styles';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -35,7 +34,6 @@ class EventForm extends React.Component {
 
   handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(value);
     const valueIncludes = value.includes("-")
     if(name === 'eventDate' && value){
       this.setState({
@@ -67,7 +65,7 @@ class EventForm extends React.Component {
       await addNewEvent(data);
     } else {
 	  const resp = await editExistingEvent(eventId, data);
-	  onUpdate(humps.camelizeKeys(resp.data));
+	  onUpdate(resp.data);
     }
     this.handleModalClose();
   }
