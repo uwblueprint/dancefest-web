@@ -28,13 +28,14 @@ def create_app():
 
     init_db(app=app)
 
-    from .routes import event_routes, performance_routes, frontend_routes, adjudication_routes, mailer_routes
+    from .routes import event_routes, performance_routes, frontend_routes, adjudication_routes, mailer_routes, award_routes
 
     app.register_blueprint(event_routes.blueprint)
     app.register_blueprint(performance_routes.blueprint)
     app.register_blueprint(frontend_routes.blueprint)
     app.register_blueprint(adjudication_routes.blueprint)
     app.register_blueprint(mailer_routes.blueprint)
+    app.register_blueprint(award_routes.blueprint)
 
     return app
 
