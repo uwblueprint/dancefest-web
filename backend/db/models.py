@@ -1,4 +1,5 @@
 from sqlalchemy import inspect
+from sqlalchemy.orm import relationship
 from sqlalchemy.orm.properties import ColumnProperty
 
 from . import db
@@ -98,6 +99,7 @@ class Adjudication(db.Model, BaseMixin):
     special_award = db.Column(db.Boolean)
     technical_mark = db.Column(db.Integer)
     performance_id = db.Column(db.Integer, db.ForeignKey('performance.id'))
+    nomination_comment = relationship("NominationComment", back_populates="adjudication")
 
 
 class School(db.Model, BaseMixin):
@@ -133,4 +135,5 @@ class NominationComment(db.Model, BaseMixin):
 	id = db.Column(db.Integer, primary_key=True)
 	adjudication_id = db.Column(db.Integer, db.ForeignKey('adjudication.id'))
 	award_id = db.Column(db.Integer, db.ForeignKey('award.id'))
-	comment = db.Column(db.String)	
+	comment = db.Column(db.String)
+	adjudication = relationship("Adjudication", back_populates="nomination_comment")	

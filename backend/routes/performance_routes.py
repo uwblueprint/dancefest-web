@@ -1,9 +1,12 @@
 from flask import Blueprint
 from flask import jsonify, request
 
+from sqlalchemy.orm import joinedload
+
 from ..db.models import Adjudication
 from ..db.models import AwardPerformance
 from ..db.models import Performance
+from ..db.models import NominationComment
 
 blueprint = Blueprint('performance', __name__, url_prefix='/performances')
 
@@ -55,7 +58,7 @@ def update_performance(performance_id):
 
 
 @blueprint.route('/<award_id>', methods=['GET'])
-def get_performances(award_id):
+def get_performances_by_award(award_id):
     performances = Performance.query \
         .join(AwardPerformance, AwardPerformance.performance_id == Performance.id) \
         .filter(AwardPerformance.award_id == award_id)
@@ -87,3 +90,12 @@ def create_adjudication(performance_id):
     new_adjudication = Adjudication.create(**adjudication_json)
 
     return jsonify(new_adjudication.to_dict())
+
+@blueprint.route('/<int:performance_id>/adjudications/<int:award_id>', methods=['GET'])
+def get_adjudications_and_comments(performance_id, award_id):
+    adjudication_comments = Adjudication.query \
+        .options(joinedload(Adjudication.nomination_comment)) \
+        .filter(Adjudication.performance_id == performance_id) \
+        .filter(NominationComment.award_id == award_id) \
+        .all()
+    return jsonify({adjudication_comment.id: adjudication_comment.to_dict(True) for adjudication_comment in adjudication_comments})
