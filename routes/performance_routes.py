@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask import jsonify, request
-from ..db.models import Performance
-from ..db.models import Adjudication
+from db.models import Performance
+from db.models import Adjudication
 
 blueprint = Blueprint('performance', __name__, url_prefix='/performances')
 
@@ -26,7 +26,7 @@ def update_performance(performance_id):
 		dance_size: <String>,
 		competition_level: <String>,
 		choreographers: Array<string>,
-		academic_level: <string>	
+		academic_level: <string>
 	}
 	Returns data in the following format
 	{
@@ -38,7 +38,7 @@ def update_performance(performance_id):
 		dance_size: <String>,
 		competition_level: <String>,
 		choreographers: Array<string>,
-		academic_level: <string>	
+		academic_level: <string>
 	}
 	'''
 	performance = Performance.query.get(performance_id)
@@ -52,11 +52,11 @@ def update_performance(performance_id):
 def get_adjudications(performance_id):
 	adjudications = Adjudication.get_by(performance_id=performance_id)
 	return jsonify({adjudication.id: adjudication.to_dict() for adjudication in adjudications})
-	
+
 @blueprint.route('/<performance_id>/adjudications', methods=['POST'])
 def create_adjudication(performance_id):
     adjudication_json = request.get_json()
     adjudication_json['performance_id'] = performance_id
     new_adjudication = Adjudication.create(**adjudication_json)
 
-    return jsonify(new_adjudication.to_dict())    
+    return jsonify(new_adjudication.to_dict())

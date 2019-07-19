@@ -1,6 +1,6 @@
 from flask import Blueprint
 from flask import jsonify, request
-from ..db.models import Adjudication
+from db.models import Adjudication
 
 blueprint = Blueprint('adjudication', __name__, url_prefix='/adjudications')
 

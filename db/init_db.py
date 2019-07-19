@@ -3,9 +3,9 @@ def _init_postgres_db(app):
     from .seeds import seed
 
     # See http://flask-sqlalchemy.pocoo.org/latest/contexts/
-    app.app_context().push()
+    # app.app_context().push()
     db.init_app(app)
-    migrate.init_app(app, db)
+    # migrate.init_app(app, db)
 
     # Clear database tables
     # db.reflect()
@@ -14,7 +14,7 @@ def _init_postgres_db(app):
     # Init database tables
     # db.create_all()
 
-    db.session.commit()
+    # db.session.commit()
 
     # TODO: remove when we have real data
     # Seed database with sample data

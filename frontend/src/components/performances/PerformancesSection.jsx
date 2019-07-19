@@ -8,7 +8,7 @@ import PerformanceTableRow from './PerformanceTableRow';
 import Filter from '../interface/filter';
 import Section from '../interface/Section';
 
-import { getPerformances } from './../../api/PerformanceAPI';
+import { getPerformances } from '../../api/performanceApi';
 
 class PerformancesSection extends React.Component {
   constructor(props) {
