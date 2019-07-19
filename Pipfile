@@ -18,6 +18,7 @@ flask-cors = "*"
 py-dateutil = "*"
 flask-mail = "*"
 gunicorn = "*"
+Flask-Script = "*"
 
 [dev-packages]
 
