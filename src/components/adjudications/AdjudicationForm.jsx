@@ -5,10 +5,8 @@ import isEqual from 'lodash/isEqual';
 import { withStyles } from '@material-ui/core/styles';
 import DialogActions from '@material-ui/core/DialogActions';
 
-import batchUpdateData from '../../firebase/utils/batchUpdateData';
-import updateData from '../../firebase/utils/updateData';
 import { awardConsiderationEnum } from '../../constants';
-import { updateAdjudications, getAdjudications } from "../../api/AdjudicationAPI";
+import { updateAdjudications } from "../../api/AdjudicationAPI";
 
 import DialogInput from '../interface/dialog/DialogInput';
 import Button from '../interface/Button';

@@ -6,7 +6,7 @@ import AdjudicationTableRow from './AdjudicationTableRow';
 import db from '../../firebase/firebase';
 import Section from '../interface/Section';
 import { getAdjudications } from '../../api/AdjudicationAPI';
-import { getPerformance } from '../../api/performanceApi';
+import { getPerformance } from '../../api/PerformanceAPI';
 import humps from 'humps';
 
 class AdjudicationsSection extends React.Component {
