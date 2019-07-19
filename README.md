@@ -60,7 +60,7 @@ $ pipenv shell
 
 Run the app as follows:
 ```
-$ flask run
+$ heroku local
 ```
 
 To deactivate pipenv run:
