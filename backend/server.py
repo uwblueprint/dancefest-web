@@ -8,9 +8,16 @@ mail = Mail()
 
 
 def create_app():
-    app = Flask(__name__, static_folder = '../build/static')
+    app = Flask(__name__, static_folder='../build/static')
+
+    # Converters
+    from .utils.converters import ListConverter
+    app.url_map.converters['list'] = ListConverter
+
+    # CORS
     CORS(app)
 
+    # Mail
     app.config.update(
         MAIL_SERVER='smtp.gmail.com',
         MAIL_DEFAULT_SENDER=os.environ['EMAIL_USER'],
@@ -19,17 +26,17 @@ def create_app():
         MAIL_USE_TLS=True,
         MAIL_PORT=587
     )
-
     mail.init_app(app)
 
+    # DB
     from .db.init_db import init_db
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
     init_db(app=app)
 
-    from .routes import event_routes, performance_routes, frontend_routes, adjudication_routes, mailer_routes, award_routes
-
+    # Routes
+    from .routes import event_routes, performance_routes, frontend_routes, adjudication_routes, mailer_routes, \
+        award_routes
     app.register_blueprint(event_routes.blueprint)
     app.register_blueprint(performance_routes.blueprint)
     app.register_blueprint(frontend_routes.blueprint)
