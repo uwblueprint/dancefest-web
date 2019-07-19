@@ -1,7 +1,6 @@
 from flask import Blueprint
 from flask import jsonify, request
-from ..db.models import Performance
-from ..db.models import Adjudication
+from ..db.models import Adjudication, AwardPerformance, Performance
 
 blueprint = Blueprint('performance', __name__, url_prefix='/performances')
 
@@ -47,6 +46,10 @@ def update_performance(performance_id):
 
 	return jsonify(performance.to_dict())
 
+@blueprint.route('/<award_id>', methods=['GET'])
+def get_performances(award_id):
+	performances = Performance.query.join(AwardPerformance, AwardPerformance.performance_id == Performance.id).filter(AwardPerformance.award_id == award_id)
+	return jsonify({ performance.id: performance.to_dict() for performance in performances })
 
 @blueprint.route('/<performance_id>/adjudications', methods=['GET'])
 def get_adjudications(performance_id):
