@@ -96,7 +96,7 @@ class Adjudication(db.Model, BaseMixin):
     notes = db.Column(db.String(255))
     special_award = db.Column(db.Boolean)
     technical_mark = db.Column(db.Integer)
-    tablet_id = db.Column(db.Integer, db.ForeignKey('tablet.id'))
+    tablet_id = db.Column(db.Integer, db.ForeignKey('tablet.id'), index=True)
     performance_id = db.Column(db.Integer, db.ForeignKey('performance.id'))
 
 

@@ -12,7 +12,7 @@ def create_tablet():
 	return jsonify(new_tablet.to_dict())
 
 
-@blueprint.route('/<tablet_serial>', methods=['GET'])
+@blueprint.route('/<string:tablet_serial>', methods=['GET'])
 def get_tablet_by_serial(tablet_serial):
 	tablet = Tablet.get_by(serial=tablet_serial, first=True)
 	return jsonify(tablet.to_dict())
