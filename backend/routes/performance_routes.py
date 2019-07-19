@@ -87,11 +87,17 @@ def get_adjudications(performance_id):
 def create_adjudication(performance_id):
     adjudication_json = request.get_json()
     adjudication_json['performance_id'] = performance_id
+    nomination_comments = adjudication_json['nomination_comment']
+    del adjudication_json['nomination_comment']
     new_adjudication = Adjudication.create(**adjudication_json)
 
-    return jsonify(new_adjudication.to_dict())
+    for comment in nomination_comments:
+        comment['adjudication_id'] = new_adjudication.id
+        NominationComment.create(**comment)
+        
+    return jsonify(new_adjudication.to_dict(True))
 
-@blueprint.route('/<int:performance_id>/adjudications/<int:award_id>', methods=['GET'])
+@blueprint.route('/<int:performance_id>/adjudications/<int:award_id>/comments', methods=['GET'])
 def get_adjudications_and_comments(performance_id, award_id):
     adjudication_comments = Adjudication.query \
         .options(joinedload(Adjudication.nomination_comment)) \
