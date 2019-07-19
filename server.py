@@ -26,7 +26,7 @@ from db.init_db import init_db
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-init_db(app=app)
+init_db( app=app )
 
 from routes import event_routes, performance_routes, frontend_routes, adjudication_routes, mailer_routes
 
