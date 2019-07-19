@@ -20,8 +20,9 @@ class AdjudicationDialog extends React.Component {
     this.setState({ open: true });
   };
 
-  handleClose = () => {
-    this.setState({ open: false, view: true });
+  handleClose = (data) => {
+    const { updateData } = this.props;
+    this.setState({ open: false, view: true }, () => updateData(data));
   };
 
   handleView = () => {
@@ -35,17 +36,18 @@ class AdjudicationDialog extends React.Component {
       adjudicationId,
       collectionName,
       currentValues,
-      performanceValues
+      performanceValues,
+      updateData,
     } = this.props;
     const { open, view } = this.state;
     const {
       artisticMark,
-      audioURL,
+      audioUrl,
       choreoAward,
       cumulativeMark,
       notes,
       specialAward,
-      tabletID,
+      tabletId,
       technicalMark
     } = currentValues;
     const {
@@ -84,7 +86,7 @@ class AdjudicationDialog extends React.Component {
             </div>
           </div>
           <DialogReadOnly fullWidth label="Notes" value={notes} />
-          {audioURL && <AudioPlay audioURL={audioURL} />}
+          {audioUrl && <AudioPlay audioURL={audioUrl} />}
           <FormHelperText>Award Considerations</FormHelperText>
           {specialAward && (
             <div>
@@ -114,6 +116,7 @@ class AdjudicationDialog extends React.Component {
 
     const editForm = (
       <AdjudicationForm
+        updateData={updateData}
         adjudicationId={adjudicationId}
         collectionName={collectionName}
         currentValues={currentValues}
@@ -130,7 +133,7 @@ class AdjudicationDialog extends React.Component {
           edit={view}
           onEditClick={this.handleView}
           shouldShowDropdown
-          title={tabletID || 'N/A'} />
+          title={tabletId || 'N/A'} />
         {view ? (viewForm) : (editForm)}
       </DFDialog>
     );
@@ -142,12 +145,12 @@ AdjudicationDialog.propTypes = {
   collectionName: PropTypes.string.isRequired,
   currentValues: PropTypes.shape({
     artisticMark: PropTypes.number,
-    audioURL: PropTypes.string,
+    audioUrl: PropTypes.string,
     choreoAward: PropTypes.bool,
     cumulativeMark: PropTypes.number,
     notes: PropTypes.string,
     specialAward: PropTypes.bool,
-    tabletID: PropTypes.number,
+    tabletId: PropTypes.number,
     technicalMark: PropTypes.number
   }).isRequired,
   performanceValues: PropTypes.shape({

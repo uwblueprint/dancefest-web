@@ -5,6 +5,10 @@ export const getPerformances = (id) => {
 	return get(`events/${id}/performances`);
 };
 
+export const getPerformance = (performanceId) => {
+  return get(`performances/${performanceId}`);
+};
+
 export const createPerformance = (data) => {
   return post('performances/', humps.decamelizeKeys(data));
 };
