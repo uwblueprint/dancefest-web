@@ -13,7 +13,6 @@ def create_tablet():
 
 
 @blueprint.route('/<tablet_serial>', methods=['GET'])
-def get_adjudications(tablet_serial):
+def get_tablet_by_serial(tablet_serial):
 	tablet = Tablet.get_by(serial=tablet_serial, first=True)
 	return jsonify(tablet.to_dict())
-	
