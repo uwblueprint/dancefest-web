@@ -127,8 +127,8 @@ class AwardPerformance(db.Model, BaseMixin):
 	award_id = db.Column(db.Integer, db.ForeignKey('award.id'))
 	performance_id = db.Column(db.Integer, db.ForeignKey('performance.id'))
 
-class NominationComments(db.Model, BaseMixin):
-	__tablename__ = 'nomination_comments'
+class NominationComment(db.Model, BaseMixin):
+	__tablename__ = 'nomination_comment'
 
 	id = db.Column(db.Integer, primary_key=True)
 	adjudication_id = db.Column(db.Integer, db.ForeignKey('adjudication.id'))
