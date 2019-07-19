@@ -8,7 +8,7 @@ mail = Mail()
 
 
 
-app = Flask(__name__, static_folder = '../build/static')
+app = Flask(__name__, static_folder = 'frontend/build/static')
 CORS(app)
 
 app.config.update(
