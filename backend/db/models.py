@@ -111,6 +111,7 @@ class School(db.Model, BaseMixin):
     teacher_contact = db.Column(db.String(255))
     teacher_email = db.Column(db.String(255))
     teacher_phone = db.Column(db.String(255))
+    token = db.Column(db.String(255))
 	
 class Award(db.Model, BaseMixin):
 	__tablename__ = 'award'
