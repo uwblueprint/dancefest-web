@@ -8,7 +8,7 @@ import PerformanceTableRow from './PerformanceTableRow';
 import Filter from '../interface/filter';
 import Section from '../interface/Section';
 
-import { getPerformances } from './../../api/PerformanceAPI';
+import { getPerformances } from '../../api/PerformanceAPI';
 
 class PerformancesSection extends React.Component {
   constructor(props) {
@@ -45,6 +45,16 @@ class PerformancesSection extends React.Component {
       }
       return res;
     }, []);
+
+  updatePerformances = (data) => {
+    const { performances } = this.state;
+    let newPerformances = performances.map((performance) => {
+      if (data.id === performance.id) return data;
+      return performance;
+    });
+    newPerformances = newPerformances.sort((a,b) => Number(a.danceEntry) - Number(b.danceEntry));
+    this.setState({performances: newPerformances, filteredPerformances: newPerformances});
+  }
 
   /*
   * Method handles the logic on filter and search
@@ -117,7 +127,7 @@ class PerformancesSection extends React.Component {
     const { match: { params: { eventId }}} = this.props;
     const headings = ['Dance Title', 'Dance Entry', 'School', 'Academic Level', 'Level of Competition', 'Dance Style', 'Dance Size'];
     const keys = ['academicLevel', 'choreographers', 'competitionLevel', 'danceEntry', 'danceSize', 'danceStyle', 'danceTitle', 'performers', 'school'];
-    const renderNewButton = (<PerformanceDialog eventId={eventId} formType="new" />);
+    const renderNewButton = (<PerformanceDialog updateData={this.updatePerformances} eventId={eventId} formType="new" />);
     const showPerformances = Array.isArray(performances) && performances.length > 0;
     const tableFilters = <Filter handleFilters={this.handleFilters} />;
 
@@ -128,6 +138,7 @@ class PerformancesSection extends React.Component {
           const currentValues = pick(performance, keys);
           return (
             <PerformanceTableRow
+              updateData={this.updatePerformances}
               currentValues={currentValues}
               eventId={eventId}
               id={id}

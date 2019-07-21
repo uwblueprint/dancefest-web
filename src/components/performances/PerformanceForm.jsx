@@ -74,12 +74,13 @@ class PerformanceForm extends React.Component {
   }
 
   handleSubmit = async () => {
-    const { collectionName, formType, performanceId } = this.props;
+    const { collectionName, formType, performanceId, updateData } = this.props;
     const data = omit(this.state, ['disabledSave', 'options']);
     if (formType === dialogType.NEW) {
       await createPerformance(data);
     } else {
-      await updatePerformance(performanceId, data);
+      const performance = await updatePerformance(performanceId, data);
+      updateData(performance.data);
     }
     this.handleModalClose();
   }

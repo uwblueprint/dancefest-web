@@ -11,6 +11,7 @@ class PerformanceTableRow extends React.Component {
 
   render() {
     const {
+      updateData,
       currentValues,
       eventId,
       id
@@ -36,6 +37,7 @@ class PerformanceTableRow extends React.Component {
         <TableCell>{danceSize}</TableCell>
         <TableCell>
           <PerformanceDialog
+            updateData={updateData}
             currentValues={currentValues}
             eventId={eventId}
             formType="edit"
