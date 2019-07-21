@@ -111,3 +111,26 @@ class School(db.Model, BaseMixin):
     teacher_contact = db.Column(db.String(255))
     teacher_email = db.Column(db.String(255))
     teacher_phone = db.Column(db.String(255))
+	
+class Award(db.Model, BaseMixin):
+	__tablename__ = 'award'
+
+	id = db.Column(db.Integer, primary_key=True)
+	title = db.Column(db.String(255))
+	event_id = db.Column(db.Integer, db.ForeignKey('event.id'))
+	winning_performance_id = db.Column(db.Integer, db.ForeignKey('performance.id'))
+
+class AwardPerformance(db.Model, BaseMixin):
+	__tablename__ = 'award_performance'
+
+	id = db.Column(db.Integer, primary_key=True)
+	award_id = db.Column(db.Integer, db.ForeignKey('award.id'))
+	performance_id = db.Column(db.Integer, db.ForeignKey('performance.id'))
+
+class NominationComments(db.Model, BaseMixin):
+	__tablename__ = 'nomination_comments'
+
+	id = db.Column(db.Integer, primary_key=True)
+	adjudication_id = db.Column(db.Integer, db.ForeignKey('adjudication.id'))
+	award_id = db.Column(db.Integer, db.ForeignKey('award.id'))
+	comment = db.Column(db.String)	

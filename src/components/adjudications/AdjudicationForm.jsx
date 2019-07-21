@@ -5,8 +5,6 @@ import isEqual from 'lodash/isEqual';
 import { withStyles } from '@material-ui/core/styles';
 import DialogActions from '@material-ui/core/DialogActions';
 
-import batchUpdateData from '../../firebase/utils/batchUpdateData';
-import updateData from '../../firebase/utils/updateData';
 import { awardConsiderationEnum } from '../../constants';
 import { updateAdjudications } from "../../api/AdjudicationAPI";
 
@@ -65,12 +63,13 @@ class AdjudicationForm extends React.Component {
       adjudicationId,
       collectionName,
       currentValues: {
-        audioURL,
+        audioUrl,
         choreoAward: prevChoreoAward,
         judgeName,
         notes,
         specialAward: prevSpecialAward
-      }
+      },
+      updateData,
     } = this.props;
     const {
       artisticMark,
@@ -90,33 +89,22 @@ class AdjudicationForm extends React.Component {
       ...this.state
     };
 
-    if (audioURL) {
-      Object.assign(data, audioURL);
+    if (audioUrl) {
+      Object.assign(data, audioUrl);
     }
 
-    const { NO_CHANGE } = awardConsiderationEnum;
+    const {data: updatedAdjudication} = await updateAdjudications(
+      adjudicationId,
+      data,
+    );
 
-    if (choreoAwardAction !== NO_CHANGE
-      || specialAwardAction !== NO_CHANGE) {
-      await batchUpdateData(
-        collectionName,
-        adjudicationId,
-        data,
-        choreoAwardAction,
-        specialAwardAction
-      );
-    } else {
-      await updateAdjudications(
-        adjudicationId,
-        data,
-      );
-    }
-    this.handleModalClose();
+    this.setState({ updatedAdjudication }, this.handleModalClose);
   }
 
   handleModalClose = () => {
+    const { updatedAdjudication } = this.state;
     const { onModalClose } = this.props;
-    onModalClose();
+    onModalClose(updatedAdjudication);
   }
 
   render() {
