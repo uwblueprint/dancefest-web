@@ -19,6 +19,7 @@ import EventsSection from './events/EventsSection';
 import Loading from './interface/Loading';
 import PerformancesSection from './performances/PerformancesSection';
 import SettingsSection from './settings/SettingsSection';
+import SchoolFeedbackSection from './feeback/SchoolFeedbackSection';
 
 const palette = createPalette({
   primary: {
@@ -134,6 +135,7 @@ export default class App extends React.Component {
                   <PrivateRoute component={SettingsSection} exact path="/settings" user={user} />
                   <PrivateRoute component={PerformancesSection} path="/events/:eventId/performances" user={user} />
                   <PrivateRoute component={AdjudicationsSection} path="/events/:eventId/performance/:performanceId/adjudications" user={user} />
+                  <Route component={SchoolFeedbackSection} exact path="/school/:token" />
                   <Route component={Landing} />
                 </Switch>
               </React.Fragment>
