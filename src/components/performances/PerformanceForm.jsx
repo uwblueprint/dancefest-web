@@ -17,7 +17,7 @@ import styles from '../styles';
 class PerformanceForm extends React.Component {
   constructor(props) {
     super(props);
-    const { currentValues } = props;
+    const { currentValues, eventId } = props;
 
     this.state = {
       academicLevel: currentValues.academicLevel || '',
@@ -30,7 +30,8 @@ class PerformanceForm extends React.Component {
       disabledSave: true,
       options: {},
       performers: currentValues.performers || '',
-      school: currentValues.school || ''
+      school: currentValues.school || '',
+      eventId: eventId
     };
   }
 
@@ -74,10 +75,11 @@ class PerformanceForm extends React.Component {
   }
 
   handleSubmit = async () => {
-    const { collectionName, formType, performanceId, updateData } = this.props;
+    const { collectionName, formType, performanceId, updateData, createData } = this.props;
     const data = omit(this.state, ['disabledSave', 'options']);
     if (formType === dialogType.NEW) {
-      await createPerformance(data);
+      const performance = await createPerformance(data);
+      createData(performance.data);
     } else {
       const performance = await updatePerformance(performanceId, data);
       updateData(performance.data);

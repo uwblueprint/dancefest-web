@@ -44,6 +44,7 @@ class PerformanceDialog extends React.Component {
   render() {
     const {
       updateData,
+      createData,
       currentValues,
       eventId,
       formType,
@@ -80,7 +81,9 @@ class PerformanceDialog extends React.Component {
           formType={formType}
           onModalClose={this.handleClose}
           performanceId={performanceId}
-          updateData={updateData} />
+          updateData={updateData}
+          createData={createData}
+          eventId={eventId}/>
       </DFDialog>
     );
   }
