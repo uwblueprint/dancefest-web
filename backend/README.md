@@ -84,3 +84,10 @@ Create the database (first time setup)
 ```
 postgres=# CREATE DATABASE dancefest;
 ```
+
+## Run DB Migration (Populate from Firebase)
+
+Make sure you are inside pipenv and run the following command
+```
+python data_migration.py
+```
