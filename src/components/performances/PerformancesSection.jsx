@@ -46,6 +46,24 @@ class PerformancesSection extends React.Component {
       return res;
     }, []);
 
+  updatePerformances = (data) => {
+    const { performances } = this.state;
+    // update performance by id
+    let newPerformances = performances.map((performance) => {
+      if (data.id === performance.id) return data;
+      return performance;
+    });
+    newPerformances = newPerformances.sort((a,b) => Number(a.danceEntry) - Number(b.danceEntry));
+    this.setState({ performances: newPerformances, filteredPerformances: newPerformances });
+  }
+
+  createPerformance = (data) => {
+    const { performances } = this.state;
+    let newPerformances = performances.concat([data]);
+    newPerformances = newPerformances.sort((a,b) => Number(a.danceEntry) - Number(b.danceEntry));
+    this.setState({ performances: newPerformances, filteredPerformances: newPerformances });
+  }
+
   /*
   * Method handles the logic on filter and search
   * @param {Object} filtersObj - object with keys as the performances metadata that
@@ -117,7 +135,7 @@ class PerformancesSection extends React.Component {
     const { match: { params: { eventId }}} = this.props;
     const headings = ['Dance Title', 'Dance Entry', 'School', 'Academic Level', 'Level of Competition', 'Dance Style', 'Dance Size'];
     const keys = ['academicLevel', 'choreographers', 'competitionLevel', 'danceEntry', 'danceSize', 'danceStyle', 'danceTitle', 'performers', 'school'];
-    const renderNewButton = (<PerformanceDialog eventId={eventId} formType="new" />);
+    const renderNewButton = (<PerformanceDialog updateData={this.updatePerformances} createData={this.createPerformance} eventId={eventId} formType="new" />);
     const showPerformances = Array.isArray(performances) && performances.length > 0;
     const tableFilters = <Filter handleFilters={this.handleFilters} />;
 
@@ -128,6 +146,8 @@ class PerformancesSection extends React.Component {
           const currentValues = pick(performance, keys);
           return (
             <PerformanceTableRow
+              updateData={this.updatePerformances}
+              createData={this.createPerformance}
               currentValues={currentValues}
               eventId={eventId}
               id={id}
