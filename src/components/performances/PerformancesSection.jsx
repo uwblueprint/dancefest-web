@@ -48,6 +48,7 @@ class PerformancesSection extends React.Component {
 
   updatePerformances = (data) => {
     const { performances } = this.state;
+    // update performance by id
     let newPerformances = performances.map((performance) => {
       if (data.id === performance.id) return data;
       return performance;
