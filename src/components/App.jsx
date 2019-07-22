@@ -17,7 +17,7 @@ import { auth } from '../firebase/firebase';
 import AdjudicationsSection from './adjudications/AdjudicationsSection';
 import EventsSection from './events/EventsSection';
 import Loading from './interface/Loading';
-import PerformancesSection from './performances/PerformancesSection';
+import LandingSection from './landing/Landing';
 import SettingsSection from './settings/SettingsSection';
 import FeedbackSection from './feedback/FeedbackSection';
 import SchoolFeedbackSection from './feedback/SchoolFeedbackSection';
@@ -134,11 +134,10 @@ export default class App extends React.Component {
                   <Route exact path="/" render={props => (<SignIn {...props} user={user} />)} />
                   <PrivateRoute component={EventsSection} exact path="/events" user={user} />
                   <PrivateRoute component={SettingsSection} exact path="/settings" user={user} />
-                  <PrivateRoute component={PerformancesSection} path="/events/:eventId/performances" user={user} />
-                  <PrivateRoute component={AdjudicationsSection} path="/events/:eventId/performance/:performanceId/adjudications" user={user} />
-                  <PrivateRoute component={FeedbackSection} path="/events/:eventId/feedback" user={user} />
+                  <PrivateRoute component={FeedbackSection} path="/events/:eventId/:eventTitle/feedback" user={user} />
+                  <PrivateRoute component={LandingSection} exact path="/events/:eventId/:eventTitle/landing" user={user} />
+                  <PrivateRoute component={AdjudicationsSection} path="/events/:eventId/:eventTitle/performance/:performanceId/adjudications" user={user} />
                   <Route component={SchoolFeedbackSection} exact path="/school/:eventId/:token" />
-                  <Route component={Landing} />
                 </Switch>
               </React.Fragment>
             )

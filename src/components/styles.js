@@ -239,7 +239,26 @@ const styles = theme => ({
   dialogSection: {
     marginTop: "100px",
     marginLeft: "139px"
-  }
+  },
+
+  //Landing
+  landingTabBarStyle: {
+    backgroundColor: 'white',
+  },
+
+  landingTabBarIndicatorStyle: {
+    backgroundColor: '#de2706',
+  },
+
+  landingTabStyle: {
+    fontFamily: "'Fjalla One', sans-serif",
+    fontSize: 20,
+    color: 'grey',
+  },
+
+  landingTabStyle_selected: {
+    color: '#de2706',
+  },
 });
 
 export default styles;
