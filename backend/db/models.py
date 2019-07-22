@@ -1,4 +1,5 @@
 from sqlalchemy import inspect
+from sqlalchemy.orm import relationship
 from sqlalchemy.orm.properties import ColumnProperty
 
 from . import db
@@ -98,8 +99,19 @@ class Adjudication(db.Model, BaseMixin):
     technical_mark = db.Column(db.Integer)
     tablet_id = db.Column(db.Integer, db.ForeignKey('tablet.id'), index=True)
     performance_id = db.Column(db.Integer, db.ForeignKey('performance.id'))
+    nomination_comment = relationship("NominationComment", back_populates="adjudication")
 
+    def create(self, **kwargs):
+        nomination_comments = kwargs['nomination_comment']
+        del kwargs['nomination_comment']
+        new_adjudication = super(Adjudication, self).create()
 
+        for comment in nomination_comments:
+            comment['adjudication_id'] = new_adjudication.id
+            NominationComment.create(**comment)
+
+        return new_adjudication
+            
 class School(db.Model, BaseMixin):
     __tablename__ = 'school'
 
@@ -128,13 +140,14 @@ class AwardPerformance(db.Model, BaseMixin):
 	award_id = db.Column(db.Integer, db.ForeignKey('award.id'))
 	performance_id = db.Column(db.Integer, db.ForeignKey('performance.id'))
 
-class NominationComments(db.Model, BaseMixin):
-	__tablename__ = 'nomination_comments'
+class NominationComment(db.Model, BaseMixin):
+	__tablename__ = 'nomination_comment'
 
 	id = db.Column(db.Integer, primary_key=True)
 	adjudication_id = db.Column(db.Integer, db.ForeignKey('adjudication.id'))
 	award_id = db.Column(db.Integer, db.ForeignKey('award.id'))
-	comment = db.Column(db.String)	
+	comment = db.Column(db.String)
+	adjudication = relationship("Adjudication", back_populates="nomination_comment")	
 
 
 class Tablet(db.Model, BaseMixin):
