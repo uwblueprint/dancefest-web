@@ -5,12 +5,12 @@ import uuid
 blueprint = Blueprint('school', __name__, url_prefix='/school')
 
 
-@blueprint.route('<token>', methods=['GET'])
-def get_performances_by_token(token):
+@blueprint.route('<event_id>/<token>', methods=['GET'])
+def get_performances_by_token(event_id, token):
     school = School.get_by(first=True, token=token)
     if not school:
         return jsonify({})
-    performances = Performance.get_by(school=school.name)
+    performances = Performance.get_by(school=school.name, event_id=event_id)
     return jsonify({performance.id: performance.to_dict() for performance in performances})
 
 

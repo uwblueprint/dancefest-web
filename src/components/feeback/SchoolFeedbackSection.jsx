@@ -13,8 +13,8 @@ class SchoolFeedbackSection extends React.Component {
   }
 
   async loadPerformances() {
-    const { match: { params: { token }}} = this.props;
-    const performances = await getPerformancesByToken(token);
+    const { match: { params: { eventId, token }}} = this.props;
+    const performances = await getPerformancesByToken(eventId, token);
     this.setState({ performances: Object.values(performances.data) });
   }
 

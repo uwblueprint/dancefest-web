@@ -1,8 +1,8 @@
 import humps from 'humps';
 import { get, post } from './ApiUtils';
 
-export const getPerformancesByToken = (token) => {
-  return get(`school/${token}`)
+export const getPerformancesByToken = (eventId, token) => {
+  return get(`school/${eventId}/${token}`)
     .then((response) => humps.camelizeKeys(response));
 };
 
