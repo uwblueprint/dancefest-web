@@ -101,7 +101,17 @@ class Adjudication(db.Model, BaseMixin):
     performance_id = db.Column(db.Integer, db.ForeignKey('performance.id'))
     nomination_comment = relationship("NominationComment", back_populates="adjudication")
 
+    def create(self, **kwargs):
+        nomination_comments = kwargs['nomination_comment']
+        del kwargs['nomination_comment']
+        new_adjudication = super(Adjudication, self).create()
 
+        for comment in nomination_comments:
+            comment['adjudication_id'] = new_adjudication.id
+            NominationComment.create(**comment)
+
+        return new_adjudication
+            
 class School(db.Model, BaseMixin):
     __tablename__ = 'school'
 

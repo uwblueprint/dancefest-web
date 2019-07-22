@@ -87,13 +87,7 @@ def get_adjudications(performance_id):
 def create_adjudication(performance_id):
     adjudication_json = request.get_json()
     adjudication_json['performance_id'] = performance_id
-    nomination_comments = adjudication_json['nomination_comment']
-    del adjudication_json['nomination_comment']
-    new_adjudication = Adjudication.create(**adjudication_json)
-
-    for comment in nomination_comments:
-        comment['adjudication_id'] = new_adjudication.id
-        NominationComment.create(**comment)
+    new_adjudication = Adjudication.create(Adjudication,**adjudication_json)
         
     return jsonify(new_adjudication.to_dict(True))
 
