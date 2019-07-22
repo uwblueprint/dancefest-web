@@ -1,13 +1,17 @@
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
-from db.models import Event, Performance, Adjudication
+from backend.db.models import Event, Performance, Adjudication
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
 # Use a service account
-def migrateData():
+if __name__ == '__main__':
+	engine = create_engine(os.getenv('DATABASE_URL'))
+	Session = sessionmaker(bind=engine)
+	session = Session()
 	cred = credentials.Certificate('serviceAccountKey.json')
 	firebase_admin.initialize_app(cred)
-
 	firebase_db = firestore.client()
 	event = firebase_db.collection(u'events').document('Rva6FuhOSZfF4HGq7Vh2')
 	performances = event.collection('performances')
@@ -17,9 +21,11 @@ def migrateData():
 		'num_judges': event.get('numJudges'),
 		'event_date': event.get('eventDate')
 	}
-	eventObj = Event.create(**event_dict)
+	eventObj = Event(**event_dict)
+	session.add(eventObj)
+	session.flush()
+	eventId = eventObj.id
 	print('Inserted Event with id: %s' % eventObj.id)
-	# event = Event.create(**event_dict)
 	for performance in performances.get():
 		pd = performance.get('')
 		performance_dict = {
@@ -31,9 +37,12 @@ def migrateData():
 			'dance_title': pd.get('danceTitle'),
 			'performers': pd.get('performers'),
 			'school': pd.get('school'),
-			'event_id': eventObj.id, # replace with event.id
+			'event_id': eventId, # replace with event.id
 		}
-		perfObj = Performance.create(**performance_dict)
+		perfObj = Performance(**performance_dict)
+		performanceId = perfObj.id
+		session.add(perfObj)
+		session.flush()
 		adjudications = performances.document(performance.id).collection('adjudications')
 		print('Inserted Performance with id: %s' % perfObj.id)
 		for adjudication in adjudications.get():
@@ -46,7 +55,11 @@ def migrateData():
 				'notes': ad.get('notes'),
 				'special_award': ad.get('specialAward'),
 				'technical_mark': ad.get('technicalMark'),
-				'performance_id': perfObj.id, # replace with performance.id
+				'performance_id': performanceId, # replace with performance.id
 			}
-			adjObj = Adjudication.create(**adjudication_dict)
+			adjObj = Adjudication(**adjudication_dict)
+			session.add(adjObj)
+			session.flush()
 			print('Inserted Adjudication with id: %s' % adjObj.id)
+		session.commit()
+		session.close()
