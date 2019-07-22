@@ -1,5 +1,5 @@
 def seed():
-    from .models import Event, Performance, Adjudication, Award, AwardPerformance, NominationComments
+    from .models import Event, Performance, Adjudication, Award, AwardPerformance, NominationComment
 
     event = Event.create(event_title="test event")
     
@@ -14,5 +14,5 @@ def seed():
             adjudication = Adjudication.create(performance_id=performance.id)
             AwardPerformance.create(performance_id=performance.id, award_id=i + 1)
             if(i % 2 != 0):
-                NominationComments.create(adjudication_id=adjudication.id, award_id=i + 1, comment="This dance was great!")
+                NominationComment.create(adjudication_id=adjudication.id, award_id=i + 1, comment="This dance was great!")
                        
