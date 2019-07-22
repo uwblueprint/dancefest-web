@@ -10,9 +10,11 @@ export const getPerformance = (performanceId) => {
 };
 
 export const createPerformance = (data) => {
-  return post('performances/', humps.decamelizeKeys(data));
+  return post('performances/', humps.decamelizeKeys(data))
+    .then((response) => humps.camelizeKeys(response));
 };
 
 export const updatePerformance = (performanceId, data) => {
-  return post(`performances/${performanceId}`, humps.decamelizeKeys(data));
+  return post(`performances/${performanceId}`, humps.decamelizeKeys(data))
+    .then((response) => humps.camelizeKeys(response));
 };
