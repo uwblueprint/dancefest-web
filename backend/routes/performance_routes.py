@@ -76,7 +76,9 @@ def get_adjudications_by_performance(performance_ids):
 
 @blueprint.route('/<int:performance_id>/adjudications', methods=['GET'])
 def get_adjudications(performance_id):
-    adjudications = Adjudication.get_by(performance_id=performance_id)
+    # Query by performance id and any additional query parameters provided
+    adjudication_filter = request.args.to_dict()
+    adjudications = Adjudication.get_by(performance_id=performance_id, **adjudication_filter)
     return jsonify({adjudication.id: adjudication.to_dict() for adjudication in adjudications})
 
 

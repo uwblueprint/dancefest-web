@@ -93,10 +93,10 @@ class Adjudication(db.Model, BaseMixin):
     artistic_mark = db.Column(db.Integer)
     audio_url = db.Column(db.String(255))
     cumulative_mark = db.Column(db.Integer)
-    tablet_id = db.Column(db.Integer)
     notes = db.Column(db.String(255))
     special_award = db.Column(db.Boolean)
     technical_mark = db.Column(db.Integer)
+    tablet_id = db.Column(db.Integer, db.ForeignKey('tablet.id'), index=True)
     performance_id = db.Column(db.Integer, db.ForeignKey('performance.id'))
 
 
@@ -135,3 +135,10 @@ class NominationComments(db.Model, BaseMixin):
 	adjudication_id = db.Column(db.Integer, db.ForeignKey('adjudication.id'))
 	award_id = db.Column(db.Integer, db.ForeignKey('award.id'))
 	comment = db.Column(db.String)	
+
+
+class Tablet(db.Model, BaseMixin):
+    __tablename__ = 'tablet'
+
+    id = db.Column(db.Integer, primary_key=True)
+    serial = db.Column(db.String(255), nullable=False, index=True, unique=True)

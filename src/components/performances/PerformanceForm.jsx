@@ -75,7 +75,7 @@ class PerformanceForm extends React.Component {
   }
 
   handleSubmit = async () => {
-    const { collectionName, formType, performanceId, updateData, createData } = this.props;
+    const { formType, performanceId, updateData, createData } = this.props;
     const data = omit(this.state, ['disabledSave', 'options']);
     if (formType === dialogType.NEW) {
       const performance = await createPerformance(data);
