@@ -3,11 +3,18 @@ import PropTypes from 'prop-types';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import moment from 'moment';
+import Button from '../interface/Button'
 
 // import EventDialog from './EventDialog';
 
 class FeedbackTableRow extends React.Component {
   state = {};
+  
+  onClick = () => {
+    console.log(this.props);
+    const {setShowForm} = this.props;
+    setShowForm(true);
+  }
 
   render() {
     const {
@@ -33,7 +40,9 @@ class FeedbackTableRow extends React.Component {
           </ul>
         </TableCell>
         <TableCell>
-          <EventDialog formType="edit" eventId={id} currentValues={currentValues} />
+          <Button type='default' onClick={this.onClick}>
+            Review Feedback
+          </Button>
         </TableCell>
       </TableRow>
     );
