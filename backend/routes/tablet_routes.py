@@ -4,15 +4,10 @@ from ..db.models import Tablet
 
 blueprint = Blueprint('tablet', __name__, url_prefix='/tablets')
 
-
-@blueprint.route('/', methods=['POST'])
-def create_tablet():
-	tablet_json = request.get_json()
-	new_tablet = Tablet.create(**tablet_json)
-	return jsonify(new_tablet.to_dict())
-
-
 @blueprint.route('/<string:tablet_serial>', methods=['GET'])
 def get_tablet_by_serial(tablet_serial):
 	tablet = Tablet.get_by(serial=tablet_serial, first=True)
+	if tablet is None:
+		tablet = Tablet.create(serial=tablet_serial)
+
 	return jsonify(tablet.to_dict())
