@@ -11,32 +11,26 @@ class FeedbackTableRow extends React.Component {
 
   render() {
     const {
-      currentValues,
-      id
+      school,
+      performances,
+      setShowForm
     } = this.props;
-
-    const {
-      eventTitle,
-      eventDate,
-      numJudges
-    } = currentValues;
-
-    // TODO: fix this
-    const numPerformances = 0;
 
     return (
       <TableRow>
         <TableCell>
-          <Link to={`/events/${id}/performances`}>{eventTitle}</Link>
+          {school}
         </TableCell>
         <TableCell>
-          {eventDate ? moment(eventDate).format('YYYY-MM-DD') : ''}
-        </TableCell>
-        <TableCell>
-          {numPerformances}
-        </TableCell>
-        <TableCell>
-          {numJudges}
+          <ul>
+          {performances.map(performance => performance.danceTitle).map((dance)=>{
+              return (
+                  <li>{dance}</li>
+              );
+              }
+            )
+          }
+          </ul>
         </TableCell>
         <TableCell>
           <EventDialog formType="edit" eventId={id} currentValues={currentValues} />
