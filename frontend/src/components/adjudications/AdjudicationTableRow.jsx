@@ -10,26 +10,27 @@ const AdjudicationTableRow = ({
   collectionName,
   currentValues,
   id,
-  performanceValues
+  performanceValues,
+  updateData,
 }) => {
   const {
-    audioURL,
+    audioUrl,
     artisticMark,
     choreoAward,
     cumulativeMark,
     specialAward,
-    tabletID,
+    tabletId,
     technicalMark
   } = currentValues;
 
   return (
     <TableRow key={id}>
       <TableCell>
-        {tabletID}
+        {tabletId}
       </TableCell>
       <TableCell>
         <p>
-          {audioURL ? 'yes' : 'no'}
+          {audioUrl ? 'yes' : 'no'}
         </p>
       </TableCell>
       <TableCell>
@@ -47,6 +48,7 @@ const AdjudicationTableRow = ({
       </TableCell>
       <TableCell>
         <AdjudicationDialog
+          updateData={updateData}
           adjudicationId={id}
           collectionName={collectionName}
           currentValues={currentValues}
@@ -59,12 +61,12 @@ const AdjudicationTableRow = ({
 AdjudicationTableRow.propTypes = {
   currentValues: PropTypes.shape({
     artisticMark: PropTypes.number,
-    audioURL: PropTypes.string,
+    audioUrl: PropTypes.string,
     choreoAward: PropTypes.bool,
     cumulativeMark: PropTypes.number,
     notes: PropTypes.string,
     specialAward: PropTypes.bool,
-    tabletID: PropTypes.number,
+    tabletId: PropTypes.number,
     technicalMark: PropTypes.number
   }).isRequired,
   collectionName: PropTypes.string.isRequired,

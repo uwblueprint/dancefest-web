@@ -24,9 +24,12 @@ frontend/npm-debug.log*
 frontend/yarn-debug.log*
 frontend/yarn-error.log*
 
+serviceAccountKey.json
+
 .DS_Store
 
 #backend
 .env
 __pycache__/
 Pipfile.lock
+/frontend/src/api/performanceApi.js

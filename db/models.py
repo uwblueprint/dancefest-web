@@ -1,4 +1,5 @@
 from sqlalchemy import inspect
+from sqlalchemy.orm import relationship
 from sqlalchemy.orm.properties import ColumnProperty
 
 from . import db
@@ -93,13 +94,24 @@ class Adjudication(db.Model, BaseMixin):
     artistic_mark = db.Column(db.Integer)
     audio_url = db.Column(db.String(255))
     cumulative_mark = db.Column(db.Integer)
-    tablet_id = db.Column(db.Integer)
     notes = db.Column(db.String(255))
     special_award = db.Column(db.Boolean)
     technical_mark = db.Column(db.Integer)
+    tablet_id = db.Column(db.Integer, db.ForeignKey('tablet.id'), index=True)
     performance_id = db.Column(db.Integer, db.ForeignKey('performance.id'))
+    nomination_comment = relationship("NominationComment", back_populates="adjudication")
 
+    def create(self, **kwargs):
+        nomination_comments = kwargs['nomination_comment']
+        del kwargs['nomination_comment']
+        new_adjudication = super(Adjudication, self).create()
 
+        for comment in nomination_comments:
+            comment['adjudication_id'] = new_adjudication.id
+            NominationComment.create(**comment)
+
+        return new_adjudication
+            
 class School(db.Model, BaseMixin):
     __tablename__ = 'school'
 
@@ -111,3 +123,35 @@ class School(db.Model, BaseMixin):
     teacher_contact = db.Column(db.String(255))
     teacher_email = db.Column(db.String(255))
     teacher_phone = db.Column(db.String(255))
+    token = db.Column(db.String(255))
+	
+class Award(db.Model, BaseMixin):
+	__tablename__ = 'award'
+
+	id = db.Column(db.Integer, primary_key=True)
+	title = db.Column(db.String(255))
+	event_id = db.Column(db.Integer, db.ForeignKey('event.id'))
+	winning_performance_id = db.Column(db.Integer, db.ForeignKey('performance.id'))
+
+class AwardPerformance(db.Model, BaseMixin):
+	__tablename__ = 'award_performance'
+
+	id = db.Column(db.Integer, primary_key=True)
+	award_id = db.Column(db.Integer, db.ForeignKey('award.id'))
+	performance_id = db.Column(db.Integer, db.ForeignKey('performance.id'))
+
+class NominationComment(db.Model, BaseMixin):
+	__tablename__ = 'nomination_comment'
+
+	id = db.Column(db.Integer, primary_key=True)
+	adjudication_id = db.Column(db.Integer, db.ForeignKey('adjudication.id'))
+	award_id = db.Column(db.Integer, db.ForeignKey('award.id'))
+	comment = db.Column(db.String)
+	adjudication = relationship("Adjudication", back_populates="nomination_comment")	
+
+
+class Tablet(db.Model, BaseMixin):
+    __tablename__ = 'tablet'
+
+    id = db.Column(db.Integer, primary_key=True)
+    serial = db.Column(db.String(255), nullable=False, index=True, unique=True)
