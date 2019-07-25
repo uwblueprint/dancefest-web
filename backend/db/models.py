@@ -44,7 +44,7 @@ class BaseMixin:
         db.session.delete(self)
         return commit and db.session.commit()
 
-    def to_dict(self, include_relationships=False):
+    def to_dict(self, include_relationships=False, *ignore_cols):
         cls = type(self)
         # `mapper` allows us to grab the columns of a Model
         mapper = inspect(cls)
@@ -52,19 +52,20 @@ class BaseMixin:
         for column in mapper.attrs:
             field = column.key
             attr = getattr(self, field)
-            # If it's a regular column, extract the value
-            if isinstance(column, ColumnProperty):
-                formatted[field] = attr
-            # Otherwise, it's a relationship field
-            elif include_relationships and attr:
-                # Recursively format the relationship
-                # Don't format the relationship's relationships
-                if isinstance(attr, Iterable):
-                    # Iterate through each obj in one to many relationship
-                    formatted[field] = [obj.to_dict() for obj in attr]
-                else:
-                    # Format obj in many to one relationship
-                    formatted[field] = attr.to_dict()
+            if(column.key not in ignore_cols):
+                # If it's a regular column, extract the value
+                if isinstance(column, ColumnProperty):
+                    formatted[field] = attr
+                # Otherwise, it's a relationship field
+                elif include_relationships and attr:
+                    # Recursively format the relationship
+                    # Don't format the relationship's relationships
+                    if isinstance(attr, Iterable):
+                        # Iterate through each obj in one to many relationship
+                        formatted[field] = [obj.to_dict() for obj in attr]
+                    else:
+                        # Format obj in many to one relationship
+                        formatted[field] = attr.to_dict()
         return formatted
 
 
