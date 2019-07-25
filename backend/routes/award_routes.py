@@ -17,7 +17,7 @@ def get_awards(event_id):
 def get_award_performance(performance_id):
     # get the title, number of judges that have nominated a performance for an award,
     # and the number of nominees for a performance's awards
-    award_performances = db.session.query(Award.title, Award.nominee_count, Award.id, \
+    award_performances = db.session.query(Award.title, Award.nominee_count, Award.id,
                                           db.func.count(AwardPerformance.award_id)) \
         .join(AwardPerformance) \
         .filter_by(performance_id=performance_id) \
@@ -29,6 +29,14 @@ def get_award_performance(performance_id):
 
 @blueprint.route('/<int:award_id>', methods=['POST'])
 def update_performance(award_id):
+    award_json = request.get_json()
+    award = Award.get(award_id)
+    new_award = award.update(**award_json)
+    return jsonify(new_award.to_dict())
+
+
+@blueprint.route('/<int:award_id>', methods=['POST'])
+def update_winning_performance(award_id):
     award_json = request.get_json()
     award = Award.get(award_id)
     new_award = award.update(**award_json)

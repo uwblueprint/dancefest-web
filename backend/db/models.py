@@ -53,7 +53,7 @@ class BaseMixin:
         for column in mapper.attrs:
             field = column.key
             attr = getattr(self, field)
-            if (column.key not in ignore_cols):
+            if column.key not in ignore_cols:
                 # If it's a regular column, extract the value
                 if isinstance(column, ColumnProperty):
                     formatted[field] = attr
@@ -65,7 +65,7 @@ class BaseMixin:
                         # When the relationship contains many objects
                         formatted[field] = [obj.to_dict() for obj in attr]
                     else:
-                        # When the relationship containes one object
+                        # Format obj in many to one relationship
                         formatted[field] = attr.to_dict()
         return formatted
 

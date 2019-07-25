@@ -1,0 +1,33 @@
+CREATE DATABASE dancefest;
+\c dancefest
+\du
+\d dancefest
+\t dancefest
+\dt dancefest
+\c dancefest
+\dt
+\dt award
+\ds award
+\d award
+\d award
+insert into award(id, title, event_id, nominee_count) values (1, award1, 1, 2);
+insert into award(id, title, event_id) values (1, "award1", 1);
+insert into award(id,title,event_id) values (1, award, 1);
+\dt
+select * from award_performance;
+select * from performance
+select * from performance;
+select * from performance;
+insert in award_performance(id, award_id, performance_id) values (1, 1, 1);
+insert into award_performance(id, award_id, performance_id) values (1,1,1);
+select * from award;
+insert into award(id, title, event_id) values (1, "", 1);
+insert into award(id, title, event_id) values (1, a, 1);
+\ds award
+\d award
+insert into award(id, title, event_id, winning_performance, nominee_count) values (1, saf, 1, 1, 3);
+insert into award(id, title, event_id, winning_performance_id, nominee_count) values (1, saf, 1, 1, 3);
+insert into award(id, title, event_id, winning_performance_id, nominee_count) values (1, 1, 1, 3);
+insert into award(id, event_id, winning_performance_id, nominee_count) values (1, 1, 1, 3);
+\d
+\s award_performance
