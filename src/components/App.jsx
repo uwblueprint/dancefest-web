@@ -19,8 +19,8 @@ import EventsSection from './events/EventsSection';
 import Loading from './interface/Loading';
 import PerformancesSection from './performances/PerformancesSection';
 import SettingsSection from './settings/SettingsSection';
-import SchoolFeedbackSection from './feeback/SchoolFeedbackSection';
 import FeedbackSection from './feedback/FeedbackSection';
+import SchoolFeedbackSection from './schoolFeedback/SchoolFeedbackSection';
 
 const palette = createPalette({
   primary: {
