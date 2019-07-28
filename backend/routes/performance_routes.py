@@ -89,7 +89,7 @@ def create_adjudication(performance_id):
     adjudication_json['performance_id'] = performance_id
     new_adjudication = Adjudication.create(Adjudication,**adjudication_json)
         
-    return jsonify(new_adjudication.to_dict(True))
+    return jsonify(new_adjudication.to_dict(True, 'performance'))
 
 @blueprint.route('/<int:performance_id>/adjudications/<int:award_id>/comments', methods=['GET'])
 def get_adjudications_and_comments(performance_id, award_id):

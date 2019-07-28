@@ -114,14 +114,15 @@ class Adjudication(db.Model, BaseMixin):
         if 'nomination_comment' in kwargs:
             nomination_comments = kwargs['nomination_comment']
             del kwargs['nomination_comment']
-            new_adjudication = super(Adjudication, self).create()
+            new_adjudication = super(Adjudication, self).create(**kwargs)
 
             for comment in nomination_comments:
                 comment['adjudication_id'] = new_adjudication.id
                 NominationComment.create(**comment)
+                AwardPerformance.create(**{'award_id':comment['award_id'], 'performance_id':new_adjudication.performance_id})
             return new_adjudication
         else:
-            return super(Adjudication, self).create()
+            return super(Adjudication, self).create(**kwargs)
             
 class School(db.Model, BaseMixin):
     __tablename__ = 'school'
@@ -143,6 +144,7 @@ class Award(db.Model, BaseMixin):
     title = db.Column(db.String(255))
     event_id = db.Column(db.Integer, db.ForeignKey('event.id'))
     winning_performance_id = db.Column(db.Integer, db.ForeignKey('performance.id'))
+    award_performance = db.relationship('AwardPerformance')
 
 class AwardPerformance(db.Model, BaseMixin):
     __tablename__ = 'award_performance'
@@ -151,6 +153,7 @@ class AwardPerformance(db.Model, BaseMixin):
     award_id = db.Column(db.Integer, db.ForeignKey('award.id'))
     performance_id = db.Column(db.Integer, db.ForeignKey('performance.id'))
     performance = db.relationship('Performance')
+    award = db.relationship('Award')
     
 class NominationComment(db.Model, BaseMixin):
     __tablename__ = 'nomination_comment'
