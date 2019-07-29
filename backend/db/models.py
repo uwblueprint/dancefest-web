@@ -1,5 +1,5 @@
 from sqlalchemy import inspect
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, load_only
 from sqlalchemy.orm.properties import ColumnProperty
 from collections import Iterable
 
@@ -115,8 +115,16 @@ class Adjudication(db.Model, BaseMixin):
             nomination_comments = kwargs['nomination_comment']
             del kwargs['nomination_comment']
             new_adjudication = super(Adjudication, self).create(**kwargs)
+            
+            awards_nominated_for = [id for id, in db.session.query(AwardPerformance.award_id).filter_by(performance_id=kwargs['performance_id']).distinct()]
 
             for comment in nomination_comments:
+                # increase nominee count if performance hasn't already been nominated
+                if comment['award_id'] not in awards_nominated_for:
+                    award = Award.get(comment['award_id'])
+                    award.nominee_count = Award.nominee_count + 1
+                    Award.update(award)
+
                 comment['adjudication_id'] = new_adjudication.id
                 NominationComment.create(**comment)
                 AwardPerformance.create(**{'award_id':comment['award_id'], 'performance_id':new_adjudication.performance_id})

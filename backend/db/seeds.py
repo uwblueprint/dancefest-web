@@ -6,7 +6,7 @@ def seed():
     awards = [ 'Creative Concept', 'Impressive Focus', 'Unique Adaptation']
 
     for award in awards:
-        Award.create(title=award, event_id=event.id)
+        Award.create(title=award, event_id=event.id, nominee_count=0)
 
     for i in range(10):
         performance = Performance.create(dance_title='test dance {}'.format(i + 1), event_id=event.id)
