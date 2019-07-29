@@ -7,7 +7,7 @@ from flask_mail import Mail
 mail = Mail()
 
 
-app = Flask(__name__, static_folder='../build/static')
+app = Flask(__name__, static_folder='frontend/build/static')
 
 # Converters
 from utils.converters import ListConverter
