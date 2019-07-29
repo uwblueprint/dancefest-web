@@ -12,8 +12,8 @@ class FeedbackTableRow extends React.Component {
   
   onClick = () => {
     console.log(this.props);
-    const {setShowForm} = this.props;
-    setShowForm(true);
+    const {setShowForm, school} = this.props;
+    setShowForm(true, school);
   }
 
   render() {

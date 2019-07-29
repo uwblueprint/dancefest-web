@@ -6,113 +6,122 @@ import { withStyles } from '@material-ui/core/styles';
 import DialogActions from '@material-ui/core/DialogActions';
 import moment from 'moment';
 
-import addData from '../../firebase/utils/addData';
-import updateData from '../../firebase/utils/updateData';
-
 import { dialogType } from '../../constants';
 import DialogInput from '../interface/dialog/DialogInput';
 import Button from '../interface/Button';
 import styles from '../styles';
-import {editExistingEvent, addNewEvent} from '../../api/EventAPI'
+import { getAdjudicationsByPerformanceId, updateAdjudications } from "../../api/AdjudicationAPI";
+import { generateToken } from '../../api/SchoolAPI';
+import { sendMail } from '../../api/MailerAPI';
 
 
-class EventForm extends React.Component {
+class FeedbackForm extends React.Component {
   constructor(props) {
     super(props);
-    const { currentValues } = props;
+    const { currentValues, school, performances } = props;
 
     this.state = {
       disabledSave: true,
       eventDate: currentValues.eventDate || moment().format('DD/MM/YYYY'),
       eventTitle: currentValues.eventTitle || '',
       numJudges: currentValues.numJudges || 0,
+      adjudications: {}
     };
   }
 
-  // Disable save button if not all input fields are filled.
-  static getDerivedStateFromProps(props, state) {
-    const values = pick(state, ['eventDate', 'eventTitle', 'numJudges']);
-    return { disabledSave: !(Object.keys(values).every(value => !!state[value])) };
+  componentDidMount() {
+    const { performances } = this.props;
+    const performanceIds = performances.map(performance => performance.id);
+    getAdjudicationsByPerformanceId(performanceIds)
+      .then((response) => {
+        this.setState({ adjudications: response.data });
+      });
   }
 
   handleChange = (e) => {
     const { name, value } = e.target;
     console.log(value);
-    const valueIncludes = value.includes("-")
-    if(name === 'eventDate' && value){
-      this.setState({
-        [name]: valueIncludes
-        ? moment(value, 'YYYY-MM-DD').format('DD/MM/YYYY')
-        : moment(value, 'MM/DD/YYYY').format('DD/MM/YYYY')
-      });
-    }
-    else{
-      this.setState({ [name]: value });
-    }
+    const adjudicationId = e.target.getAttribute('adjudicationId');
+    const performanceId = e.target.getAttribute('performanceId');
+
+    this.setState(prevState => ({
+      adjudications: {
+        ...prevState.adjudications,
+        [performanceId]: {
+          ...prevState.adjudications[performanceId],
+          [adjudicationId]: {
+            ...prevState.adjudications[performanceId][adjudicationId],
+            [name]: value
+          }
+        }
+      }
+    }));
   }
 
   handleCancel = () => {
-    // TODO: ask are you sure?
     this.handleModalClose();
   }
 
   handleSubmit = async () => {
-    const { eventId, formType } = this.props;
-    const { eventDate, eventTitle, numJudges } = this.state;
-    const collectionName = 'events';
-    const data = {
-      event_date: new Date(moment(eventDate, 'DD/MM/YYYY').format('MM-DD-YYYY')),
-      event_title: eventTitle,
-      num_judges: numJudges
-    };
-    let uri = 'http://127.0.0.1:5000/'
-    if (formType === dialogType.NEW) {
-      await addNewEvent(data)
-    } else {
-      await editExistingEvent(eventId, data)
+    const { school, eventId } = this.props;
+    const { adjudications } = this.state;
+
+    for (const performanceId in adjudications) {
+      for (const adjudicationId in adjudications[performanceId]) {
+        updateAdjudications(adjudicationId, adjudications[performanceId][adjudicationId]);
+      }
     }
+
+    const response = await generateToken({ school });
+
+    sendMail({
+      recipients: [response.data.teacherEmail],
+      token: response.data.token,
+      teacherContact: response.data.teacherContact,
+      eventId,
+      school
+    });
+
     this.handleModalClose();
   }
 
   handleModalClose = () => {
     const { onModalClose } = this.props;
-    onModalClose();
+    onModalClose(false, undefined);
   }
 
   render() {
-    const { classes, formType } = this.props;
+    const { classes, formType, school, performaces } = this.props;
     const {
       disabledSave,
       eventTitle,
       eventDate,
-      numJudges
+      numJudges,
+      adjudications
     } = this.state;
     return (
       <React.Fragment>
-        <div style={{ margin: '25px' }}>
-          <DialogInput fullWidth name="eventTitle" label="Event Title" onChange={this.handleChange} value={eventTitle} />
-          <div style={{ display: 'flex' }}>
-            <DialogInput
-              fullWidth
-              inputLabelProps={{ shrink: true }}
-              name='eventDate'
-              label='Event Date'
-              onChange={this.handleChange}
-              style={{ marginRight: '5px' }}
-              type="date"
-              value={eventDate ? moment(eventDate, 'DD/MM/YYYY').format('YYYY-MM-DD') : ''}
-              variant="filled"
-            />
-            <DialogInput fullWidth name="numJudges" label="No. Judges" onChange={this.handleChange} type="number" value={numJudges} />
-          </div>
-        </div>
+        {Object.keys(adjudications).map((performanceId) => {
+          return (
+            <div>
+              <p>{performanceId}</p>
+              {Object.values(adjudications[performanceId]).map((adjudication) => {
+                return (
+                  <div style={{ margin: '25px' }}>
+                    <input adjudicationId={adjudication.id} performanceId={performanceId} name="notes" label="Notes" onChange={this.handleChange} value={adjudication.notes} />
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })}
         <div className={classes.dfdialog_footer}>
           <DialogActions>
             <Button onClick={this.handleCancel} type="default">
               {formType === dialogType.EDIT ? 'cancel' : 'discard'}
             </Button>
-            <Button disabled={disabledSave} onClick={this.handleSubmit} type="primary">
-              Save
+            <Button onClick={this.handleSubmit} type="primary">
+              Save and Email Link
             </Button>
           </DialogActions>
         </div>
@@ -121,16 +130,16 @@ class EventForm extends React.Component {
   }
 }
 
-EventForm.propTypes = {
+FeedbackForm.propTypes = {
   classes: PropTypes.shape().isRequired,
   currentValues: PropTypes.shape(),
   formType: PropTypes.oneOf([dialogType.EDIT, dialogType.NEW]),
   onModalClose: PropTypes.func.isRequired
 };
 
-EventForm.defaultProps = {
+FeedbackForm.defaultProps = {
   currentValues: {},
   formType: dialogType.EDIT
 };
 
-export default withStyles(styles)(EventForm);
+export default withStyles(styles)(FeedbackForm);

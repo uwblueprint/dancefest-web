@@ -20,7 +20,7 @@ import Loading from './interface/Loading';
 import PerformancesSection from './performances/PerformancesSection';
 import SettingsSection from './settings/SettingsSection';
 import FeedbackSection from './feedback/FeedbackSection';
-import SchoolFeedbackSection from './schoolFeedback/SchoolFeedbackSection';
+import SchoolFeedbackSection from './feedback/SchoolFeedbackSection';
 
 const palette = createPalette({
   primary: {
