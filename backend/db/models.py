@@ -1,6 +1,7 @@
 from sqlalchemy import inspect
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, load_only
 from sqlalchemy.orm.properties import ColumnProperty
+from collections import Iterable
 
 from . import db
 
@@ -43,7 +44,7 @@ class BaseMixin:
         db.session.delete(self)
         return commit and db.session.commit()
 
-    def to_dict(self, include_relationships=False):
+    def to_dict(self, include_relationships=False, ignore_cols = []):
         cls = type(self)
         # `mapper` allows us to grab the columns of a Model
         mapper = inspect(cls)
@@ -51,14 +52,20 @@ class BaseMixin:
         for column in mapper.attrs:
             field = column.key
             attr = getattr(self, field)
-            # If it's a regular column, extract the value
-            if isinstance(column, ColumnProperty):
-                formatted[field] = attr
-            # Otherwise, it's a relationship field
-            elif include_relationships:
-                # Recursively format the relationship
-                # Don't format the relationship's relationships
-                formatted[field] = [obj.to_dict() for obj in attr]
+            if(column.key not in ignore_cols):
+                # If it's a regular column, extract the value
+                if isinstance(column, ColumnProperty):
+                    formatted[field] = attr
+                # Otherwise, it's a relationship field
+                elif include_relationships and attr:
+                    # Recursively format the relationship
+                    # Don't format the relationship's relationships
+                    if isinstance(attr, Iterable):
+                        # When the relationship contains many objects
+                        formatted[field] = [obj.to_dict() for obj in attr]
+                    else:
+                        # When the relationship containes one object
+                        formatted[field] = attr.to_dict()
         return formatted
 
 
@@ -85,6 +92,8 @@ class Performance(db.Model, BaseMixin):
     performers = db.Column(db.ARRAY(db.String(255)))
     school = db.Column(db.String(255))
     event_id = db.Column(db.Integer, db.ForeignKey('event.id'))
+    adjudications = relationship('Adjudication', backref='performance')
+    award_performance = relationship('AwardPerformance', back_populates='performance', lazy='noload') 
 
 
 class Adjudication(db.Model, BaseMixin):
@@ -99,18 +108,31 @@ class Adjudication(db.Model, BaseMixin):
     technical_mark = db.Column(db.Integer)
     tablet_id = db.Column(db.Integer, db.ForeignKey('tablet.id'), index=True)
     performance_id = db.Column(db.Integer, db.ForeignKey('performance.id'))
-    nomination_comment = relationship("NominationComment", back_populates="adjudication")
+    nomination_comment = relationship('NominationComment', back_populates="adjudication")
 
     def create(self, **kwargs):
-        nomination_comments = kwargs['nomination_comment']
-        del kwargs['nomination_comment']
-        new_adjudication = super(Adjudication, self).create()
+        if 'nomination_comment' in kwargs:
+            nomination_comments = kwargs['nomination_comment']
+            del kwargs['nomination_comment']
+            new_adjudication = super(Adjudication, self).create(**kwargs)
+            
+			# get the awards the performance has already been nominated for
+            awards_nominated_for = [id for id, in db.session.query(AwardPerformance.award_id).filter_by(performance_id=kwargs['performance_id']).distinct()]
 
-        for comment in nomination_comments:
-            comment['adjudication_id'] = new_adjudication.id
-            NominationComment.create(**comment)
+            for comment in nomination_comments:
+                # increase nominee count if performance hasn't already been nominated
+                if comment['award_id'] not in awards_nominated_for:
+                    award = Award.get(comment['award_id'])
+                    award.nominee_count = Award.nominee_count + 1
+                    Award.update(award)
 
-        return new_adjudication
+				# create nomination comments
+                comment['adjudication_id'] = new_adjudication.id
+                NominationComment.create(**comment)
+                AwardPerformance.create(**{'award_id':comment['award_id'], 'performance_id':new_adjudication.performance_id})
+            return new_adjudication
+        else:
+            return super(Adjudication, self).create(**kwargs)
             
 class School(db.Model, BaseMixin):
     __tablename__ = 'school'
@@ -124,30 +146,34 @@ class School(db.Model, BaseMixin):
     teacher_email = db.Column(db.String(255))
     teacher_phone = db.Column(db.String(255))
     token = db.Column(db.String(255))
-	
+    
 class Award(db.Model, BaseMixin):
-	__tablename__ = 'award'
+    __tablename__ = 'award'
 
-	id = db.Column(db.Integer, primary_key=True)
-	title = db.Column(db.String(255))
-	event_id = db.Column(db.Integer, db.ForeignKey('event.id'))
-	winning_performance_id = db.Column(db.Integer, db.ForeignKey('performance.id'))
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(255))
+    event_id = db.Column(db.Integer, db.ForeignKey('event.id'))
+    nominee_count = db.Column(db.Integer)
+    winning_performance_id = db.Column(db.Integer, db.ForeignKey('performance.id'))
+    award_performance = relationship('AwardPerformance', back_populates='award')
 
 class AwardPerformance(db.Model, BaseMixin):
-	__tablename__ = 'award_performance'
+    __tablename__ = 'award_performance'
 
-	id = db.Column(db.Integer, primary_key=True)
-	award_id = db.Column(db.Integer, db.ForeignKey('award.id'))
-	performance_id = db.Column(db.Integer, db.ForeignKey('performance.id'))
-
+    id = db.Column(db.Integer, primary_key=True)
+    award_id = db.Column(db.Integer, db.ForeignKey('award.id'))
+    performance_id = db.Column(db.Integer, db.ForeignKey('performance.id'))
+    performance = relationship('Performance')
+    award = relationship('Award', back_populates='award_performance')
+    
 class NominationComment(db.Model, BaseMixin):
-	__tablename__ = 'nomination_comment'
+    __tablename__ = 'nomination_comment'
 
-	id = db.Column(db.Integer, primary_key=True)
-	adjudication_id = db.Column(db.Integer, db.ForeignKey('adjudication.id'))
-	award_id = db.Column(db.Integer, db.ForeignKey('award.id'))
-	comment = db.Column(db.String)
-	adjudication = relationship("Adjudication", back_populates="nomination_comment")	
+    id = db.Column(db.Integer, primary_key=True)
+    adjudication_id = db.Column(db.Integer, db.ForeignKey('adjudication.id'))
+    award_id = db.Column(db.Integer, db.ForeignKey('award.id'))
+    comment = db.Column(db.String)
+    adjudication = relationship("Adjudication", back_populates="nomination_comment")	
 
 
 class Tablet(db.Model, BaseMixin):
