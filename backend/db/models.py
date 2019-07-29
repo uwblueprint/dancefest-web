@@ -143,8 +143,9 @@ class Award(db.Model, BaseMixin):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255))
     event_id = db.Column(db.Integer, db.ForeignKey('event.id'))
+    nominee_count = db.Column(db.Integer)
     winning_performance_id = db.Column(db.Integer, db.ForeignKey('performance.id'))
-    award_performance = db.relationship('AwardPerformance')
+    award_performance = relationship('AwardPerformance', back_populates='award')
 
 class AwardPerformance(db.Model, BaseMixin):
     __tablename__ = 'award_performance'
@@ -152,8 +153,8 @@ class AwardPerformance(db.Model, BaseMixin):
     id = db.Column(db.Integer, primary_key=True)
     award_id = db.Column(db.Integer, db.ForeignKey('award.id'))
     performance_id = db.Column(db.Integer, db.ForeignKey('performance.id'))
-    performance = db.relationship('Performance')
-    award = db.relationship('Award')
+    performance = relationship('Performance')
+    award = relationship('Award', back_populates='award_performance')
     
 class NominationComment(db.Model, BaseMixin):
     __tablename__ = 'nomination_comment'
