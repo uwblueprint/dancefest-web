@@ -44,7 +44,7 @@ class BaseMixin:
         db.session.delete(self)
         return commit and db.session.commit()
 
-    def to_dict(self, include_relationships=False, *ignore_cols):
+    def to_dict(self, include_relationships=False, ignore_cols = []):
         cls = type(self)
         # `mapper` allows us to grab the columns of a Model
         mapper = inspect(cls)
@@ -61,10 +61,10 @@ class BaseMixin:
                     # Recursively format the relationship
                     # Don't format the relationship's relationships
                     if isinstance(attr, Iterable):
-                        # Iterate through each obj in one to many relationship
+                        # When the relationship contains many objects
                         formatted[field] = [obj.to_dict() for obj in attr]
                     else:
-                        # Format obj in many to one relationship
+                        # When the relationship containes one object
                         formatted[field] = attr.to_dict()
         return formatted
 
@@ -116,6 +116,7 @@ class Adjudication(db.Model, BaseMixin):
             del kwargs['nomination_comment']
             new_adjudication = super(Adjudication, self).create(**kwargs)
             
+			# get the awards the performance has already been nominated for
             awards_nominated_for = [id for id, in db.session.query(AwardPerformance.award_id).filter_by(performance_id=kwargs['performance_id']).distinct()]
 
             for comment in nomination_comments:
@@ -125,6 +126,7 @@ class Adjudication(db.Model, BaseMixin):
                     award.nominee_count = Award.nominee_count + 1
                     Award.update(award)
 
+				# create nomination comments
                 comment['adjudication_id'] = new_adjudication.id
                 NominationComment.create(**comment)
                 AwardPerformance.create(**{'award_id':comment['award_id'], 'performance_id':new_adjudication.performance_id})

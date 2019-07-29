@@ -97,4 +97,4 @@ def get_adjudications_and_comments(performance_id, award_id):
         .filter(Adjudication.performance_id == performance_id) \
         .filter(NominationComment.award_id == award_id) \
         .all()
-    return jsonify({adjudication_comment.id: adjudication_comment.to_dict(True, 'performance') for adjudication_comment in adjudication_comments})
+    return jsonify({adjudication_comment.id: adjudication_comment.to_dict(True, ['performance']) for adjudication_comment in adjudication_comments})
