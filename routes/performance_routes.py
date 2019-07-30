@@ -99,8 +99,4 @@ def get_adjudications_and_comments(performance_id, award_id):
         .filter(Adjudication.performance_id == performance_id) \
         .filter(NominationComment.award_id == award_id) \
         .all()
-<<<<<<< HEAD:routes/performance_routes.py
-    return jsonify({adjudication_comment.id: adjudication_comment.to_dict(True) for adjudication_comment in adjudication_comments})
-=======
     return jsonify({adjudication_comment.id: adjudication_comment.to_dict(True, ['performance']) for adjudication_comment in adjudication_comments})
->>>>>>> 497b0a4ff33c9a628ca792b02a1be88aa415cfdb:backend/routes/performance_routes.py
