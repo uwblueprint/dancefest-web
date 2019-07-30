@@ -57,12 +57,12 @@ def update_performance(performance_id):
     return jsonify(performance.to_dict())
 
 
-@blueprint.route('/<award_id>', methods=['GET'])
-def get_performances_by_award(award_id):
+@blueprint.route('/<award_id>/awards', methods=['GET'])
+def get_performances_adjudications_by_award(award_id):
     performances = Performance.query \
-        .join(AwardPerformance, AwardPerformance.performance_id == Performance.id) \
-        .filter(AwardPerformance.award_id == award_id)
-    return jsonify({performance.id: performance.to_dict() for performance in performances})
+    .filter(Performance.award_performance.any(award_id = award_id)) \
+    .all()
+    return jsonify({performance.id: performance.to_dict(True) for performance in performances})
 
 
 @blueprint.route('/<list:performance_ids>/adjudications', methods=['GET'])
@@ -91,13 +91,16 @@ def create_adjudication(performance_id):
     adjudication_json['performance_id'] = performance_id
     new_adjudication = Adjudication.create(Adjudication,**adjudication_json)
         
-    return jsonify(new_adjudication.to_dict(True))
+    return jsonify(new_adjudication.to_dict(True, 'performance'))
 
 @blueprint.route('/<int:performance_id>/adjudications/<int:award_id>/comments', methods=['GET'])
 def get_adjudications_and_comments(performance_id, award_id):
     adjudication_comments = Adjudication.query \
-        .options(joinedload(Adjudication.nomination_comment)) \
         .filter(Adjudication.performance_id == performance_id) \
         .filter(NominationComment.award_id == award_id) \
         .all()
+<<<<<<< HEAD:routes/performance_routes.py
     return jsonify({adjudication_comment.id: adjudication_comment.to_dict(True) for adjudication_comment in adjudication_comments})
+=======
+    return jsonify({adjudication_comment.id: adjudication_comment.to_dict(True, ['performance']) for adjudication_comment in adjudication_comments})
+>>>>>>> 497b0a4ff33c9a628ca792b02a1be88aa415cfdb:backend/routes/performance_routes.py
