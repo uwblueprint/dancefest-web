@@ -2,7 +2,7 @@ from flask import Blueprint
 from flask import jsonify, request
 from ..db.models import Adjudication
 
-blueprint = Blueprint('adjudication', __name__, url_prefix='/adjudications')
+blueprint = Blueprint('adjudication', __name__, url_prefix='/api/adjudications')
 
 @blueprint.route('/<adjudication_id>', methods=['POST'])
 def update_adjudication(adjudication_id):

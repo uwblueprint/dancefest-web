@@ -4,7 +4,7 @@ from flask import jsonify, request
 from ..db import db
 from ..db.models import Award, AwardPerformance
 
-blueprint = Blueprint('award', __name__, url_prefix='/awards')
+blueprint = Blueprint('award', __name__, url_prefix='/api/awards')
 
 @blueprint.route('/<int:event_id>', methods=['GET'])
 def get_awards(event_id):

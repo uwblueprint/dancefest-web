@@ -2,7 +2,7 @@ from flask import Blueprint
 from flask import jsonify, request
 from ..db.models import Tablet
 
-blueprint = Blueprint('tablet', __name__, url_prefix='/tablets')
+blueprint = Blueprint('tablet', __name__, url_prefix='/api/tablets')
 
 @blueprint.route('/<string:tablet_serial>', methods=['GET'])
 def get_tablet_by_serial(tablet_serial):

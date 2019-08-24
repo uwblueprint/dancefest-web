@@ -6,7 +6,7 @@ from ..db.models import AwardPerformance
 from ..db.models import Performance
 from ..db.models import NominationComment
 
-blueprint = Blueprint('performance', __name__, url_prefix='/performances')
+blueprint = Blueprint('performance', __name__, url_prefix='/api/performances')
 
 
 @blueprint.route('/', methods=['POST'])

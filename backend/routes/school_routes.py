@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, request
 from ..db.models import Performance, School
 import uuid
 
-blueprint = Blueprint('school', __name__, url_prefix='/school')
+blueprint = Blueprint('school', __name__, url_prefix='/api/school')
 
 
 @blueprint.route('<event_id>/<token>', methods=['GET'])

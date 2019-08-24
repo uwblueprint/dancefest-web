@@ -9,7 +9,7 @@ from ..db.models import Event, Performance
 from ..utils.constants import DATE_FORMAT
 import dateutil.parser
 
-blueprint = Blueprint('events', __name__, url_prefix='/events')
+blueprint = Blueprint('events', __name__, url_prefix='/api/events')
 
 @blueprint.route('/<event_id>', methods=['POST'])
 def update_event(event_id):
