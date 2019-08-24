@@ -11,11 +11,7 @@ import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
 revision = 'b2976568d1c3'
-<<<<<<< HEAD
-down_revision = 'dedc17d321a6'
-=======
 down_revision = '920b33a546fd'
->>>>>>> fixed migration merge conflicts, added nominee count field
 branch_labels = None
 depends_on = None
 
