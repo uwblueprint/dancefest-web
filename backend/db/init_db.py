@@ -1,6 +1,5 @@
 def _init_postgres_db(app):
     from . import db, migrate
-    from .seeds import seed
 
     # See http://flask-sqlalchemy.pocoo.org/latest/contexts/
     app.app_context().push()
