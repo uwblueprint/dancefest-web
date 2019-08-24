@@ -2,11 +2,10 @@ from flask import Blueprint
 from flask import jsonify, request
 
 from ..db.models import Adjudication
-from ..db.models import AwardPerformance
-from ..db.models import Performance
 from ..db.models import NominationComment
+from ..db.models import Performance
 
-blueprint = Blueprint('performance', __name__, url_prefix='/performances')
+blueprint = Blueprint('performance', __name__, url_prefix='/api/performances')
 
 
 @blueprint.route('/', methods=['POST'])
@@ -15,39 +14,15 @@ def create_performance():
     new_performance = Performance.create(**performance_json)
     return jsonify(new_performance.to_dict())
 
-@blueprint.route('<performance_id>', methods = ['GET'])
+
+@blueprint.route('<performance_id>', methods=['GET'])
 def get_performance(performance_id):
-	performance = Performance.get(performance_id)
-	return jsonify(performance.to_dict())
+    performance = Performance.get(performance_id)
+    return jsonify(performance.to_dict())
+
 
 @blueprint.route('/<int:performance_id>', methods=['POST'])
 def update_performance(performance_id):
-    '''
-    Requires post body in the following format:
-    {
-        school: <string>,
-        performers: Array<string>,
-        dance_title: <Int>,
-        dance_style: <string>,
-        dance_entry: <Int>,
-        dance_size: <String>,
-        competition_level: <String>,
-        choreographers: Array<string>,
-        academic_level: <string>
-    }
-    Returns data in the following format
-    {
-        school: <string>,
-        performers: Array<string>,
-        dance_title: <Int>,
-        dance_style: <string>,
-        dance_entry: <Int>,
-        dance_size: <String>,
-        competition_level: <String>,
-        choreographers: Array<string>,
-        academic_level: <string>
-    }
-    '''
     performance = Performance.query.get(performance_id)
     performance_json = request.get_json()
     performance.update(**performance_json)
@@ -58,8 +33,8 @@ def update_performance(performance_id):
 @blueprint.route('/<award_id>/awards', methods=['GET'])
 def get_performances_adjudications_by_award(award_id):
     performances = Performance.query \
-    .filter(Performance.award_performance.any(award_id = award_id)) \
-    .all()
+        .filter(Performance.award_performance.any(award_id=award_id)) \
+        .all()
     return jsonify({performance.id: performance.to_dict(True) for performance in performances})
 
 
@@ -87,9 +62,10 @@ def get_adjudications(performance_id):
 def create_adjudication(performance_id):
     adjudication_json = request.get_json()
     adjudication_json['performance_id'] = performance_id
-    new_adjudication = Adjudication.create(Adjudication,**adjudication_json)
-        
+    new_adjudication = Adjudication.create(**adjudication_json)
+
     return jsonify(new_adjudication.to_dict(True, 'performance'))
+
 
 @blueprint.route('/<int:performance_id>/adjudications/<int:award_id>/comments', methods=['GET'])
 def get_adjudications_and_comments(performance_id, award_id):
@@ -97,4 +73,6 @@ def get_adjudications_and_comments(performance_id, award_id):
         .filter(Adjudication.performance_id == performance_id) \
         .filter(NominationComment.award_id == award_id) \
         .all()
-    return jsonify({adjudication_comment.id: adjudication_comment.to_dict(True, ['performance']) for adjudication_comment in adjudication_comments})
+    return jsonify(
+        {adjudication_comment.id: adjudication_comment.to_dict(True, ['performance']) for adjudication_comment in
+         adjudication_comments})

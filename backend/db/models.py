@@ -1,7 +1,8 @@
-from sqlalchemy import inspect
-from sqlalchemy.orm import relationship, load_only
-from sqlalchemy.orm.properties import ColumnProperty
 from collections import Iterable
+
+from sqlalchemy import inspect
+from sqlalchemy.orm import relationship
+from sqlalchemy.orm.properties import ColumnProperty
 
 from . import db
 
@@ -44,7 +45,7 @@ class BaseMixin:
         db.session.delete(self)
         return commit and db.session.commit()
 
-    def to_dict(self, include_relationships=False, ignore_cols = []):
+    def to_dict(self, include_relationships=False, ignore_cols=[]):
         cls = type(self)
         # `mapper` allows us to grab the columns of a Model
         mapper = inspect(cls)
@@ -52,7 +53,7 @@ class BaseMixin:
         for column in mapper.attrs:
             field = column.key
             attr = getattr(self, field)
-            if(column.key not in ignore_cols):
+            if (column.key not in ignore_cols):
                 # If it's a regular column, extract the value
                 if isinstance(column, ColumnProperty):
                     formatted[field] = attr
@@ -93,7 +94,7 @@ class Performance(db.Model, BaseMixin):
     school = db.Column(db.String(255))
     event_id = db.Column(db.Integer, db.ForeignKey('event.id'))
     adjudications = relationship('Adjudication', backref='performance')
-    award_performance = relationship('AwardPerformance', back_populates='performance', lazy='noload') 
+    award_performance = relationship('AwardPerformance', back_populates='performance', lazy='noload')
 
 
 class Adjudication(db.Model, BaseMixin):
@@ -115,9 +116,10 @@ class Adjudication(db.Model, BaseMixin):
             nomination_comments = kwargs['nomination_comment']
             del kwargs['nomination_comment']
             new_adjudication = super(Adjudication, self).create(**kwargs)
-            
-			# get the awards the performance has already been nominated for
-            awards_nominated_for = [id for id, in db.session.query(AwardPerformance.award_id).filter_by(performance_id=kwargs['performance_id']).distinct()]
+
+            # get the awards the performance has already been nominated for
+            awards_nominated_for = [id for id, in db.session.query(AwardPerformance.award_id).filter_by(
+                performance_id=kwargs['performance_id']).distinct()]
 
             for comment in nomination_comments:
                 # increase nominee count if performance hasn't already been nominated
@@ -126,14 +128,16 @@ class Adjudication(db.Model, BaseMixin):
                     award.nominee_count = Award.nominee_count + 1
                     Award.update(award)
 
-				# create nomination comments
+                # create nomination comments
                 comment['adjudication_id'] = new_adjudication.id
                 NominationComment.create(**comment)
-                AwardPerformance.create(**{'award_id':comment['award_id'], 'performance_id':new_adjudication.performance_id})
+                AwardPerformance.create(
+                    **{'award_id': comment['award_id'], 'performance_id': new_adjudication.performance_id})
             return new_adjudication
         else:
             return super(Adjudication, self).create(**kwargs)
-            
+
+
 class School(db.Model, BaseMixin):
     __tablename__ = 'school'
 
@@ -146,7 +150,8 @@ class School(db.Model, BaseMixin):
     teacher_email = db.Column(db.String(255))
     teacher_phone = db.Column(db.String(255))
     token = db.Column(db.String(255))
-    
+
+
 class Award(db.Model, BaseMixin):
     __tablename__ = 'award'
 
@@ -157,6 +162,7 @@ class Award(db.Model, BaseMixin):
     winning_performance_id = db.Column(db.Integer, db.ForeignKey('performance.id'))
     award_performance = relationship('AwardPerformance', back_populates='award')
 
+
 class AwardPerformance(db.Model, BaseMixin):
     __tablename__ = 'award_performance'
 
@@ -165,7 +171,8 @@ class AwardPerformance(db.Model, BaseMixin):
     performance_id = db.Column(db.Integer, db.ForeignKey('performance.id'))
     performance = relationship('Performance')
     award = relationship('Award', back_populates='award_performance')
-    
+
+
 class NominationComment(db.Model, BaseMixin):
     __tablename__ = 'nomination_comment'
 
@@ -173,7 +180,7 @@ class NominationComment(db.Model, BaseMixin):
     adjudication_id = db.Column(db.Integer, db.ForeignKey('adjudication.id'))
     award_id = db.Column(db.Integer, db.ForeignKey('award.id'))
     comment = db.Column(db.String)
-    adjudication = relationship("Adjudication", back_populates="nomination_comment")	
+    adjudication = relationship("Adjudication", back_populates="nomination_comment")
 
 
 class Tablet(db.Model, BaseMixin):
