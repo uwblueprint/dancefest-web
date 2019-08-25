@@ -24,12 +24,20 @@ class SchoolFeedbackSection extends React.Component {
     const { match: { params: { eventId, token }}} = this.props;
     const performances = await getPerformancesByToken(eventId, token);
     const performanceIds = Object.keys(performances.data);
-    this.setState({ performances: Object.values(performances.data) });
     getAdjudicationsByPerformanceId(performanceIds)
       .then((response) => {
-        this.setState({ adjudications: response.data });
+        const adjudications = response.data;
+        const newPerformances = Object.values(performances.data).map((p) => {
+          const performance = p;
+          const scores = [];
+          Object.values(adjudications[p.id]).forEach((adj) => {
+            scores.push(adj['cumulativeMark']);
+          });
+          performance.averageScore = this.mean(scores);
+          return performance;
+        });
+        this.setState({ adjudications, performances: newPerformances, loading: false });
       });
-    this.setState({ loading: false });
   }
 
   componentDidMount() {
@@ -40,6 +48,13 @@ class SchoolFeedbackSection extends React.Component {
     const { adjudications } = this.state;
     const comments = Object.values(adjudications[performance.id]);
     this.setState({ comments, selectedPerf: performance });
+  }
+
+  mean = (vals) => {
+    return vals.reduce((a, b) => {
+      if (isNaN(b)) return 0;
+      return a + b;
+    }) / vals.length;
   }
 
   // TODO: handle bad link
