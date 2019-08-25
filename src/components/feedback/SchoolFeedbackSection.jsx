@@ -53,7 +53,7 @@ class SchoolFeedbackSection extends React.Component {
               <h1 className="title">SCHOOL FEEDBACK</h1>
 
               <div className="sidebar-container">
-                <p className="subtitle">Nominated Dances</p>
+                <p className="subtitle">Performances</p>
                 <SchoolFeedbackPerformanceList
                   performances={performances}
                   onClick={this.handleDetailsClicked}
