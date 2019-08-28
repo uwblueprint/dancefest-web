@@ -14,6 +14,9 @@ import { getAdjudicationsByPerformanceId, updateAdjudications } from "../../api/
 import { generateToken } from '../../api/SchoolAPI';
 import { sendMail } from '../../api/MailerAPI';
 
+import SchoolFeedbackPerformanceList from './SchoolFeedbackPerformanceList';
+import FeedbackFormPerformanceInfo from './FeedbackFormPerformanceInfo';
+import Loading from '../interface/Loading';
 
 class FeedbackForm extends React.Component {
   constructor(props) {
@@ -25,7 +28,11 @@ class FeedbackForm extends React.Component {
       eventDate: currentValues.eventDate || moment().format('DD/MM/YYYY'),
       eventTitle: currentValues.eventTitle || '',
       numJudges: currentValues.numJudges || 0,
-      adjudications: {}
+      performances: [],
+      adjudications: {},
+      selectedPerf: '',
+      comments: [],
+      loading: true
     };
   }
 
@@ -34,7 +41,17 @@ class FeedbackForm extends React.Component {
     const performanceIds = performances.map(performance => performance.id);
     getAdjudicationsByPerformanceId(performanceIds)
       .then((response) => {
-        this.setState({ adjudications: response.data });
+        const adjudications = response.data;
+        const newPerformances = performances.map((p) => {
+          const performance = p;
+          const scores = [];
+          Object.values(adjudications[p.id]).forEach((adj) => {
+            scores.push(adj.cumulativeMark);
+          });
+          performance.averageScore = this.mean(scores);
+          return performance;
+        });
+        this.setState({ adjudications, performances: newPerformances, loading: false });
       });
   }
 
@@ -44,6 +61,13 @@ class FeedbackForm extends React.Component {
     const adjudicationId = e.target.getAttribute('adjudicationId');
     const performanceId = e.target.getAttribute('performanceId');
 
+    const { adjudications } = this.state;
+
+    const technicalMark = (name === 'technicalMark') ? parseInt(value) : adjudications[performanceId][adjudicationId].technicalMark;
+    const artisticMark = (name === 'artisticMark') ? parseInt(value) : adjudications[performanceId][adjudicationId].artisticMark;
+
+    const cumulativeMark = technicalMark + artisticMark;
+
     this.setState(prevState => ({
       adjudications: {
         ...prevState.adjudications,
@@ -51,10 +75,30 @@ class FeedbackForm extends React.Component {
           ...prevState.adjudications[performanceId],
           [adjudicationId]: {
             ...prevState.adjudications[performanceId][adjudicationId],
-            [name]: value
+            [name]: value,
+            cumulativeMark
           }
         }
-      }
+      },
+      comments: prevState.comments.map((adj) => {
+        const adjudication = adj;
+        if (adjudication.id === parseInt(adjudicationId)) {
+          adjudication[name] = value;
+          adjudication.cumulativeMark = cumulativeMark;
+        }
+        return adjudication;
+      }),
+      performances: prevState.performances.map((p) => {
+        const performance = p;
+        if (performance.id === parseInt(performanceId)) {
+          const scores = [];
+          Object.values(prevState.adjudications[performance.id]).forEach((adj) => {
+            scores.push((adj.id === parseInt(adjudicationId)) ? cumulativeMark : adj.cumulativeMark);
+          });
+          performance.averageScore = this.mean(scores);
+        }
+        return performance;
+      })
     }));
   }
 
@@ -90,41 +134,68 @@ class FeedbackForm extends React.Component {
     onModalClose(false, undefined);
   }
 
+  handleDetailsClicked = async (performance) => {
+    const { adjudications } = this.state;
+    const comments = Object.values(adjudications[performance.id]);
+    this.setState({ comments, selectedPerf: performance });
+  }
+
+  mean = (vals) => {
+    return vals.reduce((a, b) => {
+      if (isNaN(b)) return 0;
+      return a + b;
+    }) / vals.length;
+  }
+
   render() {
-    const { classes, formType, school, performaces } = this.props;
+    const { classes, formType, school } = this.props;
     const {
       disabledSave,
       eventTitle,
       eventDate,
       numJudges,
-      adjudications
+      adjudications,
+      performances,
+      selectedPerf,
+      comments,
+      loading
     } = this.state;
     return (
       <React.Fragment>
-        {Object.keys(adjudications).map((performanceId) => {
-          return (
-            <div>
-              <p>{performanceId}</p>
-              {Object.values(adjudications[performanceId]).map((adjudication) => {
-                return (
-                  <div style={{ margin: '25px' }}>
-                    <input adjudicationId={adjudication.id} performanceId={performanceId} name="notes" label="Notes" onChange={this.handleChange} value={adjudication.notes} />
-                  </div>
-                );
-              })}
-            </div>
-          );
-        })}
-        <div className={classes.dfdialog_footer}>
-          <DialogActions>
-            <Button onClick={this.handleCancel} type="default">
-              {formType === dialogType.EDIT ? 'cancel' : 'discard'}
-            </Button>
-            <Button onClick={this.handleSubmit} type="primary">
-              Save and Email Link
-            </Button>
-          </DialogActions>
-        </div>
+        {loading? <Loading /> :
+          (
+            <React.Fragment>
+
+              <h1 className="title">REVIEW AND SEND FEEDBACK</h1>
+
+              <div className="sidebar-container">
+                <p className="subtitle">Performances</p>
+                <SchoolFeedbackPerformanceList
+                  performances={performances}
+                  onClick={this.handleDetailsClicked}
+                />
+              </div>
+
+              <div className="views-container">
+                <FeedbackFormPerformanceInfo
+                  adjudications={comments}
+                  selected={selectedPerf}
+                  handleChange={this.handleChange}
+                />
+              </div>
+
+              <DialogActions style={{ float: 'left', 'margin-left': '2%', 'padding-bottom': '10px' }}>
+                <Button onClick={this.handleCancel} type="default">
+                  {formType === dialogType.EDIT ? 'cancel' : 'discard'}
+                </Button>
+                <Button onClick={this.handleSubmit} type="primary">
+                  Save and Email Link
+                </Button>
+              </DialogActions>
+
+            </React.Fragment>
+          )
+        }
       </React.Fragment>
     );
   }
