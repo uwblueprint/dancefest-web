@@ -44,7 +44,7 @@ function LandingSection(props) {
                 <PerformancesSection eventId={eventId} />
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <AwardsSection />
+                <AwardsSection eventId={eventId} />
             </TabPanel>
         </React.Fragment>
     );

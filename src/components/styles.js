@@ -1,5 +1,6 @@
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import Background from '../background.jpg';
+import { blue } from '@material-ui/core/colors';
 
 const styles = theme => ({
   // flex
@@ -259,6 +260,93 @@ const styles = theme => ({
   landingTabStyle_selected: {
     color: '#de2706',
   },
+
+  //Awards
+
+  awardsSectionStyle: {
+    margin: '25px 25px 25px 25px',
+    '& h1': {
+      fontSize: '0.875rem',
+      letterSpacing: '1.25px',
+      fontFamily: "'Raleway-SemiBold', sans-serif",
+    },
+  },
+
+  awardsFilterButtonStyle: {
+    padding: "10px 16px 10px 16px",
+    color: "#979797",
+    fontFamily: "'Raleway-SemiBold', sans-serif",
+    letterSpacing: "1.25px",
+    marginRight: "1rem",
+  },
+  // remove this because every dialog button is killing me
+  awardsNewAwardButtonStyle: {
+    padding: "10px 16px 10px 16px",
+    color: "#de2706",
+    fontFamily: "'Raleway-SemiBold', sans-serif",
+    letterSpacing: "1.25px",
+    borderRadius: "40px",
+  },
+
+  awardsCardButtonStyle: {
+    minWidth: "8rem",
+    padding: "10px 16px 10px 16px",
+    color: "#1d1b1b",
+    fontFamily: "'Raleway-SemiBold', sans-serif",
+    letterSpacing: "1.25px",
+    borderRadius: "40px",
+  },
+
+  awardsListItemStyle: {
+    padding: 0,
+    margin: "0 0 1rem 0 ",
+  },
+
+  awardsCardStyle: {
+    padding: "0.75rem 1rem 0.75rem 1rem",
+  },
+
+  awardsCardLeftColumnStyle: {
+    fontFamily: "'Raleway-Regular', sans-serif",
+    '& > h5': {
+      letterSpacing: "-0.13px",
+      margin: "0 0 0.5rem 0",
+      color: "#979797",
+      fontWeight: "normal",
+    }, 
+    '& > h3': {
+      letterSpacing: "-0.13px",
+      margin: "0 0 0.5rem 0",
+      color: "#de2706",
+      fontWeight: "normal",
+    },
+  },
+
+  awardsCardRightColumnStyle: {
+    display: "flex",
+    justifyContent: "flex-end",
+  },
+
+  awardsCardFooterStyle: {
+    alignItems: "center",
+    display: "flex",
+    justifyContent: "flex-start",
+    color: "#4d4d4e",
+    '& > h5': {
+      letterSpacing: "-0.13px",
+      margin: 0,
+      fontSize: "1rem",
+      fontWeight: "normal",
+      fontFamily: "'Raleway-Medium', sans-serif",
+    },
+    '& > h6': {
+      letterSpacing: "-0.13px",
+      margin: 0,
+      fontSize: "1rem",
+      fontWeight: "normal",
+    },
+  }
+
 });
 
 export default styles;
