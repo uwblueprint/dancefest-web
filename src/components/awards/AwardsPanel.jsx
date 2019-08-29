@@ -17,10 +17,11 @@ const filters = {
     pending: 2,
 }
 
+
 class AwardsPanel extends React.Component {
     state = {
-        nominatedAwards: [{title: 'Best Overall Secondary School Choreography', winner: 'Gypsy Red', score: 85, type: 'Choreography', nominatedCount: 5}, {title: 'Best Overall Secondary School Choreography', type: 'Choreography', nominatedCount: 5}],
-        pendingAwards: [{title: 'Best Overall Secondary School Choreography', type: 'Choreography', nominatedCount: 5}, {title: 'Best Overall Secondary School Choreography', type: 'Choreography', nominatedCount: 5}],
+        nominatedAwards: [],
+        pendingAwards: [],
         filter: filters.all,
     }
 
@@ -28,14 +29,18 @@ class AwardsPanel extends React.Component {
         const { eventId } = this.props;
         getAwards(eventId)
             .then(({ data }) => {
-                console.log('hello', data);
+                const nominatedAwards = Object.values(data).filter((value) => value.winningPerformanceId !== null);
+                const pendingAwards = Object.values(data).filter((value) => value.winningPerformanceId === null);
+
+                this.setState({nominatedAwards, pendingAwards});
             }).catch((err) =>{
                 console.log(err);
             });
     }
 
     renderAwardCard(data, cardType) {
-        const { title, type, nominatedCount, winner, score } = data;
+        // todo: figure out if there is a score when someone wins
+        const { title, nomineeCount, winner, score } = data;
         const { classes: { awardsListItemStyle, awardsCardButtonStyle, awardsCardStyle, awardsCardFooterStyle, awardsCardLeftColumnStyle, awardsCardRightColumnStyle } } = this.props;
         return (
             <ListItem className={awardsListItemStyle}>
@@ -46,7 +51,7 @@ class AwardsPanel extends React.Component {
                                 <h3>{title}</ h3>
                                 <div className={awardsCardFooterStyle}>
                                     <h5>{cardType === 'pending' ? 'UNDECIDED •\xa0' : 'Awarded To:\xa0'}</h5>
-                                    <h6>{cardType === 'pending' ? `${nominatedCount} dances nominated` : `${winner}	• Average Score: ${score}`}</ h6>
+                                    <h6>{cardType === 'pending' ? `${nomineeCount} dances nominated` : `${winner}	• Average Score: ${score}`}</ h6>
                                 </ div>
                             </ div>
                         </Grid>
