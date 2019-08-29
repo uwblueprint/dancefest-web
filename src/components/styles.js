@@ -263,7 +263,7 @@ const styles = theme => ({
 
   //Awards
 
-  awardsSectionStyle: {
+  awardsPanelStyle: {
     margin: '25px 25px 25px 25px',
     '& h1': {
       fontSize: '0.875rem',

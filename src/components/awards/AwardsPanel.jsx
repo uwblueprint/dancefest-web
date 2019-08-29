@@ -17,7 +17,7 @@ const filters = {
     pending: 2,
 }
 
-class AwardsSection extends React.Component {
+class AwardsPanel extends React.Component {
     state = {
         nominatedAwards: [{title: 'Best Overall Secondary School Choreography', winner: 'Gypsy Red', score: 85, type: 'Choreography', nominatedCount: 5}, {title: 'Best Overall Secondary School Choreography', type: 'Choreography', nominatedCount: 5}],
         pendingAwards: [{title: 'Best Overall Secondary School Choreography', type: 'Choreography', nominatedCount: 5}, {title: 'Best Overall Secondary School Choreography', type: 'Choreography', nominatedCount: 5}],
@@ -64,9 +64,9 @@ class AwardsSection extends React.Component {
 
     render() {
         const { nominatedAwards, pendingAwards, filter } = this.state;
-        const { classes: { awardsSectionStyle, awardsFilterButtonStyle } } = this.props;
+        const { classes: { awardsPanelStyle, awardsFilterButtonStyle } } = this.props;
         return (
-            <div className={awardsSectionStyle}>
+            <div className={awardsPanelStyle}>
                 <Grid container spacing={2}>
                     <Grid style={{display: "flex", justifyContent: "space-between", marginBottom: "1rem"}} item xs={12}>
                         <div>
@@ -109,4 +109,4 @@ class AwardsSection extends React.Component {
     }
 }
 
-export default withStyles(styles)(AwardsSection);
+export default withStyles(styles)(AwardsPanel);

@@ -1,6 +1,6 @@
 import React from "react";
 import PerformancesSection from '../performances/PerformancesSection';
-import AwardsSection from '../awards/AwardsSection';
+import AwardsPanel from '../awards/AwardsPanel';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -44,7 +44,7 @@ function LandingSection(props) {
                 <PerformancesSection eventId={eventId} />
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <AwardsSection eventId={eventId} />
+                <AwardsPanel eventId={eventId} />
             </TabPanel>
         </React.Fragment>
     );
