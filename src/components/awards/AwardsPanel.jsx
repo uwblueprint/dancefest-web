@@ -10,7 +10,10 @@ import {
 import { Link } from 'react-router-dom';
 import styles from '../styles';
 import { getAwards } from '../../api/AwardsAPI';
- 
+
+import './awards.css';
+import award from './award.png';
+
 const filters = {
     all: 0,
     nominated: 1,
@@ -69,7 +72,7 @@ class AwardsPanel extends React.Component {
 
     render() {
         const { nominatedAwards, pendingAwards, filter } = this.state;
-        const { classes: { awardsPanelStyle, awardsFilterButtonStyle } } = this.props;
+        const { classes: { awardsPanelStyle, awardsFilterButtonStyle, awardsCardButtonStyle } } = this.props;
         return (
             <div className={awardsPanelStyle}>
                 <Grid container spacing={2}>
@@ -85,6 +88,12 @@ class AwardsPanel extends React.Component {
                                 { `DECIDED AWARDS (${nominatedAwards.length})`}
                             </ Button>
                         </div>
+                            
+                        <Button variant="outlined" classes={{ root: awardsCardButtonStyle }}>
+                            <img src={award} className="award-img" alt="award_png"/>
+                            NEW AWARD
+                        </Button>
+                           
                     </Grid>
 
                     <Grid item xs={12}>
