@@ -110,7 +110,7 @@ class PerformanceForm extends React.Component {
           <div className={classes.flex}>
             <DialogInput
               className={classes.flex_default}
-              label="Dance Entry"
+              label="Entry No."
               name="danceEntry"
               onChange={this.handleChange}
               type="number"

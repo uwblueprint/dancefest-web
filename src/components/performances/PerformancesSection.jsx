@@ -133,7 +133,7 @@ class PerformancesSection extends React.Component {
   render() {
     const { filteredPerformances, loading, performances } = this.state;
     const { eventId } = this.props;
-    const headings = ['Dance Title', 'Dance Entry', 'School', 'Academic Level', 'Level of Competition', 'Dance Style', 'Dance Size'];
+    const headings = ['Dance Title', 'Entry No.', 'School', 'Academic Level', 'Level of Competition', 'Dance Style', 'Dance Size'];
     const keys = ['academicLevel', 'choreographers', 'competitionLevel', 'danceEntry', 'danceSize', 'danceStyle', 'danceTitle', 'performers', 'school'];
     const renderNewButton = (<PerformanceDialog updateData={this.updatePerformances} createData={this.createPerformance} eventId={eventId} formType="new" />);
     const showPerformances = Array.isArray(performances) && performances.length > 0;

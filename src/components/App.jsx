@@ -20,6 +20,7 @@ import Loading from './interface/Loading';
 import LandingSection from './landing/Landing';
 import SettingsSection from './settings/SettingsSection';
 import FeedbackSection from './feedback/FeedbackSection';
+import PerformancesSection from './performances/PerformancesSection';
 import SchoolFeedbackSection from './feedback/SchoolFeedbackSection';
 import AwardsSection from './awards/AwardsSection';
 

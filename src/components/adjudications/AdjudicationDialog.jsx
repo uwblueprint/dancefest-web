@@ -69,7 +69,7 @@ class AdjudicationDialog extends React.Component {
         <div style={{ display: 'flex', flexFlow: 'column', margin: '35px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-around', borderBottom: '1px solid #dcdcdc' }}>
             <div style={{ flex: '1 0 0' }}>
-              <DialogReadOnly value={getDisplayValues(danceEntry)} label="Dance Entry" />
+              <DialogReadOnly value={getDisplayValues(danceEntry)} label="Entry No." />
               <DialogReadOnly value={getDisplayValues(danceTitle)} label="Dance Title" />
               <DialogReadOnly value={getDisplayValues(performers)} label="Performers" />
               <DialogReadOnly value={getDisplayValues(choreographers)} label="Choreographer" />
