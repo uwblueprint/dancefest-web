@@ -6,6 +6,11 @@ from ..db.models import Award, AwardPerformance
 
 blueprint = Blueprint('award', __name__, url_prefix='/api/awards')
 
+@blueprint.route('/', methods=['POST'])
+def create_award():
+    award_json = request.get_json()
+    new_award = Award.create(**award_json)
+    return jsonify(new_award.to_dict())
 
 @blueprint.route('/<int:event_id>', methods=['GET'])
 def get_awards(event_id):

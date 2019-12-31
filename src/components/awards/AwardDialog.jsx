@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { dialogType } from '../../constants';
 import DFDialog from '../interface/dialog/DFDialog';
 import DialogHeader from '../interface/dialog/DialogHeader';
 import DialogInput from '../interface/dialog/DialogInput';
@@ -12,17 +11,29 @@ import { withStyles } from "@material-ui/core";
 import styles from '../styles';
 import award from './award.png';
 
+import omit from 'lodash/omit';
+import { createAward } from '../../api/AwardAPI';
+
 class AwardsDialog extends React.Component {
   constructor(props) {
     super(props);
+
+    const { eventId } = this.props;
+
     this.state = { 
-        awardname: '',
-        open: false
+        title: '',
+        open: false,
+        eventId: eventId
     };
+
+    this.handleClose = this.handleClose.bind(this);
+    this.handleClickOpen = this.handleClickOpen.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleClose = () => {
-    this.setState({ open: false });
+    this.setState({ title: "", open: false });
   };
 
   handleClickOpen = () => {
@@ -34,24 +45,26 @@ class AwardsDialog extends React.Component {
     this.setState({ [name]: value });
   }
 
-  handleSubmit = (e) => {
-
-  }
-
-  handleCancel = (e) => {
-
+  handleSubmit = async () => {
+    const { createData } = this.props;
+    const data = omit(this.state, ['open']);
+    data.nominee_count = 0;
+    const award = await createAward(data);
+    
+    createData(award.data);
+    this.handleClose();
   }
 
   render() {
     const { eventId, classes: { awardsButtonStyle, award_text }} = this.props;
-    const { open, awardname } = this.state;
+    const { open, title } = this.state;
     const collectionName = `events/${eventId}/performances`;
     const buttonTitle = 
         <React.Fragment classes={{ root: awardsButtonStyle }}>
             <img src={award} className="award-img" alt="award_png"/>
             NEW AWARD
         </React.Fragment>
-    const title = "New Award";
+    const header = "New Award";
 
     return (
       <DFDialog
@@ -61,20 +74,20 @@ class AwardsDialog extends React.Component {
         open={open}>
         <DialogHeader
           collectionName={collectionName}
-          title={title} 
+          title={header} 
         />
         <div style={{margin: "25px"}}>
           <DialogInput
             className={award_text}
             label="Award Name"
-            name="awardname"
+            name="title"
             onChange={this.handleChange}
-            value={awardname} 
+            value={title} 
           />
         </div>
         <div style={{margin: "15px"}}>
         <DialogActions>
-          <Button type="default" onClick={this.handleCancel}>
+          <Button type="default" onClick={this.handleClose}>
             Cancel
           </Button>
           <Button onClick={this.handleSubmit} style={{color: "#fff", backgroundColor: "grey"}}>

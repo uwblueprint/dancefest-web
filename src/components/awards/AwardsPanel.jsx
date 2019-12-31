@@ -19,14 +19,19 @@ const filters = {
     pending: 2,
 }
 
-
 class AwardsPanel extends React.Component {
-    state = {
-        nominatedAwards: [],
-        pendingAwards: [],
-        filter: filters.all,
-    }
+    constructor(props) {
+        super(props);
+        this.state = {
+            nominatedAwards: [],
+            pendingAwards: [],
+            filter: filters.all,
+        }
 
+        this.addAward = this.addAward.bind(this);
+        this.renderAwardCard = this.renderAwardCard.bind(this);
+    }
+    
     componentDidMount() {
         const { eventId } = this.props;
         getAwards(eventId)
@@ -38,6 +43,12 @@ class AwardsPanel extends React.Component {
             }).catch((err) =>{
                 console.log(err);
             });
+    }
+
+    addAward = (data) => {
+        const { pendingAwards } = this.state;
+        let newAwards = pendingAwards.concat([data]);
+        this.setState({ pendingAwards: newAwards });
     }
 
     renderAwardCard(data, cardType) {
@@ -71,8 +82,8 @@ class AwardsPanel extends React.Component {
 
     render() {
         const { nominatedAwards, pendingAwards, filter } = this.state;
-        const { classes: { awardsPanelStyle, awardsFilterButtonStyle, awardsCardButtonStyle } } = this.props;
-        const renderNewButton = (<AwardDialog/>); //updateData={this.updatePerformances} createData={this.createPerformance} eventId={eventId} formType="new" />);
+        const { eventId, classes: { awardsPanelStyle, awardsFilterButtonStyle, awardsCardButtonStyle } } = this.props;
+        const renderNewButton = (<AwardDialog eventId={eventId} createData={this.addAward} />);  
 
         return (
             <div className={awardsPanelStyle}>
