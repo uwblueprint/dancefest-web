@@ -1,7 +1,7 @@
 import React from 'react';
-import PerformanceEmptyImage from '../images/Performances_empty.png';
+import PerformanceEmptyImage from '../../images/Performances_empty.png';
 
-const NomineesInfo = ({ award, adjudications, selected }) => {
+const NomineesSection = ({ award, adjudications, selected }) => {
     if (Object.entries(adjudications).length !== 0) {
 
         // temporary
@@ -74,4 +74,4 @@ const NomineesInfo = ({ award, adjudications, selected }) => {
     );
 }
 
-export default NomineesInfo;
+export default NomineesSection;

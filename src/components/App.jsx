@@ -11,7 +11,6 @@ import createPalette from '@material-ui/core/styles/createPalette';
 // import Navigation from './Navigation';
 import Header from './interface/Header';
 import SignIn from './SignIn';
-import Landing from './Landing';
 
 import { auth } from '../firebase/firebase';
 import AdjudicationsSection from './adjudications/AdjudicationsSection';
@@ -22,7 +21,7 @@ import SettingsSection from './settings/SettingsSection';
 import FeedbackSection from './feedback/FeedbackSection';
 import PerformancesSection from './performances/PerformancesSection';
 import SchoolFeedbackSection from './feedback/SchoolFeedbackSection';
-import AwardsSection from './awards/AwardsSection';
+import AwardsSelectionSection from './awards/AwardsSelectionSection';
 
 const palette = createPalette({
   primary: {
@@ -140,7 +139,7 @@ export default class App extends React.Component {
                   <PrivateRoute component={LandingSection} exact path="/events/:eventId/:eventTitle/landing" user={user} />
                   <PrivateRoute component={AdjudicationsSection} path="/events/:eventId/:eventTitle/performance/:performanceId/adjudications" user={user} />
                   <PrivateRoute component={PerformancesSection} path="/events/:eventId/performances" user={user} />
-                  <PrivateRoute component={AwardsSection} exact path="/events/:eventId/awards/:awardId" user={user} />
+                  <PrivateRoute component={AwardsSelectionSection} exact path="/events/:eventId/awards/:awardId" user={user} />
                   <Route component={SchoolFeedbackSection} exact path="/school/:eventId/:token" />
                 </Switch>
               </React.Fragment>

@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import humps from 'humps';
 
-import { getAwardPerformances, getAwardPerformanceComments } from './../../api/AwardAPI';
+import { getAwardPerformances, getAwardPerformanceComments } from '../../api/AwardAPI';
 import Loading from '../interface/Loading';
-import NomineesList from './NomineesList';
-import NomineesInfo from './NomineeInfo';
+import NomineesSection from './nominations/NomineesSection';
+import NomineesList from './nominations/NomineesList';
 
 import './awards.css';
 
-class AwardsSection extends Component {
+class AwardsSelectionSection extends Component {
   constructor(props) {
     super(props);
 
@@ -101,7 +100,7 @@ class AwardsSection extends Component {
               </div>
                 
               <div className="views-container">
-                <NomineesInfo 
+                <NomineesSection 
                   award={award}
                   adjudications={adjudications}
                   selected={selectedPerf}
@@ -115,4 +114,4 @@ class AwardsSection extends Component {
   }
 }
 
-export default AwardsSection;
+export default AwardsSelectionSection;

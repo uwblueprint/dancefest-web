@@ -53,7 +53,7 @@ class AwardsPanel extends React.Component {
 
     renderAwardCard(data, cardType) {
         // todo: figure out if there is a score when someone wins
-        const { title, nomineeCount, winner, score } = data;
+        const { eventId, id, title, nomineeCount, winner, score } = data;
         const { classes: { awardsListItemStyle, awardsCardButtonStyle, awardsCardStyle, awardsCardFooterStyle, awardsCardLeftColumnStyle, awardsCardRightColumnStyle } } = this.props;
         return (
             <ListItem className={awardsListItemStyle}>
@@ -70,7 +70,7 @@ class AwardsPanel extends React.Component {
                         </Grid>
                         <Grid item xs={2}>
                             <div className={awardsCardRightColumnStyle}>
-                                {cardType ===  'pending' && <Button variant="outlined" classes={{ root: awardsCardButtonStyle }}><Link to='/' style={{ textDecoration: 'none' }}>Select Winner</Link></Button>}
+                                {cardType ===  'pending' && <Button variant="outlined" classes={{ root: awardsCardButtonStyle }}><Link to={`/events/${eventId}/awards/${id}`} style={{ textDecoration: 'none' }}>Select Winner</Link></Button>}
                                 {cardType === 'nominated' && <Button variant="outlined" classes={{ root: awardsCardButtonStyle }}><Link to='/' style={{ textDecoration: 'none' }}>Edit</Link></Button>}
                             </div>
                         </Grid>
