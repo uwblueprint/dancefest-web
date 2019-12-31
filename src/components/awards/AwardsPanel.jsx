@@ -11,8 +11,7 @@ import { Link } from 'react-router-dom';
 import styles from '../styles';
 import { getAwards } from '../../api/AwardsAPI';
 
-import './awards.css';
-import award from './award.png';
+import AwardDialog from './AwardDialog';
 
 const filters = {
     all: 0,
@@ -73,6 +72,8 @@ class AwardsPanel extends React.Component {
     render() {
         const { nominatedAwards, pendingAwards, filter } = this.state;
         const { classes: { awardsPanelStyle, awardsFilterButtonStyle, awardsCardButtonStyle } } = this.props;
+        const renderNewButton = (<AwardDialog/>); //updateData={this.updatePerformances} createData={this.createPerformance} eventId={eventId} formType="new" />);
+
         return (
             <div className={awardsPanelStyle}>
                 <Grid container spacing={2}>
@@ -89,11 +90,7 @@ class AwardsPanel extends React.Component {
                             </ Button>
                         </div>
                             
-                        <Button variant="outlined" classes={{ root: awardsCardButtonStyle }}>
-                            <img src={award} className="award-img" alt="award_png"/>
-                            NEW AWARD
-                        </Button>
-                           
+                       {renderNewButton}
                     </Grid>
 
                     <Grid item xs={12}>

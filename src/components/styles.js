@@ -297,9 +297,21 @@ const styles = theme => ({
     borderRadius: "40px",
   },
 
+  awardsButtonStyle: {
+    minWidth: "8rem",
+    color: "#1d1b1b",
+    fontFamily: "'Raleway-SemiBold', sans-serif",
+    letterSpacing: "1.25px",
+    borderRadius: "40px",
+  },
+
   awardsListItemStyle: {
     padding: 0,
     margin: "0 0 1rem 0 ",
+  },
+
+  award_text: {
+    width: "90%",
   },
 
   awardsCardStyle: {
