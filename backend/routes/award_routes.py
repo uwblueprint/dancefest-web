@@ -17,6 +17,10 @@ def get_awards(event_id):
     awards = Award.get_by(event_id=event_id)
     return jsonify({award.id: award.to_dict() for award in awards})
 
+@blueprint.route('/<int:award_id>', methods=['GET'])
+def get_award_name(award_id):
+    award_name = Award.get_by(id=award_id)
+    return award_name
 
 @blueprint.route('/<int:performance_id>/award_performance', methods=['GET'])
 def get_award_performance(performance_id):

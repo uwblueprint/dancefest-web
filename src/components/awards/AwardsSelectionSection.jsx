@@ -6,6 +6,9 @@ import Loading from '../interface/Loading';
 import NomineesSection from './nominations/NomineesSection';
 import NomineesList from './nominations/NomineesList';
 
+import ArrowLeft from '@material-ui/icons/ArrowLeft';
+import Button from '../../components/interface/Button';
+import { Link } from 'react-router-dom';
 import './awards.css';
 
 class AwardsSelectionSection extends Component {
@@ -72,7 +75,6 @@ class AwardsSelectionSection extends Component {
     console.log(performance);
   };
 
-  // TO DO: move this to a utils folder
   mean = (vals) => {
     return vals.reduce((a, b) => {
       if (isNaN(b)) return 0;
@@ -84,11 +86,19 @@ class AwardsSelectionSection extends Component {
     // TODO: check expected results of this
     const { award } = this.props;
     const { adjudications, performances, loading, selectedPerf } = this.state;
+    
     return (
       <React.Fragment>
         {loading ? <Loading /> :
           (
             <React.Fragment>
+              <div className="back-btn-container">
+                <Link to="/events/${}/${}/landing">
+                  <Button type="default">
+                    <ArrowLeft />
+                  </Button>
+                </Link>
+              </div>
               <h1 className="title">SELECT WINNER: <span className="award-name">{ award ? award : 'TestAward' }</span></h1>
               
               <div className="sidebar-container">
