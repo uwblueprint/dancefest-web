@@ -51,6 +51,8 @@ You need to install `psycopg2-binary`, but it couldn't install for me but you ca
 pip install psycopg2-binary
 ```
 
+Similarly, you will need to install `markupsafe`.  
+
 Fill in the `.env` file with any needed variables
 
 To create and enter the virtual enviroment type the following commands:
