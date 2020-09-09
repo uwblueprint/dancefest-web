@@ -35,3 +35,4 @@ serviceAccountKey.json
 backend/.env
 backend/__pycache__/
 backend/Pipfile.lock
+backend/flask
