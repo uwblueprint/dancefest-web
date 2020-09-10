@@ -1,13 +1,13 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
+frontend/node_modules
 
 # testing
-/coverage
+frontend/coverage
 
 # production
-/build
+frontend/build
 
 # intellij
 .idea
@@ -32,7 +32,7 @@ serviceAccountKey.json
 .DS_Store
 
 #backend
-backend/.env
-backend/__pycache__/
-backend/Pipfile.lock
-backend/flask
+.env
+__pycache__/
+Pipfile.lock
+flask
