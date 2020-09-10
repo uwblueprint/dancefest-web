@@ -111,7 +111,8 @@ class Adjudication(db.Model, BaseMixin):
     performance_id = db.Column(db.Integer, db.ForeignKey('performance.id'))
     nomination_comment = relationship('NominationComment', back_populates="adjudication")
 
-    def create(self, **kwargs):
+    @classmethod
+    def create(cls, **kwargs):
         if 'nomination_comment' in kwargs:
             nomination_comments = kwargs['nomination_comment']
             del kwargs['nomination_comment']
@@ -135,7 +136,7 @@ class Adjudication(db.Model, BaseMixin):
                     **{'award_id': comment['award_id'], 'performance_id': new_adjudication.performance_id})
             return new_adjudication
         else:
-            return super(Adjudication, self).create(**kwargs)
+            return super(Adjudication, Adjudication).create(**kwargs)
 
 
 class School(db.Model, BaseMixin):
