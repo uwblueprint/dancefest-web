@@ -1,5 +1,7 @@
 # Dancefest Backend
 
+Skip docker steps for now.
+
 ## Setup (Docker)
 
 Add a `.env.dev` file with the key names below:
