@@ -1,0 +1,111 @@
+.title {
+    margin-left: 30px;
+    color: #1976D1;
+}
+
+.award-name {
+    margin-left: 20px;
+    color: black;
+}
+
+.subtitle {
+    font-size: 18px;
+    padding: 0 0 15px 15px;
+    border-bottom: 1px solid hsla(0, 0%, 0%, 0.2);
+    margin-bottom: 0;
+    color: #666666;
+}
+
+.sidebar-container {
+    width: 40%;
+    float: left;
+    margin-left: 2%;
+    min-height: 75vh;
+    box-shadow: 0 2px 4px 0 hsla(0, 0%, 0%, 0.2);
+}
+
+.list-row {
+    border-bottom: 1px solid hsla(0, 0%, 0%, 0.2);
+    height: 100%;
+    padding: 15px 20px 30px 20px;
+}
+
+.dance-title {
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.6);
+    padding-bottom: 5px;
+}
+
+.dance-details {
+    color: #706D6D; 
+    padding-bottom: 5px;
+}
+
+.dance-score {
+    color: #1976D1;
+    font-size: 0.85em;
+}
+
+.dance-button {
+    color: #DE2706;
+    font-size: 0.9em;
+    font-weight: 600;
+    float: right;
+    margin: 0 10px;
+}
+
+.views-container {
+    background: #F3F2F2;
+    width: 55%;
+    min-height: 75vh;
+    float: left;
+    margin-left: 1%;
+    box-shadow: 0 2px 4px 0 hsla(0, 0%, 0%, 0.2);
+}
+
+.selected-title {
+    color: #E03416;
+    font-weight: 600;
+    font-size: 1.2em;
+    margin: 15px 20px;
+}
+
+.selected-subtitle {
+    margin: 15px 20px;
+    font-size: 0.95em;
+}
+
+.comment-block {
+    background: white;
+    width: 90%;
+    margin: 25px auto;
+    padding: 20px 20px 40px 20px;
+    box-shadow: 0 2px 4px 0 hsla(0, 0%, 0%, 0.2);
+}
+
+.category-title {
+    color: #1976D1;
+    font-weight: 600;
+}
+
+.comment {
+    margin: 10px 0;
+}
+
+.score {
+    float: left;
+    margin-right: 20px;
+}
+
+.empty-view {
+    width: 100%;
+    height: 75vh;
+    text-align: center;
+    margin-top: 10vh;
+}
+
+.empty-view-text {
+    font-size: 18px;
+    padding-top: 10px;
+    color: #de2706;
+}
