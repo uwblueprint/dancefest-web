@@ -1,32 +1,93 @@
-# Dancefest Admin
+# Dancefest Backend
 
-## Setup
+## Setup (Docker)
 
+Add a `.env.dev` file with the key names below:
 ```
-$ git clone https://github.com/uwblueprint/dancefest-web.git
-$ cd dancefest-web
-$ npm install
-```
-
-### Firebase/Firestore setup
-
-Ask a Dancefest member for firebase credentials and
-create a `.env` file with key names below:
-
-```
-REACT_APP_FIREBASE_API_KEY
-REACT_APP_FIREBASE_AUTH_DOMAIN
-REACT_APP_FIREBASE_DATABASE_UR
-REACT_APP_FIREBASE_PROJECT_ID
-REACT_APP_FIREBASE_STORAGE_BUCKET
-REACT_APP_FIREBASE_MESSAGING_SENDER_ID
+PROJECT_NAME
 ```
 
-### Running
+To start the backend add the following commands:
 
-`$ npm run start`
+```
+$ sudo docker-compose build
+$ sudo docker-compose up -d
+```
 
-Sometimes the `npm` packages and versioning gets messed up.
-If you find yourself stuck when trying to run the app, try:
+### Running After Code Changes
 
-`$ rm -rd node_modules; npm i`
+If you have new pip dependencies or you have changed the Dockerfile you need to run:
+```
+$ sudo docker-compose build
+$ sudo docker-compose up -d --force-recreate
+```
+
+If you only made code changes run:
+```
+$ sudo docker-compose up -d --force-recreate
+```
+
+## Setup (pipenv)
+
+BUILD Project from root directory (dancefest-web) before starting backend server using the following command:
+```
+$ npm run build
+```
+
+CD into Backend
+```
+$ cd backend/
+```
+
+First time setup run the following commands:
+```
+$ pipenv --python 3.6
+$ pipenv install --dev
+```
+
+You need to install `psycopg2-binary`, but it couldn't install for me but you can directly install the binary with:
+
+```
+pip install psycopg2-binary
+```
+
+Similarly, you will need to install `markupsafe`.  
+
+Fill in the `.env` file with any needed variables
+
+To create and enter the virtual enviroment type the following commands:
+```
+$ pipenv shell
+```
+
+Run the app as follows:
+```
+$ flask run
+```
+
+To deactivate pipenv run:
+```
+$ exit
+```
+
+## Setup (db)
+
+Start the postgres server, and enter the postgres terminal
+
+```
+pg_ctl -D /usr/local/var/postgres start
+psql postgres
+```
+
+Create the database (first time setup)
+
+```
+postgres=# CREATE DATABASE dancefest;
+```
+
+## Run DB Migration (Populate from Firebase)
+
+Make sure you are inside pipenv and run the following command
+```
+python data_migration.py
+```
