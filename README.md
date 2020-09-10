@@ -29,29 +29,30 @@ $ sudo docker-compose up -d --force-recreate
 
 ## Setup (pipenv)
 
-BUILD Project from root directory (dancefest-web) before starting backend server using the following command:
+BUILD Project from frontend directory (dancefest-web) before starting backend server using the following commands:
 ```
 $ npm run build
 ```
 
-CD into Backend
+First time setup run the following commands; you may need to use pyenv to manage versions.
 ```
-$ cd backend/
-```
-
-First time setup run the following commands:
-```
-$ pipenv --python 3.6
+$ pipenv --python 3.7
 $ pipenv install --dev
 ```
 
 You need to install `psycopg2-binary`, but it couldn't install for me but you can directly install the binary with:
+
+Try `pip3` instead if your machine defaults to `pip`.
 
 ```
 pip install psycopg2-binary
 ```
 
 Similarly, you will need to install `markupsafe`.  
+
+```
+pip install markupsafe
+```
 
 Fill in the `.env` file with any needed variables
 
@@ -72,7 +73,7 @@ $ exit
 
 ## Setup (db)
 
-Start the postgres server, and enter the postgres terminal
+Install `postgresql`. Start the postgres server, and enter the postgres terminal
 
 ```
 pg_ctl -D /usr/local/var/postgres start
