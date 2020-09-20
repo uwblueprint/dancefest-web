@@ -30,15 +30,15 @@ def create_app():
     CORS(app)
 
     # Mail
-    # app.config.update(
-    #     MAIL_SERVER='smtp.gmail.com',
-    #     MAIL_DEFAULT_SENDER=os.environ['EMAIL_USER'],
-    #     MAIL_USERNAME=os.environ['EMAIL_USER'],
-    #     MAIL_PASSWORD=os.environ['EMAIL_PASSWORD'],
-    #     MAIL_USE_TLS=True,
-    #     MAIL_PORT=587
-    # )
-    # mail.init_app(app)
+    app.config.update(
+        MAIL_SERVER='smtp.gmail.com',
+        MAIL_DEFAULT_SENDER=os.environ['EMAIL_USER'],
+        MAIL_USERNAME=os.environ['EMAIL_USER'],
+        MAIL_PASSWORD=os.environ['EMAIL_PASSWORD'],
+        MAIL_USE_TLS=True,
+        MAIL_PORT=587
+    )
+    mail.init_app(app)
 
     # DB
     from db.init_db import init_db
