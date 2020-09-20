@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask import jsonify
 
-from ..db.models import Tablet
+from db.models import Tablet
 
 blueprint = Blueprint('tablet', __name__, url_prefix='/api/tablets')
 

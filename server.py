@@ -23,11 +23,11 @@ def create_app():
     app = Flask(__name__, static_folder='../build/static')
 
     # Converters
-    # from .utils.converters import ListConverter
-    # app.url_map.converters['list'] = ListConverter
+    from utils.converters import ListConverter
+    app.url_map.converters['list'] = ListConverter
 
     # CORS
-    # CORS(app)
+    CORS(app)
 
     # Mail
     # app.config.update(
@@ -41,16 +41,16 @@ def create_app():
     # mail.init_app(app)
 
     # DB
-    # from .db.init_db import init_db
-    # app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
-    # app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    # init_db(app=app)
+    from db.init_db import init_db
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    init_db(app=app)
 
     app.register_blueprint(event_routes.blueprint)
     app.register_blueprint(performance_routes.blueprint)
     app.register_blueprint(frontend_routes.blueprint)
     app.register_blueprint(adjudication_routes.blueprint)
-    # app.register_blueprint(mailer_routes.blueprint)
+    app.register_blueprint(mailer_routes.blueprint)
     app.register_blueprint(award_routes.blueprint)
     app.register_blueprint(school_routes.blueprint)
     app.register_blueprint(tablet_routes.blueprint)

@@ -3,7 +3,7 @@ from flask import Blueprint
 from flask import jsonify
 from flask import request
 
-from ..db.models import Event, Performance
+from db.models import Event, Performance
 
 blueprint = Blueprint('events', __name__, url_prefix='/api/events')
 
