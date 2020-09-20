@@ -42,6 +42,8 @@ def create_app():
 
     # DB
     from db.init_db import init_db
+
+    # trying to hit a database that doesn't exist (localhost in container)
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     init_db(app=app)
@@ -60,4 +62,4 @@ def create_app():
 
 if __name__ == '__main__':
     app = create_app()
-    app.run()
+    app.run(host='0.0.0.0', port=5000)
