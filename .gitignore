@@ -36,3 +36,4 @@ serviceAccountKey.json
 __pycache__/
 Pipfile.lock
 flask
+.env.dev
