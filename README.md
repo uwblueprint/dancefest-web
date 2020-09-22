@@ -1,19 +1,25 @@
 # Dancefest Backend
 
-Skip docker steps for now.
+To all my window using friends, use Docker and do not try setting up pipenv.  
 
 ## Setup (Docker)
 
-Add a `.env.dev` file with the key names below:
-```
-PROJECT_NAME
-```
-
-To start the backend add the following commands:
+Please setup your database first. Then in your .env file, change your database URL to:
 
 ```
-$ sudo docker-compose build
-$ sudo docker-compose up -d
+DATABASE_URL="postgres://{psql_username}:{psql_password}@host.docker.internal:5432/dancefest"
+```
+
+To first setup the backend run the following commands:
+
+```
+$ docker-compose up --build
+```
+
+On subsequent runs you can omit the --build tag.
+
+```
+$ docker-compose up
 ```
 
 ### Running After Code Changes

@@ -1,7 +1,7 @@
 from flask import Blueprint, request
 from flask_mail import Message
 
-from ..server import mail
+from server import mail
 
 blueprint = Blueprint('mailer', __name__, url_prefix='/api/mailer')
 

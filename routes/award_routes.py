@@ -1,8 +1,8 @@
 from flask import Blueprint
 from flask import jsonify, request
 
-from ..db import db
-from ..db.models import Award, AwardPerformance
+from db import db
+from db.models import Award, AwardPerformance
 
 blueprint = Blueprint('award', __name__, url_prefix='/api/awards')
 

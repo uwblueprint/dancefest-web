@@ -9,4 +9,4 @@ services:
       - .:/dancefest-backend
     entrypoint:  ["sh", "./entrypoint.sh"]
     env_file:
-        - .env.dev
+        - .env

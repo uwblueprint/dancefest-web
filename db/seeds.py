@@ -1,5 +1,5 @@
 def seed():
-    from .models import Event, Performance, Adjudication, Award, AwardPerformance, NominationComment, Tablet
+    from db.models import Event, Performance, Adjudication, Award, AwardPerformance, NominationComment, Tablet
 
     event = Event.create(event_title="test event")
 
