@@ -12,13 +12,13 @@ def _init_postgres_db(app):
     # db.drop_all()
 
     # Init database tables
-    #db.create_all()
+    # db.create_all()
 
     db.session.commit()
 
     # TODO: remove when we have real data
     # Seed database with sample data
-    #seed()
+    # seed()
 
 
 def init_db(app):
