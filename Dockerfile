@@ -9,4 +9,4 @@ RUN pip install -r requirements.txt
 COPY . /app
 
 EXPOSE 5000
-RUN chmod +x ./entrypoint.sh
+ENTRYPOINT python server.py
