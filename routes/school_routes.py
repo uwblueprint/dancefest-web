@@ -2,7 +2,7 @@ import uuid
 
 from flask import Blueprint, jsonify, request
 
-from ..db.models import Performance, School
+from db.models import Performance, School
 
 blueprint = Blueprint('school', __name__, url_prefix='/api/school')
 

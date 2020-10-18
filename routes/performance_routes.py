@@ -1,9 +1,9 @@
 from flask import Blueprint
 from flask import jsonify, request
 
-from ..db.models import Adjudication
-from ..db.models import NominationComment
-from ..db.models import Performance
+from db.models import Adjudication
+from db.models import NominationComment
+from db.models import Performance
 
 blueprint = Blueprint('performance', __name__, url_prefix='/api/performances')
 

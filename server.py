@@ -4,6 +4,18 @@ from flask import Flask
 from flask_cors import CORS
 from flask_mail import Mail
 
+# Routes
+from routes import (
+    event_routes,
+    performance_routes,
+    frontend_routes,
+    adjudication_routes,
+    mailer_routes,
+    award_routes,
+    tablet_routes,
+    school_routes
+)
+
 mail = Mail()
 
 
@@ -11,7 +23,7 @@ def create_app():
     app = Flask(__name__, static_folder='../build/static')
 
     # Converters
-    from .utils.converters import ListConverter
+    from utils.converters import ListConverter
     app.url_map.converters['list'] = ListConverter
 
     # CORS
@@ -29,22 +41,12 @@ def create_app():
     mail.init_app(app)
 
     # DB
-    from .db.init_db import init_db
+    from db.init_db import init_db
+
+    # trying to hit a database that doesn't exist (localhost in container)
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     init_db(app=app)
-
-    # Routes
-    from .routes import (
-        event_routes,
-        performance_routes,
-        frontend_routes,
-        adjudication_routes,
-        mailer_routes,
-        award_routes,
-        tablet_routes,
-        school_routes
-    )
 
     app.register_blueprint(event_routes.blueprint)
     app.register_blueprint(performance_routes.blueprint)
