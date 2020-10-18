@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import pick from 'lodash/pick';
 
-import AdjudicationTableRow from '../Perf';
+import AdjudicationTableRow from './AdjudicationTableRow';
 import db from '../../firebase/firebase';
 import Section from '../interface/Section';
 import { getAdjudications } from '../../api/AdjudicationAPI';
