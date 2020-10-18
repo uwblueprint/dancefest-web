@@ -10,10 +10,10 @@ import styles from '../styles';
 import AudioPlay from '../interface/AudioPlay';
 import DialogReadOnly from '../interface/dialog/DialogReadOnly';
 import DialogHeader from '../interface/dialog/DialogHeader';
-import AdjudicationForm from './AdjudicationForm';
+import AdjudicationForm from './PerformanceAdjudicationForm';
 import Score from '../interface/dialog/Score';
 
-class AdjudicationDialog extends React.Component {
+class PerformanceAdjudicationDialog extends React.Component {
   state = { open: false, view: true };
 
   handleClickOpen = () => {
@@ -140,7 +140,7 @@ class AdjudicationDialog extends React.Component {
   }
 }
 
-AdjudicationDialog.propTypes = {
+PerformanceAdjudicationDialog.propTypes = {
   adjudicationId: PropTypes.string.isRequired,
   collectionName: PropTypes.string.isRequired,
   currentValues: PropTypes.shape({
@@ -166,4 +166,4 @@ AdjudicationDialog.propTypes = {
   }).isRequired
 };
 
-export default withStyles(styles)(AdjudicationDialog);
+export default withStyles(styles)(PerformanceAdjudicationDialog);

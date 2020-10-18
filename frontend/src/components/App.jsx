@@ -14,7 +14,7 @@ import SignIn from './SignIn';
 import Landing from './Landing';
 
 import { auth } from '../firebase/firebase';
-import AdjudicationsSection from './adjudications/AdjudicationsSection';
+import PerformanceAdjudicationsSection from './performance-adjudications/PerformanceAdjudicationsSection';
 import EventsSection from './events/EventsSection';
 import Loading from './interface/Loading';
 import PerformancesSection from './performances/PerformancesSection';
@@ -22,6 +22,7 @@ import SettingsSection from './settings/SettingsSection';
 import FeedbackSection from './feedback/FeedbackSection';
 import SchoolFeedbackSection from './feedback/SchoolFeedbackSection';
 import AwardsSection from './awards/AwardsSection';
+import AdjudicationSection from './adjudications/AdjudicationSection'
 
 const palette = createPalette({
   primary: {
@@ -136,7 +137,8 @@ export default class App extends React.Component {
                   <PrivateRoute component={EventsSection} exact path="/events" user={user} />
                   <PrivateRoute component={SettingsSection} exact path="/settings" user={user} />
                   <PrivateRoute component={PerformancesSection} path="/events/:eventId/performances" user={user} />
-                  <PrivateRoute component={AdjudicationsSection} path="/events/:eventId/performance/:performanceId/adjudications" user={user} />
+                  <PrivateRoute component={AdjudicationSection} path="/events/:eventId/adjudications" user={user} />
+                  <PrivateRoute component={PerformanceAdjudicationsSection} path="/events/:eventId/performance/:performanceId/adjudications" user={user} />
                   <PrivateRoute component={FeedbackSection} path="/events/:eventId/feedback" user={user} />
                   <PrivateRoute component={AwardsSection} exact path="/events/:eventId/awards/:awardId" user={user} />
                   <Route component={SchoolFeedbackSection} exact path="/school/:eventId/:token" />

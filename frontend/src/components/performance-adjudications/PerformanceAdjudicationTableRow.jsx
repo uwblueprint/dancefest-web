@@ -4,9 +4,9 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import LensIcon from '@material-ui/icons/Lens';
 
-import AdjudicationDialog from './AdjudicationDialog';
+import PerformanceAdjudicationDialog from './PerformanceAdjudicationDialog';
 
-const AdjudicationTableRow = ({
+const PerformanceAdjudicationTableRow = ({
   collectionName,
   currentValues,
   id,
@@ -47,7 +47,7 @@ const AdjudicationTableRow = ({
         {choreoAward && <LensIcon fontSize="inherit" style={{ color: 'purple' }} />}
       </TableCell>
       <TableCell>
-        <AdjudicationDialog
+        <PerformanceAdjudicationDialog
           updateData={updateData}
           adjudicationId={id}
           collectionName={collectionName}
@@ -58,7 +58,7 @@ const AdjudicationTableRow = ({
   );
 };
 
-AdjudicationTableRow.propTypes = {
+PerformanceAdjudicationTableRow.propTypes = {
   currentValues: PropTypes.shape({
     artisticMark: PropTypes.number,
     audioUrl: PropTypes.string,
@@ -84,4 +84,4 @@ AdjudicationTableRow.propTypes = {
   }).isRequired
 };
 
-export default AdjudicationTableRow;
+export default PerformanceAdjudicationTableRow;
