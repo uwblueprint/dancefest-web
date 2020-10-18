@@ -147,6 +147,7 @@ class School(db.Model, BaseMixin):
     phone = db.Column(db.String(255))
     address = db.Column(db.String(255))
     district = db.Column(db.String(255))
+    # TODO: clean this up into own table
     teacher_contact = db.Column(db.String(255))
     teacher_email = db.Column(db.String(255))
     teacher_phone = db.Column(db.String(255))
