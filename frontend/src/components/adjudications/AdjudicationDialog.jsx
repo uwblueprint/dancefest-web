@@ -1,4 +1,4 @@
-import React {useState} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import LensIcon from '@material-ui/icons/Lens';
 import { withStyles } from '@material-ui/core/styles';
@@ -14,7 +14,7 @@ import AdjudicationForm from './PerformanceAdjudicationForm';
 import Score from '../interface/dialog/Score';
 import { useState } from 'react';
 
-export default function PerformanceAdjudicationDialog {
+/*export default function PerformanceAdjudicationDialog() {
   const [open, setOpen] = useState(false)
   const [view, setView] = useState(view)
 
@@ -23,9 +23,9 @@ export default function PerformanceAdjudicationDialog {
   }
   
   const handleClose = (data) => {
-    const 
+    //const 
   }
-}
+}*/
 
 class PerformanceAdjudicationDialog extends React.Component {
   state = { open: false, view: true };
