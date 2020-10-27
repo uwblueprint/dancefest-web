@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import pick from 'lodash/pick';
 
-import PerformanceTableRow from '../performances/PerformanceTableRow';
+import AdjudicationTableRow from './AdjudicationTableRow';
 import db from '../../firebase/firebase';
 import Section from '../interface/Section';
 //import { getAdjudications } from '../../api/AdjudicationAPI';
@@ -119,17 +119,14 @@ export default function AdjudicationsSection(props) {
      setFileterdPerformances(filteredPerformances);
   }
 
-  //console.log(adjudicationList);
-
   return (
-    <Section headings={headings} loading={loading} showContent={showPerformances} tableFilters={tableFilters} type="performance">
+    <Section headings={headings} loading={loading} showContent={showPerformances} tableFilters={tableFilters} type="adjudication">
       {showPerformances && filteredPerformances.map((performance) => {
         const { id } = performance;
         const currentValues = pick(performance, keys);
         return (
-          <PerformanceTableRow
+          <AdjudicationTableRow
             updateData={updatePerformances}
-            //createData={this.createPerformance}
             currentValues={currentValues}
             eventId={eventId}
             id={id}

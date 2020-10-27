@@ -4,7 +4,8 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import { Link } from 'react-router-dom';
 
-import AdjudicationDialog from './AdjudicationDialog';
+//import AdjudicationDialog from './AdjudicationDialog';
+import PerformanceDialog from '../performances/PerformanceDialog'; //change when the adjudications dialog is done
 
 class AdjudicationTableRow extends React.Component {
   state = {};
@@ -35,7 +36,7 @@ class AdjudicationTableRow extends React.Component {
         <TableCell>{danceStyle}</TableCell>
         <TableCell>{danceSize}</TableCell>
         <TableCell>
-          <AdjudicationDialog
+          <PerformanceDialog //will change when dialog done
             currentValues={currentValues}
             eventId={eventId}
             formType="edit"
