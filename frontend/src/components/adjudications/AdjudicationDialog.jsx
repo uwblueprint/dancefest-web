@@ -10,7 +10,7 @@ import styles from '../styles';
 import AudioPlay from '../interface/AudioPlay';
 import DialogReadOnly from '../interface/dialog/DialogReadOnly';
 import DialogHeader from '../interface/dialog/DialogHeader';
-import AdjudicationForm from './PerformanceAdjudicationForm';
+import AdjudicationForm from './AdjudicationForm';
 import Score from '../interface/dialog/Score';
 import { useState } from 'react';
 
@@ -46,6 +46,7 @@ class PerformanceAdjudicationDialog extends React.Component {
   }
 
   render() {
+    
     const {
       adjudicationId,
       collectionName,
@@ -54,6 +55,7 @@ class PerformanceAdjudicationDialog extends React.Component {
       updateData,
     } = this.props;
     const { open, view } = this.state;
+    /*
     const {
       artisticMark,
       audioUrl,
@@ -75,10 +77,10 @@ class PerformanceAdjudicationDialog extends React.Component {
       performers,
       school
     } = performanceValues;
-
+*/
     const getDisplayValues = (value) => value || "N/A";
 
-    const viewForm = (
+    /*const viewForm = (
       <React.Fragment>
         <div style={{ display: 'flex', flexFlow: 'column', margin: '35px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-around', borderBottom: '1px solid #dcdcdc' }}>
@@ -126,7 +128,7 @@ class PerformanceAdjudicationDialog extends React.Component {
           <Score type="total" score={getDisplayValues(cumulativeMark)} scoreName="Score" />
         </DialogActions>
       </React.Fragment>
-    );
+    );*/
 
     const editForm = (
       <AdjudicationForm
@@ -147,8 +149,8 @@ class PerformanceAdjudicationDialog extends React.Component {
           edit={view}
           onEditClick={this.handleView}
           shouldShowDropdown
-          title={tabletId || 'N/A'} />
-        {view ? (viewForm) : (editForm)}
+          title="New Adjudication" />
+        {editForm}
       </DFDialog>
     );
   }

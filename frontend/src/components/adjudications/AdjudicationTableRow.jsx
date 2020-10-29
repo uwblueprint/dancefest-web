@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import { Link } from 'react-router-dom';
-
-//import AdjudicationDialog from './AdjudicationDialog';
-import PerformanceDialog from '../performances/PerformanceDialog'; //change when the adjudications dialog is done
+import AdjudicationForm from './AdjudicationForm';
+import AdjudicationDialog from './AdjudicationDialog';
+//import PerformanceAdjudicationDialog from './AdjudicationDialog'; //change when the adjudications dialog is done
 
 class AdjudicationTableRow extends React.Component {
   state = {};
@@ -13,7 +13,10 @@ class AdjudicationTableRow extends React.Component {
   render() {
     const {
       currentValues,
+      collectionName,
       eventId,
+      performanceValues,
+      updateData,
       id
     } = this.props;
     const {
@@ -25,7 +28,6 @@ class AdjudicationTableRow extends React.Component {
       danceTitle,
       school
     } = currentValues;
-
     return (
       <TableRow style={{}}>
         <TableCell><Link to={`performance/${id}/adjudications`}>{danceTitle}</Link></TableCell>
@@ -36,11 +38,12 @@ class AdjudicationTableRow extends React.Component {
         <TableCell>{danceStyle}</TableCell>
         <TableCell>{danceSize}</TableCell>
         <TableCell>
-          <PerformanceDialog //will change when dialog done
+          <AdjudicationDialog
+            updateData={updateData}
+            adjudicationId={id}
+            collectionName={collectionName}
             currentValues={currentValues}
-            eventId={eventId}
-            formType="edit"
-            performanceId={id} />
+            performanceValues={performanceValues} />
         </TableCell>
       </TableRow>
     );
