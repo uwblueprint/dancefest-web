@@ -22,7 +22,7 @@ export default function AdjudicationsSection(props) {
   const headings = ['Dance Title', 'Dance Entry', 'School', 'Academic Level', 'Level of Competition', 'Dance Style', 'Dance Size'];
     const keys = ['academicLevel', 'choreographers', 'competitionLevel', 'danceEntry', 'danceSize', 'danceStyle', 'danceTitle', 'performers', 'school'];
     const showPerformances = Array.isArray(performances) && performances.length > 0;
-    const tableFilters = <Filter handleFilters={handleFilters} />;
+ 
 
 //according to docs, componentDidMount() is similar to useEffect(() => {}); 
   useEffect(() => {     
@@ -73,7 +73,7 @@ export default function AdjudicationsSection(props) {
 
   const handleFilters = (filtersObj, searchQuery) => {
     // Retrieves the keys for performances (i.e. academicLevel, awardConsideration, etc.)
-    const keys = this.getFilterKeys(filtersObj);
+    const keys = getFilterKeys(filtersObj);
 
     // Filter function that accepts a performance object and returns true
     // if this performance passes the filter (i.e should be included)
@@ -118,7 +118,9 @@ export default function AdjudicationsSection(props) {
       .sort((a, b) => Number(a.danceEntry) - Number(b.danceEntry));
      setFileterdPerformances(filteredPerformances);
   }
-
+  
+//needed to move down here so filters could work
+  const tableFilters = <Filter handleFilters={handleFilters} />;
   return (
     <Section headings={headings} loading={loading} showContent={showPerformances} tableFilters={tableFilters} type="adjudication">
       {showPerformances && filteredPerformances.map((performance) => {
