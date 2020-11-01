@@ -33,8 +33,6 @@ class AdjudicationTableRow extends React.Component {
         <TableCell><Link to={`performance/${id}/adjudications`}>{danceTitle}</Link></TableCell>
         <TableCell>{danceEntry}</TableCell>
         <TableCell>{school}</TableCell>
-        <TableCell>{academicLevel}</TableCell>
-        <TableCell>{competitionLevel}</TableCell>
         <TableCell>{danceStyle}</TableCell>
         <TableCell>{danceSize}</TableCell>
         <TableCell>
