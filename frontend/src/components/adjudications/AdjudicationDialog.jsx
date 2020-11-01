@@ -142,7 +142,7 @@ class PerformanceAdjudicationDialog extends React.Component {
     );
 
     return (
-      <DFDialog open={open} formType="edit" buttonTitle="edit" onClick={this.handleClickOpen} onClose={this.handleClose}>
+      <DFDialog open={open} formType="edit" buttonTitle="Adjudicate" onClick={this.handleClickOpen} onClose={this.handleClose}>
         <DialogHeader
           collectionName={collectionName}
           docId={adjudicationId}
