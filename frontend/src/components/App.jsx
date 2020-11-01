@@ -14,7 +14,7 @@ import SignIn from './SignIn';
 import Landing from './Landing';
 
 import { auth } from '../firebase/firebase';
-import PerformanceAdjudicationsSection from './performance-adjudications/PerformanceAdjudicationsSection';
+import PerformanceAdjudicationsSection from './performanceAdjudications/PerformanceAdjudicationsSection';
 import EventsSection from './events/EventsSection';
 import Loading from './interface/Loading';
 import PerformancesSection from './performances/PerformancesSection';
