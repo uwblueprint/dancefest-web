@@ -22,7 +22,8 @@ import SettingsSection from './settings/SettingsSection';
 import FeedbackSection from './feedback/FeedbackSection';
 import SchoolFeedbackSection from './feedback/SchoolFeedbackSection';
 import AwardsSection from './awards/AwardsSection';
-import AdjudicationSection from './adjudications/AdjudicationSection'
+import AdjudicationSection from './adjudications/AdjudicationSection';
+import AdjudicateForm from './adjudications/AdjudicationForm';
 
 const palette = createPalette({
   primary: {
@@ -99,12 +100,12 @@ const PrivateRoute = ({
   user,
   ...rest
 }) => (
-  <Route
-    path={path}
-    render={props => (user ? <Component {...props} />
-      : <Redirect to={{ pathname: '/', state: { from: props.location }}} />)}
-    {...rest} />
-);
+    <Route
+      path={path}
+      render={props => (user ? <Component {...props} />
+        : <Redirect to={{ pathname: '/', state: { from: props.location } }} />)}
+      {...rest} />
+  );
 
 export default class App extends React.Component {
   constructor(props) {
@@ -131,13 +132,14 @@ export default class App extends React.Component {
           {
             loading ? (<Loading />) : (
               <React.Fragment>
-                { user && <Header /> }
+                { user && <Header />}
                 <Switch>
                   <Route exact path="/" render={props => (<SignIn {...props} user={user} />)} />
                   <PrivateRoute component={EventsSection} exact path="/events" user={user} />
                   <PrivateRoute component={SettingsSection} exact path="/settings" user={user} />
                   <PrivateRoute component={PerformancesSection} path="/events/:eventId/performances" user={user} />
                   <PrivateRoute component={AdjudicationSection} path="/events/:eventId/adjudications" user={user} />
+                  <PrivateRoute component={AdjudicateForm} path="/events/:eventId/adjudications/performance/:performanceId" user={user} />
                   <PrivateRoute component={PerformanceAdjudicationsSection} path="/events/:eventId/performance/:performanceId/adjudications" user={user} />
                   <PrivateRoute component={FeedbackSection} path="/events/:eventId/feedback" user={user} />
                   <PrivateRoute component={AwardsSection} exact path="/events/:eventId/awards/:awardId" user={user} />
