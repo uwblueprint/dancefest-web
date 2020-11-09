@@ -6,6 +6,11 @@ from db.models import Performance, School
 
 blueprint = Blueprint('school', __name__, url_prefix='/api/school')
 
+@blueprint.route('<school_id>', methods=['GET'])
+def get_school(school_id):
+    school = School.get_by(id=school_id)
+    return jsonify(school) if school else jsonify({})
+
 
 @blueprint.route('<event_id>/<token>', methods=['GET'])
 def get_performances_by_token(event_id, token):

@@ -9,6 +9,7 @@ import Filter from '../interface/filter';
 import Section from '../interface/Section';
 
 import { getPerformances } from '../../api/PerformanceAPI';
+import { getSchool } from '../../api/SchoolAPI';
 
 class PerformancesSection extends React.Component {
   constructor(props) {
@@ -27,13 +28,13 @@ class PerformancesSection extends React.Component {
 	getPerformances(eventId)
 	.then(response => {
 		let performances = Object.values(response.data).map(performance => {
+      // TODO: add school object here with `getSchool`
 			return humps.camelizeKeys(performance);
-		});
+    });
 		performances = performances.sort((a,b) => Number(a.danceEntry) - Number(b.danceEntry));
 		this.setState({ filteredPerformances: performances, loading: false, performances });
 	})
 	.catch(err => {
-		console.log(err);
 		this.setState({loading: false});
 	});
   }
@@ -134,7 +135,7 @@ class PerformancesSection extends React.Component {
     const { filteredPerformances, loading, performances } = this.state;
     const { match: { params: { eventId }}} = this.props;
     const headings = ['Dance Title', 'Dance Entry', 'School', 'Academic Level', 'Level of Competition', 'Dance Style', 'Dance Size'];
-    const keys = ['academicLevel', 'choreographers', 'competitionLevel', 'danceEntry', 'danceSize', 'danceStyle', 'danceTitle', 'performers', 'school'];
+    const keys = ['academicLevel', 'choreographers', 'competitionLevel', 'danceEntry', 'danceSize', 'danceStyle', 'danceTitle', 'performers', 'schoolId'];
     const renderNewButton = (<PerformanceDialog updateData={this.updatePerformances} createData={this.createPerformance} eventId={eventId} formType="new" />);
     const showPerformances = Array.isArray(performances) && performances.length > 0;
     const tableFilters = <Filter handleFilters={this.handleFilters} />;

@@ -24,14 +24,14 @@ class PerformanceTableRow extends React.Component {
       danceSize,
       danceStyle,
       danceTitle,
-      school
+      schoolId,
     } = currentValues;
 
     return (
       <TableRow style={{}}>
         <TableCell><Link to={`performance/${id}/adjudications`}>{danceTitle}</Link></TableCell>
         <TableCell>{danceEntry}</TableCell>
-        <TableCell>{school}</TableCell>
+        <TableCell>{schoolId}</TableCell>
         <TableCell>{academicLevel}</TableCell>
         <TableCell>{competitionLevel}</TableCell>
         <TableCell>{danceStyle}</TableCell>
@@ -59,7 +59,7 @@ PerformanceTableRow.propTypes = {
     danceStyle: PropTypes.string,
     danceTitle: PropTypes.string,
     performers: PropTypes.string,
-    school: PropTypes.string
+    schoolId: PropTypes.string,
   }),
   eventId: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired

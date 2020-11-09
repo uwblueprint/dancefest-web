@@ -1,5 +1,5 @@
 def seed():
-    from db.models import Event, Performance, Adjudication, Award, AwardPerformance, NominationComment, Tablet
+    from db.models import SchoolContact, School, Event, Performance, Adjudication, Award, AwardPerformance, NominationComment, Tablet
     import random
 
     event = Event.create(
@@ -19,6 +19,15 @@ def seed():
     dance_styles = ['Ballet', 'Creative Collab', 'Cultural', 'Fusion', 'Hip Hop', 'Jazz', 'Lyrical', 'Modern/Contemporary', 'Musical Theatre - Lip Sync', 'Musical Theatre - Vocals', 'Open', 'Production', 'Tap']
     schools = ['BCI', 'CAS', 'CCC', 'CCCE', 'CCH', 'CHC', 'CKS', 'ECI', 'FHC', 'GAH', 'HNH', 'LADE', 'LAJ', 'MAC', 'STA', 'STJ', 'STV', 'TVA', 'WAP', 'WCI']
 
+
+    for i in range(5):
+        School.create(
+            name=random.choice(schools),
+            phone=random.randint(6471111111,6479999999),
+            address=random.choice(schools),
+            district=random.choice(schools),
+        )
+
     tablet = Tablet.create(serial='serial{}'.format(1))
 
     for i in range(10):
@@ -32,7 +41,7 @@ def seed():
             dance_entry=i+1,
             dance_style=random.choice(dance_styles),
             performers=random.choices(names, k=5),
-            school=random.choice(schools)
+            school_id=random.randint(1,5)
         )
         
         for i in range(3):

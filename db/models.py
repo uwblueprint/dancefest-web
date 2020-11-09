@@ -91,9 +91,9 @@ class Performance(db.Model, BaseMixin):
     dance_style = db.Column(db.String(255))
     dance_title = db.Column(db.String(255))
     performers = db.Column(db.ARRAY(db.String(255)))
-    school = db.Column(db.String(255))
     token = db.Column(db.String(255))
     event_id = db.Column(db.Integer, db.ForeignKey('event.id'))
+    school_id = db.Column(db.Integer, db.ForeignKey('school.id'))
     adjudications = relationship('Adjudication', backref='performance')
     award_performance = relationship('AwardPerformance', back_populates='performance', lazy='noload')
 
