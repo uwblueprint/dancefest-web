@@ -6,11 +6,36 @@ import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 import { awardConsiderationEnum } from '../../constants';
 import { updateAdjudications } from "../../api/AdjudicationAPI";
+import { getAdjudications } from '../../api/AdjudicationAPI';
+import { getPerformance } from '../../api/PerformanceAPI';
+import humps from 'humps';
 
 export default function AdjudicateForm(props) {
-    const { currentValues } = props;
-    console.log("PROPS ARE THIS:")
-    console.log(props)
+    //console.log("PROPS ARE THIS:")
+   //console.log(props.match.params)
+    const { match: { params: { eventId, performanceId }}} = props;
+    const [loading, setLoading] = useState(true)
+    const [adjudications, setAdjudications] = useState({}) 
+    const [performanceValues, setPerformancesValues] = useState({}) 
+
+//according to docs, componentDidMount() is similar to useEffect(() => {}); 
+    useEffect(() => {     
+        getPerformance(performanceId)
+        .then(({data}) => {
+            setPerformancesValues(humps.camelizeKeys(data)) 
+        });
+
+        getAdjudications(performanceId)
+        .then(({data}) => {
+            setAdjudications(data)  
+            setLoading(false)
+        });
+  }, []); //added the empty array so that it will only be called after the component mounts
+    console.log("performance values are:")
+    console.log(performanceValues) //works!!
+    console.log("adjudications are:")
+    console.log(adjudications) //works!!
+
     const [artisticMark, setartisticMark] = useState() //currentValues.artisticMark
     const [choreoAward, setchoreoAward] = useState() //currentValues.choreoAward || false
     const [specialAward, setspecialAward] = useState() //currentValues.specialAward || false
