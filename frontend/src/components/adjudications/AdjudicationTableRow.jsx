@@ -34,7 +34,9 @@ class AdjudicationTableRow extends React.Component {
         <TableCell>{danceStyle}</TableCell>
         <TableCell>{danceSize}</TableCell>
         <TableCell>
-          <Button variant="outlined" color="primary"><Link to={`adjudications/performance/${id}`}>Adjudicate</Link></Button>
+          <Button variant="outlined" color="primary">
+            <Link to={`adjudications/performance/${id}`}>Adjudicate</Link>
+          </Button>
         </TableCell>
       </TableRow>
     );
@@ -42,6 +44,7 @@ class AdjudicationTableRow extends React.Component {
 }
 
 AdjudicationTableRow.propTypes = {
+  history: PropTypes.shape().isRequired,
   currentValues: PropTypes.shape({
     academicLevel: PropTypes.string,
     choreographers: PropTypes.string,

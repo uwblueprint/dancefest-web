@@ -55,8 +55,16 @@ export default function AdjudicateForm(props) {
         }
       ];
     //handle change of text fields
-    const handleChange = (e) => {
-        
+    const handleArtisticScoreChange = (e) => {
+        const { name, value } = e.target;
+        const keys = ['artisticMark', 'technicalMark'];
+        setartisticMark(keys.includes(name) ? parseInt(value, 10) : value)
+    }
+
+    const handleTechnicalScoreChange = (e) => {
+        const { name, value } = e.target;
+        const keys = ['artisticMark', 'technicalMark'];
+        settechnicalMark(keys.includes(name) ? parseInt(value, 10) : value)
     }
     //handle cancellation of form
     const handleCancel = () => {
@@ -85,8 +93,8 @@ export default function AdjudicateForm(props) {
             <div>
                 <p>Scores</p>
                 <div style={{marginBottom: '10px'}}>
-                    <TextField id="filled-basic" label="Artistic Score" variant="filled" style={{width: 'calc(50% - 20px)', marginRight: '20px'}} onChange={handleChange}/>
-                    <TextField id="filled-basic" label="Technical Score" variant="filled" style={{width: 'calc(50%)'}} onChange={handleChange}/>
+                    <TextField id="filled-basic" label="Artistic Score" variant="filled" style={{width: 'calc(50% - 20px)', marginRight: '20px'}} onChange={handleArtisticScoreChange}/>
+                    <TextField id="filled-basic" label="Technical Score" variant="filled" style={{width: 'calc(50%)'}} onChange={handleTechnicalScoreChange}/>
                 </div>
             </div>
             <div>
