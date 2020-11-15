@@ -35,10 +35,10 @@ export default function AdjudicateForm(props) {
     console.log("adjudications are:")
     console.log(adjudications) //works!!
 
-    const [artisticMark, setartisticMark] = useState(adjudications.artisticMark) //currentValues.artisticMark
-    const [choreoAward, setchoreoAward] = useState(adjudications.choreoAward || false) //currentValues.choreoAward || false
-    const [specialAward, setspecialAward] = useState(adjudications.specialAward || false) //currentValues.specialAward || false
-    const [technicalMark, settechnicalMark] = useState(adjudications.technicalMark) //currentValues.technicalMark
+    const [artisticMark, setartisticMark] = useState(0) //currentValues.artisticMark
+    const [choreoAward, setchoreoAward] = useState(false) //currentValues.choreoAward || false
+    const [specialAward, setspecialAward] = useState(false) //currentValues.specialAward || false
+    const [technicalMark, settechnicalMark] = useState(0) //currentValues.technicalMark
 
     const choices = [
         {
@@ -66,6 +66,19 @@ export default function AdjudicateForm(props) {
         const keys = ['artisticMark', 'technicalMark'];
         settechnicalMark(keys.includes(name) ? parseInt(value, 10) : value)
     }
+
+    //handles the checkboxes
+    const handleCheckedAward = (e) => {
+        const { name, checked } = e.target;
+        if (name == 'choreoAward') {
+            setchoreoAward(checked)
+            setspecialAward(false)
+        } else {
+            setchoreoAward(false)
+            setspecialAward(checked)
+        }
+    }
+    
     //handle cancellation of form
     const handleCancel = () => {
         //go back to last page
@@ -74,11 +87,6 @@ export default function AdjudicateForm(props) {
     const handleSubmit = async () => {
        
     }
-
-    const handleCheckedAward = (e) => {
-        
-    }
-
     return (
         <div style={{ display: 'flex', flexFlow: 'column', marginLeft: '200px', marginRight: '200px'}}>
             <div>
