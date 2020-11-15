@@ -29,15 +29,16 @@ export default function AdjudicateForm(props) {
             setLoading(false)
         });
   }, []); //added the empty array so that it will only be called after the component mounts
+
     console.log("performance values are:")
     console.log(performanceValues) //works!!
     console.log("adjudications are:")
     console.log(adjudications) //works!!
 
-    const [artisticMark, setartisticMark] = useState() //currentValues.artisticMark
-    const [choreoAward, setchoreoAward] = useState() //currentValues.choreoAward || false
-    const [specialAward, setspecialAward] = useState() //currentValues.specialAward || false
-    const [technicalMark, settechnicalMark] = useState() //currentValues.technicalMark
+    const [artisticMark, setartisticMark] = useState(adjudications.artisticMark) //currentValues.artisticMark
+    const [choreoAward, setchoreoAward] = useState(adjudications.choreoAward || false) //currentValues.choreoAward || false
+    const [specialAward, setspecialAward] = useState(adjudications.specialAward || false) //currentValues.specialAward || false
+    const [technicalMark, settechnicalMark] = useState(adjudications.technicalMark) //currentValues.technicalMark
 
     const choices = [
         {
@@ -53,7 +54,10 @@ export default function AdjudicateForm(props) {
           value: 'choreoAward'
         }
       ];
-
+    //handle change of text fields
+    const handleChange = (e) => {
+        
+    }
     //handle cancellation of form
     const handleCancel = () => {
         //go back to last page
@@ -73,10 +77,16 @@ export default function AdjudicateForm(props) {
                 <h1>Adjudication Form</h1>
             </div>
             <div>
+                <h2>Title of Piece: {performanceValues.danceTitle}</h2>
+                <h2>Dance Style: {performanceValues.danceStyle}</h2>
+                <h2>Group Size: {performanceValues.danceSize}</h2>
+                <h2>School: {performanceValues.school}</h2>
+            </div>
+            <div>
                 <p>Scores</p>
                 <div style={{marginBottom: '10px'}}>
-                    <TextField id="filled-basic" label="Artistic Score" variant="filled" style={{width: 'calc(50% - 20px)', marginRight: '20px'}}/>
-                    <TextField id="filled-basic" label="Technical Score" variant="filled" style={{width: 'calc(50%)'}}/>
+                    <TextField id="filled-basic" label="Artistic Score" variant="filled" style={{width: 'calc(50% - 20px)', marginRight: '20px'}} onChange={handleChange}/>
+                    <TextField id="filled-basic" label="Technical Score" variant="filled" style={{width: 'calc(50%)'}} onChange={handleChange}/>
                 </div>
             </div>
             <div>
