@@ -156,7 +156,7 @@ class SchoolContact(db.Model, BaseMixin):
     id = db.Column(db.Integer, primary_key=True)
     school_id = db.Column(db.Integer, db.ForeignKey('school.id'))
     year = db.Column(db.String(255))
-    teacher_contact = db.Column(db.String(255))
+    teacher_name = db.Column(db.String(255))
     teacher_email = db.Column(db.String(255))
     teacher_phone = db.Column(db.String(255))
     token = db.Column(db.String(255))

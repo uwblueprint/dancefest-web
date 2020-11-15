@@ -18,8 +18,8 @@ def seed():
     dance_sizes = ['Duet', 'Grad Solo', 'Large Group 16+', 'Medium Group 10-15', 'Production', 'Small Group 4-9', 'Trio']
     dance_styles = ['Ballet', 'Creative Collab', 'Cultural', 'Fusion', 'Hip Hop', 'Jazz', 'Lyrical', 'Modern/Contemporary', 'Musical Theatre - Lip Sync', 'Musical Theatre - Vocals', 'Open', 'Production', 'Tap']
     schools = ['BCI', 'CAS', 'CCC', 'CCCE', 'CCH', 'CHC', 'CKS', 'ECI', 'FHC', 'GAH', 'HNH', 'LADE', 'LAJ', 'MAC', 'STA', 'STJ', 'STV', 'TVA', 'WAP', 'WCI']
-    teacher_name = ['Brandon L', 'Victoria L', 'Mark A', 'Winnie R', 'Samu B', 'Megan N', 'Stephen Y', 'Leon O', 'Peiyao C', 'Lena N', 'Jason F', 'Leon L', 'Nim W', 'Imran A', 'Aaron Y', 'Anson Y', 'Chidi N', 'Mathurah R', 'Howard Y', 'Sophie Q']
-    teacher_email = ['csmieton0@wikimedia.org', 'nmenis1@amazon.co.jp', 'rrupprecht2@springer.com', 'mparriss3@admin.ch', 'thucquart4@about.me', 'lrubenczyk5@ebay.co.uk', 'clyal6@ft.com', 'joleksinski7@yellowpages.com', 'gcapponeer8@marriott.com']
+    teacher_names = ['Brandon L', 'Victoria L', 'Mark A', 'Winnie R', 'Samu B', 'Megan N', 'Stephen Y', 'Leon O', 'Peiyao C', 'Lena N', 'Jason F', 'Leon L', 'Nim W', 'Imran A', 'Aaron Y', 'Anson Y', 'Chidi N', 'Mathurah R', 'Howard Y', 'Sophie Q']
+    teacher_emails = ['csmieton0@wikimedia.org', 'nmenis1@amazon.co.jp', 'rrupprecht2@springer.com', 'mparriss3@admin.ch', 'thucquart4@about.me', 'lrubenczyk5@ebay.co.uk', 'clyal6@ft.com', 'joleksinski7@yellowpages.com', 'gcapponeer8@marriott.com']
 
     for i in range(5):
         school = School.create(
@@ -32,8 +32,8 @@ def seed():
         SchoolContact.create(
             school_id=school.id,
             year=random.randint(2000,2020),
-            teacher_name=random.choice(teacher_name),
-            teacher_email=random.choice(teacher_email),
+            teacher_name=random.choice(teacher_names),
+            teacher_email=random.choice(teacher_emails),
             teacher_phone=random.randint(6471111111,6479999999),
             token=uuid.uuid4().hex,
 
@@ -52,7 +52,7 @@ def seed():
             dance_entry=i+1,
             dance_style=random.choice(dance_styles),
             performers=random.choices(names, k=5),
-            school_id=school.id,
+            school_id=random.randint(1,5),
             token=uuid.uuid4().hex
         )
         

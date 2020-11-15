@@ -24,14 +24,14 @@ class PerformanceTableRow extends React.Component {
       danceSize,
       danceStyle,
       danceTitle,
-      schoolId,
+      schoolName,
     } = currentValues;
 
     return (
       <TableRow style={{}}>
         <TableCell><Link to={`performance/${id}/adjudications`}>{danceTitle}</Link></TableCell>
         <TableCell>{danceEntry}</TableCell>
-        <TableCell>{schoolId}</TableCell>
+        <TableCell>{schoolName}</TableCell>
         <TableCell>{academicLevel}</TableCell>
         <TableCell>{competitionLevel}</TableCell>
         <TableCell>{danceStyle}</TableCell>
