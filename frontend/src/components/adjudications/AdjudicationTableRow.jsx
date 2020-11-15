@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
+import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 import AdjudicationForm from './AdjudicationForm';
 import AdjudicationDialog from './AdjudicationDialog';
@@ -36,7 +37,7 @@ class AdjudicationTableRow extends React.Component {
         <TableCell>{danceStyle}</TableCell>
         <TableCell>{danceSize}</TableCell>
         <TableCell>
-          <button><Link to={`adjudications/performance/${id}`}>Adjudicate</Link></button>
+          <Button variant="outlined" color="primary"><Link to={`adjudications/performance/${id}`}>Adjudicate</Link></Button>
         </TableCell>
       </TableRow>
     );
