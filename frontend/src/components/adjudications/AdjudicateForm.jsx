@@ -11,8 +11,6 @@ import { getPerformance } from '../../api/PerformanceAPI';
 import humps from 'humps';
 
 export default function AdjudicateForm(props) {
-    //console.log("PROPS ARE THIS:")
-   //console.log(props.match.params)
     const { match: { params: { eventId, performanceId }}} = props;
     const [loading, setLoading] = useState(true)
     const [adjudications, setAdjudications] = useState({}) 
@@ -67,7 +65,7 @@ export default function AdjudicateForm(props) {
 
     const handleCheckedAward = (e) => {
         
-      }
+    }
 
     return (
         <div style={{ display: 'flex', flexFlow: 'column', marginLeft: '200px', marginRight: '200px'}}>

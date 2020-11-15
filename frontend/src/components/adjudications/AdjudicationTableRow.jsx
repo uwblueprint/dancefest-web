@@ -36,12 +36,7 @@ class AdjudicationTableRow extends React.Component {
         <TableCell>{danceStyle}</TableCell>
         <TableCell>{danceSize}</TableCell>
         <TableCell>
-          <AdjudicationDialog
-            updateData={updateData}
-            adjudicationId={id}
-            collectionName={collectionName}
-            currentValues={currentValues}
-            performanceValues={performanceValues} />
+          <button><Link to={`adjudications/performance/${id}`}>Adjudicate</Link></button>
         </TableCell>
       </TableRow>
     );
