@@ -35,10 +35,10 @@ export default function AdjudicateForm(props) {
     console.log("adjudications are:")
     console.log(adjudications) //works!!
 
-    const [artisticMark, setartisticMark] = useState(0) //currentValues.artisticMark
+    const [artisticMark, setArtisticMark] = useState(0) //currentValues.artisticMark
     const [choreoAward, setchoreoAward] = useState(false) //currentValues.choreoAward || false
     const [specialAward, setspecialAward] = useState(false) //currentValues.specialAward || false
-    const [technicalMark, settechnicalMark] = useState(0) //currentValues.technicalMark
+    const [technicalMark, setTechnicalMark] = useState(0) //currentValues.technicalMark
 
     const choices = [
         {
@@ -58,13 +58,13 @@ export default function AdjudicateForm(props) {
     const handleArtisticScoreChange = (e) => {
         const { name, value } = e.target;
         const keys = ['artisticMark', 'technicalMark'];
-        setartisticMark(keys.includes(name) ? parseInt(value, 10) : value)
+        setArtisticMark(keys.includes(name) ? parseInt(value, 10) : value)
     }
 
     const handleTechnicalScoreChange = (e) => {
         const { name, value } = e.target;
         const keys = ['artisticMark', 'technicalMark'];
-        settechnicalMark(keys.includes(name) ? parseInt(value, 10) : value)
+        setTechnicalMark(keys.includes(name) ? parseInt(value, 10) : value)
     }
 
     //handles the checkboxes
@@ -78,14 +78,14 @@ export default function AdjudicateForm(props) {
             setspecialAward(checked)
         }
     }
-    
+
     //handle cancellation of form
     const handleCancel = () => {
         //go back to last page
     }
     //handle submission of form
     const handleSubmit = async () => {
-       
+
     }
     return (
         <div style={{ display: 'flex', flexFlow: 'column', marginLeft: '200px', marginRight: '200px'}}>
