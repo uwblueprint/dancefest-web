@@ -15,13 +15,13 @@ def seed():
     adjectives = ['great', 'good', 'okay', 'bad', 'boring']
     academic_levels = ['Elementary', 'Secondary']
     comp_levels = ['Competitive 1', 'Competitive 2', 'Novice', 'Pre-Competitive 1', 'Pre-Competitive 2']
-    dance_sizes = ['Duet', 'Grad Solo', 'Large Group 16+', 'Medium Group 10-15', 'Production', 'Small Group 4-9', 'Trio']
+    dance_sizes = ['Duet', 'Grad Solo', 'Large Group 16 +', 'Medium Group 10-15', 'Production', 'Small Group 4-9', 'Trio']
     dance_styles = ['Ballet', 'Creative Collab', 'Cultural', 'Fusion', 'Hip Hop', 'Jazz', 'Lyrical', 'Modern/Contemporary', 'Musical Theatre - Lip Sync', 'Musical Theatre - Vocals', 'Open', 'Production', 'Tap']
     schools = [
         'BCI - Bluevale CI', 'CAS - Central Algoma S.S.', 'CCC - Cardinal Carter Catholic',
         'CCCE - Cardinal Carter Middle School', 'CCH - Catholic Central H.S.', 'CHC - Cameron Heights CI',
         'CKS - Chatham Kent S.S.', 'ECI - Eastwood CI', 'FHC - Forest Heights CI', 'GAH - General Amherst H.S.',
-        'HNH - Holy Nmae H.S.', 'LADE - L.A. Desmarais Catholic School', 'LAJ - E.J. Lajeunesse',
+        'HNH - Holy Name H.S.', 'LADE - L.A. Desmarais Catholic School', 'LAJ - E.J. Lajeunesse',
         'MAC - Sir John A. MacDonald S.S.', 'STA - St. Anne Catholic H.S.', "STJ - St. Joseph's Catholic S.S.",
         'STV - St. Thomas of Villanova S.S.', 'TVA - Tecumseh Vista Academy', 'WAP - SATEC @ W.A. Porter CI', 'WCI - Walkerville CI'
     ]
@@ -39,7 +39,7 @@ def seed():
     for i in range(5):
         SchoolContact.create(
             school_id=random.randint(1,20),
-            year=random.randint(2000,2020),
+            year=random.randint(2019,2020),
             teacher_name=random.choice(teacher_names),
             teacher_email=random.choice(teacher_emails),
             teacher_phone=random.randint(6471111111,6479999999),

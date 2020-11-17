@@ -1,3 +1,5 @@
+import uuid
+
 from flask import Blueprint
 from flask import jsonify, request
 
@@ -11,6 +13,7 @@ blueprint = Blueprint('performance', __name__, url_prefix='/api/performances')
 @blueprint.route('/', methods=['POST'])
 def create_performance():
     performance_json = request.get_json()
+    performance_json['token'] = uuid.uuid4().hex
     new_performance = Performance.create(**performance_json)
     return jsonify(new_performance.to_dict())
 

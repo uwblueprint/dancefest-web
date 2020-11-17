@@ -21,10 +21,7 @@ def get_performances_by_token(event_id, token):
     return jsonify({performance.id: performance.to_dict() for performance in performances})
 
 
-# @blueprint.route('/token', methods=['POST'])
-# def generate_token():
-#     token = uuid.uuid4().hex
-#     args = request.get_json()
-#     school = School.get_by(first=True, name=args['school'])
-#     school.update(token=token)
-#     return jsonify(school.to_dict())
+@blueprint.route('/', methods=['GET'])
+def get_schools():
+    schools = School.query.all()
+    return jsonify({school.id: school.to_dict() for school in schools})

@@ -116,12 +116,12 @@ class FeedbackForm extends React.Component {
       }
     }
 
-    const response = await generateToken({ school });
+    // const response = await generateToken({ school });
 
     sendMail({
-      recipients: [response.data.teacherEmail],
-      token: response.data.token,
-      teacherContact: response.data.teacherContact,
+      // recipients: [response.data.teacherEmail],
+      // token: response.data.token,
+      // teacherContact: response.data.teacherContact,
       eventId,
       school
     });

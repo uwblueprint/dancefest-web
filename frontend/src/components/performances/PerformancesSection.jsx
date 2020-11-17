@@ -34,8 +34,6 @@ class PerformancesSection extends React.Component {
       }));
 
       return performances.sort((a,b) => Number(a.danceEntry) - Number(b.danceEntry));
-      // this.setState({ filteredPerformances: performances, loading: false, performances });
-      // return performances;
     }
     
     async function getSchoolInfo(performance) {
@@ -47,9 +45,6 @@ class PerformancesSection extends React.Component {
     const performances = await getPerformancesInfo(eventId);
     this.setState({ filteredPerformances: performances, loading: false, performances });
   }
-
-  
-  
 
   getFilterKeys = filters => Object.keys(filters)
     .reduce((res, value) => {
@@ -147,7 +142,7 @@ class PerformancesSection extends React.Component {
     const { filteredPerformances, loading, performances } = this.state;
     const { match: { params: { eventId }}} = this.props;
     const headings = ['Dance Title', 'Dance Entry', 'School', 'Academic Level', 'Level of Competition', 'Dance Style', 'Dance Size'];
-    const keys = ['academicLevel', 'choreographers', 'competitionLevel', 'danceEntry', 'danceSize', 'danceStyle', 'danceTitle', 'performers', 'schoolName'];
+    const keys = ['academicLevel', 'choreographers', 'competitionLevel', 'danceEntry', 'danceSize', 'danceStyle', 'danceTitle', 'performers', 'schoolName', 'schoolId'];
     const renderNewButton = (<PerformanceDialog updateData={this.updatePerformances} createData={this.createPerformance} eventId={eventId} formType="new" />);
     const showPerformances = Array.isArray(performances) && performances.length > 0;
     const tableFilters = <Filter handleFilters={this.handleFilters} />;

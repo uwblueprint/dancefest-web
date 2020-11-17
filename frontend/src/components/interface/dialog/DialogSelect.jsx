@@ -38,7 +38,12 @@ const DialogSelect = ({
     margin="normal"
     variant="filled">
     {options.map(option => (
-      <MenuItem key={option.value} value={option.value}>{option.value}</MenuItem>
+      <MenuItem 
+        key={option.value}
+        value={option && option.key ? option.key : option.value}
+      >
+        {option.value}
+      </MenuItem>
     ))}
   </TextField>
 );

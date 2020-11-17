@@ -11,7 +11,12 @@ export const getPerformancesByToken = (eventId, token) => {
     .then((response) => humps.camelizeKeys(response));
 };
 
+export const getSchools = () => {
+  return get('school/').then((response) => humps.camelizeKeys(response));
+};
+
+// deprecated
 export const generateToken = (data) => {
-  return post('school/token', humps.decamelizeKeys(data))
-    .then((response) => humps.camelizeKeys(response));
+  // return post('school/token', humps.decamelizeKeys(data))
+  //  .then((response) => humps.camelizeKeys(response));
 };
