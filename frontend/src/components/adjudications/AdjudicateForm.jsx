@@ -16,19 +16,19 @@ export default function AdjudicateForm(props) {
     const [adjudications, setAdjudications] = useState({}) 
     const [performanceValues, setPerformancesValues] = useState({}) 
 
-//according to docs, componentDidMount() is similar to useEffect(() => {}); 
+    //according to docs, componentDidMount() is similar to useEffect(() => {}); 
     useEffect(() => {     
         getPerformance(performanceId)
-        .then(({data}) => {
-            setPerformancesValues(humps.camelizeKeys(data)) 
-        });
+            .then(({data}) => {
+                setPerformancesValues(humps.camelizeKeys(data)) 
+            });
 
         getAdjudications(performanceId)
-        .then(({data}) => {
-            setAdjudications(data)  
-            setLoading(false)
-        });
-  }, []); //added the empty array so that it will only be called after the component mounts
+            .then(({data}) => {
+                setAdjudications(data)  
+                setLoading(false)
+            });
+    }, []); //added the empty array so that it will only be called after the component mounts
 
     const [artisticMark, setArtisticMark] = useState(0) //currentValues.artisticMark
     const [choreoAward, setchoreoAward] = useState(false) //currentValues.choreoAward || false
