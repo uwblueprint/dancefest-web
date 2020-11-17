@@ -89,6 +89,8 @@ class PerformanceForm extends React.Component {
 
   renderOptions = option => (option ? option.map(o => ({ value: o })) : []);
 
+  renderSchoolOptions = option => (option ? option.map(o => ({ value: o })) : []);
+
   render() {
     const { classes, formType } = this.props;
     const {
@@ -121,7 +123,7 @@ class PerformanceForm extends React.Component {
                 label="School"
                 name="school"
                 onChange={this.handleChange}
-                options={this.renderOptions(options.school)}
+                options={this.renderSchoolOptions(options.school)}
                 value={school} />
               <DialogSelect
                 fullWidth

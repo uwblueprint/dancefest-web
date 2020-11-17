@@ -17,20 +17,28 @@ def seed():
     comp_levels = ['Competitive 1', 'Competitive 2', 'Novice', 'Pre-Competitive 1', 'Pre-Competitive 2']
     dance_sizes = ['Duet', 'Grad Solo', 'Large Group 16+', 'Medium Group 10-15', 'Production', 'Small Group 4-9', 'Trio']
     dance_styles = ['Ballet', 'Creative Collab', 'Cultural', 'Fusion', 'Hip Hop', 'Jazz', 'Lyrical', 'Modern/Contemporary', 'Musical Theatre - Lip Sync', 'Musical Theatre - Vocals', 'Open', 'Production', 'Tap']
-    schools = ['BCI', 'CAS', 'CCC', 'CCCE', 'CCH', 'CHC', 'CKS', 'ECI', 'FHC', 'GAH', 'HNH', 'LADE', 'LAJ', 'MAC', 'STA', 'STJ', 'STV', 'TVA', 'WAP', 'WCI']
+    schools = [
+        'BCI - Bluevale CI', 'CAS - Central Algoma S.S.', 'CCC - Cardinal Carter Catholic',
+        'CCCE - Cardinal Carter Middle School', 'CCH - Catholic Central H.S.', 'CHC - Cameron Heights CI',
+        'CKS - Chatham Kent S.S.', 'ECI - Eastwood CI', 'FHC - Forest Heights CI', 'GAH - General Amherst H.S.',
+        'HNH - Holy Nmae H.S.', 'LADE - L.A. Desmarais Catholic School', 'LAJ - E.J. Lajeunesse',
+        'MAC - Sir John A. MacDonald S.S.', 'STA - St. Anne Catholic H.S.', "STJ - St. Joseph's Catholic S.S.",
+        'STV - St. Thomas of Villanova S.S.', 'TVA - Tecumseh Vista Academy', 'WAP - SATEC @ W.A. Porter CI', 'WCI - Walkerville CI'
+    ]
     teacher_names = ['Brandon L', 'Victoria L', 'Mark A', 'Winnie R', 'Samu B', 'Megan N', 'Stephen Y', 'Leon O', 'Peiyao C', 'Lena N', 'Jason F', 'Leon L', 'Nim W', 'Imran A', 'Aaron Y', 'Anson Y', 'Chidi N', 'Mathurah R', 'Howard Y', 'Sophie Q']
     teacher_emails = ['csmieton0@wikimedia.org', 'nmenis1@amazon.co.jp', 'rrupprecht2@springer.com', 'mparriss3@admin.ch', 'thucquart4@about.me', 'lrubenczyk5@ebay.co.uk', 'clyal6@ft.com', 'joleksinski7@yellowpages.com', 'gcapponeer8@marriott.com']
 
-    for i in range(5):
-        school = School.create(
-            name=random.choice(schools),
+    for school in schools:
+        School.create(
+            name=school,
             phone=random.randint(6471111111,6479999999),
             address=random.choice(schools),
             district=random.choice(schools),
         )
 
+    for i in range(5):
         SchoolContact.create(
-            school_id=school.id,
+            school_id=random.randint(1,20),
             year=random.randint(2000,2020),
             teacher_name=random.choice(teacher_names),
             teacher_email=random.choice(teacher_emails),
