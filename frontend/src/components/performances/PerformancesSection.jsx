@@ -9,33 +9,41 @@ import Filter from '../interface/filter';
 import Section from '../interface/Section';
 
 import { getPerformances } from '../../api/PerformanceAPI';
+import { getSchool } from '../../api/SchoolAPI';
 
 class PerformancesSection extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      filteredPerformances: null,
+      filteredPerformances: [],
       loading: true,
-      performances: null
+      performances: [],
     };
+
   }
 
-  componentDidMount() {
-	const { match: { params: { eventId }}} = this.props;
-	
-	getPerformances(eventId)
-	.then(response => {
-		let performances = Object.values(response.data).map(performance => {
-			return humps.camelizeKeys(performance);
-		});
-		performances = performances.sort((a,b) => Number(a.danceEntry) - Number(b.danceEntry));
-		this.setState({ filteredPerformances: performances, loading: false, performances });
-	})
-	.catch(err => {
-		console.log(err);
-		this.setState({loading: false});
-	});
+  async componentDidMount() {
+    const { match: { params: { eventId }}} = this.props;
+    
+    //write async await function, seperate mapping into alternative helper function that can be called
+    async function getPerformancesInfo(eventId) {
+      const rawPerformances = await getPerformances(eventId);
+      let performances = await Promise.all(Object.values(rawPerformances.data).map(performance => {
+        return getSchoolInfo(performance);
+      }));
+
+      return performances.sort((a,b) => Number(a.danceEntry) - Number(b.danceEntry));
+    }
+    
+    async function getSchoolInfo(performance) {
+      const school = await getSchool(performance.school_id);
+      performance.school_name = school.data[performance.school_id].name;
+      return humps.camelizeKeys(performance); 
+    }
+
+    const performances = await getPerformancesInfo(eventId);
+    this.setState({ filteredPerformances: performances, loading: false, performances });
   }
 
   getFilterKeys = filters => Object.keys(filters)
@@ -134,7 +142,7 @@ class PerformancesSection extends React.Component {
     const { filteredPerformances, loading, performances } = this.state;
     const { match: { params: { eventId }}} = this.props;
     const headings = ['Dance Title', 'Dance Entry', 'School', 'Academic Level', 'Level of Competition', 'Dance Style', 'Dance Size'];
-    const keys = ['academicLevel', 'choreographers', 'competitionLevel', 'danceEntry', 'danceSize', 'danceStyle', 'danceTitle', 'performers', 'school'];
+    const keys = ['academicLevel', 'choreographers', 'competitionLevel', 'danceEntry', 'danceSize', 'danceStyle', 'danceTitle', 'performers', 'schoolName', 'schoolId'];
     const renderNewButton = (<PerformanceDialog updateData={this.updatePerformances} createData={this.createPerformance} eventId={eventId} formType="new" />);
     const showPerformances = Array.isArray(performances) && performances.length > 0;
     const tableFilters = <Filter handleFilters={this.handleFilters} />;

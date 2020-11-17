@@ -91,8 +91,9 @@ class Performance(db.Model, BaseMixin):
     dance_style = db.Column(db.String(255))
     dance_title = db.Column(db.String(255))
     performers = db.Column(db.ARRAY(db.String(255)))
-    school = db.Column(db.String(255))
+    token = db.Column(db.String(255))
     event_id = db.Column(db.Integer, db.ForeignKey('event.id'))
+    school_id = db.Column(db.Integer, db.ForeignKey('school.id'))
     adjudications = relationship('Adjudication', backref='performance')
     award_performance = relationship('AwardPerformance', back_populates='performance', lazy='noload')
 
@@ -147,11 +148,18 @@ class School(db.Model, BaseMixin):
     phone = db.Column(db.String(255))
     address = db.Column(db.String(255))
     district = db.Column(db.String(255))
-    teacher_contact = db.Column(db.String(255))
+
+
+class SchoolContact(db.Model, BaseMixin):
+    __tablename__ = 'school_contact'
+
+    id = db.Column(db.Integer, primary_key=True)
+    school_id = db.Column(db.Integer, db.ForeignKey('school.id'))
+    year = db.Column(db.String(255))
+    teacher_name = db.Column(db.String(255))
     teacher_email = db.Column(db.String(255))
     teacher_phone = db.Column(db.String(255))
     token = db.Column(db.String(255))
-
 
 class Award(db.Model, BaseMixin):
     __tablename__ = 'award'
