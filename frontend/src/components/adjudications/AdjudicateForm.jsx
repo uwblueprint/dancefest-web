@@ -30,11 +30,6 @@ export default function AdjudicateForm(props) {
         });
   }, []); //added the empty array so that it will only be called after the component mounts
 
-    console.log("performance values are:")
-    console.log(performanceValues) //works!!
-    console.log("adjudications are:")
-    console.log(adjudications) //works!!
-
     const [artisticMark, setArtisticMark] = useState(0) //currentValues.artisticMark
     const [choreoAward, setchoreoAward] = useState(false) //currentValues.choreoAward || false
     const [specialAward, setspecialAward] = useState(false) //currentValues.specialAward || false
