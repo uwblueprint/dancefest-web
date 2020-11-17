@@ -5,7 +5,7 @@ import CheckBox from '../interface/CheckBox';
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 import { awardConsiderationEnum } from '../../constants';
-import { updateAdjudications } from "../../api/AdjudicationAPI";
+import { createAdjudication, updateAdjudications } from "../../api/AdjudicationAPI";
 import { getAdjudications } from '../../api/AdjudicationAPI';
 import { getPerformance } from '../../api/PerformanceAPI';
 import humps from 'humps';
@@ -84,9 +84,19 @@ export default function AdjudicateForm(props) {
         //go back to last page
     }
     //handle submission of form
-    const handleSubmit = async () => {
-       
+    //STEP ONE: create json from state variables to pass into function
+    handleSubmit = async () => {
+        const { formType, adjudicationID, updateData, createData } = this.props; //need to change for hooks
+        const data = omit(this.state, ['disabledSave', 'options']); //need to change for hooks
+        if (formType === dialogType.NEW) {
+            const adjudicate = await createAdjudication(data);
+            createData(adjudicate.data);
+        } else {
+            const adjudicate = await updateAdjudications(adjudicationId, data);
+            updateData(adjudicate.data);
+        }
     }
+
     return (
         <div style={{ display: 'flex', flexFlow: 'column', marginLeft: '200px', marginRight: '200px'}}>
             <div>
