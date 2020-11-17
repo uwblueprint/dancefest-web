@@ -53,13 +53,13 @@ export default function AdjudicateForm(props) {
     const handleArtisticScoreChange = (e) => {
         const { name, value } = e.target;
         const keys = ['artisticMark', 'technicalMark'];
-        setArtisticMark(keys.includes(name) ? parseInt(value, 10) : value)
+        setArtisticMark(keys.includes(name) ? parseInt(value) : value)
     }
 
     const handleTechnicalScoreChange = (e) => {
         const { name, value } = e.target;
         const keys = ['artisticMark', 'technicalMark'];
-        setTechnicalMark(keys.includes(name) ? parseInt(value, 10) : value)
+        setTechnicalMark(keys.includes(name) ? parseInt(value) : value)
     }
 
     //handles the checkboxes
