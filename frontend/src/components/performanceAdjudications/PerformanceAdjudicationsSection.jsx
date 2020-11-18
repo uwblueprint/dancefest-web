@@ -2,14 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import pick from 'lodash/pick';
 
-import AdjudicationTableRow from './AdjudicationTableRow';
+import AdjudicationTableRow from './PerformanceAdjudicationTableRow';
 import db from '../../firebase/firebase';
 import Section from '../interface/Section';
 import { getAdjudications } from '../../api/AdjudicationAPI';
 import { getPerformance } from '../../api/PerformanceAPI';
 import humps from 'humps';
 
-class AdjudicationsSection extends React.Component {
+class PerformanceAdjudicationsSection extends React.Component {
   constructor(props) {
     super(props);
 
@@ -69,8 +69,8 @@ class AdjudicationsSection extends React.Component {
   }
 }
 
-AdjudicationsSection.propTypes = {
+PerformanceAdjudicationsSection.propTypes = {
   match: PropTypes.shape().isRequired
 };
 
-export default AdjudicationsSection;
+export default PerformanceAdjudicationsSection;

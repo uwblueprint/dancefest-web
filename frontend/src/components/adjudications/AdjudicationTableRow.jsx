@@ -2,86 +2,65 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
-import LensIcon from '@material-ui/icons/Lens';
+import Button from '@material-ui/core/Button';
+import { Link } from 'react-router-dom';
 
-import AdjudicationDialog from './AdjudicationDialog';
+class AdjudicationTableRow extends React.Component {
+  state = {};
 
-const AdjudicationTableRow = ({
-  collectionName,
-  currentValues,
-  id,
-  performanceValues,
-  updateData,
-}) => {
-  const {
-    audioUrl,
-    artisticMark,
-    choreoAward,
-    cumulativeMark,
-    specialAward,
-    tabletId,
-    technicalMark
-  } = currentValues;
-
-  return (
-    <TableRow key={id}>
-      <TableCell>
-        {tabletId}
-      </TableCell>
-      <TableCell>
-        <p>
-          {audioUrl ? 'yes' : 'no'}
-        </p>
-      </TableCell>
-      <TableCell>
-        {artisticMark}
-      </TableCell>
-      <TableCell>
-        {technicalMark}
-      </TableCell>
-      <TableCell>
-        {cumulativeMark}
-      </TableCell>
-      <TableCell>
-        {specialAward && <LensIcon fontSize="inherit" color="primary" />}
-        {choreoAward && <LensIcon fontSize="inherit" style={{ color: 'purple' }} />}
-      </TableCell>
-      <TableCell>
-        <AdjudicationDialog
-          updateData={updateData}
-          adjudicationId={id}
-          collectionName={collectionName}
-          currentValues={currentValues}
-          performanceValues={performanceValues} />
-      </TableCell>
-    </TableRow>
-  );
-};
+  render() {
+    const {
+      currentValues,
+      collectionName,
+      eventId,
+      performanceValues,
+      updateData,
+      id
+    } = this.props;
+    const {
+      academicLevel,
+      competitionLevel,
+      danceEntry,
+      danceSize,
+      danceStyle,
+      danceTitle,
+      school
+    } = currentValues;
+    return (
+      <TableRow style={{}}>
+        <TableCell><Link to={`performance/${id}/adjudications`}>{danceTitle}</Link></TableCell>
+        <TableCell>{danceEntry}</TableCell>
+        <TableCell>{school}</TableCell>
+        <TableCell>{danceStyle}</TableCell>
+        <TableCell>{danceSize}</TableCell>
+        <TableCell>
+          <Button variant="outlined" color="primary">
+            <Link to={`adjudications/performance/${id}`}>Adjudicate</Link>
+          </Button>
+        </TableCell>
+      </TableRow>
+    );
+  }
+}
 
 AdjudicationTableRow.propTypes = {
+  history: PropTypes.shape().isRequired,
   currentValues: PropTypes.shape({
-    artisticMark: PropTypes.number,
-    audioUrl: PropTypes.string,
-    choreoAward: PropTypes.bool,
-    cumulativeMark: PropTypes.number,
-    notes: PropTypes.string,
-    specialAward: PropTypes.bool,
-    tabletId: PropTypes.number,
-    technicalMark: PropTypes.number
-  }).isRequired,
-  collectionName: PropTypes.string.isRequired,
-  id: PropTypes.string.isRequired,
-  performanceValues: PropTypes.shape({
     academicLevel: PropTypes.string,
     choreographers: PropTypes.string,
-    competitionLevel: PropTypes.string,
-    danceEntry: PropTypes.string,
+    danceEntry: PropTypes.number,
     danceSize: PropTypes.string,
     danceStyle: PropTypes.string,
     danceTitle: PropTypes.string,
     performers: PropTypes.string,
     school: PropTypes.string
-  }).isRequired
+  }),
+  eventId: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired
+};
+
+AdjudicationTableRow.defaultProps = {
+  currentValues: {}
 };
 
 export default AdjudicationTableRow;
