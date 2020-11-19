@@ -1,11 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextField } from '@material-ui/core';
 import Button from '../interface/Button';
 import CheckBox from '../interface/CheckBox';
-import PropTypes from 'prop-types';
-import { useState, useEffect } from 'react';
-import { awardConsiderationEnum } from '../../constants';
-import { createAdjudication, updateAdjudications } from "../../api/AdjudicationAPI";
+import { Redirect } from 'react-router-dom';
+import { createAdjudication } from "../../api/AdjudicationAPI";
 import { getAdjudications } from '../../api/AdjudicationAPI';
 import { getPerformance } from '../../api/PerformanceAPI';
 import humps from 'humps';
@@ -34,6 +32,7 @@ export default function AdjudicateForm(props) {
     const [choreoAward, setchoreoAward] = useState(false) //currentValues.choreoAward || false
     const [specialAward, setspecialAward] = useState(false) //currentValues.specialAward || false
     const [technicalMark, setTechnicalMark] = useState(0) //currentValues.technicalMark
+    const [notes, setNotes] = useState('');
 
     const choices = [
         {
@@ -53,7 +52,20 @@ export default function AdjudicateForm(props) {
     const handleArtisticScoreChange = (e) => {
         const { name, value } = e.target;
         const keys = ['artisticMark', 'technicalMark'];
+        setArtisticMark(keys.includes(name) ? parseInt(value) : value)
     }
+
+    const handleTechnicalScoreChange = (e) => {
+        const { name, value } = e.target;
+        const keys = ['artisticMark', 'technicalMark'];
+        setTechnicalMark(keys.includes(name) ? parseInt(value) : value)
+    }
+
+    const handleNotesChange = (e) => {
+        const { value } = e.target;
+        setNotes(value)
+    }
+
     //handles the checkboxes
     const handleCheckedAward = (e) => {
         const { name, checked } = e.target;
@@ -71,15 +83,18 @@ export default function AdjudicateForm(props) {
     }
     //handle submission of form
     //STEP ONE: create json from state variables to pass into function
-    handleSubmit = async () => {
-        const { formType, adjudicationID, updateData, createData } = this.props; //need to change for hooks
-        const data = omit(this.state, ['disabledSave', 'options']); //need to change for hooks
-        if (formType === dialogType.NEW) {
-            const adjudicate = await createAdjudication(data);
-            createData(adjudicate.data);
-        } else {
-            const adjudicate = await updateAdjudications(adjudicationId, data);
-            updateData(adjudicate.data);
+    const handleSubmit = async () => {
+        if (artisticMark && technicalMark) {
+            const data = {
+                performanceId,
+                artisticMark,
+                technicalMark,
+                cumulativeMark: (artisticMark + technicalMark)/2,
+                notes,
+                tablet_id: 1
+            }
+        
+            await createAdjudication(data);
         }
     }
 
@@ -97,21 +112,39 @@ export default function AdjudicateForm(props) {
             <div>
                 <p>Scores</p>
                 <div style={{marginBottom: '10px'}}>
-                    <TextField id="filled-basic" label="Artistic Score" variant="filled" style={{width: 'calc(50% - 20px)', marginRight: '20px'}} onChange={handleArtisticScoreChange}/>
-                    <TextField id="filled-basic" label="Technical Score" variant="filled" style={{width: 'calc(50%)'}} onChange={handleTechnicalScoreChange}/>
+                    <TextField
+                        required
+                        id="artistic-score"
+                        label="Artistic Score"
+                        variant="filled"
+                        style={{width: 'calc(50% - 20px)', marginRight: '20px'}}
+                        onChange={handleArtisticScoreChange}
+                        type="number"
+                    />
+                    <TextField 
+                        required
+                        id="technical-score"
+                        label="Technical Score"
+                        variant="filled"
+                        style={{width: 'calc(50%)'}}
+                        onChange={handleTechnicalScoreChange}
+                        type="number"
+                    />
                 </div>
             </div>
             <div>
                 <p>Notes</p>
                 <div style={{marginBottom: '10px'}}>
                 <TextField
-                    id="filled-multiline-static"
-                    label="Multiline"
+                    required
+                    id="adjudication-notes"
+                    label="Adjudication Notes"
                     multiline
                     rows={4}
-                    defaultValue="Notes"
+                    defaultValue=""
                     variant="filled"
                     style={{width: 'calc(100%)'}}
+                    onChange={handleNotesChange}
                 />
                 </div>
             </div>
