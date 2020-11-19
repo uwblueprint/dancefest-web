@@ -1,5 +1,5 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
@@ -26,6 +26,7 @@ const SectionHeader = ({
       <Typography variant="h3">
         {`${title}s`}
       </Typography>
+      <Link to={`/events/1/feedback`}>Share Feedback</Link>
       {!!renderNewButton && (
         <div className={classes.sectionHeaderAction}>
           {renderNewButton}

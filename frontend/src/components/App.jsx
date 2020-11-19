@@ -100,12 +100,12 @@ const PrivateRoute = ({
   user,
   ...rest
 }) => (
-    <Route
-      path={path}
-      render={props => (user ? <Component {...props} />
-        : <Redirect to={{ pathname: '/', state: { from: props.location } }} />)}
-      {...rest} />
-  );
+  <Route
+    path={path}
+    render={props => (user ? <Component {...props} />
+      : <Redirect to={{ pathname: '/', state: { from: props.location } }} />)}
+    {...rest} />
+);
 
 export default class App extends React.Component {
   constructor(props) {

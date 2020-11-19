@@ -16,29 +16,24 @@ export default function AdjudicateForm(props) {
     const [adjudications, setAdjudications] = useState({}) 
     const [performanceValues, setPerformancesValues] = useState({}) 
 
-//according to docs, componentDidMount() is similar to useEffect(() => {}); 
+    //according to docs, componentDidMount() is similar to useEffect(() => {}); 
     useEffect(() => {     
         getPerformance(performanceId)
-        .then(({data}) => {
-            setPerformancesValues(humps.camelizeKeys(data)) 
-        });
+            .then(({data}) => {
+                setPerformancesValues(humps.camelizeKeys(data)) 
+            });
 
         getAdjudications(performanceId)
-        .then(({data}) => {
-            setAdjudications(data)  
-            setLoading(false)
-        });
-  }, []); //added the empty array so that it will only be called after the component mounts
+            .then(({data}) => {
+                setAdjudications(data)  
+                setLoading(false)
+            });
+    }, []); //added the empty array so that it will only be called after the component mounts
 
-    console.log("performance values are:")
-    console.log(performanceValues) //works!!
-    console.log("adjudications are:")
-    console.log(adjudications) //works!!
-
-    const [artisticMark, setartisticMark] = useState(0) //currentValues.artisticMark
+    const [artisticMark, setArtisticMark] = useState(0) //currentValues.artisticMark
     const [choreoAward, setchoreoAward] = useState(false) //currentValues.choreoAward || false
     const [specialAward, setspecialAward] = useState(false) //currentValues.specialAward || false
-    const [technicalMark, settechnicalMark] = useState(0) //currentValues.technicalMark
+    const [technicalMark, setTechnicalMark] = useState(0) //currentValues.technicalMark
 
     const choices = [
         {
@@ -58,15 +53,7 @@ export default function AdjudicateForm(props) {
     const handleArtisticScoreChange = (e) => {
         const { name, value } = e.target;
         const keys = ['artisticMark', 'technicalMark'];
-        setartisticMark(keys.includes(name) ? parseInt(value, 10) : value)
     }
-
-    const handleTechnicalScoreChange = (e) => {
-        const { name, value } = e.target;
-        const keys = ['artisticMark', 'technicalMark'];
-        settechnicalMark(keys.includes(name) ? parseInt(value, 10) : value)
-    }
-
     //handles the checkboxes
     const handleCheckedAward = (e) => {
         const { name, checked } = e.target;
@@ -78,7 +65,6 @@ export default function AdjudicateForm(props) {
             setspecialAward(checked)
         }
     }
-    
     //handle cancellation of form
     const handleCancel = () => {
         //go back to last page

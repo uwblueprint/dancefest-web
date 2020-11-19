@@ -6,6 +6,11 @@ from db.models import Performance, School
 
 blueprint = Blueprint('school', __name__, url_prefix='/api/school')
 
+@blueprint.route('<school_id>', methods=['GET'])
+def get_school(school_id):
+    schools = School.get_by(id=school_id)
+    return jsonify({school.id: school.to_dict() for school in schools})
+
 
 @blueprint.route('<event_id>/<token>', methods=['GET'])
 def get_performances_by_token(event_id, token):
@@ -16,10 +21,7 @@ def get_performances_by_token(event_id, token):
     return jsonify({performance.id: performance.to_dict() for performance in performances})
 
 
-@blueprint.route('/token', methods=['POST'])
-def generate_token():
-    token = uuid.uuid4().hex
-    args = request.get_json()
-    school = School.get_by(first=True, name=args['school'])
-    school.update(token=token)
-    return jsonify(school.to_dict())
+@blueprint.route('/', methods=['GET'])
+def get_schools():
+    schools = School.query.all()
+    return jsonify({school.id: school.to_dict() for school in schools})

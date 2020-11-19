@@ -14,7 +14,7 @@ export default function AdjudicationsSection(props) {
   const [adjudications, setAdjudications] = useState({}) 
   const [performances, setPerformances] = useState({}) 
   const collectionName = `events/${eventId}/performances/1/adjudications`; //replace 1 with ${performanceId}
-  const [filteredPerformances, setFileterdPerformances] = useState([]) 
+  const [filteredPerformances, setFilteredPerformances] = useState([]) 
   //constants
   const { match: { params: { eventId }}} = props;
   const headings = ['Dance Title', 'Dance Entry', 'School', 'Dance Style', 'Dance Size'];
@@ -33,7 +33,7 @@ export default function AdjudicationsSection(props) {
     performances = performances.sort((a,b) => Number(a.danceEntry) - Number(b.danceEntry));
     setPerformances(performances);
     setLoading(false);
-    setFileterdPerformances(performances);
+    setFilteredPerformances(performances);
 	})
 	.catch(err => {
     console.log(err);
