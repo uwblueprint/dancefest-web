@@ -7,16 +7,8 @@ import Section from '../interface/Section';
 import { getPerformances } from '../../api/PerformanceAPI';
 import humps from 'humps';
 import { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
 
 export default function AdjudicationsSection(props) {
-  const history = useHistory()
-  history.push({
-    pathname:  "/adjudications",
-    state: {
-      response: messageFromServer 
-    } 
- });
 
   const [loading, setLoading] = useState(true)
   const [adjudications, setAdjudications] = useState({}) 

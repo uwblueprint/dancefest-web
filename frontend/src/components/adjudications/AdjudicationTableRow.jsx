@@ -4,13 +4,11 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
-import { useHistory } from "react-router-dom";
 
 class AdjudicationTableRow extends React.Component {
   state = {};
 
   render() {
-    const history = useHistory()
     const {
       currentValues,
       collectionName,
