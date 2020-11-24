@@ -9,7 +9,8 @@ import { getPerformance } from '../../api/PerformanceAPI';
 import humps from 'humps';
 
 export default function AdjudicateForm(props) {
-    const { match: { params: { eventId, performanceId }}} = props;
+    const { history, match: { params: { eventId, performanceId }}} = props;
+    console.log(props)
     const [loading, setLoading] = useState(true)
     const [adjudications, setAdjudications] = useState({}) 
     const [performanceValues, setPerformancesValues] = useState({}) 
@@ -80,6 +81,7 @@ export default function AdjudicateForm(props) {
     //handle cancellation of form
     const handleCancel = () => {
         //go back to last page
+        history.push(`/events/${eventId}/adjudications/`)
     }
     //handle submission of form
     //STEP ONE: create json from state variables to pass into function
@@ -96,6 +98,7 @@ export default function AdjudicateForm(props) {
         
             await createAdjudication(data);
         }
+        history.push(`/events/${eventId}/adjudications/`)
     }
 
     return (
