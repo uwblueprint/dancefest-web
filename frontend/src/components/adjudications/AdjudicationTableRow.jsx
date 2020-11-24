@@ -4,11 +4,13 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 
 class AdjudicationTableRow extends React.Component {
   state = {};
 
   render() {
+    const history = useHistory()
     const {
       currentValues,
       collectionName,
@@ -26,6 +28,7 @@ class AdjudicationTableRow extends React.Component {
       danceTitle,
       school
     } = currentValues;
+
     return (
       <TableRow style={{}}>
         <TableCell><Link to={`performance/${id}/adjudications`}>{danceTitle}</Link></TableCell>
@@ -34,8 +37,14 @@ class AdjudicationTableRow extends React.Component {
         <TableCell>{danceStyle}</TableCell>
         <TableCell>{danceSize}</TableCell>
         <TableCell>
-          <Button variant="outlined" color="primary">
-            <Link to={`adjudications/performance/${id}`}>Adjudicate</Link>
+          <Button variant="outlined" color="primary" onClick={   
+            history.push({
+              pathname:  `/performance/${id}`,
+              state: {
+                response: messageFromServer 
+              } 
+            })}>
+            {/* <Link to={`adjudications/performance/${id}`}>Adjudicate</Link> */}
           </Button>
         </TableCell>
       </TableRow>
