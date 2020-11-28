@@ -1,0 +1,59 @@
+diff --git a/node_modules/react-voice-recorder/dist/index.css b/node_modules/react-voice-recorder/dist/index.css
+index ed90905..0976032 100644
+--- a/node_modules/react-voice-recorder/dist/index.css
++++ b/node_modules/react-voice-recorder/dist/index.css
+@@ -25,7 +25,7 @@
+   position: fixed;
+   justify-content: center;
+   align-items: center;
+-  background: rgb(245, 0, 87);
++  background: #de2706;
+   border-radius: 50%;
+   bottom: 65px;
+   right: 20%;
+@@ -35,7 +35,7 @@
+ ._1ceqH ._1lB9c{
+     display: flex;
+     justify-content: space-between;
+-    background: #bd9f61;
++    background: #de2706;
+     align-items: center;
+     padding: 20px 20px;
+     color: #fff;
+@@ -84,23 +84,23 @@
+   outline: 0;
+   padding: 10px 20px;
+   border-radius: 20px;
+-  background: #185fec;
++  background: #de2706;
+   color: #fff;
+   cursor: pointer;
+-  border:1px solid #185fec;
++  border:1px solid #de2706;
+   transition:.3s ease all;
+ }
+ ._1ceqH ._1Yplu ._1Pz2d:hover{
+   background: #fff;
+-  color: #185fec;
++  color: #de2706;
+ }
+ ._1ceqH ._1Yplu ._2gd2_{
+   background: #fff;
+-  color: #185fec;
++  color: #de2706;
+   margin-left:15px;
+ }
+ ._1ceqH ._1Yplu ._2gd2_:hover{
+-  background: #185fec;
++  background: #de2706;
+   color: #fff;
+ }
+ ._1ceqH ._f2DT8{
+@@ -144,5 +144,5 @@
+   background: #940505;
+ }
+ ._1ceqH ._qxztz ._3nQu5 {
+-  background: #9c6702;
++  background: #de2706;
+ }
+\ No newline at end of file
