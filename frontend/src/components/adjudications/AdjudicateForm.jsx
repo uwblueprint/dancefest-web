@@ -7,13 +7,31 @@ import { createAdjudication } from "../../api/AdjudicationAPI";
 import { getAdjudications } from '../../api/AdjudicationAPI';
 import { getPerformance } from '../../api/PerformanceAPI';
 import humps from 'humps';
+import {Recorder} from 'react-voice-recorder'
+import 'react-voice-recorder/dist/index.css'
 
 export default function AdjudicateForm(props) {
     const { history, match: { params: { eventId, performanceId }}} = props;
-    console.log(props)
     const [loading, setLoading] = useState(true)
     const [adjudications, setAdjudications] = useState({}) 
     const [performanceValues, setPerformancesValues] = useState({}) 
+
+    //form fields
+    const [artisticMark, setArtisticMark] = useState(0) //currentValues.artisticMark
+    const [choreoAward, setchoreoAward] = useState(false) //currentValues.choreoAward || false
+    const [specialAward, setspecialAward] = useState(false) //currentValues.specialAward || false
+    const [technicalMark, setTechnicalMark] = useState(0) //currentValues.technicalMark
+    const [notes, setNotes] = useState('');
+    const [audioDetails, setAudioDetails] = useState({
+        url: null,
+        blob: null,
+        chunks: null,
+        duration: {
+          h: 0,
+          m: 0,
+          s: 0
+        }
+      })
 
     //according to docs, componentDidMount() is similar to useEffect(() => {}); 
     useEffect(() => {     
@@ -29,11 +47,6 @@ export default function AdjudicateForm(props) {
             });
     }, []); //added the empty array so that it will only be called after the component mounts
 
-    const [artisticMark, setArtisticMark] = useState(0) //currentValues.artisticMark
-    const [choreoAward, setchoreoAward] = useState(false) //currentValues.choreoAward || false
-    const [specialAward, setspecialAward] = useState(false) //currentValues.specialAward || false
-    const [technicalMark, setTechnicalMark] = useState(0) //currentValues.technicalMark
-    const [notes, setNotes] = useState('');
 
     const choices = [
         {
@@ -66,6 +79,30 @@ export default function AdjudicateForm(props) {
         const { value } = e.target;
         setNotes(value)
     }
+
+    //audio methods
+    const handleAudioStop = (data) => {
+        console.log(data)
+        setAudioDetails(data)
+    }
+
+    const handleAudioUpload = (file) => {
+        console.log(file);
+    }
+
+    const handleRest = () => {
+        const reset = {
+          url: null,
+          blob: null,
+          chunks: null,
+          duration: {
+            h: 0,
+            m: 0,
+            s: 0
+          }
+        };
+        setAudioDetails(reset);
+      }
 
     //handles the checkboxes
     const handleCheckedAward = (e) => {
@@ -150,6 +187,17 @@ export default function AdjudicateForm(props) {
                     onChange={handleNotesChange}
                 />
                 </div>
+            </div>
+            <div>
+            <Recorder
+                record={true}
+                title={"Voice Recording"}
+                audioURL={audioDetails.url}
+                showUIAudio
+                handleAudioStop={data => handleAudioStop(data)}
+                handleAudioUpload={data => handleAudioUpload(data)}
+                handleRest={handleRest} 
+            />
             </div>
             <div> 
                 <CheckBox label="Award Considerations" choices={choices} onChange={handleCheckedAward} />
