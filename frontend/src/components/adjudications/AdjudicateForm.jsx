@@ -191,7 +191,7 @@ export default function AdjudicateForm(props) {
             <div>
             <Recorder
                 record={true}
-                title={"Voice Recording"}
+                title={"Voice Notes"}
                 audioURL={audioDetails.url}
                 showUIAudio
                 handleAudioStop={data => handleAudioStop(data)}
