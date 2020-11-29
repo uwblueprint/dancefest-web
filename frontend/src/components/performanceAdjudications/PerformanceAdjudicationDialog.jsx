@@ -10,22 +10,8 @@ import styles from '../styles';
 import AudioPlay from '../interface/AudioPlay';
 import DialogReadOnly from '../interface/dialog/DialogReadOnly';
 import DialogHeader from '../interface/dialog/DialogHeader';
-import AdjudicationForm from './AdjudicationForm';
+import AdjudicationForm from './PerformanceAdjudicationForm';
 import Score from '../interface/dialog/Score';
-import { useState } from 'react';
-
-/*export default function PerformanceAdjudicationDialog() {
-  const [open, setOpen] = useState(false)
-  const [view, setView] = useState(view)
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  }
-  
-  const handleClose = (data) => {
-    //const 
-  }
-}*/
 
 class PerformanceAdjudicationDialog extends React.Component {
   state = { open: false, view: true };
@@ -46,7 +32,6 @@ class PerformanceAdjudicationDialog extends React.Component {
   }
 
   render() {
-    
     const {
       adjudicationId,
       collectionName,
@@ -55,7 +40,6 @@ class PerformanceAdjudicationDialog extends React.Component {
       updateData,
     } = this.props;
     const { open, view } = this.state;
-    /*
     const {
       artisticMark,
       audioUrl,
@@ -77,10 +61,10 @@ class PerformanceAdjudicationDialog extends React.Component {
       performers,
       school
     } = performanceValues;
-*/
+
     const getDisplayValues = (value) => value || "N/A";
 
-    /*const viewForm = (
+    const viewForm = (
       <React.Fragment>
         <div style={{ display: 'flex', flexFlow: 'column', margin: '35px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-around', borderBottom: '1px solid #dcdcdc' }}>
@@ -128,7 +112,7 @@ class PerformanceAdjudicationDialog extends React.Component {
           <Score type="total" score={getDisplayValues(cumulativeMark)} scoreName="Score" />
         </DialogActions>
       </React.Fragment>
-    );*/
+    );
 
     const editForm = (
       <AdjudicationForm
@@ -142,15 +126,15 @@ class PerformanceAdjudicationDialog extends React.Component {
     );
 
     return (
-      <DFDialog open={open} formType="edit" buttonTitle="Adjudicate" onClick={this.handleClickOpen} onClose={this.handleClose}>
+      <DFDialog open={open} formType="edit" buttonTitle="edit" onClick={this.handleClickOpen} onClose={this.handleClose}>
         <DialogHeader
           collectionName={collectionName}
           docId={adjudicationId}
           edit={view}
           onEditClick={this.handleView}
           shouldShowDropdown
-          title="New Adjudication" />
-        {editForm}
+          title={tabletId || 'N/A'} />
+        {view ? (viewForm) : (editForm)}
       </DFDialog>
     );
   }

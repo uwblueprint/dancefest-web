@@ -13,7 +13,7 @@ import Button from '../interface/Button';
 import CheckBox from '../interface/CheckBox';
 import styles from '../styles';
 
-class AdjudicationForm extends React.Component {
+class PerformanceAdjudicationForm extends React.Component {
   constructor(props) {
     super(props);
     const { currentValues } = props;
@@ -159,7 +159,7 @@ class AdjudicationForm extends React.Component {
   }
 }
 
-AdjudicationForm.propTypes = {
+PerformanceAdjudicationForm.propTypes = {
   classes: PropTypes.shape().isRequired,
   currentValues: PropTypes.shape(),
   handleView: PropTypes.func.isRequired,
@@ -167,8 +167,8 @@ AdjudicationForm.propTypes = {
   view: PropTypes.bool.isRequired
 };
 
-AdjudicationForm.defaultProps = {
+PerformanceAdjudicationForm.defaultProps = {
   currentValues: {}
 };
 
-export default withStyles(styles)(AdjudicationForm);
+export default withStyles(styles)(PerformanceAdjudicationForm);

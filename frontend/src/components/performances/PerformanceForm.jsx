@@ -6,6 +6,8 @@ import pick from 'lodash/pick';
 import { withStyles } from '@material-ui/core/styles';
 import DialogActions from '@material-ui/core/DialogActions';
 
+import { getSchools } from '../../api/SchoolAPI';
+
 import { dialogType } from '../../constants';
 import db from '../../firebase/firebase';
 import { createPerformance, updatePerformance } from '../../api/PerformanceAPI';
@@ -30,8 +32,10 @@ class PerformanceForm extends React.Component {
       disabledSave: true,
       options: {},
       performers: currentValues.performers || '',
-      school: currentValues.school || '',
-      eventId: eventId
+      schoolName: currentValues.schoolName || '',
+      schoolId: currentValues.schoolId || '',
+      eventId: eventId,
+      schools: [],
     };
   }
 
@@ -44,7 +48,7 @@ class PerformanceForm extends React.Component {
     return { disabledSave: !(Object.keys(values).every(value => !!state[value])) };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.subscribe = db.collection('settings').onSnapshot((querySnapshot) => {
       const options = {};
       querySnapshot.forEach((doc) => {
@@ -52,6 +56,9 @@ class PerformanceForm extends React.Component {
       });
       this.setState({ options });
     });
+
+    const schools = await getSchools();
+    this.setState({ schools: schools.data });
   }
 
   componentWillUnmount() {
@@ -76,18 +83,26 @@ class PerformanceForm extends React.Component {
 
   handleSubmit = async () => {
     const { formType, performanceId, updateData, createData } = this.props;
-    const data = omit(this.state, ['disabledSave', 'options']);
+    const { schoolId, schools } = this.state;
+
+    const data = omit(this.state, ['disabledSave', 'options', 'schools', 'schoolName']);
     if (formType === dialogType.NEW) {
       const performance = await createPerformance(data);
+      performance.data.schoolName = schools[schoolId].name;
       createData(performance.data);
     } else {
       const performance = await updatePerformance(performanceId, data);
+      performance.data.schoolName = schools[schoolId].name;
       updateData(performance.data);
     }
     this.handleModalClose();
   }
 
   renderOptions = option => (option ? option.map(o => ({ value: o })) : []);
+
+  renderSchoolOptions = schools => {
+    return Object.values(schools).map(s => ({ key: s.id, value: s.name }));
+  };
 
   render() {
     const { classes, formType } = this.props;
@@ -102,7 +117,8 @@ class PerformanceForm extends React.Component {
       disabledSave,
       options,
       performers,
-      school
+      schoolId,
+      schools
     } = this.state;
     return (
       <React.Fragment>
@@ -119,10 +135,10 @@ class PerformanceForm extends React.Component {
               <DialogSelect
                 fullWidth
                 label="School"
-                name="school"
+                name="schoolId"
                 onChange={this.handleChange}
-                options={this.renderOptions(options.school)}
-                value={school} />
+                options={this.renderSchoolOptions(schools)}
+                value={schoolId} />
               <DialogSelect
                 fullWidth
                 label="Level"
