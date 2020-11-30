@@ -29,7 +29,7 @@ class AdjudicationTableRow extends React.Component {
 
     return (
       <TableRow style={{}}>
-        <TableCell><Link to={`performance/${id}/adjudications`}>{danceTitle}</Link></TableCell>
+        <TableCell>{danceTitle}</TableCell>
         <TableCell>{danceEntry}</TableCell>
         <TableCell>{school}</TableCell>
         <TableCell>{danceStyle}</TableCell>
