@@ -87,6 +87,7 @@ export default function AdjudicateForm(props) {
     }
 
     const handleAudioUpload = (file) => {
+        //i think this is where firebase comes in 
         console.log(file);
     }
 
@@ -121,19 +122,18 @@ export default function AdjudicateForm(props) {
         history.push(`/events/${eventId}/adjudications/`)
     }
     //handle submission of form
-    //STEP ONE: create json from state variables to pass into function
     const handleSubmit = async () => {
         if (artisticMark && technicalMark) {
             const data = {
                 performanceId,
                 artisticMark,
                 technicalMark,
-                cumulativeMark: (artisticMark + technicalMark)/2,
+                cumulativeMark: (parseInt(artisticMark) + parseInt(technicalMark))/2,
                 notes,
                 tablet_id: 1
             }
         
-            await createAdjudication(data);
+            const adjudication = await createAdjudication(data);
         }
         history.push(`/events/${eventId}/adjudications/`)
     }
