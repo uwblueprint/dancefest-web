@@ -117,6 +117,7 @@ export default class App extends React.Component {
     };
   }
 
+  // test
   componentDidMount() {
     auth.onAuthStateChanged((user) => {
       this.setState({ loading: false, user });
