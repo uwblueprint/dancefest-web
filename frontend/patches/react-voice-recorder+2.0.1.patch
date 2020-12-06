@@ -57,3 +57,28 @@ index ed90905..0976032 100644
 +  background: #de2706;
  }
 \ No newline at end of file
+diff --git a/node_modules/react-voice-recorder/dist/index.modern.js b/node_modules/react-voice-recorder/dist/index.modern.js
+index 6e2e9bb..30e2b55 100644
+--- a/node_modules/react-voice-recorder/dist/index.modern.js
++++ b/node_modules/react-voice-recorder/dist/index.modern.js
+@@ -184,6 +184,8 @@ var Recorder = /*#__PURE__*/function (_Component) {
+       chunks: this.chunks,
+       duration: this.state.time
+     });
++    //Added so that upload is triggered.
++    this.props.handleAudioUpload(blob)
+   };
+ 
+   _proto.render = function render() {
+@@ -221,11 +223,6 @@ var Recorder = /*#__PURE__*/function (_Component) {
+     }, /*#__PURE__*/React.createElement("div", {
+       className: styles.btn_wrapper
+     }, /*#__PURE__*/React.createElement("button", {
+-      onClick: function onClick() {
+-        return _this4.props.handleAudioUpload(_this4.state.audioBlob);
+-      },
+-      className: styles.btn + " " + styles.upload_btn
+-    }, "Upload"), /*#__PURE__*/React.createElement("button", {
+       onClick: function onClick() {
+         return _this4.handleRest();
+       },

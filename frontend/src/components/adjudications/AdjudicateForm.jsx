@@ -87,14 +87,11 @@ export default function AdjudicateForm(props) {
         setAudioDetails(data)
     }
 
-    const handleAudioUpload = (file) => {
+    const handleAudioFile = (file) => {
         //i think this is where firebase comes in 
         console.log(file);
-
-        var storeRef = storage.child(makeFirebasePath("potato")) //was adjudicationId
-        storeRef.put(file)
-
-       // console.log(source)
+        //var storeRef = storage.child(makeFirebasePath("test2")) //was adjudicationId
+        //storeRef.put(file)
     }
 
     const makeFirebasePath = (fileName) => {
@@ -205,7 +202,7 @@ export default function AdjudicateForm(props) {
                 audioURL={audioDetails.url}
                 showUIAudio
                 handleAudioStop={data => handleAudioStop(data)}
-                handleAudioUpload={data => handleAudioUpload(data)}
+                handleAudioUpload={data => handleAudioFile(data)}
                 handleRest={handleRest} 
             />
             </div>
