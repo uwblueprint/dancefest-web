@@ -9,6 +9,7 @@ import { getPerformance } from '../../api/PerformanceAPI';
 import humps from 'humps';
 import {Recorder} from 'react-voice-recorder'
 import 'react-voice-recorder/dist/index.css'
+import { storage } from '../../firebase/firebase';
 
 export default function AdjudicateForm(props) {
     const { history, match: { params: { eventId, performanceId }}} = props;
@@ -89,6 +90,15 @@ export default function AdjudicateForm(props) {
     const handleAudioUpload = (file) => {
         //i think this is where firebase comes in 
         console.log(file);
+
+        var storeRef = storage.child(makeFirebasePath("potato")) //was adjudicationId
+        storeRef.put(file)
+
+       // console.log(source)
+    }
+
+    const makeFirebasePath = (fileName) => {
+        return `${fileName}.mp3`
     }
 
     const handleRest = () => {
