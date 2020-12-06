@@ -3,7 +3,7 @@ import { TextField } from '@material-ui/core';
 import Button from '../interface/Button';
 import CheckBox from '../interface/CheckBox';
 import { Redirect } from 'react-router-dom';
-import { createAdjudication } from "../../api/AdjudicationAPI";
+import { createAdjudication, updateAdjudications } from "../../api/AdjudicationAPI";
 import { getAdjudications } from '../../api/AdjudicationAPI';
 import { getPerformance } from '../../api/PerformanceAPI';
 import humps from 'humps';
@@ -33,6 +33,7 @@ export default function AdjudicateForm(props) {
           s: 0
         }
       })
+    const [audioFile, setAudioFile] = useState() //will be blob  
 
     //according to docs, componentDidMount() is similar to useEffect(() => {}); 
     useEffect(() => {     
@@ -83,15 +84,11 @@ export default function AdjudicateForm(props) {
 
     //audio methods
     const handleAudioStop = (data) => {
-        console.log(data)
         setAudioDetails(data)
     }
 
     const handleAudioFile = (file) => {
-        //i think this is where firebase comes in 
-        console.log(file);
-        //var storeRef = storage.child(makeFirebasePath("test2")) //was adjudicationId
-        //storeRef.put(file)
+        setAudioFile(file)
     }
 
     const makeFirebasePath = (fileName) => {
@@ -130,7 +127,9 @@ export default function AdjudicateForm(props) {
     }
     //handle submission of form
     const handleSubmit = async () => {
+
         if (artisticMark && technicalMark) {
+
             const data = {
                 performanceId,
                 artisticMark,
@@ -141,6 +140,21 @@ export default function AdjudicateForm(props) {
             }
         
             const adjudication = await createAdjudication(data);
+
+            var storeRef = storage.child(makeFirebasePath(`${adjudication.data.id}`))
+            storeRef.put(audioFile)
+            
+            const updatedData = {
+                performanceId,
+                artisticMark,
+                technicalMark,
+                cumulativeMark: (parseInt(artisticMark) + parseInt(technicalMark))/2,
+                notes,
+                tablet_id: 1,
+                audio_url: makeFirebasePath(`${adjudication.data.id}`)
+            }
+
+            const updatedAdjudication = await updateAdjudications(adjudication.data.id, updatedData)
         }
         history.push(`/events/${eventId}/adjudications/`)
     }
