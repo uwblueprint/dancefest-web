@@ -58,7 +58,7 @@ index ed90905..0976032 100644
  }
 \ No newline at end of file
 diff --git a/node_modules/react-voice-recorder/dist/index.modern.js b/node_modules/react-voice-recorder/dist/index.modern.js
-index 6e2e9bb..30e2b55 100644
+index 6e2e9bb..62a82cd 100644
 --- a/node_modules/react-voice-recorder/dist/index.modern.js
 +++ b/node_modules/react-voice-recorder/dist/index.modern.js
 @@ -184,6 +184,8 @@ var Recorder = /*#__PURE__*/function (_Component) {
@@ -70,7 +70,20 @@ index 6e2e9bb..30e2b55 100644
    };
  
    _proto.render = function render() {
-@@ -221,11 +223,6 @@ var Recorder = /*#__PURE__*/function (_Component) {
+@@ -209,23 +211,11 @@ var Recorder = /*#__PURE__*/function (_Component) {
+       className: styles.reco_header
+     }, /*#__PURE__*/React.createElement("h2", {
+       className: styles.h2
+-    }, title), /*#__PURE__*/React.createElement("span", {
+-      className: styles.close_icons
+-    }, /*#__PURE__*/React.createElement("img", {
+-      src: closeIcons,
+-      width: 20,
+-      height: 20,
+-      alt: "Close icons"
+-    }))), !medianotFound ? /*#__PURE__*/React.createElement("div", {
++    }, title)), !medianotFound ? /*#__PURE__*/React.createElement("div", {
+       className: styles.record_section
      }, /*#__PURE__*/React.createElement("div", {
        className: styles.btn_wrapper
      }, /*#__PURE__*/React.createElement("button", {

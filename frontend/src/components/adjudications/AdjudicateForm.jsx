@@ -164,11 +164,19 @@ export default function AdjudicateForm(props) {
             <div>
                 <h1>Adjudication Form</h1>
             </div>
-            <div>
-                <h2>Title of Piece: {performanceValues.danceTitle}</h2>
-                <h2>Dance Style: {performanceValues.danceStyle}</h2>
-                <h2>Group Size: {performanceValues.danceSize}</h2>
-                <h2>School: {performanceValues.school}</h2>
+            <div style={{ display: 'flex'}}>
+                <div style={{ flex: '50%'}}>
+                    <p>Title of Piece</p>
+                    <h2>{performanceValues.danceTitle}</h2>
+                    <p>Dance Style</p>
+                    <h2>{performanceValues.danceStyle}</h2>
+                </div>
+                <div style={{ flex: '50%'}}>
+                    <p>Group Size</p>
+                    <h2>{performanceValues.danceSize}</h2>
+                    <p>School</p>
+                    <h2>{performanceValues.school}</h2>
+                </div>
             </div>
             <div>
                 <p>Scores</p>
