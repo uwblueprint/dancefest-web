@@ -70,6 +70,24 @@ class BaseMixin:
         return formatted
 
 
+class UserTypes(db.Model, BaseMixin):
+    __tablename__ = 'user_type'
+
+    id = db.Column(db.Integer, primary_key=True)
+    role = db.Column(db.String(255))
+
+
+class User(db.Model, BaseMixin):
+    __tablename__ = 'user'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255))
+    email = db.Column(db.String(255))
+    # reference to firebase object
+    uid = db.Column(db.String(255))
+    user_type = db.Column(db.Integer, db.ForeignKey('user_type.id'))
+
+
 class Event(db.Model, BaseMixin):
     __tablename__ = 'event'
 
