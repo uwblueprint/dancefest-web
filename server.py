@@ -13,7 +13,8 @@ from routes import (
     mailer_routes,
     award_routes,
     tablet_routes,
-    school_routes
+    school_routes,
+    user_routes,
 )
 
 mail = Mail()
@@ -56,6 +57,7 @@ def create_app():
     app.register_blueprint(award_routes.blueprint)
     app.register_blueprint(school_routes.blueprint)
     app.register_blueprint(tablet_routes.blueprint)
+    app.register_blueprint(user_routes.blueprint)
 
     return app
 

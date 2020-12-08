@@ -8,6 +8,8 @@ import DialogInput from './interface/dialog/DialogInput';
 import Button from './interface/Button';
 import styles from './styles';
 
+import { getUserByUID } from '../api/UserAPI';
+
 const inputLabel = (textLabel) => (<div style={{color: "white"}}>{textLabel}</div>);  
 
 class SignIn extends React.Component {
@@ -37,17 +39,21 @@ class SignIn extends React.Component {
     });
   }
 
-  handleSubmit = () => {
+  handleSubmit = async () => {
     const { history } = this.props;
     const { email, password } = this.state;
     auth.onAuthStateChanged((user) => {
       if (user) {
-        history.push('events');
+        history.push('events');  
       } else {
         history.push('/');
       }
     });
-    auth.signInWithEmailAndPassword(email, password);
+    const loginResponse = await auth.signInWithEmailAndPassword(email, password);
+    if (loginResponse && loginResponse.user && loginResponse.user.uid) {
+      const userId = loginResponse.user.uid;
+      await getUserByUID(userId);
+    }
     return false;
   }
 

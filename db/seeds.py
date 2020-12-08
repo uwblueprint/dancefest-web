@@ -1,5 +1,5 @@
 def seed():
-    from db.models import SchoolContact, School, Event, Performance, Adjudication, Award, AwardPerformance, NominationComment, Tablet
+    from db.models import SchoolContact, School, Event, Performance, Adjudication, Award, AwardPerformance, NominationComment, Tablet, UserTypes, User
     import random, uuid
 
     event = Event.create(
@@ -27,6 +27,22 @@ def seed():
     ]
     teacher_names = ['Brandon L', 'Victoria L', 'Mark A', 'Winnie R', 'Samu B', 'Megan N', 'Stephen Y', 'Leon O', 'Peiyao C', 'Lena N', 'Jason F', 'Leon L', 'Nim W', 'Imran A', 'Aaron Y', 'Anson Y', 'Chidi N', 'Mathurah R', 'Howard Y', 'Sophie Q']
     teacher_emails = ['csmieton0@wikimedia.org', 'nmenis1@amazon.co.jp', 'rrupprecht2@springer.com', 'mparriss3@admin.ch', 'thucquart4@about.me', 'lrubenczyk5@ebay.co.uk', 'clyal6@ft.com', 'joleksinski7@yellowpages.com', 'gcapponeer8@marriott.com']
+    user_types = ['admin', 'dancefest', 'judges', 'blueprint']
+    users_emails = ['ansonyu24@gmail.com', 'brandonleung@uwblueprint.org', 'chidinmaumenwofornweze@uwblueprint.org', 'mathurahravigulan@uwblueprint.org']
+    user_tokens = ['6wHUzpQAufaqn3qQTZx1P8hlpr03', 'S6WtrYAyMoeb94Xt2oSDPqZbeJr1', 'Ui0lvLZ8RfhWbF4D2r9SROVQQw42', 'kOhrsCjn8BQCM21ij82Dvq6h7n83']
+
+    for user_type in user_types:
+        UserTypes.create(
+            role=user_type
+        )
+
+    for i, user in enumerate(users_emails):
+        User.create(
+            name=user,
+            email=user,
+            uid=user_tokens[i],
+            user_type=4
+        )
 
     for school in schools:
         School.create(
