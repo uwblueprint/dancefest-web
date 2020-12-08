@@ -132,7 +132,7 @@ export default class App extends React.Component {
           {
             loading ? (<Loading />) : (
               <React.Fragment>
-                { user && <Header /> }
+                { user && <Header />}
                 <Switch>
                   <Route exact path="/" render={props => (<SignIn {...props} user={user} />)} />
                   <PrivateRoute component={EventsSection} exact path="/events" user={user} />

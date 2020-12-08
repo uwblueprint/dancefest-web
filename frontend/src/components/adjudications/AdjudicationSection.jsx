@@ -8,8 +8,8 @@ import { getPerformances } from '../../api/PerformanceAPI';
 import humps from 'humps';
 import { useState, useEffect } from 'react';
 
-
 export default function AdjudicationsSection(props) {
+
   const [loading, setLoading] = useState(true)
   const [adjudications, setAdjudications] = useState({}) 
   const [performances, setPerformances] = useState({}) 
@@ -26,19 +26,19 @@ export default function AdjudicationsSection(props) {
   useEffect(() => {     
 
     getPerformances(eventId)
-	.then(response => {
-		let performances = Object.values(response.data).map(performance => {
-			return humps.camelizeKeys(performance);
-		});
-    performances = performances.sort((a,b) => Number(a.danceEntry) - Number(b.danceEntry));
-    setPerformances(performances);
-    setLoading(false);
-    setFilteredPerformances(performances);
-	})
-	.catch(err => {
-    console.log(err);
-    setLoading(false);
-  });
+      .then(response => {
+        let performances = Object.values(response.data).map(performance => {
+          return humps.camelizeKeys(performance);
+        });
+        performances = performances.sort((a,b) => Number(a.danceEntry) - Number(b.danceEntry));
+        setPerformances(performances);
+        setLoading(false);
+        setFilteredPerformances(performances);
+      })
+      .catch(err => {
+        console.log(err);
+        setLoading(false);
+      });
 
   }, []); //added the empty array so that it will only be called after the component mounts
 

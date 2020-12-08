@@ -15,3 +15,8 @@ export const getAdjudicationsByPerformanceId = (ids) => {
   return get(`performances/${ids.join(',')}/adjudications`)
     .then((response) => humps.camelizeKeys(response));
 };
+
+export const createAdjudication = (data) => {
+  return post('adjudications/', humps.decamelizeKeys(data))
+    .then((response) => humps.camelizeKeys(response));
+};

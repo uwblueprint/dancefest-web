@@ -26,16 +26,17 @@ class AdjudicationTableRow extends React.Component {
       danceTitle,
       school
     } = currentValues;
+
     return (
       <TableRow style={{}}>
-        <TableCell><Link to={`performance/${id}/adjudications`}>{danceTitle}</Link></TableCell>
+        <TableCell>{danceTitle}</TableCell>
         <TableCell>{danceEntry}</TableCell>
         <TableCell>{school}</TableCell>
         <TableCell>{danceStyle}</TableCell>
         <TableCell>{danceSize}</TableCell>
         <TableCell>
           <Button variant="outlined" color="primary">
-            <Link to={`adjudications/performance/${id}`}>Adjudicate</Link>
+            <Link to={`performance/${id}`}>Adjudicate</Link>
           </Button>
         </TableCell>
       </TableRow>
