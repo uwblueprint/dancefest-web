@@ -28,12 +28,12 @@ def get_unjudged_performance(event_id, tablet_id):
     #1. Get all performances
     all_performances = Performance.get_by(**{"event_id": event_id})
     for performance in all_performances:
-        adjudication_filter = request.args.to_dict()
         # 2. Get all adjudications for that performance
-        # adjudications = Adjudication.get_by(performance_id=performance.id, **adjudication_filter)
         # 3. Check if any of those adjudications have a tablet_id that matches   
         q = db.session.query(Adjudication).filter(Adjudication.tablet_id==tablet_id, Adjudication.performance_id==performance.id)
         # 4. If none match, return that performance
-        if (q.exists()==False):
+        if (db.session.query(q.exists()).scalar()==False):
             return jsonify(performance.to_dict())
+        else: 
+            continue
     return jsonify(None)
