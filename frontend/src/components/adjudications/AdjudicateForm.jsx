@@ -201,6 +201,10 @@ export default function AdjudicateForm(props) {
         history.push(`/events/${eventId}/adjudications/performance/${nextPerformance.id}`)
     }
 
+    const goToPrevious = () => {
+        history.goBack()
+    }
+
     return (
         <div style={{ display: 'flex', flexFlow: 'column', marginLeft: '200px', marginRight: '200px'}}>
             <div>
@@ -273,9 +277,12 @@ export default function AdjudicateForm(props) {
             <div> 
                 <CheckBox label="Award Considerations" choices={choices} onChange={handleCheckedAward} />
             </div>
-            <div> 
+            <div>     
             <Button type="default" onClick={handleCancel}>
                 cancel
+            </Button>
+            <Button type="primary" onClick={goToPrevious}>
+                Previous
             </Button>
             <Button type="primary" onClick={handleSubmit}>
                 save
