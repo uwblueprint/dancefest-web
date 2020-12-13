@@ -48,7 +48,7 @@ export default function AdjudicateForm(props) {
                 setAdjudications(data)  
                 setLoading(false)
             });  
-        console.log("data received is:")
+
         getNextUnjudgedPerformance(eventId, 2) //hardcoded tablet id for now
             .then(({data}) => {
                 console.log(data)
