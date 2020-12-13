@@ -49,10 +49,9 @@ export default function AdjudicateForm(props) {
                 setLoading(false)
             });  
         console.log("data received is:")
-        getNextUnjudgedPerformance(eventId, 1)
+        getNextUnjudgedPerformance(1, 2)
             .then(({data}) => {
                 console.log(data)
-                setNextPerformance(humps.camelizeKeys(data)) 
             });  
     }, []); //added the empty array so that it will only be called after the component mounts
 
