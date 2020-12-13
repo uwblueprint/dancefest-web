@@ -6,7 +6,7 @@ import db from '../../firebase/firebase';
 import EventDialog from './EventDialog';
 import EventTableRow from './EventTableRow';
 import Section from '../interface/Section';
-import { getEvents } from '../../api/EventAPI';
+import { getEvents, test } from '../../api/EventAPI';
 
 class EventsSection extends React.Component {
   constructor(props) {
@@ -19,6 +19,9 @@ class EventsSection extends React.Component {
   }
 
   componentDidMount() {
+    test().then((response) => {
+      console.log('test', response);
+    });
     getEvents().then((response) => {
       let events = Object.values(response.data).map(event => {
         return humps.camelizeKeys(event);
