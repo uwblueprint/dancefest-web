@@ -8,6 +8,7 @@ import { getPerformances } from '../../api/PerformanceAPI';
 import { getNextUnjudgedPerformance } from "../../api/AdjudicationAPI";
 import humps from 'humps';
 import { useState, useEffect } from 'react';
+import { Button } from '@material-ui/core';
 
 export default function AdjudicationsSection(props) {
 
@@ -15,9 +16,10 @@ export default function AdjudicationsSection(props) {
   const [adjudications, setAdjudications] = useState({}) 
   const [performances, setPerformances] = useState({}) 
   const collectionName = `events/${eventId}/performances/1/adjudications`; //replace 1 with ${performanceId}
-  const [filteredPerformances, setFilteredPerformances] = useState([]) 
+  const [filteredPerformances, setFilteredPerformances] = useState([])
+  const [nextPerformance, setNextPerformance] = useState()
   //constants
-  const { match: { params: { eventId }}} = props;
+  const { history, match: { params: { eventId }}} = props;
   const headings = ['Dance Title', 'Dance Entry', 'School', 'Dance Style', 'Dance Size'];
   const keys = ['academicLevel', 'choreographers', 'competitionLevel', 'danceEntry', 'danceSize', 'danceStyle', 'danceTitle', 'performers', 'school'];
   const showPerformances = Array.isArray(performances) && performances.length > 0;
@@ -41,6 +43,11 @@ export default function AdjudicationsSection(props) {
         setLoading(false);
       });
 
+    getNextUnjudgedPerformance(eventId, 2) //hardcoded tablet id for now
+      .then(({data}) => {
+        setNextPerformance(data)
+    });    
+
   }, []); //added the empty array so that it will only be called after the component mounts
 
   const updateAdjudications = (data) => {
@@ -48,8 +55,19 @@ export default function AdjudicationsSection(props) {
     setAdjudications(newAdjudications);
   }
 
+  const goToNextPerformance = () => {
+    history.push(`/events/${eventId}/adjudications/performance/${nextPerformance.id}`)
+  }
+
   return (
-    <Section headings={headings} loading={loading} showContent={showPerformances} type="adjudication">
+
+    <Section headings={headings} loading={loading} 
+    renderNewButton={
+    <Button variant="outlined" color="primary" onClick={goToNextPerformance}>
+      Adjudicate Next
+    </Button>} 
+    showContent={showPerformances} type="adjudication">
+    
       {showPerformances && filteredPerformances.map((performance) => {
         const { id } = performance;
         const currentValues = pick(performance, keys);

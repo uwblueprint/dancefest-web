@@ -51,7 +51,6 @@ export default function AdjudicateForm(props) {
 
         getNextUnjudgedPerformance(eventId, 2) //hardcoded tablet id for now
             .then(({data}) => {
-                console.log(data)
                 setNextPerformance(data)
             });  
     }, [location]); //added location dependency so it is called when the "Save And Next Button is pressed"
