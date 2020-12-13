@@ -56,6 +56,9 @@ export default function AdjudicationsSection(props) {
   }
 
   const goToNextPerformance = () => {
+    if(nextPerformance==null) { //catch if they have adjudicated everything
+      return
+    }
     history.push(`/events/${eventId}/adjudications/performance/${nextPerformance.id}`)
   }
 
