@@ -3,7 +3,7 @@ import { TextField } from '@material-ui/core';
 import Button from '../interface/Button';
 import CheckBox from '../interface/CheckBox';
 import { Redirect } from 'react-router-dom';
-import { createAdjudication, updateAdjudications } from "../../api/AdjudicationAPI";
+import { createAdjudication, updateAdjudications, getNextUnjudgedPerformance } from "../../api/AdjudicationAPI";
 import { getAdjudications } from '../../api/AdjudicationAPI';
 import { getPerformance } from '../../api/PerformanceAPI';
 import humps from 'humps';
@@ -34,6 +34,7 @@ export default function AdjudicateForm(props) {
         }
       })
     const [audioFile, setAudioFile] = useState() //will be blob  
+    const [nextPerformance, setNextPerformance] = useState()
 
     //according to docs, componentDidMount() is similar to useEffect(() => {}); 
     useEffect(() => {     
@@ -46,7 +47,13 @@ export default function AdjudicateForm(props) {
             .then(({data}) => {
                 setAdjudications(data)  
                 setLoading(false)
-            });
+            });  
+        console.log("data received is:")
+        getNextUnjudgedPerformance(eventId, 1)
+            .then(({data}) => {
+                console.log(data)
+                setNextPerformance(humps.camelizeKeys(data)) 
+            });  
     }, []); //added the empty array so that it will only be called after the component mounts
 
 
