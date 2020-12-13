@@ -12,7 +12,7 @@ import 'react-voice-recorder/dist/index.css'
 import { storage } from '../../firebase/firebase';
 
 export default function AdjudicateForm(props) {
-    const { history, match: { params: { eventId, performanceId }}} = props;
+    const { history, location, match: { params: { eventId, performanceId }}} = props;
     const [loading, setLoading] = useState(true)
     const [adjudications, setAdjudications] = useState({}) 
     const [performanceValues, setPerformancesValues] = useState({}) 
@@ -49,11 +49,12 @@ export default function AdjudicateForm(props) {
                 setLoading(false)
             });  
         console.log("data received is:")
-        getNextUnjudgedPerformance(1, 2)
+        getNextUnjudgedPerformance(eventId, 2) //hardcoded tablet id for now
             .then(({data}) => {
                 console.log(data)
+                setNextPerformance(data)
             });  
-    }, []); //added the empty array so that it will only be called after the component mounts
+    }, [location]); //added location dependency so it is called when the "Save And Next Button is pressed"
 
 
     const choices = [
@@ -165,6 +166,40 @@ export default function AdjudicateForm(props) {
         history.push(`/events/${eventId}/adjudications/`)
     }
 
+    //handle submission and going to next performance to adjudicate
+    const handleSubmitAndNext = async () => {
+
+        if (artisticMark && technicalMark) {
+
+            const data = {
+                performanceId,
+                artisticMark,
+                technicalMark,
+                cumulativeMark: (parseInt(artisticMark) + parseInt(technicalMark))/2,
+                notes,
+                tablet_id: 1
+            }
+        
+            const adjudication = await createAdjudication(data);
+
+            var storeRef = storage.child(makeFirebasePath(`${adjudication.data.id}`))
+            storeRef.put(audioFile)
+            
+            const updatedData = {
+                performanceId,
+                artisticMark,
+                technicalMark,
+                cumulativeMark: (parseInt(artisticMark) + parseInt(technicalMark))/2,
+                notes,
+                tablet_id: 1,
+                audio_url: makeFirebasePath(`${adjudication.data.id}`)
+            }
+
+            const updatedAdjudication = await updateAdjudications(adjudication.data.id, updatedData)
+        }
+        history.push(`/events/${eventId}/adjudications/performance/${nextPerformance.id}`)
+    }
+
     return (
         <div style={{ display: 'flex', flexFlow: 'column', marginLeft: '200px', marginRight: '200px'}}>
             <div>
@@ -243,6 +278,9 @@ export default function AdjudicateForm(props) {
             </Button>
             <Button type="primary" onClick={handleSubmit}>
                 save
+            </Button>
+            <Button type="primary" onClick={handleSubmitAndNext}>
+                Save and Next
             </Button>
             </div>  
         </div>
