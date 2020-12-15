@@ -52,9 +52,11 @@ def test_route(event_id):
     for performance in all_performances:
         q = db.session.query(Adjudication).filter(Adjudication.performance_id == performance.id)
 
-    return jsonify(q.to_dict())
-
-    
+        if (db.session.query(q.exists()).scalar()==False):
+            return jsonify(performance.to_dict())
+        else: 
+            continue
+    return jsonify({})
     # join(Adjudication, Performance.id == Adjudication.performance_id).group_by(Performance.id)
     # return jsonify({b.id: b for b in a})
 
