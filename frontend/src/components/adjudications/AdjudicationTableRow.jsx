@@ -36,7 +36,7 @@ class AdjudicationTableRow extends React.Component {
         <TableCell>{danceSize}</TableCell>
         <TableCell>
           <Button variant="outlined" color="primary">
-            <Link to={`adjudications/performance/${id}`}>Adjudicate</Link>
+            <Link to={`performance/${id}`}>Adjudicate</Link>
           </Button>
         </TableCell>
       </TableRow>
