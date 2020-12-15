@@ -49,7 +49,7 @@ export default function AdjudicateForm(props) {
                 setLoading(false)
             });  
 
-        getNextUnjudgedPerformance(eventId, 2) //hardcoded tablet id for now
+        getNextUnjudgedPerformance(eventId, 1) //hardcoded tablet id for now
             .then(({data}) => {
                 setNextPerformance(data)
             });  
@@ -196,7 +196,10 @@ export default function AdjudicateForm(props) {
 
             const updatedAdjudication = await updateAdjudications(adjudication.data.id, updatedData)
         }
-        if(nextPerformance == null) return //check if all performances have been adjudicated
+        if(nextPerformance == null) {
+            history.push(`/events/${eventId}/adjudications/`)
+            return 
+        } //check if all performances have been adjudicated
         //else go to next one
         history.push(`/events/${eventId}/adjudications/performance/${nextPerformance.id}`)
     }
