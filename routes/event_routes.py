@@ -46,9 +46,13 @@ def get_performances(event_id):
 
 @blueprint.route('/test')
 def test_route():
-    # get all the adjudications and performances by id 
-    a = db.session.query(Performance.id).join().filter(Performance.id == Adjudication.performance_id).group_by(Performance.id)
-    return jsonify({b.id: b for b in a})
+    # get all the performances
+    all_performances = Performance.get_by(**{"event_id": event_id})
+    # get all the adjudications in the peformance, and check if they match the performance
+    for performance in all_performances:
+        q = db.session.query(Adjudication).filter(Adjudication.performance_id == performance.id)
+
+    return jsonify(performance.to_dict())
 
     
     # join(Adjudication, Performance.id == Adjudication.performance_id).group_by(Performance.id)
