@@ -20,7 +20,7 @@ export default function AdjudicationsSection(props) {
   const [nextPerformance, setNextPerformance] = useState();
   //constants
   const { history, match: { params: { eventId }}} = props;
-  const headings = ['Dance Title', 'Dance Entry', 'School', 'Dance Style', 'Dance Size'];
+  const headings = ['Dance Title', 'Dance Entry', 'School', 'Dance Style', 'Dance Size', 'Test'];
   const keys = ['academicLevel', 'choreographers', 'competitionLevel', 'danceEntry', 'danceSize', 'danceStyle', 'danceTitle', 'performers', 'school'];
   const showPerformances = Array.isArray(performances) && performances.length > 0;
  
