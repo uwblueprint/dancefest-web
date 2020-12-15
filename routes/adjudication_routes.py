@@ -36,4 +36,4 @@ def get_unjudged_performance(event_id, tablet_id):
             return jsonify(performance.to_dict())
         else: 
             continue
-    return jsonify(None)
+    return jsonify({})
