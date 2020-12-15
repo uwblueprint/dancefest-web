@@ -13,15 +13,15 @@ import { storage } from '../../firebase/firebase';
 
 export default function AdjudicateForm(props) {
     const { history, location, match: { params: { eventId, performanceId }}} = props;
-    const [loading, setLoading] = useState(true)
-    const [adjudications, setAdjudications] = useState({}) 
-    const [performanceValues, setPerformancesValues] = useState({}) 
+    const [loading, setLoading] = useState(true);
+    const [adjudications, setAdjudications] = useState({}); 
+    const [performanceValues, setPerformancesValues] = useState({}); 
 
     //form fields
-    const [artisticMark, setArtisticMark] = useState(0) //currentValues.artisticMark
-    const [choreoAward, setChoreoAward] = useState(false) //currentValues.choreoAward || false
-    const [specialAward, setSpecialAward] = useState(false) //currentValues.specialAward || false
-    const [technicalMark, setTechnicalMark] = useState(0) //currentValues.technicalMark
+    const [artisticMark, setArtisticMark] = useState(0); //currentValues.artisticMark
+    const [choreoAward, setChoreoAward] = useState(false); //currentValues.choreoAward || false
+    const [specialAward, setSpecialAward] = useState(false); //currentValues.specialAward || false
+    const [technicalMark, setTechnicalMark] = useState(0); //currentValues.technicalMark
     const [notes, setNotes] = useState('');
     const [audioDetails, setAudioDetails] = useState({
         url: null,
@@ -32,26 +32,26 @@ export default function AdjudicateForm(props) {
           m: 0,
           s: 0
         }
-      })
-    const [audioFile, setAudioFile] = useState() //will be blob  
-    const [nextPerformance, setNextPerformance] = useState()
+      });
+    const [audioFile, setAudioFile] = useState(); //will be blob  
+    const [nextPerformance, setNextPerformance] = useState();
 
     //according to docs, componentDidMount() is similar to useEffect(() => {}); 
     useEffect(() => {     
         getPerformance(performanceId)
             .then(({data}) => {
-                setPerformancesValues(humps.camelizeKeys(data)) 
+                setPerformancesValues(humps.camelizeKeys(data));
             });
 
         getAdjudications(performanceId)
             .then(({data}) => {
-                setAdjudications(data)  
-                setLoading(false)
+                setAdjudications(data); 
+                setLoading(false);
             });  
 
         getNextUnjudgedPerformance(eventId, 1) //hardcoded tablet id for now
             .then(({data}) => {
-                setNextPerformance(data)
+                setNextPerformance(data);
             });  
     }, [location]); //added location dependency so it is called when the "Save And Next Button is pressed"
 
@@ -74,31 +74,31 @@ export default function AdjudicateForm(props) {
     const handleArtisticScoreChange = (e) => {
         const { name, value } = e.target;
         const keys = ['artisticMark', 'technicalMark'];
-        setArtisticMark(keys.includes(name) ? parseInt(value) : value)
+        setArtisticMark(keys.includes(name) ? parseInt(value) : value);
     };
 
     const handleTechnicalScoreChange = (e) => {
         const { name, value } = e.target;
         const keys = ['artisticMark', 'technicalMark'];
-        setTechnicalMark(keys.includes(name) ? parseInt(value) : value)
+        setTechnicalMark(keys.includes(name) ? parseInt(value) : value);
     };
 
     const handleNotesChange = (e) => {
         const { value } = e.target;
-        setNotes(value)
+        setNotes(value);
     };
 
     //audio methods
     const handleAudioStop = (data) => {
-        setAudioDetails(data)
+        setAudioDetails(data);
     };
 
     const handleAudioFile = (file) => {
-        setAudioFile(file)
+        setAudioFile(file);
     };
 
     const makeFirebasePath = (fileName) => {
-        return `${fileName}.mp3`
+        return `${fileName}.mp3`;
     };
 
     const handleRest = () => {
@@ -118,18 +118,18 @@ export default function AdjudicateForm(props) {
     //handles the checkboxes
     const handleCheckedAward = (e) => {
         const { name, checked } = e.target;
-        if (name == 'choreoAward') {
-            setChoreoAward(checked)
-            setSpecialAward(false)
+        if (name === 'choreoAward') {
+            setChoreoAward(checked);
+            setSpecialAward(false);
         } else {
-            setChoreoAward(false)
-            setSpecialAward(checked)
+            setChoreoAward(false);
+            setSpecialAward(checked);
         }
     };
     //handle cancellation of form
     const handleCancel = () => {
         //go back to last page
-        history.push(`/events/${eventId}/adjudications/`)
+        history.push(`/events/${eventId}/adjudications/`);
     };
     //handle submission of form
     const handleSubmit = async () => {
@@ -196,7 +196,7 @@ export default function AdjudicateForm(props) {
 
             const updatedAdjudication = await updateAdjudications(adjudication.data.id, updatedData);
         }
-        if(nextPerformance == null) {
+        if(!nextPerformance) {
             history.push(`/events/${eventId}/adjudications/`);
             return 
         } //check if all performances have been adjudicated
@@ -205,7 +205,7 @@ export default function AdjudicateForm(props) {
     };
 
     const goToPrevious = () => {
-        history.goBack()
+        history.goBack();
     };
 
     return (
