@@ -53,24 +53,24 @@ export default function AdjudicationsSection(props) {
   const updateAdjudications = (data) => {
     const newAdjudications = Object.assign({}, adjudications, {[data.id]: data});
     setAdjudications(newAdjudications);
-  }
+  };
 
   const goToNextPerformance = () => {
     if(!nextPerformance) { //catch if they have adjudicated everything
       return
     }
     history.push(`/events/${eventId}/adjudications/performance/${nextPerformance.id}`);
-  }
+  };
 
   return (
 
-    <Section headings={headings} loading={loading} 
-      renderNewButton={
-      <Button variant="outlined" color="primary" onClick={goToNextPerformance}>
-        Adjudicate Next
-      </Button>} 
-      showContent={showPerformances} type="adjudication">
-    
+    <Section 
+      headings={headings} 
+      loading={loading} 
+      renderNewButton={<Button variant="outlined" color="primary" onClick={goToNextPerformance}>Adjudicate Next</Button>} 
+      showContent={showPerformances} 
+      type="adjudication"
+    >
       {showPerformances && filteredPerformances.map((performance) => {
         const { id } = performance;
         const currentValues = pick(performance, keys);
