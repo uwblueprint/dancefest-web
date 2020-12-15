@@ -4,9 +4,16 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
+import { getAdjudications } from '../../api/AdjudicationAPI';
 
 class AdjudicationTableRow extends React.Component {
-  state = {};
+  state = {adjudications: {}};
+  componentDidMount() {
+    getAdjudications(this.props.id)
+    .then(({data}) => {
+      this.setState({ adjudications: data});
+    });
+  }
 
   render() {
     const {
@@ -26,7 +33,7 @@ class AdjudicationTableRow extends React.Component {
       danceTitle,
       school
     } = currentValues;
-
+    const { adjudications } = this.state;
     return (
       <TableRow style={{}}>
         <TableCell>{danceTitle}</TableCell>
@@ -34,6 +41,7 @@ class AdjudicationTableRow extends React.Component {
         <TableCell>{school}</TableCell>
         <TableCell>{danceStyle}</TableCell>
         <TableCell>{danceSize}</TableCell>
+        <TableCell>{console.log(adjudications)}</TableCell>
         <TableCell>
           <Button variant="outlined" color="primary">
             <Link to={`performance/${id}`}>Adjudicate</Link>
