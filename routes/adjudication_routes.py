@@ -1,8 +1,6 @@
-from flask import Blueprint
-from flask import jsonify, request
+from flask import Blueprint, jsonify, request
 
-from db.models import Adjudication
-from db.models import Performance
+from db.models import Adjudication, Performance
 from db import db
 
 blueprint = Blueprint('adjudication', __name__, url_prefix='/api/adjudications')
