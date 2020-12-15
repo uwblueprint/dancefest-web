@@ -148,7 +148,7 @@ export default function AdjudicateForm(props) {
             const adjudication = await createAdjudication(data);
 
             var storeRef = storage.child(makeFirebasePath(`${adjudication.data.id}`));
-            storeRef.put(audioFile);
+            await storeRef.put(audioFile);
             
             const updatedData = {
                 performanceId,
@@ -182,7 +182,7 @@ export default function AdjudicateForm(props) {
             const adjudication = await createAdjudication(data);
 
             var storeRef = storage.child(makeFirebasePath(`${adjudication.data.id}`));
-            storeRef.put(audioFile);
+            await storeRef.put(audioFile);
             
             const updatedData = {
                 performanceId,
