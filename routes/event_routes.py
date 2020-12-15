@@ -46,5 +46,25 @@ def get_performances(event_id):
 
 @blueprint.route('/test')
 def test_route():
-    a = db.session.query(Performance.id).join(Adjudication, Performance.id == Adjudication.performance_id).group_by(Performance.id)
+    # get all the adjudications and performances by id 
+    a = db.session.query(Performance.id).join().filter(Performance.id == Adjudication.performance_id).group_by(Performance.id)
     return jsonify({b.id: b for b in a})
+
+    
+    # join(Adjudication, Performance.id == Adjudication.performance_id).group_by(Performance.id)
+    # return jsonify({b.id: b for b in a})
+
+'''
+@blueprint.route('/<int:performance_id>/award_performance', methods=['GET'])
+def get_award_performance(performance_id):
+    # get the title, number of judges that have nominated a performance for an award,
+    # and the number of nominees for a performance's awards
+    award_performances = db.session.query(Award.title, Award.nominee_count, Award.id,
+                                          db.func.count(AwardPerformance.award_id)) \
+        .join(AwardPerformance) \
+        .filter_by(performance_id=performance_id) \
+        .group_by(Award.title, Award.nominee_count, Award.id).all()
+
+    return jsonify({award_id: {'title': title, 'nominations_count': count, 'nominee_count': nominee_count} for
+                    title, nominee_count, award_id, count in award_performances})
+'''
