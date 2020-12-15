@@ -12,12 +12,12 @@ import { Button } from '@material-ui/core';
 
 export default function AdjudicationsSection(props) {
 
-  const [loading, setLoading] = useState(true)
-  const [adjudications, setAdjudications] = useState({}) 
-  const [performances, setPerformances] = useState({}) 
+  const [loading, setLoading] = useState(true);
+  const [adjudications, setAdjudications] = useState({}); 
+  const [performances, setPerformances] = useState({}); 
   const collectionName = `events/${eventId}/performances/1/adjudications`; //replace 1 with ${performanceId}
-  const [filteredPerformances, setFilteredPerformances] = useState([])
-  const [nextPerformance, setNextPerformance] = useState()
+  const [filteredPerformances, setFilteredPerformances] = useState([]);
+  const [nextPerformance, setNextPerformance] = useState();
   //constants
   const { history, match: { params: { eventId }}} = props;
   const headings = ['Dance Title', 'Dance Entry', 'School', 'Dance Style', 'Dance Size'];
@@ -45,7 +45,7 @@ export default function AdjudicationsSection(props) {
 
     getNextUnjudgedPerformance(eventId, 2) //hardcoded tablet id for now
       .then(({data}) => {
-        setNextPerformance(data)
+        setNextPerformance(data);
     });    
 
   }, []); //added the empty array so that it will only be called after the component mounts
@@ -59,7 +59,7 @@ export default function AdjudicationsSection(props) {
     if(!nextPerformance) { //catch if they have adjudicated everything
       return
     }
-    history.push(`/events/${eventId}/adjudications/performance/${nextPerformance.id}`)
+    history.push(`/events/${eventId}/adjudications/performance/${nextPerformance.id}`);
   }
 
   return (
