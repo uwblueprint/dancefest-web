@@ -35,3 +35,12 @@ def get_unjudged_performance(event_id, tablet_id):
         else: 
             continue
     return jsonify({})
+
+@blueprint.route('/<int:performance_id>/<tablet_id>', methods=['GET'])
+def get_adjudication_by_judge(performance_id, tablet_id):
+    # Query by performance id and any additional query parameters provided
+    adjudication_filter = request.args.to_dict()
+    adjudications = Adjudication.get_by(performance_id=performance_id, tablet_id=tablet_id, **adjudication_filter)
+    # There should only be one, but I'm doing this due to the seeding script
+    adjudication = adjudications[0]
+    return jsonify(adjudication.to_dict())
