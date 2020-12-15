@@ -65,11 +65,11 @@ export default function AdjudicationsSection(props) {
   return (
 
     <Section headings={headings} loading={loading} 
-    renderNewButton={
-    <Button variant="outlined" color="primary" onClick={goToNextPerformance}>
-      Adjudicate Next
-    </Button>} 
-    showContent={showPerformances} type="adjudication">
+      renderNewButton={
+      <Button variant="outlined" color="primary" onClick={goToNextPerformance}>
+        Adjudicate Next
+      </Button>} 
+      showContent={showPerformances} type="adjudication">
     
       {showPerformances && filteredPerformances.map((performance) => {
         const { id } = performance;
