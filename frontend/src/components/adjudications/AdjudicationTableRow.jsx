@@ -11,8 +11,6 @@ class AdjudicationTableRow extends React.Component {
   componentDidMount() {
     getAdjudicationByPerformanceAndJudge(this.props.id, 1) //hradcoded tablet_id
     .then(({data}) => {
-      console.log("data is:")
-      console.log(data)
       this.setState({ adjudication: data});
     });
   }
