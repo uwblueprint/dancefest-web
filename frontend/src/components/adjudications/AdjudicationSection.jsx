@@ -67,7 +67,9 @@ export default function AdjudicationsSection(props) {
     <Section 
       headings={headings} 
       loading={loading} 
-      renderNewButton={<Button variant="outlined" color="primary" onClick={goToNextPerformance}>Adjudicate Next</Button>} 
+      renderNewButton={
+        <Button variant="outlined" color="primary" onClick={goToNextPerformance}>Adjudicate Next</Button>
+      } 
       showContent={showPerformances} 
       type="adjudication"
     >
