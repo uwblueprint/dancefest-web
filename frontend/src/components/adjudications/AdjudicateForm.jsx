@@ -75,31 +75,31 @@ export default function AdjudicateForm(props) {
         const { name, value } = e.target;
         const keys = ['artisticMark', 'technicalMark'];
         setArtisticMark(keys.includes(name) ? parseInt(value) : value)
-    }
+    };
 
     const handleTechnicalScoreChange = (e) => {
         const { name, value } = e.target;
         const keys = ['artisticMark', 'technicalMark'];
         setTechnicalMark(keys.includes(name) ? parseInt(value) : value)
-    }
+    };
 
     const handleNotesChange = (e) => {
         const { value } = e.target;
         setNotes(value)
-    }
+    };
 
     //audio methods
     const handleAudioStop = (data) => {
         setAudioDetails(data)
-    }
+    };
 
     const handleAudioFile = (file) => {
         setAudioFile(file)
-    }
+    };
 
     const makeFirebasePath = (fileName) => {
         return `${fileName}.mp3`
-    }
+    };
 
     const handleRest = () => {
         const reset = {
@@ -113,7 +113,7 @@ export default function AdjudicateForm(props) {
           }
         };
         setAudioDetails(reset);
-      }
+      };
 
     //handles the checkboxes
     const handleCheckedAward = (e) => {
@@ -125,12 +125,12 @@ export default function AdjudicateForm(props) {
             setchoreoAward(false)
             setspecialAward(checked)
         }
-    }
+    };
     //handle cancellation of form
     const handleCancel = () => {
         //go back to last page
         history.push(`/events/${eventId}/adjudications/`)
-    }
+    };
     //handle submission of form
     const handleSubmit = async () => {
 
@@ -143,12 +143,12 @@ export default function AdjudicateForm(props) {
                 cumulativeMark: (parseInt(artisticMark) + parseInt(technicalMark))/2,
                 notes,
                 tablet_id: 1
-            }
+            };
         
             const adjudication = await createAdjudication(data);
 
-            var storeRef = storage.child(makeFirebasePath(`${adjudication.data.id}`))
-            storeRef.put(audioFile)
+            var storeRef = storage.child(makeFirebasePath(`${adjudication.data.id}`));
+            storeRef.put(audioFile);
             
             const updatedData = {
                 performanceId,
@@ -158,11 +158,11 @@ export default function AdjudicateForm(props) {
                 notes,
                 tablet_id: 1,
                 audio_url: makeFirebasePath(`${adjudication.data.id}`)
-            }
+            };
 
-            const updatedAdjudication = await updateAdjudications(adjudication.data.id, updatedData)
+            const updatedAdjudication = await updateAdjudications(adjudication.data.id, updatedData);
         }
-        history.push(`/events/${eventId}/adjudications/`)
+        history.push(`/events/${eventId}/adjudications/`);
     }
 
     //handle submission and going to next performance to adjudicate
@@ -177,12 +177,12 @@ export default function AdjudicateForm(props) {
                 cumulativeMark: (parseInt(artisticMark) + parseInt(technicalMark))/2,
                 notes,
                 tablet_id: 1
-            }
+            };
         
             const adjudication = await createAdjudication(data);
 
-            var storeRef = storage.child(makeFirebasePath(`${adjudication.data.id}`))
-            storeRef.put(audioFile)
+            var storeRef = storage.child(makeFirebasePath(`${adjudication.data.id}`));
+            storeRef.put(audioFile);
             
             const updatedData = {
                 performanceId,
@@ -192,21 +192,21 @@ export default function AdjudicateForm(props) {
                 notes,
                 tablet_id: 1,
                 audio_url: makeFirebasePath(`${adjudication.data.id}`)
-            }
+            };
 
-            const updatedAdjudication = await updateAdjudications(adjudication.data.id, updatedData)
+            const updatedAdjudication = await updateAdjudications(adjudication.data.id, updatedData);
         }
         if(nextPerformance == null) {
-            history.push(`/events/${eventId}/adjudications/`)
+            history.push(`/events/${eventId}/adjudications/`);
             return 
         } //check if all performances have been adjudicated
         //else go to next one
-        history.push(`/events/${eventId}/adjudications/performance/${nextPerformance.id}`)
-    }
+        history.push(`/events/${eventId}/adjudications/performance/${nextPerformance.id}`);
+    };
 
     const goToPrevious = () => {
         history.goBack()
-    }
+    };
 
     return (
         <div style={{ display: 'flex', flexFlow: 'column', marginLeft: '200px', marginRight: '200px'}}>
