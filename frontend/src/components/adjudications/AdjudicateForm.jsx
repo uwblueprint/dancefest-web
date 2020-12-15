@@ -19,8 +19,8 @@ export default function AdjudicateForm(props) {
 
     //form fields
     const [artisticMark, setArtisticMark] = useState(0) //currentValues.artisticMark
-    const [choreoAward, setchoreoAward] = useState(false) //currentValues.choreoAward || false
-    const [specialAward, setspecialAward] = useState(false) //currentValues.specialAward || false
+    const [choreoAward, setChoreoAward] = useState(false) //currentValues.choreoAward || false
+    const [specialAward, setSpecialAward] = useState(false) //currentValues.specialAward || false
     const [technicalMark, setTechnicalMark] = useState(0) //currentValues.technicalMark
     const [notes, setNotes] = useState('');
     const [audioDetails, setAudioDetails] = useState({
@@ -119,11 +119,11 @@ export default function AdjudicateForm(props) {
     const handleCheckedAward = (e) => {
         const { name, checked } = e.target;
         if (name == 'choreoAward') {
-            setchoreoAward(checked)
-            setspecialAward(false)
+            setChoreoAward(checked)
+            setSpecialAward(false)
         } else {
-            setchoreoAward(false)
-            setspecialAward(checked)
+            setChoreoAward(false)
+            setSpecialAward(checked)
         }
     };
     //handle cancellation of form
