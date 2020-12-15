@@ -280,7 +280,7 @@ export default function AdjudicateForm(props) {
             <div> 
                 <CheckBox label="Award Considerations" choices={choices} onChange={handleCheckedAward} />
             </div>
-            <div>     
+            <div>
             <Button type="default" onClick={handleCancel}>
                 cancel
             </Button>
