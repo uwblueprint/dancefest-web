@@ -9,14 +9,15 @@ import EditIcon from "@material-ui/icons/EditOutlined";
 import DoneIcon from "@material-ui/icons/DoneAllTwoTone";
 import RevertIcon from "@material-ui/icons/NotInterestedOutlined";
 import { Link } from 'react-router-dom';
-import { getAdjudicationByPerformanceAndJudge } from '../../api/AdjudicationAPI';
+import { updateAdjudications, getAdjudicationByPerformanceAndJudge } from '../../api/AdjudicationAPI';
 
 class AdjudicationTableRow extends React.Component {
-  state = {adjudication: {}, isEditMode: false };
+  state = {adjudication: {}, isEditMode: false, technicalMark: {}, artisticMark: {} };
   componentDidMount() {
     getAdjudicationByPerformanceAndJudge(this.props.id, 1) //hradcoded tablet_id
     .then(({data}) => {
       this.setState({ adjudication: data});
+      this.setState({technicalMark: this.state.adjudication.technicalMark, artisticMark: this.state.adjudication.artisticMark})
     });
   }
 
@@ -28,15 +29,43 @@ class AdjudicationTableRow extends React.Component {
     }
   };
 
-  onRevert = id => {
+  onRevert = () => {
+    this.setState({technicalMark: this.state.adjudication.technicalMark, artisticMark: this.state.adjudication.artisticMark})
     this.onToggleEditMode();
   };
 
-  onChange = (e, data) => {
+  submitQuickEdit = async () => {
+    const {
+      adjudication,
+      artisticMark,
+      technicalMark
+    } = this.state;
+    const cumulativeMark = (parseInt(artisticMark, 10) + parseInt(technicalMark, 10)) / 2;
+    
+    const data = { 
+      performanceId: adjudication.performanceId,
+      artisticMark,
+      technicalMark,
+      cumulativeMark,
+      notes: adjudication.notes,
+      tablet_id: adjudication.tablet_id,
+      audio_url: adjudication.audio_url
+    };
+
+    const updatedAdjudication = await updateAdjudications(adjudication.id, data);
+
+    this.onToggleEditMode();
+  };
+
+  onChange = (e) => {
     const value = e.target.value;
     const name = e.target.name;
     //do something with new values
-    //do something with data (the old value of the cell)
+    if ( name === "artisticMark") {
+      this.setState({ artisticMark: value});
+    } else {
+      this.setState({ technicalMark: value});
+    }
   };
 
   render() {
@@ -57,7 +86,7 @@ class AdjudicationTableRow extends React.Component {
       danceTitle,
       school
     } = currentValues;
-    const { adjudication, isEditMode } = this.state;
+    const { technicalMark, artisticMark, isEditMode } = this.state;
     return (
       <TableRow style={{}}>
         <TableCell>{danceTitle}</TableCell>
@@ -68,35 +97,35 @@ class AdjudicationTableRow extends React.Component {
         <TableCell>
         {isEditMode ? (
           <Input
-            value={adjudication.artisticMark}
-            name={adjudication.artisticMark} //unsure if this is necessary
-            onChange={(e) => this.onChange(e, adjudication.artisticMark)}
+            defaultValue={parseInt(artisticMark)}
+            name={"artisticMark"} //unsure if this is necessary
+            onChange={(e) => this.onChange(e)}
           />
         ) : (
-          adjudication.artisticMark
+          parseInt(artisticMark)
         )}
       </TableCell>
       <TableCell>
         {isEditMode ? (
           <Input
-            value={adjudication.technicalMark}
-            name={adjudication.technicalMark} //unsure if this is necessary
-            onChange={(e) => this.onChange(e, adjudication.technicalMark)}
+            defaultValue={parseInt(technicalMark)}
+            name={"technicalMark"} //unsure if this is necessary
+            onChange={(e) => this.onChange(e)}
           />
         ) : (
-          adjudication.technicalMark
+          parseInt(technicalMark)
         )}
       </TableCell>
         <TableCell>
                 {isEditMode ? (
                   <>
                     <IconButton
-                      onClick={() => this.onToggleEditMode()}
+                      onClick={() => this.submitQuickEdit()}
                     >
                       <DoneIcon />
                     </IconButton>
                     <IconButton
-                      onClick={() => this.onRevert(id)}
+                      onClick={() => this.onRevert()}
                     >
                       <RevertIcon />
                     </IconButton>
