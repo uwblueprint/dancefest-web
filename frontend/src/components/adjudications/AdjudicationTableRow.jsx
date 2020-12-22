@@ -86,7 +86,7 @@ class AdjudicationTableRow extends React.Component {
       danceTitle,
       school
     } = currentValues;
-    const { technicalMark, artisticMark, isEditMode } = this.state;
+    const { adjudication, technicalMark, artisticMark, isEditMode } = this.state;
     return (
       <TableRow style={{}}>
         <TableCell>{danceTitle}</TableCell>
@@ -117,7 +117,8 @@ class AdjudicationTableRow extends React.Component {
         )}
       </TableCell>
         <TableCell>
-                {isEditMode ? (
+          { adjudication.artisticMark && adjudication.technicalMark ? (
+                isEditMode ? (
                   <>
                     <IconButton
                       onClick={() => this.submitQuickEdit()}
@@ -136,7 +137,7 @@ class AdjudicationTableRow extends React.Component {
                   >
                     <EditIcon />
                   </IconButton>
-                )}
+                ) ) : ("N/A") }
               </TableCell>
         <TableCell>
           <Button variant="outlined" color="primary">
