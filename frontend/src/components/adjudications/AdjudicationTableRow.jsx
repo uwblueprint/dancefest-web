@@ -118,19 +118,27 @@ class AdjudicationTableRow extends React.Component {
       </TableCell>
         <TableCell>
           { adjudication.artisticMark && adjudication.technicalMark ? (
-                isEditMode ? (
-                  <>
+                isEditMode ? ( 
+                  <div style={{ display: 'flex'}}>
+                  <div style={{ flex: '50%'}}>
+                    <>
                     <IconButton
                       onClick={() => this.submitQuickEdit()}
                     >
                       <DoneIcon />
                     </IconButton>
+                  </>
+                  </div>
+                  <div style={{ flex: '50%'}}>
+                    <>
                     <IconButton
                       onClick={() => this.onRevert()}
                     >
                       <RevertIcon />
                     </IconButton>
                   </>
+                  </div>
+                  </div>
                 ) : (
                   <IconButton
                     onClick={() => this.onToggleEditMode()}
