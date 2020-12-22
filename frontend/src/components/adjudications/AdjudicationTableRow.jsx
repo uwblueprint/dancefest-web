@@ -13,24 +13,22 @@ import { updateAdjudications, getAdjudicationByPerformanceAndJudge } from '../..
 
 class AdjudicationTableRow extends React.Component {
   state = {adjudication: {}, isEditMode: false, technicalMark: {}, artisticMark: {} };
+
   componentDidMount() {
     getAdjudicationByPerformanceAndJudge(this.props.id, 1) //hradcoded tablet_id
     .then(({data}) => {
-      this.setState({ adjudication: data});
-      this.setState({technicalMark: this.state.adjudication.technicalMark, artisticMark: this.state.adjudication.artisticMark})
+      this.setState({ adjudication: data, technicalMark: data.technicalMark, artisticMark: data.artisticMark});
     });
   };
 
   onToggleEditMode = () => {
-    if (this.state.isEditMode === true) {
-      this.setState({ isEditMode: false});
-    } else {
-      this.setState({ isEditMode: true});
-    }
+    const { isEditMode } = this.state;
+    this.setState({ isEditMode: !isEditMode })
   };
 
   onRevert = () => {
-    this.setState({technicalMark: this.state.adjudication.technicalMark, artisticMark: this.state.adjudication.artisticMark})
+    const { adjudication } = this.state;
+    this.setState({technicalMark: adjudication.technicalMark, artisticMark: adjudication.artisticMark})
     this.onToggleEditMode();
   };
 
@@ -121,22 +119,18 @@ class AdjudicationTableRow extends React.Component {
                 isEditMode ? ( 
                   <div style={{ display: 'flex'}}>
                   <div style={{ flex: '50%'}}>
-                    <>
                     <IconButton
                       onClick={() => this.submitQuickEdit()}
                     >
                       <DoneIcon />
                     </IconButton>
-                  </>
                   </div>
                   <div style={{ flex: '50%'}}>
-                    <>
                     <IconButton
                       onClick={() => this.onRevert()}
                     >
                       <RevertIcon />
                     </IconButton>
-                  </>
                   </div>
                   </div>
                 ) : (
