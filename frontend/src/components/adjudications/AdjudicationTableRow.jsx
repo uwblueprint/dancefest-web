@@ -96,7 +96,7 @@ class AdjudicationTableRow extends React.Component {
         {isEditMode ? (
           <Input
             defaultValue={parseInt(artisticMark)}
-            name={"artisticMark"} //unsure if this is necessary
+            name="artisticMark" //unsure if this is necessary
             onChange={(e) => this.onChange(e)}
           />
         ) : (
@@ -107,7 +107,7 @@ class AdjudicationTableRow extends React.Component {
         {isEditMode ? (
           <Input
             defaultValue={parseInt(technicalMark)}
-            name={"technicalMark"} //unsure if this is necessary
+            name="technicalMark" //unsure if this is necessary
             onChange={(e) => this.onChange(e)}
           />
         ) : (
