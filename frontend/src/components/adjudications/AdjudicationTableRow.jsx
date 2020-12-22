@@ -19,7 +19,7 @@ class AdjudicationTableRow extends React.Component {
       this.setState({ adjudication: data});
       this.setState({technicalMark: this.state.adjudication.technicalMark, artisticMark: this.state.adjudication.artisticMark})
     });
-  }
+  };
 
   onToggleEditMode = () => {
     if (this.state.isEditMode === true) {
