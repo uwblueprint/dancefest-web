@@ -35,3 +35,8 @@ def get_unjudged_performance(event_id, tablet_id):
         else: 
             continue
     return jsonify({})
+
+@blueprint.route('/<int:performance_id>/<tablet_id>', methods=['GET'])
+def get_adjudication_by_judge(performance_id, tablet_id):
+    adjudication = db.session.query(Adjudication).filter(Adjudication.tablet_id==tablet_id, Adjudication.performance_id==performance_id).first()
+    return jsonify(adjudication.to_dict())
