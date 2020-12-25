@@ -82,14 +82,14 @@ class AdjudicationTableRow extends React.Component {
       danceSize,
       danceStyle,
       danceTitle,
-      school
+      schoolName
     } = currentValues;
     const { adjudication, technicalMark, artisticMark, isEditMode } = this.state;
     return (
       <TableRow style={{}}>
         <TableCell>{danceTitle}</TableCell>
         <TableCell>{danceEntry}</TableCell>
-        <TableCell>{school}</TableCell>
+        <TableCell>{schoolName}</TableCell>
         <TableCell>{danceStyle}</TableCell>
         <TableCell>{danceSize}</TableCell>
         <TableCell>

@@ -21,7 +21,7 @@ export default function AdjudicationsSection(props) {
   //constants
   const { history, match: { params: { eventId }}} = props;
   const headings = ['Dance Title', 'Dance Entry', 'School', 'Dance Style', 'Dance Size', 'Artistic Mark', 'Technical Mark'];
-  const keys = ['academicLevel', 'choreographers', 'competitionLevel', 'danceEntry', 'danceSize', 'danceStyle', 'danceTitle', 'performers', 'school'];
+  const keys = ['academicLevel', 'choreographers', 'competitionLevel', 'danceEntry', 'danceSize', 'danceStyle', 'danceTitle', 'performers', 'schoolName'];
   const showPerformances = Array.isArray(performances) && performances.length > 0;
  
 
@@ -30,9 +30,12 @@ export default function AdjudicationsSection(props) {
 
     getPerformances(eventId)
       .then(response => {
-        let performances = Object.values(response.data).map(performance => {
-          return humps.camelizeKeys(performance);
-        });
+        let performances = Object.values(response.data).map(entry => {
+          const temp_perf = entry.performance;
+          temp_perf['school_name'] = entry.school_name;
+          return humps.camelizeKeys(temp_perf);
+        })
+
         performances = performances.sort((a,b) => Number(a.danceEntry) - Number(b.danceEntry));
         setPerformances(performances);
         setLoading(false);
