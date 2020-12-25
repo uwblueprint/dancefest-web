@@ -9,7 +9,6 @@ import Filter from '../interface/filter';
 import Section from '../interface/Section';
 
 import { getPerformances } from '../../api/PerformanceAPI';
-import { getSchool } from '../../api/SchoolAPI';
 
 class PerformancesSection extends React.Component {
   constructor(props) {
@@ -29,17 +28,14 @@ class PerformancesSection extends React.Component {
     //write async await function, seperate mapping into alternative helper function that can be called
     async function getPerformancesInfo(eventId) {
       const rawPerformances = await getPerformances(eventId);
-      let performances = await Promise.all(Object.values(rawPerformances.data).map(performance => {
-        return getSchoolInfo(performance);
-      }));
+
+      const performances = Object.values(rawPerformances.data).map(entry => {
+        const temp_perf = entry.performance;
+        temp_perf['school_name'] = entry.school_name;
+        return humps.camelizeKeys(temp_perf);
+      })
 
       return performances.sort((a,b) => Number(a.danceEntry) - Number(b.danceEntry));
-    }
-    
-    async function getSchoolInfo(performance) {
-      const school = await getSchool(performance.school_id);
-      performance.school_name = school.data[performance.school_id].name;
-      return humps.camelizeKeys(performance); 
     }
 
     const performances = await getPerformancesInfo(eventId);
