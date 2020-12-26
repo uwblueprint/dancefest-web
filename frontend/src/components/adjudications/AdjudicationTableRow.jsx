@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom';
 import { updateAdjudications, getAdjudicationByPerformanceAndJudge } from '../../api/AdjudicationAPI';
 
 class AdjudicationTableRow extends React.Component {
-  state = {adjudication: {}, isEditMode: false, technicalMark: {}, artisticMark: {} };
+  state = {adjudication: {}, isEditMode: false, technicalMark: {}, artisticMark: {}, isAdmin: true };
 
   componentDidMount() {
     getAdjudicationByPerformanceAndJudge(this.props.id, 1) //hradcoded tablet_id
@@ -84,7 +84,7 @@ class AdjudicationTableRow extends React.Component {
       danceTitle,
       schoolName
     } = currentValues;
-    const { adjudication, technicalMark, artisticMark, isEditMode } = this.state;
+    const { adjudication, technicalMark, artisticMark, isEditMode, isAdmin } = this.state;
     return (
       <TableRow style={{}}>
         <TableCell>{danceTitle}</TableCell>
@@ -92,29 +92,32 @@ class AdjudicationTableRow extends React.Component {
         <TableCell>{schoolName}</TableCell>
         <TableCell>{danceStyle}</TableCell>
         <TableCell>{danceSize}</TableCell>
-        <TableCell>
-        {isEditMode ? (
-          <Input
-            defaultValue={parseInt(artisticMark)}
-            name="artisticMark" //unsure if this is necessary
-            onChange={(e) => this.onChange(e)}
-          />
-        ) : (
-          parseInt(artisticMark)
-        )}
-      </TableCell>
-      <TableCell>
-        {isEditMode ? (
-          <Input
-            defaultValue={parseInt(technicalMark)}
-            name="technicalMark" //unsure if this is necessary
-            onChange={(e) => this.onChange(e)}
-          />
-        ) : (
+        {isAdmin ? 
+        (<TableCell>{"blah"}</TableCell>) :
+        (<>
+          <TableCell>
+          {isEditMode ? (
+            <Input
+              defaultValue={parseInt(artisticMark)}
+              name="artisticMark" //unsure if this is necessary
+              onChange={(e) => this.onChange(e)}
+            />
+          ) : (
+            parseInt(artisticMark)
+          )}
+          </TableCell>
+          <TableCell>
+          {isEditMode ? (
+            <Input
+              defaultValue={parseInt(technicalMark)}
+              name="technicalMark" //unsure if this is necessary
+              onChange={(e) => this.onChange(e)}
+            />
+          ) : (
           parseInt(technicalMark)
-        )}
-      </TableCell>
-        <TableCell>
+          )}
+          </TableCell>
+          <TableCell>
           { adjudication.artisticMark && adjudication.technicalMark ? (
                 isEditMode ? ( 
                   <div style={{ display: 'flex'}}>
@@ -140,12 +143,15 @@ class AdjudicationTableRow extends React.Component {
                     <EditIcon />
                   </IconButton>
                 ) ) : ("N/A") }
-              </TableCell>
-        <TableCell>
-          <Button variant="outlined" color="primary">
-            <Link to={`performance/${id}`}>Adjudicate</Link>
-          </Button>
-        </TableCell>
+          </TableCell>
+          <TableCell>
+              <Button variant="outlined" color="primary">
+                <Link to={`performance/${id}`}>Adjudicate</Link>
+              </Button>
+          </TableCell>
+        </>
+        )}
+
       </TableRow>
     );
   }
