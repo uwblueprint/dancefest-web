@@ -30,3 +30,8 @@ export const getAdjudicationByPerformanceAndJudge = (performanceId, tabletId) =>
   return get(`adjudications/${performanceId}/${tabletId}`)
     .then((response) => humps.camelizeKeys(response));
 }
+
+export const getJudgesWhoCompletedAdjudication = (performanceId) => {
+  return get(`adjudications/judges/${performanceId}`)
+    .then((response) => humps.camelizeKeys(response));
+}

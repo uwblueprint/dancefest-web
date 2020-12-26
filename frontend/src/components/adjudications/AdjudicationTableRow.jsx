@@ -9,17 +9,24 @@ import EditIcon from "@material-ui/icons/EditOutlined";
 import DoneIcon from "@material-ui/icons/DoneAllTwoTone";
 import RevertIcon from "@material-ui/icons/NotInterestedOutlined";
 import { Link } from 'react-router-dom';
-import { updateAdjudications, getAdjudicationByPerformanceAndJudge } from '../../api/AdjudicationAPI';
+import { updateAdjudications, getAdjudicationByPerformanceAndJudge, getJudgesWhoCompletedAdjudication } from '../../api/AdjudicationAPI';
 
 class AdjudicationTableRow extends React.Component {
-  state = {adjudication: {}, isEditMode: false, technicalMark: {}, artisticMark: {}, isAdmin: true };
+  state = {adjudication: {}, isEditMode: false, technicalMark: {}, artisticMark: {}, isAdmin: true, judges: {}}; //hardcoded admin value
 
   componentDidMount() {
     getAdjudicationByPerformanceAndJudge(this.props.id, 1) //hradcoded tablet_id
     .then(({data}) => {
       this.setState({ adjudication: data, technicalMark: data.technicalMark, artisticMark: data.artisticMark});
+    }); 
+    getJudgesWhoCompletedAdjudication(parseInt(this.props.id))
+    .then(({data}) => {
+      this.setState({judges: data});
+      console.log(data);
     });
-  };
+  }
+
+  
 
   onToggleEditMode = () => {
     const { isEditMode } = this.state;
@@ -84,7 +91,7 @@ class AdjudicationTableRow extends React.Component {
       danceTitle,
       schoolName
     } = currentValues;
-    const { adjudication, technicalMark, artisticMark, isEditMode, isAdmin } = this.state;
+    const { adjudication, technicalMark, artisticMark, isEditMode, isAdmin} = this.state;
     return (
       <TableRow style={{}}>
         <TableCell>{danceTitle}</TableCell>
@@ -93,7 +100,7 @@ class AdjudicationTableRow extends React.Component {
         <TableCell>{danceStyle}</TableCell>
         <TableCell>{danceSize}</TableCell>
         {isAdmin ? 
-        (<TableCell>{"blah"}</TableCell>) :
+        (<TableCell>{"blahblah"}</TableCell>) :
         (<>
           <TableCell>
           {isEditMode ? (
