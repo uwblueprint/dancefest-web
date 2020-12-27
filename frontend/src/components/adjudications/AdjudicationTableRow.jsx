@@ -8,18 +8,25 @@ import IconButton from "@material-ui/core/IconButton";
 import EditIcon from "@material-ui/icons/EditOutlined";
 import DoneIcon from "@material-ui/icons/DoneAllTwoTone";
 import RevertIcon from "@material-ui/icons/NotInterestedOutlined";
+import LensIcon from '@material-ui/icons/Lens';
 import { Link } from 'react-router-dom';
-import { updateAdjudications, getAdjudicationByPerformanceAndJudge } from '../../api/AdjudicationAPI';
+import { updateAdjudications, getAdjudicationByPerformanceAndJudge, getJudgesWhoCompletedAdjudication } from '../../api/AdjudicationAPI';
 
 class AdjudicationTableRow extends React.Component {
-  state = {adjudication: {}, isEditMode: false, technicalMark: {}, artisticMark: {} };
+  state = {adjudication: {}, isEditMode: false, technicalMark: {}, artisticMark: {}, isAdmin: true, judges: {}}; //hardcoded admin value
 
   componentDidMount() {
     getAdjudicationByPerformanceAndJudge(this.props.id, 1) //hradcoded tablet_id
     .then(({data}) => {
       this.setState({ adjudication: data, technicalMark: data.technicalMark, artisticMark: data.artisticMark});
+    }); 
+    getJudgesWhoCompletedAdjudication(parseInt(this.props.id))
+    .then(({data}) => {
+      this.setState({judges: data});
     });
-  };
+  }
+
+  
 
   onToggleEditMode = () => {
     const { isEditMode } = this.state;
@@ -84,7 +91,7 @@ class AdjudicationTableRow extends React.Component {
       danceTitle,
       schoolName
     } = currentValues;
-    const { adjudication, technicalMark, artisticMark, isEditMode } = this.state;
+    const { adjudication, technicalMark, artisticMark, isEditMode, isAdmin, judges} = this.state;
     return (
       <TableRow style={{}}>
         <TableCell>{danceTitle}</TableCell>
@@ -92,29 +99,38 @@ class AdjudicationTableRow extends React.Component {
         <TableCell>{schoolName}</TableCell>
         <TableCell>{danceStyle}</TableCell>
         <TableCell>{danceSize}</TableCell>
-        <TableCell>
-        {isEditMode ? (
-          <Input
-            defaultValue={parseInt(artisticMark)}
-            name="artisticMark" //unsure if this is necessary
-            onChange={(e) => this.onChange(e)}
-          />
-        ) : (
-          parseInt(artisticMark)
-        )}
-      </TableCell>
-      <TableCell>
-        {isEditMode ? (
-          <Input
-            defaultValue={parseInt(technicalMark)}
-            name="technicalMark" //unsure if this is necessary
-            onChange={(e) => this.onChange(e)}
-          />
-        ) : (
+        {isAdmin ? 
+        (<TableCell>
+          <div style={{ display: 'flex'}}>
+            <div style={{ flex: '33%'}}>{Object.values(judges).includes(1)? (<LensIcon fontSize="inherit" style={{ color: 'purple' }}/>):(<LensIcon fontSize="inherit" style={{ color: 'white' }}/>)}</div>
+            <div style={{ flex: '33%'}}>{Object.values(judges).includes(2)? (<LensIcon fontSize="inherit" style={{ color: 'green' }}/>):(<LensIcon fontSize="inherit" style={{ color: 'white' }}/>)} </div>
+            <div style={{ flex: '33%'}}>{Object.values(judges).includes(3)? (<LensIcon fontSize="inherit" style={{ color: 'primary' }}/>):(<LensIcon fontSize="inherit" style={{ color: 'white' }}/>)} </div>
+          </div>
+        </TableCell>) :
+        (<>
+          <TableCell>
+          {isEditMode ? (
+            <Input
+              defaultValue={parseInt(artisticMark)}
+              name="artisticMark" //unsure if this is necessary
+              onChange={(e) => this.onChange(e)}
+            />
+          ) : (
+            parseInt(artisticMark)
+          )}
+          </TableCell>
+          <TableCell>
+          {isEditMode ? (
+            <Input
+              defaultValue={parseInt(technicalMark)}
+              name="technicalMark" //unsure if this is necessary
+              onChange={(e) => this.onChange(e)}
+            />
+          ) : (
           parseInt(technicalMark)
-        )}
-      </TableCell>
-        <TableCell>
+          )}
+          </TableCell>
+          <TableCell>
           { adjudication.artisticMark && adjudication.technicalMark ? (
                 isEditMode ? ( 
                   <div style={{ display: 'flex'}}>
@@ -140,12 +156,15 @@ class AdjudicationTableRow extends React.Component {
                     <EditIcon />
                   </IconButton>
                 ) ) : ("N/A") }
-              </TableCell>
-        <TableCell>
-          <Button variant="outlined" color="primary">
-            <Link to={`performance/${id}`}>Adjudicate</Link>
-          </Button>
-        </TableCell>
+          </TableCell>
+          <TableCell>
+              <Button variant="outlined" color="primary">
+                <Link to={`performance/${id}`}>Adjudicate</Link>
+              </Button>
+          </TableCell>
+        </>
+        )}
+
       </TableRow>
     );
   }

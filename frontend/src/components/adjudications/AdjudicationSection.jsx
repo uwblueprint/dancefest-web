@@ -15,15 +15,21 @@ export default function AdjudicationsSection(props) {
   const [loading, setLoading] = useState(true);
   const [adjudications, setAdjudications] = useState({}); 
   const [performances, setPerformances] = useState({}); 
-  const collectionName = `events/${eventId}/performances/1/adjudications`; //replace 1 with ${performanceId}
+  const collectionName = `events/${eventId}/performances/1/adjudications`; 
   const [filteredPerformances, setFilteredPerformances] = useState([]);
   const [nextPerformance, setNextPerformance] = useState();
+  const [isAdmin, setIsAdmin] = useState(true); //change when user stuff is completed
+
   //constants
   const { history, match: { params: { eventId }}} = props;
-  const headings = ['Dance Title', 'Dance Entry', 'School', 'Dance Style', 'Dance Size', 'Artistic Mark', 'Technical Mark'];
   const keys = ['academicLevel', 'choreographers', 'competitionLevel', 'danceEntry', 'danceSize', 'danceStyle', 'danceTitle', 'performers', 'schoolName'];
   const showPerformances = Array.isArray(performances) && performances.length > 0;
- 
+
+  //table headings
+  var headings = ['Dance Title', 'Dance Entry', 'School', 'Dance Style', 'Dance Size', 'Artistic Mark', 'Technical Mark']
+  if (isAdmin) {
+    headings = ['Dance Title', 'Dance Entry', 'School', 'Dance Style', 'Dance Size', 'Judges']
+  } 
 
 //according to docs, componentDidMount() is similar to useEffect(() => {}); 
   useEffect(() => {     
