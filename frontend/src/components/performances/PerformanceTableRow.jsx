@@ -3,11 +3,17 @@ import PropTypes from 'prop-types';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import { Link } from 'react-router-dom';
-
+import { test2 } from '../../api/AdjudicationAPI';
 import PerformanceDialog from './PerformanceDialog';
 
 class PerformanceTableRow extends React.Component {
   state = {};
+  componentDidMount() {
+    test2(this.props.id) 
+    .then(({data}) => {
+      console.log(data)
+    }); 
+  }
 
   render() {
     const {

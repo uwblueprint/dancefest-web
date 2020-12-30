@@ -46,6 +46,7 @@ def get_performances(event_id):
 
 @blueprint.route('/<event_id>/test')
 def test_route(event_id):
+    console.log('on test page')
     # get all the performances
     all_performances = Performance.get_by(**{"event_id": event_id})
     # get all the adjudications in the peformance, and check if they match the performance
@@ -53,6 +54,7 @@ def test_route(event_id):
         q = db.session.query(Adjudication).filter(Adjudication.performance_id == performance.id)
 
         # if (db.session.query(q.exists())==False):
+    console.log(jsonify(performance.to_dict(True)))
     return jsonify(performance.to_dict(True))
         # else: 
         #     continue

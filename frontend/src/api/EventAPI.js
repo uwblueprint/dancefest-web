@@ -14,4 +14,4 @@ export const editExistingEvent = (eventId, body) => {
 
 export const test = () => {
     return get('events/test');
-}
+};

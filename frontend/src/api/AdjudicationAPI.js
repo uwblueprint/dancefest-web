@@ -20,3 +20,8 @@ export const createAdjudication = (data) => {
   return post('adjudications/', humps.decamelizeKeys(data))
     .then((response) => humps.camelizeKeys(response));
 };
+
+export const test2 = (id) => {
+  return get(`adjudications/${id}/test2`)
+    .then((response) => humps.camelizeKeys(response));
+};
