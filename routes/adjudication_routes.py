@@ -26,12 +26,15 @@ def create_adjudication():
 def test2_route(performance_id):
     artist_marks = []
     technical_marks = []
+    cumulative_marks = []
     adjudication_filter = request.args.to_dict()
     for adjudication in db.session.query(Adjudication).filter(Adjudication.performance_id==performance_id):
         artist_marks.append(adjudication.artistic_mark)
         technical_marks.append(adjudication.technical_mark)
+        cumulative_marks.append(adjudication.cumulative_mark)
+    
+    artistic_mark = int(sum(artist_marks)/len(artist_marks))
+    technical_mark = int(sum(technical_marks)/len(technical_marks))
+    cumulative_mark = int(sum(cumulative_marks)/len(cumulative_marks))
 
-    artistic_mark = sum(artist_marks)/len(artist_marks)
-    technical_mark = sum(technical_marks)/len(technical_marks)
-
-    return jsonify(artistic_mark)
+    return jsonify(artistic_mark=artistic_mark, technical_mark=technical_mark, cumulative_mark =cumulative_mark)
