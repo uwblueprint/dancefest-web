@@ -42,7 +42,7 @@ class PerformanceTableRow extends React.Component {
 
     return (
       <TableRow style={{}}>
-        <TableCell><Link to={`performance/${id}/adjudications`}>{danceTitle}</Link></TableCell>
+        <TableCell><Link to={`performance/${id}/adjudications`} target="_blank">{danceTitle}</Link></TableCell>
         <TableCell>{danceEntry}</TableCell>
         <TableCell>{schoolName}</TableCell>
         <TableCell>{academicLevel}</TableCell>
