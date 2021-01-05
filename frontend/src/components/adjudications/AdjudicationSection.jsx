@@ -71,14 +71,17 @@ export default function AdjudicationsSection(props) {
     history.push(`/events/${eventId}/adjudications/performance/${nextPerformance.id}`);
   };
 
+  var adjudicateNextButton = <Button variant="outlined" color="primary" onClick={goToNextPerformance}>Adjudicate Next</Button>;
+  if(isAdmin) {
+    adjudicateNextButton = <></>;
+  }
+
   return (
 
     <Section 
       headings={headings} 
-      loading={loading} 
-      renderNewButton={
-        <Button variant="outlined" color="primary" onClick={goToNextPerformance}>Adjudicate Next</Button>
-      } 
+      loading={loading}
+      renderNewButton={adjudicateNextButton} 
       showContent={showPerformances} 
       type="adjudication"
     >
