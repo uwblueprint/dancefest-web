@@ -26,11 +26,8 @@ export default function AdjudicationsSection(props) {
   const showPerformances = Array.isArray(performances) && performances.length > 0;
 
   //table headings
-  var headings = ['Dance Title', 'Dance Entry', 'School', 'Dance Style', 'Dance Size', 'Artistic Mark', 'Technical Mark']
-  if (isAdmin) {
-    headings = ['Dance Title', 'Dance Entry', 'School', 'Dance Style', 'Dance Size', 'Judges']
-  } 
-
+  const headings = isAdmin? (['Dance Title', 'Dance Entry', 'School', 'Dance Style', 'Dance Size', 'Judges']) : (['Dance Title', 'Dance Entry', 'School', 'Dance Style', 'Dance Size', 'Artistic Mark', 'Technical Mark']);
+  
 //according to docs, componentDidMount() is similar to useEffect(() => {}); 
   useEffect(() => {     
 
@@ -71,14 +68,14 @@ export default function AdjudicationsSection(props) {
     history.push(`/events/${eventId}/adjudications/performance/${nextPerformance.id}`);
   };
 
+  const adjudicateNextButton = isAdmin? (<></>) : (<Button variant="outlined" color="primary" onClick={goToNextPerformance}>Adjudicate Next</Button>);
+
   return (
 
     <Section 
       headings={headings} 
-      loading={loading} 
-      renderNewButton={
-        <Button variant="outlined" color="primary" onClick={goToNextPerformance}>Adjudicate Next</Button>
-      } 
+      loading={loading}
+      renderNewButton={adjudicateNextButton} 
       showContent={showPerformances} 
       type="adjudication"
     >
