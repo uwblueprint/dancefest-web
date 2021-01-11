@@ -3,16 +3,15 @@ import PropTypes from 'prop-types';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import { Link } from 'react-router-dom';
-import { test2 } from '../../api/AdjudicationAPI';
+import { surfaceScores } from '../../api/AdjudicationAPI';
 import PerformanceDialog from './PerformanceDialog';
 import { Tab } from '@material-ui/core';
 
 class PerformanceTableRow extends React.Component {
   state = {artisticMark: 0, technicalMark: 0, cumulativeMark: 0};
   componentDidMount() {
-    test2(this.props.id) 
+    surfaceScores(this.props.id) 
     .then(({data}) => {
-      console.log(data)
       this.setState({artisticMark: data["artisticMark"], technicalMark: data['technicalMark'], cumulativeMark: data["cumulativeMark"]});
     }); 
   }

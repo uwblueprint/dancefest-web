@@ -21,7 +21,7 @@ export const createAdjudication = (data) => {
     .then((response) => humps.camelizeKeys(response));
 };
 
-export const test2 = (id) => {
-  return get(`adjudications/${id}/test2`)
+export const surfaceScores = (id) => {
+  return get(`adjudications/${id}/surfaceScores`)
     .then((response) => humps.camelizeKeys(response));
 };

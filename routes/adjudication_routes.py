@@ -22,8 +22,8 @@ def create_adjudication():
 
     return jsonify(new_adjudication.to_dict())
 
-@blueprint.route('/<performance_id>/test2')    
-def test2_route(performance_id):
+@blueprint.route('/<performance_id>/surfaceScores')    
+def surface_scores_route(performance_id):
     artist_marks = []
     technical_marks = []
     cumulative_marks = []

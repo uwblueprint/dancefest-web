@@ -11,7 +11,3 @@ export const addNewEvent = (body) => {
 export const editExistingEvent = (eventId, body) => {
     return post(`/events/${eventId}`, body);
 };
-
-export const test = () => {
-    return get('events/test');
-};
