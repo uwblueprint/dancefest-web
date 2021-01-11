@@ -29,7 +29,7 @@ class EventTableRow extends React.Component {
     return (
       <TableRow>
         <TableCell>
-          <Link to={`/events/${id}/performances`} target="_blank" >{eventTitle}</Link>
+          <Link to={`/events/${id}/performances`}>{eventTitle}</Link>
         </TableCell>
         <TableCell>
           {eventDate ? moment(eventDate).format('YYYY-MM-DD') : ''}

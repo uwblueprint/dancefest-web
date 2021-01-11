@@ -25,3 +25,18 @@ export const surfaceScores = (id) => {
   return get(`adjudications/${id}/surfaceScores`)
     .then((response) => humps.camelizeKeys(response));
 };
+
+export const getNextUnjudgedPerformance = (eventId, tabletId) => {
+  return get(`adjudications/${eventId}/${tabletId}`)
+    .then((response) => humps.camelizeKeys(response));
+}
+
+export const getAdjudicationByPerformanceAndJudge = (performanceId, tabletId) => {
+  return get(`adjudications/${performanceId}/${tabletId}`)
+    .then((response) => humps.camelizeKeys(response));
+}
+
+export const getJudgesWhoCompletedAdjudication = (performanceId) => {
+  return get(`adjudications/judges/${performanceId}`)
+    .then((response) => humps.camelizeKeys(response));
+}

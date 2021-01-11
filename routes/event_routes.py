@@ -3,7 +3,9 @@ from flask import Blueprint
 from flask import jsonify
 from flask import request
 
-from db.models import Event, Performance, Adjudication
+from db.models import Event, Performance, Adjudication, School
+from db import db
+from db.models import Event, Performance, School
 
 blueprint = Blueprint('events', __name__, url_prefix='/api/events')
 
@@ -38,7 +40,10 @@ def get_events():
 
 # TODO: re-org where the endpoints go especially this one and update api specs
 @blueprint.route('/<event_id>/performances')
-def get_performances(event_id):
-    events = Event.query.all()
-    all_performances = Performance.get_by(**{"event_id": event_id})
-    return jsonify({performance.id: performance.to_dict() for performance in all_performances})
+def get_performances(event_id)
+    all_performances = db.session.query(Performance, School.name) \
+        .outerjoin(School, Performance.school_id==School.id) \
+        .filter(Performance.event_id == event_id)
+    return jsonify({
+        performance.id: {'performance': performance.to_dict(), 'school_name': school_name} for performance, school_name in all_performances
+    })
