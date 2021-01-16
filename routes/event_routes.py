@@ -2,13 +2,11 @@ import dateutil.parser
 from flask import Blueprint
 from flask import jsonify
 from flask import request
-
 from db.models import Event, Performance, Adjudication, School
 from db import db
 from db.models import Event, Performance, School
 
 blueprint = Blueprint('events', __name__, url_prefix='/api/events')
-
 
 @blueprint.route('/<event_id>', methods=['POST'])
 def update_event(event_id):
