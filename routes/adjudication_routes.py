@@ -21,6 +21,23 @@ def create_adjudication():
 
     return jsonify(new_adjudication.to_dict())
 
+@blueprint.route('/<performance_id>/surfaceScores')    
+def surface_scores_route(performance_id):
+    artist_marks = []
+    technical_marks = []
+    cumulative_marks = []
+    adjudication_filter = request.args.to_dict()
+    for adjudication in db.session.query(Adjudication).filter(Adjudication.performance_id==performance_id):
+        artist_marks.append(adjudication.artistic_mark)
+        technical_marks.append(adjudication.technical_mark)
+        cumulative_marks.append(adjudication.cumulative_mark)
+    
+    artistic_mark = int(sum(artist_marks)/len(artist_marks))
+    technical_mark = int(sum(technical_marks)/len(technical_marks))
+    cumulative_mark = int(sum(cumulative_marks)/len(cumulative_marks))
+
+    return jsonify(artistic_mark=artistic_mark, technical_mark=technical_mark, cumulative_mark =cumulative_mark)
+
 @blueprint.route('/<event_id>/<tablet_id>', methods=['GET'])
 def get_unjudged_performance(event_id, tablet_id):
     #1. Get all performances

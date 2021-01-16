@@ -21,6 +21,11 @@ export const createAdjudication = (data) => {
     .then((response) => humps.camelizeKeys(response));
 };
 
+export const surfaceScores = (id) => {
+  return get(`adjudications/${id}/surfaceScores`)
+    .then((response) => humps.camelizeKeys(response));
+};
+
 export const getNextUnjudgedPerformance = (eventId, tabletId) => {
   return get(`adjudications/${eventId}/${tabletId}`)
     .then((response) => humps.camelizeKeys(response));

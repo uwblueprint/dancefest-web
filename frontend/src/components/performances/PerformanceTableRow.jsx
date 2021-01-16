@@ -1,13 +1,20 @@
-import React from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import { Link } from 'react-router-dom';
-
+import { surfaceScores } from '../../api/AdjudicationAPI';
 import PerformanceDialog from './PerformanceDialog';
+import { Tab } from '@material-ui/core';
 
 class PerformanceTableRow extends React.Component {
-  state = {};
+  state = {artisticMark: 0, technicalMark: 0, cumulativeMark: 0};
+  componentDidMount() {
+    surfaceScores(this.props.id) 
+    .then(({data}) => {
+      this.setState({artisticMark: data["artisticMark"], technicalMark: data['technicalMark'], cumulativeMark: data["cumulativeMark"]});
+    }); 
+  }
 
   render() {
     const {
@@ -15,8 +22,13 @@ class PerformanceTableRow extends React.Component {
       createData,
       currentValues,
       eventId,
-      id
+      id,
     } = this.props;
+    const {
+      artisticMark, 
+      technicalMark,
+      cumulativeMark,
+    } = this.state;
     const {
       academicLevel,
       competitionLevel,
@@ -36,6 +48,9 @@ class PerformanceTableRow extends React.Component {
         <TableCell>{competitionLevel}</TableCell>
         <TableCell>{danceStyle}</TableCell>
         <TableCell>{danceSize}</TableCell>
+        <TableCell>{artisticMark}</TableCell>
+        <TableCell>{technicalMark}</TableCell>
+        <TableCell>{cumulativeMark}</TableCell>
         <TableCell>
           <PerformanceDialog
             updateData={updateData}
@@ -60,6 +75,7 @@ PerformanceTableRow.propTypes = {
     danceTitle: PropTypes.string,
     performers: PropTypes.string,
     schoolId: PropTypes.string,
+    artisticMark: PropTypes.number,
   }),
   eventId: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired
@@ -68,5 +84,7 @@ PerformanceTableRow.propTypes = {
 PerformanceTableRow.defaultProps = {
   currentValues: {}
 };
+
+  
 
 export default PerformanceTableRow;
