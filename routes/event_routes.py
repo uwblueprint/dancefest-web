@@ -40,7 +40,7 @@ def get_events():
 
 # TODO: re-org where the endpoints go especially this one and update api specs
 @blueprint.route('/<event_id>/performances')
-def get_performances(event_id)
+def get_performances(event_id):
     all_performances = db.session.query(Performance, School.name) \
         .outerjoin(School, Performance.school_id==School.id) \
         .filter(Performance.event_id == event_id)
