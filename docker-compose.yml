@@ -1,6 +1,7 @@
-version: "2.1"
+version: "3.8"
 services:
   backend:
+    container_name: backend
     restart: always
     build: .
     ports:
@@ -12,15 +13,15 @@ services:
     depends_on:
       - db
   db:
+    container_name: db
     image: postgres:12-alpine
     ports:
       - 5432:5432
     volumes:
       - postgres_data:/var/lib/postgresql/data/
-    environment:
-      POSTGRES_DB: "dancefest"
-      POSTGRES_PASSWORD: "test"
-      POSTGRES_USER: "test"
+    env_file:
+      - .env
+
   frontend:
     container_name: frontend
     image: node:10.22.0-alpine
@@ -34,6 +35,8 @@ services:
     volumes:
       - /app/node_modules
       - ./frontend:/app
+    env_file:
+      - .env
     depends_on:
       - backend
       - db
