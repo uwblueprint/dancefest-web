@@ -11,7 +11,7 @@ Requirements:
 
 The project is dockerized.  We use ReactJS, Flask, PostgreSQL, and Firebase. 
 
-- Backend (will) support hot-reload so no need to re run it after every change
+- Backend supports hot-reload so no need to re run it after every change
 - Frontend supports hot-reload so no need to re run it after every change
 - You may be missing one or more env variables in your `.env` file: check the Slack channel
 

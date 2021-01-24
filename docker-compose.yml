@@ -3,11 +3,13 @@ services:
   backend:
     container_name: backend
     restart: always
-    build: .
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
     ports:
       - 5000:5000
     volumes:
-      - .:/backend
+      - ./backend:/app
     env_file:
       - .env
     depends_on:
