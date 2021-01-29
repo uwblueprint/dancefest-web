@@ -32,11 +32,12 @@ def surface_scores_route(performance_id):
         technical_marks.append(adjudication.technical_mark)
         cumulative_marks.append(adjudication.cumulative_mark)
     
-    artistic_mark = int(sum(artist_marks)/len(artist_marks))
-    technical_mark = int(sum(technical_marks)/len(technical_marks))
-    cumulative_mark = int(sum(cumulative_marks)/len(cumulative_marks))
+    # Fallback to mark of 0 if the list is empty
+    artistic_mark = int(sum(artist_marks)/len(artist_marks)) if artist_marks else 0
+    technical_mark = int(sum(technical_marks)/len(technical_marks)) if technical_marks else 0
+    cumulative_mark = int(sum(cumulative_marks)/len(cumulative_marks)) if cumulative_marks else 0
 
-    return jsonify(artistic_mark=artistic_mark, technical_mark=technical_mark, cumulative_mark =cumulative_mark)
+    return jsonify(artistic_mark=artistic_mark, technical_mark=technical_mark, cumulative_mark=cumulative_mark)
 
 @blueprint.route('/<event_id>/<tablet_id>', methods=['GET'])
 def get_unjudged_performance(event_id, tablet_id):
