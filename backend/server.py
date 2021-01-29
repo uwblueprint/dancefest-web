@@ -22,7 +22,6 @@ from routes import (
 
 mail = Mail()
 
-
 def create_app():
     app = Flask(__name__, static_folder='../build/static')
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']

@@ -5,7 +5,7 @@ from server import mail
 
 blueprint = Blueprint('mailer', __name__, url_prefix='/api/mailer')
 
-
+# TODO: refactor mailing (spec'ed out)
 @blueprint.route('/', methods=['POST'])
 def send_mail():
     args = request.get_json()

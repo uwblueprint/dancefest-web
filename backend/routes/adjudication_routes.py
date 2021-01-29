@@ -6,7 +6,7 @@ from db import db
 blueprint = Blueprint('adjudication', __name__, url_prefix='/api/adjudications')
 
 
-@blueprint.route('/<adjudication_id>', methods=['POST'])
+@blueprint.route('/<int:adjudication_id>', methods=['PUT'])
 def update_adjudication(adjudication_id):
     adjudication = Adjudication.get(adjudication_id)
     adjudication_json = request.get_json()
@@ -21,7 +21,8 @@ def create_adjudication():
 
     return jsonify(new_adjudication.to_dict())
 
-@blueprint.route('/<performance_id>/surfaceScores')    
+#TODO: these scores should be returned when we retrieves the performances
+@blueprint.route('/<int:performance_id>/surface_scores')    
 def surface_scores_route(performance_id):
     artist_marks = []
     technical_marks = []
@@ -38,6 +39,8 @@ def surface_scores_route(performance_id):
     cumulative_mark = int(sum(cumulative_marks)/len(cumulative_marks)) if cumulative_marks else 0
 
     return jsonify(artistic_mark=artistic_mark, technical_mark=technical_mark, cumulative_mark=cumulative_mark)
+
+# TODO: CLEANUP ANDROID APP ROUTES 
 
 @blueprint.route('/<event_id>/<tablet_id>', methods=['GET'])
 def get_unjudged_performance(event_id, tablet_id):
@@ -59,6 +62,8 @@ def get_adjudication_by_judge(performance_id, tablet_id):
     adjudication = db.session.query(Adjudication).filter(Adjudication.tablet_id==tablet_id, Adjudication.performance_id==performance_id).first()
     return jsonify(adjudication.to_dict())
 
+# should be common get judges, passing in boolean for adjudicated 
+# TODO: USE CASE?
 @blueprint.route('judges/<int:performance_id>', methods=['GET'])
 def get_judges_who_adjudicated(performance_id):
     judge_ids = []

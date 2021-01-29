@@ -8,7 +8,7 @@ from db.models import Event, Performance, School
 
 blueprint = Blueprint('events', __name__, url_prefix='/api/events')
 
-@blueprint.route('/<event_id>', methods=['POST'])
+@blueprint.route('/<event_id>', methods=['PUT'])
 def update_event(event_id):
     event = Event.query.get(event_id)
 

@@ -1,7 +1,7 @@
 import uuid
 
 from flask import Blueprint
-from flask import jsonify, request
+from flask import jsonify, request, current_app
 
 from db.models import Adjudication
 from db.models import NominationComment
@@ -9,7 +9,7 @@ from db.models import Performance
 
 blueprint = Blueprint('performance', __name__, url_prefix='/api/performances')
 
-
+# TODO: double check that frontend is passing choreographers and performers as a list
 @blueprint.route('/', methods=['POST'])
 def create_performance():
     performance_json = request.get_json()
@@ -18,29 +18,28 @@ def create_performance():
     return jsonify(new_performance.to_dict())
 
 
-@blueprint.route('<performance_id>', methods=['GET'])
+@blueprint.route('<int:performance_id>', methods=['GET'])
 def get_performance(performance_id):
     performance = Performance.get(performance_id)
     return jsonify(performance.to_dict())
 
 
-@blueprint.route('/<int:performance_id>', methods=['POST'])
+@blueprint.route('/<int:performance_id>', methods=['PUT'])
 def update_performance(performance_id):
     performance = Performance.query.get(performance_id)
     performance_json = request.get_json()
     performance.update(**performance_json)
-
     return jsonify(performance.to_dict())
 
-
-@blueprint.route('/<award_id>/awards', methods=['GET'])
+# TODO: what is the use case for?
+@blueprint.route('/<int:award_id>/awards', methods=['GET'])
 def get_performances_adjudications_by_award(award_id):
     performances = Performance.query \
         .filter(Performance.award_performance.any(award_id=award_id)) \
         .all()
     return jsonify({performance.id: performance.to_dict(True) for performance in performances})
 
-
+#TODO: Move to Adjudications, refactor with common GET route
 @blueprint.route('/<list:performance_ids>/adjudications', methods=['GET'])
 def get_adjudications_by_performance(performance_ids):
     adjudications = Adjudication.query.filter(Adjudication.performance_id.in_(performance_ids)).all()
@@ -52,7 +51,7 @@ def get_adjudications_by_performance(performance_ids):
         performance_to_adjudication[performance_id][adjudication.id] = adjudication.to_dict()
     return jsonify(performance_to_adjudication)
 
-
+#TODO: Move to Adjudications, refactor with common GET route
 @blueprint.route('/<int:performance_id>/adjudications', methods=['GET'])
 def get_adjudications(performance_id):
     # Query by performance id and any additional query parameters provided
@@ -60,7 +59,7 @@ def get_adjudications(performance_id):
     adjudications = Adjudication.get_by(performance_id=performance_id, **adjudication_filter)
     return jsonify({adjudication.id: adjudication.to_dict() for adjudication in adjudications})
 
-
+#TODO: Move to Adjudications, refactor with common GET route
 @blueprint.route('/<int:performance_id>/adjudications', methods=['POST'])
 def create_adjudication(performance_id):
     adjudication_json = request.get_json()
@@ -69,7 +68,7 @@ def create_adjudication(performance_id):
 
     return jsonify(new_adjudication.to_dict(True, 'performance'))
 
-
+#TODO: Move to Adjudications, refactor with common GET route
 @blueprint.route('/<int:performance_id>/adjudications/<int:award_id>/comments', methods=['GET'])
 def get_adjudications_and_comments(performance_id, award_id):
     adjudication_comments = Adjudication.query \
@@ -81,6 +80,7 @@ def get_adjudications_and_comments(performance_id, award_id):
         {adjudication_comment.id: adjudication_comment.to_dict(True, ['performance']) for adjudication_comment in
          adjudication_comments})
 
+#TODO: Tablet ID? Change formatting of route
 @blueprint.route('/<event_id>/<tablet_id>/adjudications', methods=['GET'])
 def get_performance_adjudication_pairs(event_id, tablet_id):
     performances = Performance.get_by(event_id=event_id)
