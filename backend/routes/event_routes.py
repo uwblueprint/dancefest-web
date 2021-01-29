@@ -37,6 +37,8 @@ def get_events():
 
 
 # TODO: re-org where the endpoints go especially this one and update api specs
+# TODO: retrive all necessary metadata about the event here
+# '/<int:event_id>'
 @blueprint.route('/<event_id>/performances')
 def get_performances(event_id):
     all_performances = db.session.query(Performance, School.name) \
