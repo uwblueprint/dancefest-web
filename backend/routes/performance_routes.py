@@ -3,33 +3,92 @@ import uuid
 from flask import Blueprint
 from flask import jsonify, request, current_app
 
+# TODO: get rid of unnecessary imports
 from db.models import Adjudication
 from db.models import NominationComment
 from db.models import Performance
 
+from resources.performance_resource import PerformanceResource
+from services import performance_service
+
 blueprint = Blueprint('performance', __name__, url_prefix='/api/performances')
+
+@blueprint.route('<int:id>', methods=['GET'])
+def get_performance(id):
+    """Gets performance by id
+
+    Returns:
+        performance with provided id
+    """
+    performance = performance_service.get_performance(id)
+    if performance is None:
+        error = {'error': 'Performance not found'}
+        return jsonify(error), 404
+
+    return jsonify(performance), 200
 
 # TODO: double check that frontend is passing choreographers and performers as a list
 @blueprint.route('/', methods=['POST'])
 def create_performance():
-    performance_json = request.get_json()
-    performance_json['token'] = uuid.uuid4().hex
-    new_performance = Performance.create(**performance_json)
-    return jsonify(new_performance.to_dict())
+    """Creates a performance
 
+    Request Body:
+        school_id: integer
+        performers: list of strings
+        dance_title: string
+        dance_style: string
+        dance_entry: integer
+        dance_size: string
+        competition_level: string
+        choreographers: list of strings
+        academic_level: string
 
-@blueprint.route('<int:performance_id>', methods=['GET'])
-def get_performance(performance_id):
-    performance = Performance.get(performance_id)
-    return jsonify(performance.to_dict())
+    Returns:
+        data for created performance
+    """
+    try:
+        performance_json = request.get_json()
+        body = PerformanceResource(**request.get_json())
 
+    except Exception as error:
+        error = {'error': str(error)}
 
-@blueprint.route('/<int:performance_id>', methods=['PUT'])
-def update_performance(performance_id):
-    performance = Performance.query.get(performance_id)
-    performance_json = request.get_json()
-    performance.update(**performance_json)
-    return jsonify(performance.to_dict())
+        return jsonify(error), 400
+
+    return jsonify(performance_service.create_performance(body.__dict__)), 201
+
+@blueprint.route('/<int:id>', methods=['PUT'])
+def update_performance(id):
+    """Updates a performance with provided id
+
+    Request Body:
+        school_id: integer
+        performers: list of strings
+        dance_title: string
+        dance_style: string
+        dance_entry: integer
+        dance_size: string
+        competition_level: string
+        choreographers: list of strings
+        academic_level: string
+
+    Returns:
+        updated performance
+    """
+    try:
+        body = PerformanceResource(**request.get_json())
+    except Exception as error:
+        error = {'error': str(error)}
+        return jsonify(error), 400
+
+    updated_performance = performance_service.update_performance(id, body.__dict__)
+
+    if updated_performance is None:
+        error = {'error': 'Performance not found'}
+        return jsonify(error), 404
+    
+    return jsonify(updated_performance), 200
+
 
 # TODO: what is the use case for?
 @blueprint.route('/<int:award_id>/awards', methods=['GET'])
