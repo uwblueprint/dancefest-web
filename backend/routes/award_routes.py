@@ -1,18 +1,17 @@
 from flask import Blueprint
 from flask import jsonify, request
 
+#TODO: remove unnecessary imports
 from db import db
 from db.models import Award, AwardPerformance
 
 blueprint = Blueprint('award', __name__, url_prefix='/api/awards')
-
 
 @blueprint.route('/<int:event_id>', methods=['GET'])
 def get_awards(event_id):
     awards = Award.get_by(event_id=event_id)
     return jsonify({award.id: award.to_dict() for award in awards})
 
-# TODO: 
 @blueprint.route('/<int:performance_id>/award_performance', methods=['GET'])
 def get_award_performance(performance_id):
     # get the title, number of judges that have nominated a performance for an award,

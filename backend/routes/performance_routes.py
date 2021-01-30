@@ -47,7 +47,6 @@ def create_performance():
         data for created performance
     """
     try:
-        performance_json = request.get_json()
         body = PerformanceResource(**request.get_json())
 
     except Exception as error:

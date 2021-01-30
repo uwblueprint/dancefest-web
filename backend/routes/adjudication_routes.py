@@ -3,23 +3,67 @@ from flask import Blueprint, jsonify, request
 from db.models import Adjudication, Performance
 from db import db
 
+from resources.adjudication_resource import AdjudicationResource
+from services import adjudication_service
+
 blueprint = Blueprint('adjudication', __name__, url_prefix='/api/adjudications')
-
-
-@blueprint.route('/<int:adjudication_id>', methods=['PUT'])
-def update_adjudication(adjudication_id):
-    adjudication = Adjudication.get(adjudication_id)
-    adjudication_json = request.get_json()
-    adjudication.update(**adjudication_json)
-
-    return jsonify(adjudication.to_dict())
 
 @blueprint.route('/', methods=['POST'])
 def create_adjudication():
-    adjudication_json = request.get_json()
-    new_adjudication = Adjudication.create(**adjudication_json)
+    """Creates an adjudication
+    TODO: Frontend currently does not data about special_award
+    Request Body:
+        artistic_mark = integer
+        audio_url = string
+        cumulative_mark = integer
+        notes = string
+        technical_mark = integer
+        tablet_id = integer
+        performance_id = integer
 
-    return jsonify(new_adjudication.to_dict())
+    Returns:
+        data for created performance
+    """
+    try:
+        body = AdjudicationResource(**request.get_json())
+
+    except Exception as error:
+        error = {'error': str(error)}
+
+        return jsonify(error), 400
+
+    return jsonify(adjudication_service.create_adjudication(body.__dict__)), 201
+
+@blueprint.route('/<int:id>', methods=['PUT'])
+def update_adjudication(id):
+    """Updates an adjudication with provided id
+
+    TODO: Frontend currently does not data about special_award
+    Request Body:
+        artistic_mark = integer
+        audio_url = string
+        cumulative_mark = integer
+        notes = string
+        technical_mark = integer
+        tablet_id = integer
+        performance_id = integer
+
+    Returns:
+        updated adjudication
+    """
+    try:
+        body = AdjudicationResource(**request.get_json())
+    except Exception as error:
+        error = {'error': str(error)}
+        return jsonify(error), 400
+
+    update_adjudication = adjudication_service.update_adjudication(id, body.__dict__)
+
+    if update_adjudication is None:
+        error = {'error': 'Adjudication not found'}
+        return jsonify(error), 404
+    
+    return jsonify(update_adjudication), 200
 
 #TODO: these scores should be returned when we retrieves the performances
 @blueprint.route('/<int:performance_id>/surface_scores')    
