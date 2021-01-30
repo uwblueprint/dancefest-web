@@ -1,36 +1,24 @@
-# Dancefest Backend
+# Dancefest
 
 ## Setup
 
-On the backend we use Python3, Flask, PostgreSQL, and Firebase. The server is dockerized so all you need to do is run the instructions below. Make sure you have Docker desktop installed.
+Requirements:
+- [Docker](https://docs.docker.com/get-docker/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
+- `.env` files pinned in Slack channel
 
-Message a member of DanceFest Fall 2020 for `.env` credentials.
+## Development Workflow
 
-## Commands
+The project is dockerized.  We use ReactJS, Flask, PostgreSQL, and Firebase. 
 
-To first setup the backend run the following commands:
+- Backend supports hot-reload so no need to re run it after every change
+- Frontend supports hot-reload so no need to re run it after every change
+- You may be missing one or more env variables in your `.env` file: check the Slack channel
 
-```
-$ docker-compose up --build
-```
-
-On subsequent runs you can omit the --build tag.
+To run the application:
 
 ```
 $ docker-compose up
-```
-
-### Running After Code Changes
-
-If you have new pip dependencies or you have changed the Dockerfile you need to run:
-```
-$ docker-compose build
-$ docker-compose up -d --force-recreate
-```
-
-If you only made code changes run:
-```
-$ docker-compose up -d --force-recreate
 ```
 
 ### Seeding
