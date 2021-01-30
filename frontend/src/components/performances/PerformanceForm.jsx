@@ -88,10 +88,8 @@ class PerformanceForm extends React.Component {
     const data = omit(this.state, ['disabledSave', 'options', 'schools', 'schoolName']);
     if (formType === dialogType.NEW) {
       const performance = await createPerformance(data);
-      console.log('testestest')
-      console.log(data);
-      // performance.data.schoolName = schools[schoolId].name;
-      // createData(performance.data);
+      performance.data.schoolName = schools[schoolId].name;
+      createData(performance.data);
     } else {
       const performance = await updatePerformance(performanceId, data);
       performance.data.schoolName = schools[schoolId].name;
