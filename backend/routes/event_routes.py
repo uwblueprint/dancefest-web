@@ -1,7 +1,5 @@
 import dateutil.parser
-from flask import Blueprint
-from flask import jsonify
-from flask import request
+from flask import Blueprint, jsonify, request
 
 #TODO: remove unnecssary imports
 from db.models import Event, Performance, Adjudication, School

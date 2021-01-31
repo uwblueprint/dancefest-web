@@ -1,7 +1,6 @@
 import uuid
 
-from flask import Blueprint
-from flask import jsonify, request, current_app
+from flask import Blueprint, jsonify, request
 
 # TODO: get rid of unnecessary imports
 from db.models import Adjudication

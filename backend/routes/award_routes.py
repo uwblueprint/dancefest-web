@@ -1,5 +1,4 @@
-from flask import Blueprint
-from flask import jsonify, request
+from flask import Blueprint, jsonify, request
 
 #TODO: remove unnecessary imports
 from db import db

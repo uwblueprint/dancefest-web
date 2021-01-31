@@ -1,5 +1,4 @@
-from flask import Blueprint
-from flask import jsonify
+from flask import Blueprint, jsonify
 
 from db.models import Tablet
 

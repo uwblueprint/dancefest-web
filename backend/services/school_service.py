@@ -6,6 +6,4 @@ def get_schools():
 
 def get_school(id):
     school = School.query.get(id)
-    if school is None:
-        return school
-    return school.to_dict()
+    return school and school.to_dict()

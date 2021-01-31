@@ -1,7 +1,4 @@
-import dateutil.parser
-from flask import Blueprint
-from flask import jsonify
-from flask import request
+from flask import Blueprint, jsonify, request
 
 from db.models import User, UserTypes
 

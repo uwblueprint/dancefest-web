@@ -8,14 +8,10 @@ def create_event(event):
     new_event = Event(**event)
     db.session.add(new_event)
     db.session.commit()
-
     return new_event.to_dict()
 
 def update_event(id, event):
     Event.query.filter_by(id=id).update(event)
     updated_event = Event.query.get(id)
     db.session.commit()
-
-    if updated_event is None:
-        return updated_event
-    return updated_event.to_dict()
+    return updated_event and update_event.to_dict()
