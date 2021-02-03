@@ -22,11 +22,12 @@ from routes import (
 
 mail = Mail()
 
-
 def create_app():
     app = Flask(__name__, static_folder='../build/static')
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+    app.url_map.strict_slashes = False
 
     # Converters
     app.url_map.converters['list'] = ListConverter

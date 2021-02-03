@@ -1,42 +1,74 @@
 import dateutil.parser
-from flask import Blueprint
-from flask import jsonify
-from flask import request
+from flask import Blueprint, jsonify, request
+
+#TODO: remove unnecssary imports
 from db.models import Event, Performance, Adjudication, School
 from db import db
-from db.models import Event, Performance, School
+
+from resources.event_resource import EventResource
+from services import event_service
 
 blueprint = Blueprint('events', __name__, url_prefix='/api/events')
 
-@blueprint.route('/<event_id>', methods=['POST'])
-def update_event(event_id):
-    event = Event.query.get(event_id)
+@blueprint.route('/', methods=['GET'])
+def get_events():
+    """Gets all events
 
-    event_json = request.get_json()
-    event_json['event_date'] = dateutil.parser.parse(event_json['event_date'])
-
-    event.update(**event_json)
-
-    return jsonify(event.to_dict())
-
+    Returns:
+        all events
+    """
+    events = event_service.get_events()
+    return jsonify(events), 200
 
 @blueprint.route('/', methods=['POST'])
 def create_event():
-    event_json = request.get_json()
+    """Creates an event
 
-    event_json['event_date'] = dateutil.parser.parse(event_json['event_date'])
-    new_event = Event.create(**event_json)
+    Request Body:
+        event_title: string
+        num_judges: integer
+        event_date: string in format: DD/MM/YYYY
 
-    return jsonify(new_event.to_dict())
+    Returns:
+        data for created event
+    """
+    try:
+        body = EventResource(**request.get_json())
+    except Exception as error:
+        error = {'error': str(error)}
+        return jsonify(error), 400
 
+    return jsonify(event_service.create_event(body.__dict__)), 201
 
-@blueprint.route('/')
-def get_events():
-    events = Event.query.all()
-    return jsonify({event.id: event.to_dict() for event in events})
+@blueprint.route('/<int:id>', methods=['PUT'])
+def update_event(id):
+    """Updates event with provided id
 
+    Request Body:
+        event_title: string
+        num_judges: integer
+        event_date: string in format: DD/MM/YYYY
+
+    Returns:
+        updated event
+    """
+    try:
+        body = EventResource(**request.get_json())
+    except Exception as error:
+        error = {'error': str(error)}
+        return jsonify(error), 400
+
+    updated_event = event_service.update_event(id, body.__dict__)
+
+    if updated_event is None:
+        error = {'error': 'Event not found'}
+        return jsonify(error), 404
+
+    return jsonify(updated_event), 200
 
 # TODO: re-org where the endpoints go especially this one and update api specs
+# TODO: retrive all necessary metadata about the event here
+# '/<int:event_id>'
 @blueprint.route('/<event_id>/performances')
 def get_performances(event_id):
     all_performances = db.session.query(Performance, School.name) \

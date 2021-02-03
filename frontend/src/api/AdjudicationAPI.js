@@ -22,7 +22,7 @@ export const createAdjudication = (data) => {
 };
 
 export const surfaceScores = (id) => {
-  return get(`adjudications/${id}/surfaceScores`)
+  return get(`adjudications/${id}/surface_scores`)
     .then((response) => humps.camelizeKeys(response));
 };
 

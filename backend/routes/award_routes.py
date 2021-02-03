@@ -1,17 +1,15 @@
-from flask import Blueprint
-from flask import jsonify, request
+from flask import Blueprint, jsonify, request
 
+#TODO: remove unnecessary imports
 from db import db
 from db.models import Award, AwardPerformance
 
 blueprint = Blueprint('award', __name__, url_prefix='/api/awards')
 
-
 @blueprint.route('/<int:event_id>', methods=['GET'])
 def get_awards(event_id):
     awards = Award.get_by(event_id=event_id)
     return jsonify({award.id: award.to_dict() for award in awards})
-
 
 @blueprint.route('/<int:performance_id>/award_performance', methods=['GET'])
 def get_award_performance(performance_id):
@@ -26,17 +24,9 @@ def get_award_performance(performance_id):
     return jsonify({award_id: {'title': title, 'nominations_count': count, 'nominee_count': nominee_count} for
                     title, nominee_count, award_id, count in award_performances})
 
-
-@blueprint.route('/<int:award_id>', methods=['POST'])
+# TODO: use case and how it relates to performance
+@blueprint.route('/<int:award_id>', methods=['PUT'])
 def update_performance(award_id):
-    award_json = request.get_json()
-    award = Award.get(award_id)
-    new_award = award.update(**award_json)
-    return jsonify(new_award.to_dict())
-
-
-@blueprint.route('/<int:award_id>', methods=['POST'])
-def update_winning_performance(award_id):
     award_json = request.get_json()
     award = Award.get(award_id)
     new_award = award.update(**award_json)
