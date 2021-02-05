@@ -1,0 +1,102 @@
+/*
+****************************************
+Layout: Header
+****************************************
+*/
+.layout__header {
+  height: 64px;
+  padding: 0px 40px;
+  border-radius: 0px 0px 16px 16px;
+  background-color: var(--brand-other-red);
+}
+
+.layout__header > div {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Layout: Header - Logo */
+.layout__header_logo {
+  width: 150px;
+}
+
+.layout__header_logo > a {
+  text-decoration: none;
+  color: var(--brand-white);
+}
+
+.layout__header_logo > a > h1 {
+  font-size: 24px;
+}
+
+.layout__header_logo > a:hover > h1 {
+  opacity: 0.8;
+}
+
+/* Layout: Header - Menu */
+.layout__header_menu {
+  width: calc(100% - 150px);
+}
+
+.layout__header_menu > ul {
+  margin: 0px;
+  padding: 0px;
+  float: right;
+  list-style-type: none;
+}
+
+.layout__header_menu > ul > li {
+  margin: 0px 35px;
+  display: inline-block;
+}
+
+.layout__header_menu > ul > li:last-of-type {
+  margin-right: 0px;
+}
+
+.layout__header_menu > ul > li > a {
+  font-size: 18px;
+  text-decoration: none;
+  color: var(--brand-white);
+}
+
+.layout__header_menu > ul > li:last-of-type > a {
+  border: 1px solid var(--brand-white);
+  padding: 7px 25px;
+  border-radius: 5px;
+  transition: 100ms ease-in-out;
+}
+
+.layout__header_menu > ul > li > a:hover {
+  opacity: 0.8;
+}
+
+.layout__header_menu > ul > li:last-of-type > a:hover {
+  opacity: 1;
+  background-color: var(--brand-white);
+  color: var(--brand-other-red);
+}
+
+/*
+****************************************
+Layout: Content
+****************************************
+*/
+.layout__content {
+  padding: 30px 0px 64px 64px;
+}
+
+/*
+****************************************
+Layout: Responsiveness
+****************************************
+*/
+@media screen and (max-width: 750px) {
+  .layout__header {
+    padding: 0px 16px;
+  }
+
+  .layout__content {
+    padding: 20px 0px 16px 16px;
+  }
+}
