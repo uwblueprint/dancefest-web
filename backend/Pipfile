@@ -17,6 +17,7 @@ python-dotenv = "*"
 flask-cors = "*"
 py-dateutil = "*"
 flask-mail = "*"
+gunicorn = "*"
 
 [dev-packages]
 
