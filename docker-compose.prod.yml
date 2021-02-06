@@ -11,7 +11,7 @@ services:
     volumes:
       - ./backend:/app
     env_file:
-      - .env
+      - ./.env.prod
     depends_on:
       - db
   db:
