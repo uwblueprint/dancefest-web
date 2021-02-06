@@ -2,7 +2,7 @@ import humps from 'humps';
 import { get, post } from './ApiUtils';
 
 export const getPerformances = (id) => {
-	return get(`events/${id}/performances`);
+	return get(`performances?event_id=${id}`);
 };
 
 export const getPerformance = (performanceId) => {

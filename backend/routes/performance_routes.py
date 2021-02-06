@@ -26,6 +26,26 @@ def get_performance(id):
 
     return jsonify(performance), 200
 
+@blueprint.route('/', methods=['GET'])
+def get_performances():
+    """Gets performances with provided filter
+
+    Request Parameters: 
+    - event_id
+        Filters for all performances matching event_id passed in
+        Example: ?event_id=1 to get performances for event_id=1
+
+    Returns:
+        performances that match filter
+    """
+    event_id = request.args.get('event_id')
+
+    performances = performance_service.get_performances(event_id)
+
+    return jsonify({
+        performance.id: {'performance': performance.to_dict(), 'school_name': school_name} for performance, school_name in performances
+    })
+
 # TODO: double check that frontend is passing choreographers and performers as a list
 @blueprint.route('/', methods=['POST'])
 def create_performance():
@@ -116,14 +136,14 @@ def get_adjudications(performance_id):
     adjudications = Adjudication.get_by(performance_id=performance_id, **adjudication_filter)
     return jsonify({adjudication.id: adjudication.to_dict() for adjudication in adjudications})
 
-#TODO: Move to Adjudications, refactor with common GET route
-@blueprint.route('/<int:performance_id>/adjudications', methods=['POST'])
-def create_adjudication(performance_id):
-    adjudication_json = request.get_json()
-    adjudication_json['performance_id'] = performance_id
-    new_adjudication = Adjudication.create(**adjudication_json)
+# Deprecated as we have a create adjudication
+# @blueprint.route('/<int:performance_id>/adjudications', methods=['POST'])
+# def create_adjudication(performance_id):
+#     adjudication_json = request.get_json()
+#     adjudication_json['performance_id'] = performance_id
+#     new_adjudication = Adjudication.create(**adjudication_json)
 
-    return jsonify(new_adjudication.to_dict(True, 'performance'))
+#     return jsonify(new_adjudication.to_dict(True, 'performance'))
 
 #TODO: Move to Adjudications, refactor with common GET route
 @blueprint.route('/<int:performance_id>/adjudications/<int:award_id>/comments', methods=['GET'])
