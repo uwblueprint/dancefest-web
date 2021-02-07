@@ -8,17 +8,57 @@ from services import adjudication_service
 
 blueprint = Blueprint('adjudication', __name__, url_prefix='/api/adjudications')
 
+@blueprint.route('<int:id>', methods=['GET'])
+def get_adjudication(id):
+    """Gets adjudication by id
+
+    Returns:
+        adjudication with provided id
+    """
+
+    adjudication = adjudication_service.get_adjudication(id)
+    
+    if adjudication is None:
+        error = {'error': 'Performance not found'}
+        return jsonify(error), 404
+
+    return jsonify(adjudication), 200
+
+@blueprint.route('/', methods=['GET'])
+def get_adjudications():
+    """Gets adjudications grouped by the performance they are associated with
+
+    Request Parameters: 
+    - performance_id
+        Filters to only retrieve adjudications for performance_id passed in
+        Example: ?performance_id=1,2 to get adjudications for performance_id of 1 and 2
+
+    Returns:
+        adjudications that match request filtering passed in
+    """
+    adjudications_filter = request.args.to_dict()
+    adjudications = adjudication_service.get_adjudications(adjudications_filter)
+
+    performance_to_adjudication = {}
+    for adjudication in adjudications:
+        performance_id = adjudication['performance_id']
+        if performance_id not in performance_to_adjudication:
+            performance_to_adjudication[performance_id] = [adjudication]
+        performance_to_adjudication[performance_id].append(adjudication)
+
+    return jsonify(performance_to_adjudication), 200
+
 @blueprint.route('/', methods=['POST'])
 def create_adjudication():
     """Creates an adjudication
-    TODO: Frontend currently does not data about special_award
+    TODO: Frontend currently does not send in data about special_award
     Request Body:
         artistic_mark = integer
         audio_url = string
         cumulative_mark = integer
         notes = string
         technical_mark = integer
-        performance_id = integer
+        performance_id = integer -> associates the adjudication with a performance
 
     Returns:
         data for created performance
@@ -62,22 +102,3 @@ def update_adjudication(id):
         return jsonify(error), 404
     
     return jsonify(update_adjudication), 200
-
-#TODO: these scores should be returned when we retrieves the performances
-@blueprint.route('/<int:performance_id>/surface_scores')    
-def surface_scores_route(performance_id):
-    artist_marks = []
-    technical_marks = []
-    cumulative_marks = []
-    adjudication_filter = request.args.to_dict()
-    for adjudication in db.session.query(Adjudication).filter(Adjudication.performance_id==performance_id):
-        artist_marks.append(adjudication.artistic_mark)
-        technical_marks.append(adjudication.technical_mark)
-        cumulative_marks.append(adjudication.cumulative_mark)
-    
-    # Fallback to mark of 0 if the list is empty
-    artistic_mark = int(sum(artist_marks)/len(artist_marks)) if artist_marks else 0
-    technical_mark = int(sum(technical_marks)/len(technical_marks)) if technical_marks else 0
-    cumulative_mark = int(sum(cumulative_marks)/len(cumulative_marks)) if cumulative_marks else 0
-
-    return jsonify(artistic_mark=artistic_mark, technical_mark=technical_mark, cumulative_mark=cumulative_mark)

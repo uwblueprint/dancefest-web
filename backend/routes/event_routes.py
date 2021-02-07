@@ -66,14 +66,13 @@ def update_event(id):
 
     return jsonify(updated_event), 200
 
-# TODO: re-org where the endpoints go especially this one and update api specs
-# TODO: retrive all necessary metadata about the event here
+# Deprecated as functionality is moved to get_performances in performance_routes
 # '/<int:event_id>'
-@blueprint.route('/<event_id>/performances')
-def get_performances(event_id):
-    all_performances = db.session.query(Performance, School.name) \
-        .outerjoin(School, Performance.school_id==School.id) \
-        .filter(Performance.event_id == event_id)
-    return jsonify({
-        performance.id: {'performance': performance.to_dict(), 'school_name': school_name} for performance, school_name in all_performances
-    })
+# @blueprint.route('/<event_id>/performances')
+# def get_performances(event_id):
+#     all_performances = db.session.query(Performance, School.name) \
+#         .outerjoin(School, Performance.school_id==School.id) \
+#         .filter(Performance.event_id == event_id)
+#     return jsonify({
+#         performance.id: {'performance': performance.to_dict(), 'school_name': school_name} for performance, school_name in all_performances
+#     })
