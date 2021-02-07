@@ -38,12 +38,12 @@ def get_performances():
     Returns:
         performances that match filter
     """
-    event_id = request.args.get('event_id')
+    performance_filter = request.args.to_dict()
 
-    performances = performance_service.get_performances(event_id)
+    performances = performance_service.get_performances(performance_filter)
 
     return jsonify({
-        performance.id: {'performance': performance.to_dict(), 'school_name': school_name} for performance, school_name in performances
+        performance.id: {'performance': performance.to_dict(True), 'school_name': school_name} for performance, school_name in performances
     })
 
 # TODO: double check that frontend is passing choreographers and performers as a list

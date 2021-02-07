@@ -6,7 +6,7 @@ def get_performance(id):
     return performance and performance.to_dict()
 
 # TODO: get adjudication scores for each performance as well
-def get_performances(event_id=None):
+def get_performances(performance_filter=None):
     """
     Returns performances with associated event_id. If no event_id is passed in,
     all performances are returned
@@ -16,9 +16,9 @@ def get_performances(event_id=None):
     """
     performances = db.session.query(Performance, School.name) \
         .outerjoin(School, Performance.school_id == School.id) 
-    
-    if event_id:
-        performances = performances.filter(Performance.event_id == event_id)
+        
+    if 'event_id' in performance_filter:
+        performances = performances.filter(Performance.event_id == performance_filter['event_id'])
     
     return performances
 
