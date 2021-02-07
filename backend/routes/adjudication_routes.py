@@ -18,7 +18,6 @@ def create_adjudication():
         cumulative_mark = integer
         notes = string
         technical_mark = integer
-        tablet_id = integer
         performance_id = integer
 
     Returns:
@@ -45,7 +44,6 @@ def update_adjudication(id):
         cumulative_mark = integer
         notes = string
         technical_mark = integer
-        tablet_id = integer
         performance_id = integer
 
     Returns:
@@ -83,35 +81,3 @@ def surface_scores_route(performance_id):
     cumulative_mark = int(sum(cumulative_marks)/len(cumulative_marks)) if cumulative_marks else 0
 
     return jsonify(artistic_mark=artistic_mark, technical_mark=technical_mark, cumulative_mark=cumulative_mark)
-
-# TODO: CLEANUP ANDROID APP ROUTES 
-
-@blueprint.route('/<event_id>/<tablet_id>', methods=['GET'])
-def get_unjudged_performance(event_id, tablet_id):
-    #1. Get all performances
-    all_performances = Performance.get_by(**{"event_id": event_id})
-    for performance in all_performances:
-        # 2. Get all adjudications for that performance
-        # 3. Check if any of those adjudications have a tablet_id that matches   
-        q = db.session.query(Adjudication).filter(Adjudication.tablet_id==tablet_id, Adjudication.performance_id==performance.id)
-        # 4. If none match, return that performance
-        if (db.session.query(q.exists()).scalar()==False):
-            return jsonify(performance.to_dict())
-        else: 
-            continue
-    return jsonify({})
-
-@blueprint.route('/<int:performance_id>/<tablet_id>', methods=['GET'])
-def get_adjudication_by_judge(performance_id, tablet_id):
-    adjudication = db.session.query(Adjudication).filter(Adjudication.tablet_id==tablet_id, Adjudication.performance_id==performance_id).first()
-    return jsonify(adjudication.to_dict())
-
-# should be common get judges, passing in boolean for adjudicated 
-# TODO: USE CASE?
-@blueprint.route('judges/<int:performance_id>', methods=['GET'])
-def get_judges_who_adjudicated(performance_id):
-    judge_ids = []
-    adjudication_filter = request.args.to_dict()
-    for adjudication in db.session.query(Adjudication).filter(Adjudication.performance_id==performance_id).distinct(Adjudication.tablet_id):
-        judge_ids.append(adjudication.tablet_id)
-    return jsonify(judge_ids)  
