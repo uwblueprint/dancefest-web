@@ -63,8 +63,6 @@ def seed():
 
         )
 
-    tablet = Tablet.create(serial='serial{}'.format(1))
-
     for i in range(10):
         performance = Performance.create(
             dance_title='test dance {}'.format(i + 1),
@@ -88,8 +86,7 @@ def seed():
                 artistic_mark=art,
                 technical_mark=tech,
                 cumulative_mark=(art+tech)/2,
-                notes='This dance was {}!'.format(random.choice(adjectives)),
-                tablet_id=tablet.id
+                notes='This dance was {}!'.format(random.choice(adjectives))
             )
             # TODO: AWARDS SEEDING
             # AwardPerformance.create(

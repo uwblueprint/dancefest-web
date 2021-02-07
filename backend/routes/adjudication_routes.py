@@ -84,7 +84,6 @@ def update_adjudication(id):
         cumulative_mark = integer
         notes = string
         technical_mark = integer
-        tablet_id = integer
         performance_id = integer
 
     Returns:

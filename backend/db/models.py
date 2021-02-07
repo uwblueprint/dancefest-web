@@ -126,7 +126,6 @@ class Adjudication(db.Model, BaseMixin):
     notes = db.Column(db.String(255))
     special_award = db.Column(db.Boolean)
     technical_mark = db.Column(db.Integer)
-    tablet_id = db.Column(db.Integer, db.ForeignKey('tablet.id'), index=True)
     performance_id = db.Column(db.Integer, db.ForeignKey('performance.id'))
     nomination_comment = relationship('NominationComment', back_populates="adjudication")
 
@@ -209,10 +208,3 @@ class NominationComment(db.Model, BaseMixin):
     award_id = db.Column(db.Integer, db.ForeignKey('award.id'))
     comment = db.Column(db.String)
     adjudication = relationship("Adjudication", back_populates="nomination_comment")
-
-
-class Tablet(db.Model, BaseMixin):
-    __tablename__ = 'tablet'
-
-    id = db.Column(db.Integer, primary_key=True)
-    serial = db.Column(db.String(255), nullable=False, index=True, unique=True)

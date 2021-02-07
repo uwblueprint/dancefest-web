@@ -127,16 +127,3 @@ def get_adjudications_and_comments(performance_id, award_id):
     return jsonify(
         {adjudication_comment.id: adjudication_comment.to_dict(True, ['performance']) for adjudication_comment in
          adjudication_comments})
-
-#TODO: Tablet ID? Change formatting of route
-@blueprint.route('/<event_id>/<tablet_id>/adjudications', methods=['GET'])
-def get_performance_adjudication_pairs(event_id, tablet_id):
-    performances = Performance.get_by(event_id=event_id)
-    pairs = []
-    for p in performances:
-        a = Adjudication.get_by(first=True, performance_id=p.id, tablet_id=tablet_id)
-        pairs.append({
-            "performance": p.to_dict(),
-            "adjudication": a if a is None else a.to_dict()
-        })
-    return jsonify(pairs)
