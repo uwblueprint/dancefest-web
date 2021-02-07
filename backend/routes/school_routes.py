@@ -1,9 +1,5 @@
 import uuid
-
 from flask import Blueprint, jsonify, request
-
-# remove unnecessary imports
-from db.models import Performance, School
 
 from services import school_service
 
@@ -34,12 +30,12 @@ def get_school(id):
     return jsonify(school), 200
 
 #TODO: Figure out use case? 
-@blueprint.route('<event_id>/<token>', methods=['GET'])
-def get_performances_by_token(event_id, token):
-    school = School.get_by(first=True, token=token)
-    if not school:
-        return jsonify({})
-    performances = Performance.get_by(school=school.name, event_id=event_id)
-    return jsonify({performance.id: performance.to_dict() for performance in performances})
+# @blueprint.route('<event_id>/<token>', methods=['GET'])
+# def get_performances_by_token(event_id, token):
+#     school = School.get_by(first=True, token=token)
+#     if not school:
+#         return jsonify({})
+#     performances = Performance.get_by(school=school.name, event_id=event_id)
+#     return jsonify({performance.id: performance.to_dict() for performance in performances})
 
 

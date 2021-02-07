@@ -186,7 +186,8 @@ class Award(db.Model, BaseMixin):
     title = db.Column(db.String(255))
     event_id = db.Column(db.Integer, db.ForeignKey('event.id'))
     nominee_count = db.Column(db.Integer)
-    winning_performance_id = db.Column(db.Integer, db.ForeignKey('performance.id'))
+    #TODO: why do we have this if we have a many to many table storing the award and performance, should we remove?
+    # winning_performance_id = db.Column(db.Integer, db.ForeignKey('performance.id'))
     award_performance = relationship('AwardPerformance', back_populates='award')
 
 

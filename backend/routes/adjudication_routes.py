@@ -1,8 +1,5 @@
 from flask import Blueprint, jsonify, request
 
-from db.models import Adjudication, Performance
-from db import db
-
 from resources.adjudication_resource import AdjudicationResource
 from services import adjudication_service
 
@@ -39,6 +36,8 @@ def get_adjudications():
     adjudications_filter = request.args.to_dict()
     adjudications = adjudication_service.get_adjudications(adjudications_filter)
 
+    # TODO: previous code mapped each performance_id to list of ajudication
+    # We should check if we still want this as we are now returning the adjudications with each performance
     performance_to_adjudication = {}
     for adjudication in adjudications:
         performance_id = adjudication['performance_id']

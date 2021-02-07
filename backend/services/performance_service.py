@@ -5,6 +5,7 @@ def get_performance(id):
     performance = Performance.query.get(id)
     return performance and performance.to_dict()
 
+# TODO: debug
 def get_performances(performance_filter=None):
     """
     Returns performances with associated event_id. If no event_id is passed in,
@@ -19,7 +20,8 @@ def get_performances(performance_filter=None):
     if 'event_id' in performance_filter:
         performances = performances.filter(Performance.event_id == performance_filter['event_id'])
     
-    return performances
+    # TODO: make this cleaner for getting performance, adjudications for the performance, and school name of the performance
+    return {performance.id: {'performance': performance.to_dict(True), 'school_name': school_name} for performance, school_name in performances}
 
 def create_performance(performance):
     new_performance = Performance(**performance)

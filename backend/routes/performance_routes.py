@@ -42,11 +42,8 @@ def get_performances():
 
     performances = performance_service.get_performances(performance_filter)
 
-    return jsonify({
-        performance.id: {'performance': performance.to_dict(True), 'school_name': school_name} for performance, school_name in performances
-    })
+    return jsonify(performances), 200
 
-# TODO: double check that frontend is passing choreographers and performers as a list
 @blueprint.route('/', methods=['POST'])
 def create_performance():
     """Creates a performance
@@ -108,7 +105,8 @@ def update_performance(id):
     return jsonify(updated_performance), 200
 
 
-# TODO: what is the use case for?
+# TODO: This is for getting all performances for a specific awards
+# Shouldbe in awards route
 @blueprint.route('/<int:award_id>/awards', methods=['GET'])
 def get_performances_adjudications_by_award(award_id):
     performances = Performance.query \
