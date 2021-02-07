@@ -105,25 +105,6 @@ def update_adjudication(id):
     
     return jsonify(update_adjudication), 200
 
-# Deprecated. We now return the list of adjudications for each performance in get_performances in performance_routes.py
-# @blueprint.route('/<int:performance_id>/surface_scores')    
-# def surface_scores_route(performance_id):
-#     artist_marks = []
-#     technical_marks = []
-#     cumulative_marks = []
-#     adjudication_filter = request.args.to_dict()
-#     for adjudication in db.session.query(Adjudication).filter(Adjudication.performance_id==performance_id):
-#         artist_marks.append(adjudication.artistic_mark)
-#         technical_marks.append(adjudication.technical_mark)
-#         cumulative_marks.append(adjudication.cumulative_mark)
-    
-#     # Fallback to mark of 0 if the list is empty
-#     artistic_mark = int(sum(artist_marks)/len(artist_marks)) if artist_marks else 0
-#     technical_mark = int(sum(technical_marks)/len(technical_marks)) if technical_marks else 0
-#     cumulative_mark = int(sum(cumulative_marks)/len(cumulative_marks)) if cumulative_marks else 0
-
-#     return jsonify(artistic_mark=artistic_mark, technical_mark=technical_mark, cumulative_mark=cumulative_mark)
-
 # TODO: CLEANUP ANDROID APP ROUTES 
 
 @blueprint.route('/<event_id>/<tablet_id>', methods=['GET'])

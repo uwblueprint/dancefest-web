@@ -5,7 +5,6 @@ def get_performance(id):
     performance = Performance.query.get(id)
     return performance and performance.to_dict()
 
-# TODO: get adjudication scores for each performance as well
 def get_performances(performance_filter=None):
     """
     Returns performances with associated event_id. If no event_id is passed in,
