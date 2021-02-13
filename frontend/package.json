@@ -1,37 +1,46 @@
 {
-  "name": "dancefest-web",
+  "name": "dancefest-frontend",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@material-ui/core": "^3.9.4",
-    "@material-ui/icons": "^3.0.1",
-    "axios": "^0.19.2",
-    "classnames": "^2.2.6",
-    "firebase": "^5.2.0",
-    "humps": "^2.0.1",
-    "lodash": "^4.17.20",
-    "moment": "^2.27.0",
-    "prop-types": "^15.6.2",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-loading": "^2.0.3",
-    "react-moment": "^0.7.9",
-    "react-router-dom": "^4.3.1",
-    "react-scripts": "^2.1.2",
-    "react-voice-recorder": "^2.0.1"
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.1.10",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "4.0.1",
+    "web-vitals": "^0.2.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "postinstall": "npx patch-package"
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
-  "devDependencies": {},
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ]
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "eslint": "^7.19.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.22.0",
+    "eslint-plugin-react-hooks": "^4.2.0"
+  }
 }

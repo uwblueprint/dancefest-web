@@ -1,0 +1,32 @@
+/*
+****************************************
+Global configuration
+****************************************
+*/
+html {
+  /* Colours: Dancefest Brand */
+  --brand-red: #c90c0f;
+  --brand-black: #0b0504;
+  --brand-white: #fafafa;
+  --brand-other-red: #a72a1d;
+  --brand-pop-blue: #42526e;
+  --brand-pop-yellow: #ffab00;
+
+  /* Colours: System */
+  --system-neutral-grey: #6b778c;
+  --system-light-grey: #dfe1e6;
+  --system-lightest-grey: #f5f6f7;
+  --system-light-blue: #4c9aff;
+
+  /* Fonts */
+  font-family: 'DM Sans', sans-serif;
+}
+
+body {
+  /* Remove default padding + margin */
+  padding: 0px;
+  margin: 0px;
+
+  /* Background */
+  background-color: var(--system-lightest-grey);
+}
