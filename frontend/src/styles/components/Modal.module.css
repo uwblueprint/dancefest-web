@@ -1,0 +1,74 @@
+/*
+****************************************
+Modal: Container
+****************************************
+*/
+.modal__container {
+  display: flex;
+  flex-flow: column nowrap;
+  height: 100%;
+  padding: 64px;
+}
+
+/*
+****************************************
+Modal: Header
+****************************************
+*/
+.modal__header h1 {
+  margin: 0;
+  font-family: DM Sans;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 36px;
+  line-height: 47px;
+  color: var(--brand-other-red);
+}
+
+/*
+****************************************
+Modal: Body
+****************************************
+*/
+.modal__body {
+  flex-grow: 1;
+  margin: 24px 0 64px 0;
+}
+
+/*
+****************************************
+Modal: Footer
+****************************************
+*/
+.modal__footer {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-end;
+}
+
+.modal__footer button {
+  box-sizing: border-box;
+  margin-left: 32px;
+  padding: 10px 40px;
+  border: 1px solid var(--brand-pop-blue);
+  border-radius: 4px;
+
+  text-align: center;
+  font-family: DM Sans;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 21px;
+
+  cursor: pointer;
+}
+
+.modal__footer .modal__footer_cancelButton {
+  background-color: #ffffff;
+  color: var(--brand-pop-blue);
+}
+
+.modal__footer .modal__footer_submitButton {
+  background-color: var(--brand-pop-blue);
+  color: #ffffff;
+}
