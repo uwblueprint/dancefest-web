@@ -126,10 +126,10 @@ class Adjudication(db.Model, BaseMixin):
     notes = db.Column(db.String(255))
     special_award = db.Column(db.Boolean)
     technical_mark = db.Column(db.Integer)
-    tablet_id = db.Column(db.Integer, db.ForeignKey('tablet.id'), index=True)
     performance_id = db.Column(db.Integer, db.ForeignKey('performance.id'))
     nomination_comment = relationship('NominationComment', back_populates="adjudication")
 
+    #TODO: shouldn't this be in create_adjudications in service instead?
     @classmethod
     def create(cls, **kwargs):
         if 'nomination_comment' in kwargs:
@@ -186,7 +186,8 @@ class Award(db.Model, BaseMixin):
     title = db.Column(db.String(255))
     event_id = db.Column(db.Integer, db.ForeignKey('event.id'))
     nominee_count = db.Column(db.Integer)
-    winning_performance_id = db.Column(db.Integer, db.ForeignKey('performance.id'))
+    #TODO: why do we have this if we have a many to many table storing the award and performance, should we remove?
+    # winning_performance_id = db.Column(db.Integer, db.ForeignKey('performance.id'))
     award_performance = relationship('AwardPerformance', back_populates='award')
 
 
@@ -208,10 +209,3 @@ class NominationComment(db.Model, BaseMixin):
     award_id = db.Column(db.Integer, db.ForeignKey('award.id'))
     comment = db.Column(db.String)
     adjudication = relationship("Adjudication", back_populates="nomination_comment")
-
-
-class Tablet(db.Model, BaseMixin):
-    __tablename__ = 'tablet'
-
-    id = db.Column(db.Integer, primary_key=True)
-    serial = db.Column(db.String(255), nullable=False, index=True, unique=True)

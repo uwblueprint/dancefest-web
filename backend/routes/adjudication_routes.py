@@ -1,67 +1,103 @@
 from flask import Blueprint, jsonify, request
 
-from db.models import Adjudication, Performance
-from db import db
+from resources.adjudication_resource import AdjudicationResource
+from services import adjudication_service
 
 blueprint = Blueprint('adjudication', __name__, url_prefix='/api/adjudications')
 
+@blueprint.route('<int:id>', methods=['GET'])
+def get_adjudication(id):
+    """Gets adjudication by id
 
-@blueprint.route('/<adjudication_id>', methods=['POST'])
-def update_adjudication(adjudication_id):
-    adjudication = Adjudication.get(adjudication_id)
-    adjudication_json = request.get_json()
-    adjudication.update(**adjudication_json)
+    Returns:
+        adjudication with provided id
+    """
 
-    return jsonify(adjudication.to_dict())
+    adjudication = adjudication_service.get_adjudication(id)
+    
+    if adjudication is None:
+        error = {'error': 'Performance not found'}
+        return jsonify(error), 404
+
+    return jsonify(adjudication), 200
+
+@blueprint.route('/', methods=['GET'])
+def get_adjudications():
+    """Gets adjudications grouped by the performance they are associated with
+
+    Request Parameters: 
+    - performance_id
+        Filters to only retrieve adjudications for performance_id passed in
+        Example: ?performance_id=1,2 to get adjudications for performance_id of 1 and 2
+
+    Returns:
+        adjudications that match request filtering passed in
+    """
+    adjudications_filter = request.args.to_dict()
+    adjudications = adjudication_service.get_adjudications(adjudications_filter)
+
+    # TODO: previous code mapped each performance_id to list of ajudication
+    # We should check if we still want this as we are now returning the adjudications with each performance
+    performance_to_adjudication = {}
+    for adjudication in adjudications:
+        performance_id = adjudication['performance_id']
+        if performance_id not in performance_to_adjudication:
+            performance_to_adjudication[performance_id] = [adjudication]
+        performance_to_adjudication[performance_id].append(adjudication)
+
+    return jsonify(performance_to_adjudication), 200
 
 @blueprint.route('/', methods=['POST'])
 def create_adjudication():
-    adjudication_json = request.get_json()
-    new_adjudication = Adjudication.create(**adjudication_json)
+    """Creates an adjudication
+    TODO: Frontend currently does not send in data about special_award
+    Request Body:
+        artistic_mark = integer
+        audio_url = string
+        cumulative_mark = integer
+        notes = string
+        technical_mark = integer
+        performance_id = integer -> associates the adjudication with a performance
 
-    return jsonify(new_adjudication.to_dict())
+    Returns:
+        data for created performance
+    """
+    try:
+        body = AdjudicationResource(**request.get_json())
 
-@blueprint.route('/<performance_id>/surfaceScores')    
-def surface_scores_route(performance_id):
-    artist_marks = []
-    technical_marks = []
-    cumulative_marks = []
-    adjudication_filter = request.args.to_dict()
-    for adjudication in db.session.query(Adjudication).filter(Adjudication.performance_id==performance_id):
-        artist_marks.append(adjudication.artistic_mark)
-        technical_marks.append(adjudication.technical_mark)
-        cumulative_marks.append(adjudication.cumulative_mark)
+    except Exception as error:
+        error = {'error': str(error)}
+
+        return jsonify(error), 400
+
+    return jsonify(adjudication_service.create_adjudication(body.__dict__)), 201
+
+@blueprint.route('/<int:id>', methods=['PUT'])
+def update_adjudication(id):
+    """Updates an adjudication with provided id
+
+    TODO: Frontend currently does not data about special_award
+    Request Body:
+        artistic_mark = integer
+        audio_url = string
+        cumulative_mark = integer
+        notes = string
+        technical_mark = integer
+        performance_id = integer
+
+    Returns:
+        updated adjudication
+    """
+    try:
+        body = AdjudicationResource(**request.get_json())
+    except Exception as error:
+        error = {'error': str(error)}
+        return jsonify(error), 400
+
+    update_adjudication = adjudication_service.update_adjudication(id, body.__dict__)
+
+    if update_adjudication is None:
+        error = {'error': 'Adjudication not found'}
+        return jsonify(error), 404
     
-    artistic_mark = int(sum(artist_marks)/len(artist_marks))
-    technical_mark = int(sum(technical_marks)/len(technical_marks))
-    cumulative_mark = int(sum(cumulative_marks)/len(cumulative_marks))
-
-    return jsonify(artistic_mark=artistic_mark, technical_mark=technical_mark, cumulative_mark =cumulative_mark)
-
-@blueprint.route('/<event_id>/<tablet_id>', methods=['GET'])
-def get_unjudged_performance(event_id, tablet_id):
-    #1. Get all performances
-    all_performances = Performance.get_by(**{"event_id": event_id})
-    for performance in all_performances:
-        # 2. Get all adjudications for that performance
-        # 3. Check if any of those adjudications have a tablet_id that matches   
-        q = db.session.query(Adjudication).filter(Adjudication.tablet_id==tablet_id, Adjudication.performance_id==performance.id)
-        # 4. If none match, return that performance
-        if (db.session.query(q.exists()).scalar()==False):
-            return jsonify(performance.to_dict())
-        else: 
-            continue
-    return jsonify({})
-
-@blueprint.route('/<int:performance_id>/<tablet_id>', methods=['GET'])
-def get_adjudication_by_judge(performance_id, tablet_id):
-    adjudication = db.session.query(Adjudication).filter(Adjudication.tablet_id==tablet_id, Adjudication.performance_id==performance_id).first()
-    return jsonify(adjudication.to_dict())
-
-@blueprint.route('judges/<int:performance_id>', methods=['GET'])
-def get_judges_who_adjudicated(performance_id):
-    judge_ids = []
-    adjudication_filter = request.args.to_dict()
-    for adjudication in db.session.query(Adjudication).filter(Adjudication.performance_id==performance_id).distinct(Adjudication.tablet_id):
-        judge_ids.append(adjudication.tablet_id)
-    return jsonify(judge_ids)  
+    return jsonify(update_adjudication), 200
