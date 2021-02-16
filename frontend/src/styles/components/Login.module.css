@@ -1,0 +1,126 @@
+.row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.logo__div {
+    margin-left: 120px;
+    margin-top: 183px;
+    display: flex;
+    flex-direction: column;
+}
+
+.logo__div > label {
+    font-family: DM Sans;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 16px;
+    letter-spacing: 0px;
+    text-align: left;
+    color: var(--system-neutral-grey);
+}
+
+.logo__div > input {
+
+    margin-top: 4px;
+    height: 40px;
+    width: 240px;
+    left: 0px;
+    top: 20px;
+    border-radius: 3px;
+    background: var(--brand-white);
+
+    border: 2px solid var(--system-light-grey);
+    box-sizing: border-box;
+
+    padding: 6px 8px;
+
+}
+
+.logo__div > input[type=text] {
+
+    font-family: DM Sans;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+    letter-spacing: 0px;
+    text-align: left;
+    color: var(--system-neutral-grey)
+
+}
+
+.logo__div > button {
+    box-sizing: border-box;
+    padding: 10px;
+    border: 1px solid var(--brand-pop-blue);
+    border-radius: 4px;
+
+    text-align: center;
+    font-family: DM Sans;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 21px;
+
+    cursor: pointer;
+    background-color: var(--brand-pop-blue);
+    color: #ffffff;
+    width: 124px;
+    margin-top: 24px;
+}
+
+.logo__div > span {
+    margin-top: 24px;
+}
+
+.logo__div > span > input[type=checkbox] {
+
+    position: static;
+    left: 0px;
+    top: 0px;
+    background: rgba(255, 255, 255, 0.0001);
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.logo__div > span > label {
+
+    font-family: DM Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+
+    color: var(--brand-pop-blue);
+
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+    margin: 0px 4px;
+
+}
+
+.logo {
+    max-width: 476px;
+    max-height: 206px;
+}
+
+.welcome_illustration__div {
+    margin-right: 90px;
+    margin-top: 123px;
+    margin-left: 12px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.welcome_illustration {
+    margin-left: auto;
+    max-width: 744px;
+    max-height: 662px;
+}
