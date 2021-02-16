@@ -129,7 +129,6 @@ class Adjudication(db.Model, BaseMixin):
     performance_id = db.Column(db.Integer, db.ForeignKey('performance.id'))
     nomination_comment = relationship('NominationComment', back_populates="adjudication")
 
-    #TODO: shouldn't this be in create_adjudications in service instead?
     @classmethod
     def create(cls, **kwargs):
         if 'nomination_comment' in kwargs:

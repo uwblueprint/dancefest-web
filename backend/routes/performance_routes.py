@@ -39,7 +39,9 @@ def get_performances():
         performances that match filter
     """
     performance_filter = request.args.to_dict()
-
+    if 'school_id' in performance_filter:
+        performance_filter['school_id'] = performance_filter['school_id'].split(',')
+    
     performances = performance_service.get_performances(performance_filter)
 
     return jsonify(performances), 200

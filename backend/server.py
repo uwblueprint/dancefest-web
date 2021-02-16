@@ -17,6 +17,7 @@ from routes import (
     award_routes,
     school_routes,
     user_routes,
+    feedback_routes
 )
 
 mail = Mail()
@@ -54,6 +55,7 @@ def create_app(config_name):
     app.register_blueprint(award_routes.blueprint)
     app.register_blueprint(school_routes.blueprint)
     app.register_blueprint(user_routes.blueprint)
+    app.register_blueprint(feedback_routes.blueprint)
 
     return app
 
