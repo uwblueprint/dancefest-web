@@ -165,7 +165,7 @@ class School(db.Model, BaseMixin):
     phone = db.Column(db.String(255))
     address = db.Column(db.String(255))
     district = db.Column(db.String(255))
-
+    contacts = relationship('SchoolContact', backref='school')
 
 class SchoolContact(db.Model, BaseMixin):
     __tablename__ = 'school_contact'
