@@ -1,5 +1,5 @@
 def seed():
-    from db.models import SchoolContact, School, Event, Performance, Adjudication, Award, AwardPerformance, NominationComment, Tablet, UserTypes, User
+    from db.models import SchoolContact, School, Event, Performance, Adjudication, Award, AwardPerformance, NominationComment, UserTypes, User
     import random, uuid
 
     event = Event.create(

@@ -17,6 +17,7 @@ from routes import (
     award_routes,
     school_routes,
     user_routes,
+    setting_routes
 )
 
 mail = Mail()
@@ -47,11 +48,12 @@ def create_app(config_name):
     # Seeding should be done when required, via some flag or env var?
     init_db(app=app)
 
-    app.register_blueprint(event_routes.blueprint)
-    app.register_blueprint(performance_routes.blueprint)
     app.register_blueprint(adjudication_routes.blueprint)
-    app.register_blueprint(frontend_routes.blueprint)
     app.register_blueprint(award_routes.blueprint)
+    app.register_blueprint(event_routes.blueprint)
+    app.register_blueprint(frontend_routes.blueprint)
+    app.register_blueprint(performance_routes.blueprint)
+    app.register_blueprint(setting_routes.blueprint)
     app.register_blueprint(school_routes.blueprint)
     app.register_blueprint(user_routes.blueprint)
 

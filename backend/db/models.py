@@ -1,4 +1,5 @@
 from collections import Iterable
+from enum import Enum
 
 from sqlalchemy import inspect
 from sqlalchemy.orm import relationship
@@ -209,3 +210,15 @@ class NominationComment(db.Model, BaseMixin):
     award_id = db.Column(db.Integer, db.ForeignKey('award.id'))
     comment = db.Column(db.String)
     adjudication = relationship("Adjudication", back_populates="nomination_comment")
+
+class SettingType(str, Enum):
+    competition_level: str = "competition_level"
+    dance_size: str = "dance_size"
+    style: str = "style"
+    school: str = "school"
+class Setting(db.Model, BaseMixin):
+    __tablename__ = 'setting'
+
+    id = db.Column(db.Integer, primary_key=True)
+    setting_type = db.Column(db.Enum(SettingType))
+    setting_value = db.Column(db.String)
