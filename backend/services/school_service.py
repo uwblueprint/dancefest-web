@@ -2,31 +2,18 @@ from db.models import School, SchoolContact
 from db import db
 import logging 
 def get_schools():
-    schools_data = db.session.query(School, SchoolContact) \
-        .outerjoin(SchoolContact, School.id == SchoolContact.school_id) \
+    schools = db.session.query(School) \
         .all()
-    
-    res = {}
-    for school, school_contact in schools_data:
-        school_info = school.to_dict()
-        if school_contact:
-            school_info = {**school_info, **school_contact.to_dict()}
-        res[school.id] = school_info
        
-    return res
+    return [school.to_dict(True) for school in schools]
 
 def get_school(id):
     try:
-        school, school_contact = db.session.query(School, SchoolContact) \
-            .outerjoin(SchoolContact, School.id == SchoolContact.school_id) \
+        school = School.query \
             .filter(School.id == id) \
             .one()
-    
-        res = school.to_dict()
-        if school_contact:
-            res.update(school_contact.to_dict())
-      
-        return res
+
+        return school.to_dict(True)
     except:
         return None
 
