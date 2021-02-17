@@ -2,7 +2,7 @@ name: Python Linter
 
 on:
   push:
-    branches: [ master, dev ]
+    branches: [ master, dev, ops-python-linter ]
     paths:
       - '*.py'
   pull_request:
