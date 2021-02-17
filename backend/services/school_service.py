@@ -1,6 +1,6 @@
 from db.models import School, SchoolContact
 from db import db
-import logging 
+
 def get_schools():
     schools = db.session.query(School) \
         .all()
