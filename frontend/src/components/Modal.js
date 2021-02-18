@@ -1,61 +1,44 @@
 import React from 'react'; // React
 import PropTypes from 'prop-types'; // PropTypes
-import Modal, { ModalTransition } from '@atlaskit/modal-dialog'; // Atlaskit Modal
+import ReactModal from 'react-modal'; // React Modal
+
+import Title from 'components/Title'; // Title
+import Button from 'components/Button'; // Button
 import styles from 'styles/components/Modal.module.css'; // Component styles
 
 export default function DancefestModal({
   children,
   title = 'Title',
-  open = false,
+  open = true,
   cancelText = 'Cancel',
   submitText = 'Submit',
   onCancel = () => {},
   onSubmit = () => {},
+  ...props
 }) {
-  const Header = () => {
-    return (
-      <div className={styles.modal__header}>
-        <h1>{title}</h1>
-      </div>
-    );
-  };
-
-  const Footer = props => {
-    return (
-      <div className={styles.modal__footer} {...props}>
-        <button className={styles.modal__footer_cancelButton} onClick={onCancel}>
-          {cancelText}
-        </button>
-        <button className={styles.modal__footer_submitButton} onClick={onSubmit}>
-          {submitText}
-        </button>
-      </div>
-    );
-  };
-
-  const Body = ({ children }) => <div className={styles.modal__body}>{children}</div>;
-
-  const Container = ({ children }) => <div className={styles.modal__container}>{children}</div>;
-
   return (
-    <ModalTransition>
-      {open && (
-        <Modal
-          autoFocus={false}
-          components={{
-            Header,
-            Footer,
-            Body,
-            Container,
-          }}
-          width={800}
-          height={600}
-          onClose={onCancel}
+    <ReactModal
+      isOpen={open}
+      className={styles.modal__container}
+      overlayClassName={styles.modal__overlay}
+      onRequestClose={onCancel}
+      {...props}
+    >
+      <Title>{title}</Title>
+      <div className={styles.modal__body}>{children}</div>
+      <div className={styles.modal__footer}>
+        <Button variant="outlined" onClick={onCancel}>
+          {cancelText}
+        </Button>
+        <Button
+          className={styles.modal__footer_submitButton}
+          variant="contained"
+          onClick={onSubmit}
         >
-          {children}
-        </Modal>
-      )}
-    </ModalTransition>
+          {submitText}
+        </Button>
+      </div>
+    </ReactModal>
   );
 }
 
