@@ -1,0 +1,53 @@
+/*
+****************************************
+Table: Styles
+****************************************
+*/
+.table__div {
+  padding: 1rem;
+}
+
+.table__div > table {
+  border-spacing: 0;
+  background-color: #ffffff;
+}
+
+.table__div > table tr:last-child {
+  border-spacing: 0;
+  border-bottom: 2px solid #dfe1e6;
+}
+
+.table__div > table > tbody > tr:hover {
+  background-color: #f5f6f7;
+}
+
+.table__div > table th {
+  padding: 16px;
+  text-align: left;
+  margin: 0;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 21px;
+  letter-spacing: 0.05em;
+  color: #0b0504;
+  border-bottom: 2px solid #f5f6f7;
+  word-wrap: break-word;
+  max-width: 220px;
+}
+
+.table__div > table td {
+  margin: 0;
+  padding: 16px;
+  vertical-align: middle;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 20px;
+  color: #172b4d;
+  word-wrap: break-word;
+  max-width: 220px;
+}
+
+.table__div > table td:last-child {
+  border-right: 0;
+}
