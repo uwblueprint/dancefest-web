@@ -6,14 +6,14 @@ import Input from 'components/Input'; // Input
 import { ReactComponent as Calendar } from 'assets/calendar.svg'; // Calendar Icon
 import { ReactComponent as ChevronLeft } from 'assets/chevron-left.svg'; // Chevron Left Icon
 import { ReactComponent as ChevronRight } from 'assets/chevron-right.svg'; // Chevron Right Icon
-import styles from 'styles/components/DatePicker.module.css'; // Component styles
+import 'styles/components/DatePicker.module.css'; // Component styles
 
 export default function DatePicker({
   date = new Date(),
   setDate,
-  calendarClassName,
-  inputClassName,
-  wrapperClassName,
+  calendarClassName = '',
+  inputClassName = '',
+  wrapperClassName = '',
 }) {
   const DatePickerInput = ({ onClick, value }) => (
     <Input

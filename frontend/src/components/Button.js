@@ -4,33 +4,31 @@ import PropTypes from 'prop-types'; // PropTypes
 import { ReactComponent as Edit } from 'assets/edit.svg'; // Edit Icon
 import styles from 'styles/components/Button.module.css'; // Component styles
 
-export default function Button({ className, children, variant, ...props }) {
-  let variantClasses = '';
-
+export default function Button({ className = '', children, variant, ...props }) {
   switch (variant) {
+    case 'edit':
+      return (
+        <button className={`${styles.button__edit} ${className}`} {...props}>
+          <Edit />
+        </button>
+      );
     case 'outlined':
-      variantClasses = `${styles.button} ${styles.button__outlined}`;
-      break;
-    case 'contained':
-      variantClasses = `${styles.button} ${styles.button__contained}`;
-      break;
+      return (
+        <button className={`${styles.button} ${styles.button__outlined} ${className}`} {...props}>
+          {children}
+        </button>
+      );
+    default:
+      return (
+        <button className={`${styles.button} ${styles.button__contained} ${className}`} {...props}>
+          {children}
+        </button>
+      );
   }
-
-  variantClasses += ` ${className}`;
-
-  return variant === 'edit' ? (
-    <button className={styles.button__edit} {...props}>
-      <Edit />
-    </button>
-  ) : (
-    <button className={variantClasses} {...props}>
-      {children}
-    </button>
-  );
 }
 
 Button.propTypes = {
   children: PropTypes.any,
-  className: PropTypes.any,
+  className: PropTypes.string,
   variant: PropTypes.oneOf(['outlined', 'contained', 'edit']),
 };

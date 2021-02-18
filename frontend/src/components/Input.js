@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'; // PropTypes
 import styles from 'styles/components/Input.module.css'; // Component styles
 
 export default function Input({
-  className,
+  className = '',
   inputRef = null,
   icon: Icon,
   onIconClick = () => {},
@@ -28,7 +28,7 @@ export default function Input({
 
 Input.propTypes = {
   className: PropTypes.string,
-  icon: PropTypes.element,
+  icon: PropTypes.object,
   inputRef: PropTypes.oneOfType([
     PropTypes.func,
     PropTypes.shape({ current: PropTypes.elementType }),

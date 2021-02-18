@@ -7,6 +7,7 @@ import 'styles/global.css';
 
 // Navigation
 import HandleNavigation from 'routes';
+
 // React application
 function App() {
   return (

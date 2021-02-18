@@ -14,15 +14,14 @@ const DropdownIndicator = props => (
 const Option = props => <components.Option className={styles.dropdown__option} {...props} />;
 
 export default function Dropdown({
-  className,
-  wrapperClassName,
+  className = '',
+  wrapperClassName = '',
   isDisabled = false,
   options,
   placeholder = 'placeholder',
   selected,
-  setSelected = () => {},
+  onChange = () => {},
 }) {
-  // TODO: replace classname for dropdown wrapper
   return (
     <div className={`${styles.dropdown__wrapper} ${wrapperClassName}`}>
       <Select
@@ -35,7 +34,7 @@ export default function Dropdown({
         classNamePrefix="dropdown"
         defaultValue={selected}
         isDisabled={isDisabled}
-        onChange={setSelected}
+        onChange={onChange}
         placeholder={placeholder}
         options={options}
         theme={theme => ({
@@ -45,7 +44,6 @@ export default function Dropdown({
             primary25: '#f5f6f7',
           },
         })}
-        value={selected}
       />
     </div>
   );
