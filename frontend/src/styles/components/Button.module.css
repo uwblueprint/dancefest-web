@@ -1,0 +1,48 @@
+/*
+****************************************
+Button
+****************************************
+*/
+.button {
+  box-sizing: border-box;
+  padding: 10px 40px;
+  border: 1px solid var(--brand-pop-blue);
+  border-radius: 4px;
+
+  text-align: center;
+  font-family: DM Sans;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 21px;
+
+  cursor: pointer;
+}
+
+/* Outlined button */
+.button__outlined {
+  background-color: #ffffff;
+  color: var(--brand-pop-blue);
+}
+
+/* Contained button */
+.button__contained {
+  background-color: var(--brand-pop-blue);
+  color: #ffffff;
+}
+
+/* Edit button */
+.button__edit {
+  height: 24px;
+  width: 24px;
+  padding: 2px;
+  box-sizing: border-box;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.button__edit > svg {
+  height: 100%;
+  width: 100%;
+}

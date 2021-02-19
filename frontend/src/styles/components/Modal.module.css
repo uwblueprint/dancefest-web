@@ -1,0 +1,61 @@
+/*
+****************************************
+Modal: Overlay
+****************************************
+*/
+.modal__overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+/*
+****************************************
+Modal: Container
+****************************************
+*/
+.modal__container {
+  display: flex;
+  flex-flow: column nowrap;
+  height: 600px;
+  width: 800px;
+  padding: 64px;
+  margin: auto;
+
+  background-color: #ffffff;
+  box-shadow: 0px 0px 40px rgba(92, 92, 92, 0.1);
+  border-radius: 8px;
+  outline: none;
+}
+
+/*
+****************************************
+Modal: Body
+****************************************
+*/
+.modal__body {
+  flex-grow: 1;
+  margin: 24px 0 64px 0;
+}
+
+/*
+****************************************
+Modal: Footer
+****************************************
+*/
+.modal__footer {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-end;
+}
+
+.modal__footer .modal__footer_submitButton {
+  margin-left: 32px;
+}
