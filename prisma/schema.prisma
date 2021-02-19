@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model users {
+  id             Int       @id @default(autoincrement())
+  name           String?   @db.VarChar(255)
+  email          String?   @unique @db.VarChar(255)
+  email_verified DateTime? @db.Timestamptz(6)
+  image          String?
+  created_at     DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at     DateTime  @default(now()) @db.Timestamptz(6)
+}
+
+model verification_requests {
+  id         Int      @id @default(autoincrement())
+  identifier String   @db.VarChar(255)
+  token      String   @unique @db.VarChar(255)
+  expires    DateTime @db.Timestamptz(6)
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  updated_at DateTime @default(now()) @db.Timestamptz(6)
+}
+
+model events {
+  id               Int       @id @default(autoincrement())
+  name             String    @db.VarChar(255)
+  event_date       DateTime? @db.Timestamp(6)
+  num_performances Int       @default(0)
+  judges           Json?     @db.Json
+  created_at       DateTime  @default(now()) @db.Timestamp(6)
+  updated_at       DateTime  @default(now()) @db.Timestamp(6)
+}

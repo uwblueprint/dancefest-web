@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@prisma/*": ["prisma/*"],
+      "@styles/*": ["styles/*"],
+      "@components/*": ["components/*"]
+    }
+  }
+}

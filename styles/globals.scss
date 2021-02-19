@@ -1,0 +1,62 @@
+html {
+  // Colours: Dancefest Brand
+  --brand-red: #c90c0f;
+  --brand-black: #0b0504;
+  --brand-white: #fafafa;
+  --brand-other-red: #a72a1d;
+  --brand-pop-blue: #42526e;
+  --brand-pop-yellow: #ffab00;
+
+  // Colours: System
+  --system-neutral-grey: #6b778c;
+  --system-light-grey: #dfe1e6;
+  --system-lightest-grey: #f5f6f7;
+  --system-light-blue: #4c9aff;
+
+  // Fonts
+  font-family: "DM Sans", sans-serif;
+}
+
+body {
+  // Remove default padding + margin
+  padding: 0px;
+  margin: 0px;
+
+  // Background
+  background-color: var(--system-lightest-grey);
+}
+
+button {
+  // Pointer on hover
+  cursor: pointer;
+  // Force button font
+  font-family: "DM Sans", sans-serif;
+}
+
+button:focus {
+  // Remove forced outline on focus
+  outline: none;
+}
+
+button:disabled {
+  // Force not-allowed cursor on disabled
+  cursor: not-allowed;
+}
+
+input {
+  // Force input font
+  font-family: "DM Sans", sans-serif;
+}
+
+// React Modal overrides
+// FIXME:
+.ReactModal__Overlay {
+  background-color: rgba(0, 0, 0, 0.4) !important;
+}
+
+.ReactModal__Content {
+  max-width: 800px;
+  margin: 0px auto;
+  box-shadow: 0px 0px 40px rgba(92, 92, 92, 0.1);
+  border-radius: 8px !important;
+}

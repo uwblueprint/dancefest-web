@@ -1,0 +1,42 @@
+.page__login {
+  text-align: center;
+  padding-top: 50px;
+
+  // Logo
+  img {
+    width: 100%;
+    max-width: 300px;
+    padding-bottom: 20px;
+  }
+}
+
+.page__login_card {
+  background: #ffffff;
+  box-shadow: 0px 0px 40px rgba(92, 92, 92, 0.1);
+  width: calc(100% - 40px);
+  max-width: 400px;
+  padding: 30px 20px;
+  border-radius: 8px;
+  margin: 0px auto;
+
+  h3 {
+    color: var(--brand-other-red);
+    font-size: 28px;
+    margin: 0px;
+  }
+
+  p {
+    color: var(--brand-pop-blue);
+    font-size: 17px;
+    margin-block-start: 10px;
+    line-height: 150%;
+  }
+
+  input {
+    margin-top: 10px;
+  }
+
+  button {
+    margin-top: 10px;
+  }
+}

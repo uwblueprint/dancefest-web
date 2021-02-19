@@ -1,0 +1,127 @@
+/*
+****************************************
+Layout: Header
+****************************************
+*/
+.layout__header {
+  height: 64px;
+  padding: 0px 40px;
+  border-radius: 0px 0px 16px 16px;
+  background-color: var(--brand-other-red);
+
+  div {
+    display: inline-block;
+    vertical-align: middle;
+  }
+}
+
+.layout__header_logo {
+  width: 150px;
+
+  a {
+    text-decoration: none;
+    color: var(--brand-white);
+
+    h1 {
+      font-size: 24px;
+    }
+
+    :hover {
+      opacity: 0.8;
+    }
+  }
+}
+
+.layout__header_menu {
+  width: calc(100% - 150px);
+
+  ul {
+    margin: 0px;
+    padding: 0px;
+    float: right;
+    list-style-type: none;
+
+    li {
+      margin: 0px 35px;
+      display: inline-block;
+
+      a {
+        font-size: 18px;
+        text-decoration: none;
+        color: var(--brand-white);
+      }
+
+      button {
+        padding: 0px;
+        border: none;
+        background-color: transparent;
+        font-size: 18px;
+        color: var(--brand-white);
+      }
+
+      :hover {
+        opacity: 0.8;
+      }
+    }
+
+    li:last-of-type {
+      margin-right: 0px;
+
+      button {
+        border: 1px solid var(--brand-white);
+        padding: 7px 25px;
+        border-radius: 5px;
+      }
+    }
+  }
+}
+
+/*
+****************************************
+Layout: Content
+****************************************
+*/
+.layout__content {
+  padding: 30px 64px 0px 64px;
+  min-height: calc(100vh - 150px);
+
+  .layout__content_sizer {
+    max-width: 1200px;
+    margin: 0px auto;
+  }
+}
+
+/*
+****************************************
+Layout: Footer
+****************************************
+*/
+.layout__footer {
+  height: 50px;
+  text-align: center;
+
+  p {
+    margin: 0px;
+    font-size: 14px;
+    color: var(--brand-pop-blue);
+
+    a {
+      color: inherit;
+    }
+  }
+}
+
+/*
+****************************************
+Layout: Responsiveness
+****************************************
+*/
+@media screen and (max-width: 750px) {
+  .layout__header {
+    padding: 0px 16px;
+  }
+
+  .layout__content {
+    padding: 20px 16px 0px 16px;
+  }
+}

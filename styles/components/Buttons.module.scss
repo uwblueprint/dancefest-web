@@ -1,0 +1,52 @@
+/*
+****************************************
+Button: Filled
+****************************************
+*/
+.button__filled {
+  border: none;
+  border-radius: 4px;
+  padding: 10px 40px;
+  font-weight: 500;
+  color: #fff;
+  font-size: 16px;
+  line-height: 21px;
+  border: 1px solid transparent;
+  background-color: var(--brand-pop-blue);
+  transition: 100ms ease-in-out;
+}
+
+.button__filled:hover {
+  opacity: 0.8;
+}
+
+/*
+****************************************
+Button: Unfilled
+****************************************
+*/
+.button__unfilled {
+  padding: 10px 40px;
+  border: 1px solid #42526e;
+  border-radius: 4px;
+  background-color: transparent;
+  font-weight: 500;
+  color: var(--brand-pop-blue);
+  font-size: 16px;
+  line-height: 21px;
+  transition: 100ms ease-in-out;
+}
+
+.button__unfilled:hover {
+  background-color: var(--brand-pop-blue);
+  color: #fff;
+}
+
+/*
+****************************************
+Button: Common
+****************************************
+*/
+.button__fullwidth {
+  width: 100%;
+}

@@ -1,0 +1,28 @@
+{
+  "name": "dancefest",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start -p $PORT"
+  },
+  "dependencies": {
+    "@prisma/client": "2.17.0",
+    "axios": "^0.21.1",
+    "dayjs": "^1.10.4",
+    "next": "10.0.7",
+    "next-auth": "^3.4.2",
+    "pg": "^8.5.1",
+    "react": "17.0.1",
+    "react-datepicker": "^3.5.0",
+    "react-dom": "17.0.1",
+    "react-loader-spinner": "^4.0.0",
+    "react-modal": "^3.12.1",
+    "sass": "^1.32.7"
+  },
+  "devDependencies": {
+    "prisma": "2.17.0",
+    "serverless": "1.74.1"
+  }
+}

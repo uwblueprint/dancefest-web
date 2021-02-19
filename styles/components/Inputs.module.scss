@@ -1,0 +1,23 @@
+/*
+****************************************
+Input: Text
+****************************************
+*/
+.input__text {
+  background-color: #fafafa;
+  border: 2px solid #dfe1e6;
+  border-radius: 3px;
+  padding: 10px 0px 10px 8px;
+  color: var(--system-neutral-grey);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+/*
+****************************************
+Input: Common
+****************************************
+*/
+.input__fullwidth {
+  width: calc(100% - 12px);
+}
