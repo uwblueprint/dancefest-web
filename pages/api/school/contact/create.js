@@ -7,23 +7,25 @@ export default async (req, res) => {
 
   // If user is authenticated and is an admin
   if (session && session.isAdmin) {
-    // Collect title, date, and judges array for new event
-    const { title, date, judges } = req.body;
+    // Collect name, email, year, school_id and phone of school contact
+    const { name, email, year, phone, schoolID } = req.body;
 
-    // If all exist
-    if (title && date && judges) {
-      // Create new event
-      const event = await prisma.event.create({
+    // If name, email and schoolID exist
+    if (name && email && schoolID) {
+      // Create new school contact
+      const contact = await prisma.contact.create({
         data: {
-          name: title,
-          event_date: new Date(date),
-          judges: JSON.stringify(judges),
+          school_id: schoolID,
+          year: year,
+          name: name,
+          email: email,
+          phone: phone,
         },
       });
 
-      // If event creation is successful, return event
-      if (event) {
-        res.send(event);
+      // If school contact creation is successful, return conact
+      if (contact) {
+        res.send(contact);
       }
       // Else, return server error
       else {

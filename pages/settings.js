@@ -1,5 +1,5 @@
-import Layout from "@components/Layout"; // Layout wrapper
-import { getSession } from "next-auth/client"; // Session handling
+import Layout from '@components/Layout'; // Layout wrapper
+import { getSession } from 'next-auth/client'; // Session handling
 
 // Page: Settings
 export default function Settings() {
@@ -20,7 +20,7 @@ export async function getServerSideProps(context) {
     return {
       redirect: {
         // Redirect user to login page
-        destination: "/login",
+        destination: '/login',
         permanent: false,
       },
     };

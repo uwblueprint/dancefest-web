@@ -1,4 +1,4 @@
-import styles from "@styles/components/Inputs.module.scss"; // Input component styles
+import styles from '@styles/components/Inputs.module.scss'; // Input component styles
 
 /**
  * Standard input field
@@ -14,9 +14,9 @@ function TextInput({ type, value, onChange, onEnter, fullWidth, ...props }) {
    * Handles execution on enter
    * @param {Event} e event
    */
-  const handleEnter = (e) => {
+  const handleEnter = e => {
     // If pressed key is enter, execute onEnter
-    if (e.key === "Enter") onEnter();
+    if (e.key === 'Enter') onEnter();
   };
 
   return (

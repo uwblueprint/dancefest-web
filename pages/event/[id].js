@@ -1,6 +1,6 @@
-import Layout from "@components/Layout"; // Layout wrapper
-import { getSession } from "next-auth/client"; // Session handling
-import { getEventByID } from "pages/api/events/get"; // Back-end helper
+import Layout from '@components/Layout'; // Layout wrapper
+import { getSession } from 'next-auth/client'; // Session handling
+import { getEventByID } from 'pages/api/events/get'; // Back-end helper
 
 // Page: Individual event
 export default function Event({ event }) {
@@ -24,7 +24,7 @@ export async function getServerSideProps(context) {
     return {
       redirect: {
         // Redirect user to login page
-        destination: "/login",
+        destination: '/login',
         permanent: false,
       },
     };
@@ -44,21 +44,21 @@ export async function getServerSideProps(context) {
     return {
       redirect: {
         // Redirect user to events page
-        destination: "/",
+        destination: '/',
         permanent: false,
       },
     };
   }
 
   // Parse and filter event judges
-  event.judges = JSON.parse(event.judges).filter((judge) => judge !== "");
+  event.judges = JSON.parse(event.judges).filter(judge => judge !== '');
 
   // Check if user has access to event
   if (!session.isAdmin && !event.judges.includes(session.user.email)) {
     return {
       redirect: {
         // Redirect user to events page
-        destination: "/",
+        destination: '/',
         permanent: false,
       },
     };

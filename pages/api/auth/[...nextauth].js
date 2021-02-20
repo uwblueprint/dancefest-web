@@ -1,9 +1,12 @@
-import NextAuth from "next-auth"; // Next Authentication
-import Providers from "next-auth/providers"; // Next Authentication providers
+import NextAuth from 'next-auth'; // Next Authentication
+import Providers from 'next-auth/providers'; // Next Authentication providers
+// TODO retrieve custom ORM model using Prisma adapter
+// import Adapters from 'next-auth/adapters'; // Next Authentication adapters
+// import prisma from 'pages/index';
 
 // Database Configuration
 const databaseConfig = {
-  type: "postgres",
+  type: 'postgres',
   host: process.env.POSTGRES_HOST,
   port: 5432,
   username: process.env.POSTGRES_USER,
@@ -11,17 +14,17 @@ const databaseConfig = {
   database: process.env.POSTGRES_DBNAME,
   // Bypass SSL rejectUnauthorized (Heroku, etc)
   ssl: {
-    sslmode: "require",
+    sslmode: 'require',
     rejectUnauthorized: false,
   },
 };
 
 // Administrator emails
-const adminEmails = ["contact+admin@anishagnihotri.com"];
+const adminEmails = ['contact+admin@anishagnihotri.com', 'ericli@uwblueprint.org'];
 
 export default NextAuth({
   // Site URL
-  site: process.env.NEXTAUTH_URL || "http://localhost:3000",
+  site: process.env.NEXTAUTH_URL || 'http://localhost:3000',
   // Supported authentication providers
   providers: [
     // Email authentication
@@ -31,9 +34,17 @@ export default NextAuth({
       maxAge: 24 * 60, // 1 hour max life for login request
     }),
   ],
+  // adapter: Adapters.Prisma.Adapter({
+  //   prisma,
+  //   modelMapping: {
+  //     User: 'user',
+  //     Session: 'session',
+  //     VerificationRequest: 'verificationRequest',
+  //   },
+  // }),
   pages: {
     // On errors, redirect to home
-    error: "/",
+    error: '/',
   },
   // Session handling
   session: {

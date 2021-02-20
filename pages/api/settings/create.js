@@ -7,28 +7,24 @@ export default async (req, res) => {
 
   // If user is authenticated and is an admin
   if (session && session.isAdmin) {
-    // Collect title, date, and judges array for new event
-    const { title, date, judges } = req.body;
+    // Collect setting type and setting value (see Prisma SettingType enum)
+    // type must be string in all capitals matching corresponding enum
+    const { type, value } = req.body;
 
     // If all exist
-    if (title && date && judges) {
-      // Create new event
-      const event = await prisma.event.create({
+    if (type && value) {
+      // Create new setting
+      const setting = await prisma.setting.create({
         data: {
-          name: title,
-          event_date: new Date(date),
-          judges: JSON.stringify(judges),
+          type: type,
+          value: value,
         },
       });
 
-      // If event creation is successful, return event
-      if (event) {
-        res.send(event);
-      }
+      // If setting creation is successful, return setting
+      if (setting) res.send(setting);
       // Else, return server error
-      else {
-        res.status(500).end();
-      }
+      else res.status(500).end();
     }
   }
 

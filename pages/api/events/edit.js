@@ -1,5 +1,5 @@
-import prisma from "@prisma/index"; // Prisma client
-import { getSession } from "next-auth/client"; // Session handling
+import prisma from '@prisma/index'; // Prisma client
+import { getSession } from 'next-auth/client'; // Session handling
 
 export default async (req, res) => {
   // Collect session from request
@@ -7,13 +7,13 @@ export default async (req, res) => {
 
   // If authenticated and admin
   if (session && session.isAdmin) {
-    // Collect params from request body
+    // Collect from request body
     const { id, title, date, judges } = req.body;
 
-    // If all params exist
+    // If all fields exist
     if (id && title && date && judges) {
       // Update event
-      const updatedEvent = await prisma.events.update({
+      const updatedEvent = await prisma.event.update({
         // Where
         where: {
           // Id is passed
@@ -29,12 +29,16 @@ export default async (req, res) => {
       });
 
       // If event updating is successful, return updated event
-      if (updatedEvent) res.send(updatedEvent);
+      if (updatedEvent) {
+        res.send(updatedEvent);
+      }
       // Else, return server error
-      else res.status(500);
+      else {
+        res.status(500).end();
+      }
     }
   }
 
   // Else, throw unauthenticated for all
-  res.status(401);
+  res.status(401).end();
 };

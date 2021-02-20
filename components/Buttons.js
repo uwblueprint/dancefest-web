@@ -1,4 +1,4 @@
-import styles from "@styles/components/Buttons.module.scss"; // Button component styles
+import styles from '@styles/components/Buttons.module.scss'; // Button component styles
 
 /**
  * Button with filled background-color

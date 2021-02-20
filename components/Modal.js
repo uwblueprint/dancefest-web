@@ -1,4 +1,4 @@
-import Modal from "react-modal"; // React modal
+import Modal from 'react-modal'; // React modal
 
 /**
  * Modal View
