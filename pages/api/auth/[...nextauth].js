@@ -24,7 +24,7 @@ const adminEmails = ['contact+admin@anishagnihotri.com', 'ericli@uwblueprint.org
 
 export default NextAuth({
   // Site URL
-  site: process.env.SITE || 'http://localhost:3000',
+  site: process.env.NEXTAUTH_URL || 'http://localhost:3000',
   // Supported authentication providers
   providers: [
     // Email authentication
@@ -61,7 +61,6 @@ export default NextAuth({
     // On session request
     session: async (session, user) => {
       // If user email is included among admins, attach isAdmin === true to session
-      console.log(user);
       session.isAdmin = adminEmails.includes(user.email) ? true : false;
       // Return altered session
       return Promise.resolve(session);

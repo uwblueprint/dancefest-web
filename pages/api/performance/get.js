@@ -1,13 +1,12 @@
 import prisma from '@prisma/index'; // Prisma client
 import { getSession } from 'next-auth/client'; // Session handling
 
-// get performances by specifying the corresponding eventID
-// POST with { eventID: id }
+// get performances by specifying the corresponding event id
 export default async (req, res) => {
   // Collect session from request
   const session = await getSession({ req });
 
-  const { id: id } = req.body;
+  const { id } = req.query;
 
   // If session exists and eventID provided (thus, user is authenticated)
   // only judges and admins

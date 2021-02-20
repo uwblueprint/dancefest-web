@@ -2,12 +2,11 @@ import prisma from '@prisma/index'; // Prisma client
 import { getSession } from 'next-auth/client'; // Session handling
 
 // get settings by specifying the corresponding type
-// POST with { type : type }
 export default async (req, res) => {
   // Collect session from request
   const session = await getSession({ req });
 
-  const { type: type } = req.body;
+  const { type } = req.query;
 
   // If session exists (user authenticated) and type provided
   if (session && type) {

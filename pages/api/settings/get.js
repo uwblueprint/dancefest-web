@@ -7,7 +7,7 @@ export default async (req, res) => {
   // Collect session from request
   const session = await getSession({ req });
 
-  const { id: id } = req.body;
+  const { id } = req.body;
 
   // If session exists (user authenticated) and type provided
   if (session && id) {

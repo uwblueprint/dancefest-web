@@ -22,20 +22,8 @@ export default async (req, res) => {
       school_id,
     } = req.body;
 
-    // If all exist
-    if (
-      name &&
-      academic_level &&
-      performers &&
-      choreographers &&
-      competition_level &&
-      dance_size &&
-      dance_entry &&
-      dance_style &&
-      dance_title &&
-      event_id &&
-      school_id
-    ) {
+    // If required fields exist
+    if (dance_entry && event_id && school_id) {
       // Create new event
       const event = await prisma.performance.create({
         data: {
@@ -57,6 +45,8 @@ export default async (req, res) => {
       if (event) res.send(performance);
       // Else, return server error
       else res.status(500).end();
+    } else {
+      res.status(400).end();
     }
   }
 

@@ -7,8 +7,8 @@ export default async (req, res) => {
 
   // If user is authenticated and is an admin
   if (session && session.isAdmin) {
-    // Collect name of school
-    const { name: name, email: email, year: year, phone: phone, school_id: school_id } = req.body;
+    // Collect name, email, year, school_id and phone of school contact
+    const { name, email, year, phone, school_id } = req.body;
 
     // If name exist
     if (name && email && year && school_id) {
