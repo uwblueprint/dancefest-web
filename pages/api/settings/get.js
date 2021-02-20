@@ -7,7 +7,7 @@ export default async (req, res) => {
   // Collect session from request
   const session = await getSession({ req });
 
-  const { id } = req.body;
+  const { id } = req.query;
 
   // If session exists (user authenticated) and type provided
   if (session && id) {
@@ -17,8 +17,11 @@ export default async (req, res) => {
         id: parseInt(id),
       },
     });
-    if (setting) res.send(setting);
-    else res.status(404).end();
+    if (setting) {
+      res.send(setting);
+    } else {
+      res.status(404).end();
+    }
   }
 
   // Else, return 401 for all failures

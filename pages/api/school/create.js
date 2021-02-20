@@ -20,9 +20,13 @@ export default async (req, res) => {
       });
 
       // If school creation is successful, return school
-      if (school) res.send(school);
+      if (school) {
+        res.send(school);
+      }
       // Else, return server error
-      else res.status(500).end();
+      else {
+        res.status(500).end();
+      }
     }
   }
 

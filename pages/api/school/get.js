@@ -17,8 +17,11 @@ export default async (req, res) => {
         id: parseInt(id),
       },
     });
-    if (school) res.send(school);
-    else res.status(404).end();
+    if (school) {
+      res.send(school);
+    } else {
+      res.status(404).end();
+    }
   }
 
   // Else, return 401 for all failures

@@ -22,9 +22,13 @@ export default async (req, res) => {
       });
 
       // If event creation is successful, return event
-      if (event) res.send(event);
+      if (event) {
+        res.send(event);
+      }
       // Else, return server error
-      else res.status(500).end();
+      else {
+        res.status(500).end();
+      }
     }
   }
 

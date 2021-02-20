@@ -7,10 +7,10 @@ export default async (req, res) => {
 
   // If authenticated and admin
   if (session && session.isAdmin) {
-    // Collect params from request body
+    // Collect from request body
     const { id, title, date, judges } = req.body;
 
-    // If all params exist
+    // If all fields exist
     if (id && title && date && judges) {
       // Update event
       const updatedEvent = await prisma.event.update({
@@ -29,9 +29,13 @@ export default async (req, res) => {
       });
 
       // If event updating is successful, return updated event
-      if (updatedEvent) res.send(updatedEvent);
+      if (updatedEvent) {
+        res.send(updatedEvent);
+      }
       // Else, return server error
-      else res.status(500).end();
+      else {
+        res.status(500).end();
+      }
     }
   }
 

@@ -8,15 +8,15 @@ export default async (req, res) => {
   // If user is authenticated and is an admin
   if (session && session.isAdmin) {
     // Collect name, email, year, school_id and phone of school contact
-    const { name, email, year, phone, school_id } = req.body;
+    const { name, email, year, phone, schoolID } = req.body;
 
-    // If name exist
-    if (name && email && year && school_id) {
+    // If name, email and schoolID exist
+    if (name && email && schoolID) {
       // Create new school contact
       const contact = await prisma.contact.create({
         data: {
-          school_id: parseInt(school_id),
-          year: parseInt(year),
+          school_id: schoolID,
+          year: year,
           name: name,
           email: email,
           phone: phone,
@@ -24,9 +24,13 @@ export default async (req, res) => {
       });
 
       // If school contact creation is successful, return conact
-      if (contact) res.send(contact);
+      if (contact) {
+        res.send(contact);
+      }
       // Else, return server error
-      else res.status(500).end();
+      else {
+        res.status(500).end();
+      }
     }
   }
 

@@ -9,8 +9,7 @@ export default async (req, res) => {
   const { id } = req.query;
 
   // If session exists and eventID provided (thus, user is authenticated)
-  // only judges and admins
-  // TODO check they have access to this event
+  // TODO check they have access to this event via roles
   if (session && id) {
     // Collect all events from database
     let performance = await prisma.performance.findUnique({
@@ -18,8 +17,11 @@ export default async (req, res) => {
         id: parseInt(id),
       },
     });
-    if (performance) res.send(performance);
-    else res.status(404).end();
+    if (performance) {
+      res.send(performance);
+    } else {
+      res.status(404).end();
+    }
   }
 
   // Else, return 401 for all failures

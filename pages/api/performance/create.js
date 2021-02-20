@@ -7,44 +7,47 @@ export default async (req, res) => {
 
   // If user is authenticated and is an admin
   if (session && session.isAdmin) {
-    // Collect performance information
+    // Collect performance information from request body
     const {
       name,
-      academic_level,
+      academicLevel,
       performers,
       choreographers,
-      competition_level,
-      dance_size,
-      dance_entry,
-      dance_style,
-      dance_title,
-      event_id,
-      school_id,
+      competitionLevel,
+      danceSize,
+      danceEntry,
+      danceStyle,
+      danceTitle,
+      eventID,
+      schoolID,
     } = req.body;
 
     // If required fields exist
-    if (dance_entry && event_id && school_id) {
-      // Create new event
+    if (danceEntry && eventID && schoolID) {
+      // Create new performance
       const event = await prisma.performance.create({
         data: {
           name: name,
-          academic_level: academic_level,
+          academic_level: academicLevel,
           performers: performers,
           choreographers: choreographers,
-          competition_level: competition_level,
-          dance_size: dance_size,
-          dance_entry: dance_entry,
-          dance_style: dance_style,
-          dance_title: dance_title,
-          event_id: event_id,
-          school_id: school_id,
+          competition_level: competitionLevel,
+          dance_size: danceSize,
+          dance_entry: danceEntry,
+          dance_style: danceStyle,
+          dance_title: danceTitle,
+          event_id: eventID,
+          school_id: schoolID,
         },
       });
 
       // If performance creation is successful, return performance
-      if (event) res.send(performance);
       // Else, return server error
-      else res.status(500).end();
+      if (event) {
+        res.send(performance);
+      } else {
+        res.status(500).end();
+      }
     } else {
       res.status(400).end();
     }
