@@ -48,8 +48,8 @@ CREATE TABLE schools (
 -- Create settings table
 CREATE TABLE settings (
   id SERIAL PRIMARY KEY NOT NULL,
-  setting_type SettingType NOT NULL,
-  setting_value VARCHAR(255),
+  type SettingType NOT NULL,
+  value VARCHAR(255),
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -57,6 +57,7 @@ CREATE TABLE settings (
 -- Create performances table
 CREATE TABLE performances (
   id SERIAL PRIMARY KEY NOT NULL,
+  name VARCHAR(255),
   academic_level VARCHAR(255),
   performers VARCHAR(255)[],
   choreographers VARCHAR(255)[],

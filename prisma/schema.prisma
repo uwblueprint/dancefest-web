@@ -56,17 +56,18 @@ model School {
 }
 
 model Setting {
-  id            Int         @id @default(autoincrement())
-  setting_type  settingtype
-  setting_value String?     @db.VarChar(255)
-  created_at    DateTime    @default(now()) @db.Timestamp(6)
-  updated_at    DateTime    @default(now()) @db.Timestamp(6)
+  id         Int         @id @default(autoincrement())
+  type       settingtype
+  value      String?     @db.VarChar(255)
+  created_at DateTime    @default(now()) @db.Timestamp(6)
+  updated_at DateTime    @default(now()) @db.Timestamp(6)
 
   @@map("settings")
 }
 
 model Performance {
   id                Int            @id @default(autoincrement())
+  name              String?        @db.VarChar(255)
   academic_level    String?        @db.VarChar(255)
   performers        String[]       @db.VarChar(255)
   choreographers    String[]       @db.VarChar(255)
