@@ -17,7 +17,7 @@ export default async (req, res) => {
       const setting = await prisma.setting.create({
         data: {
           type: type,
-          value: value
+          value: value,
         },
       });
 
