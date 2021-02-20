@@ -7,13 +7,13 @@ export default async (req, res) => {
 
   // If authenticated and admin
   if (session && session.isAdmin) {
-    // Collect id of event to delete
+    // Collect id of setting to delete
     const { id } = req.body;
 
     // If id exists
     if (id) {
       // Delete event
-      const deletedEvent = await prisma.event.delete({
+      const deletedSetting = await prisma.setting.delete({
         // With
         where: {
           // Specified id
@@ -21,8 +21,8 @@ export default async (req, res) => {
         },
       });
 
-      // Return deleted event
-      res.send(deletedEvent);
+      // Return deleted setting
+      res.send(deletedSetting);
     }
   }
 

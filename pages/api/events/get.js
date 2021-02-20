@@ -8,7 +8,7 @@ export default async (req, res) => {
   // If session exists (thus, user is authenticated)
   if (session) {
     // Collect eventID from URL query
-    const { id: eventID } = req.query;
+    const { eventID } = req.query;
 
     // If eventID is provided
     if (eventID) {
@@ -30,7 +30,7 @@ export default async (req, res) => {
             res.send(event);
         }
       } catch (error) {
-        res.status(401);
+        res.status(401).end();
       }
     }
   }

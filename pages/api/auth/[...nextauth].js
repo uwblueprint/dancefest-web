@@ -1,7 +1,8 @@
 import NextAuth from 'next-auth'; // Next Authentication
 import Providers from 'next-auth/providers'; // Next Authentication providers
-import Adapters from 'next-auth/adapters'; // Next Authentication adapters
-import prisma from 'pages/index';
+// TODO retrieve custom ORM model using Prisma adapter
+// import Adapters from 'next-auth/adapters'; // Next Authentication adapters
+// import prisma from 'pages/index';
 
 // Database Configuration
 const databaseConfig = {
@@ -23,7 +24,7 @@ const adminEmails = ['contact+admin@anishagnihotri.com', 'ericli@uwblueprint.org
 
 export default NextAuth({
   // Site URL
-  site: process.env.SITE || 'http://localhost:3000',
+  site: process.env.NEXTAUTH_URL || 'http://localhost:3000',
   // Supported authentication providers
   providers: [
     // Email authentication
@@ -33,14 +34,14 @@ export default NextAuth({
       maxAge: 24 * 60, // 1 hour max life for login request
     }),
   ],
-  adapter: Adapters.Prisma.Adapter({
-    prisma,
-    modelMapping: {
-      User: 'user',
-      Session: 'session',
-      VerificationRequest: 'verificationRequest',
-    },
-  }),
+  // adapter: Adapters.Prisma.Adapter({
+  //   prisma,
+  //   modelMapping: {
+  //     User: 'user',
+  //     Session: 'session',
+  //     VerificationRequest: 'verificationRequest',
+  //   },
+  // }),
   pages: {
     // On errors, redirect to home
     error: '/',
@@ -60,7 +61,6 @@ export default NextAuth({
     // On session request
     session: async (session, user) => {
       // If user email is included among admins, attach isAdmin === true to session
-      console.log(user);
       session.isAdmin = adminEmails.includes(user.email) ? true : false;
       // Return altered session
       return Promise.resolve(session);

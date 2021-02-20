@@ -1,15 +1,113 @@
-TODOS:
+<img src="https://raw.githubusercontent.com/uwblueprint/dancefest-web/master/public/vectors/logo.svg" width="200" />
 
-1. Deploy to AWS
-2. Button disabled effects
-3. Custom email template for login
-4. Custom email redirect check your email page
-5. Mobile responsive header
+# Dancefest Web ([live](https://ossdancefest.com))
 
-Individual Event/Performance page:
+Dancefest Web is [Ontario Secondary School Dancefest's (OSSDF)](https://www.dancefestcanada.ca/)
+Judging and Adjudication Platform. This webapp is utilized by OSSDF' judges to coordinate their
+performance scoring.
 
-1. List all performances (paginated)
-2. Make new performance (by admin)
-3. Edit performance info (by admin)
-4. Provide performance feedback (by judge)
-5. Edit performance feedback (by judge)
+## General Architecture
+
+1. [NodeJS](https://nodejs.org/en/) application powered by the [Next.JS](https://nextjs.org/)
+   framework.
+2. [Prisma](https://www.prisma.io/) ORM for [PostgreSQL](https://www.postgresql.org/).
+3. Service: [Amazon SES](https://aws.amazon.com/ses/) for outbound email service.
+4. Service: [Heroku](https://heroku.com) for application and database deploys.
+
+## Project structure
+
+```bash
+.
+├── .github/workflows # Github deployment workflows
+├── components # Individual application components
+│   ├── Buttons.js
+│   ├── Cards.js
+│   ├── Inputs.js
+│   ├── Layout.js
+│   └── Modal.js
+├── pages
+│   ├── _app.js
+│   ├── api # Serverless API routes
+│   ├── event # /event/[id].js
+│   ├── index.js # / -> Events
+│   ├── login.js # /login
+│   └── settings.js # /settings
+├── prisma
+│   ├── index.js # Prisma default export
+│   ├── migrations
+│   ├── schema.prisma # Prisma schema
+│   └── schema.sql # SQL schema conforming to Prisma
+├── public # Public outputs
+│   ├── favicon.ico
+│   └── vectors
+├── styles
+│   ├── components # Component styles
+│   ├── globals.scss
+│   └── pages # Page styles
+# Misc individual files
+├── .env.sample # Sample env file
+├── .eslintrc.json
+├── .gitignore
+├── .prettierignore
+├── .prettierrc.json
+├── jsconfig.json
+├── LICENSE
+├── package.json
+├── README.md
+└── yarn.lock
+```
+
+## Run locally
+
+Duplicate `.env.sample` to `.env` and replace with your appropriate environment variables.
+
+To deploy your database schema run (one-time):
+
+```bash
+# Deploy schema.sql to Heroku postgres
+heroku pg:psql -a YOUR_APP_NAME -f prisma/schema.sql
+
+# Regenerate Prisma schema and client
+npx prisma introspect && npx prisma generate
+```
+
+To run the application:
+
+```bash
+# Install dependencies
+yarn
+
+# Run locally
+yarn dev
+```
+
+## Development
+
+To run the linters:
+
+```bash
+# Runs linting
+yarn lint
+
+# Corrects linting issues
+yarn fix
+```
+
+If you want to deploy a branch for testing, open a PR against staging and comment /deploy in the
+PR!  
+Make sure someone else isn't using the deployment environment at the same time as you.
+
+## Deploy
+
+Deployment occurs automatically on-push to the
+[Master](https://github.com/uwblueprint/dancefest-web/tree/master) and
+[Staging](https://github.com/uwblueprint/dancefest-web/tree/staging) branches. These deploys are
+handled by their respective
+[Github Actions Workflows](https://github.com/uwblueprint/dancefest-web/tree/master/.github/workflows).
+
+1. Master Deploy: [ossdancefest.com](https://www.ossdancefest.com)
+2. Staging Deploy: [dancefest.dev](https://dancefest.dev)
+
+## License
+
+[MIT](https://github.com/uwblueprint/dancefest-web/blob/master/LICENSE)
