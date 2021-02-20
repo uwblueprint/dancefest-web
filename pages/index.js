@@ -1,14 +1,14 @@
-import axios from "axios"; // Axios requests
-import Layout from "@components/Layout"; // Layout wrapper
-import Loader from "react-loader-spinner"; // Spinning loader
-import DatePicker from "react-datepicker"; // Date picker
-import { useState, useEffect } from "react"; // State management
-import { ModalView } from "@components/Modal"; // Modal component
-import { getSession } from "next-auth/client"; // Session handling
-import { EventCard } from "@components/Cards"; // Event card component
-import { TextInput } from "@components/Inputs"; // Text input component
-import styles from "@styles/pages/Events.module.scss"; // Page styling
-import { FilledButton, UnfilledButton } from "@components/Buttons"; // Button components
+import axios from 'axios'; // Axios requests
+import Layout from '@components/Layout'; // Layout wrapper
+import Loader from 'react-loader-spinner'; // Spinning loader
+import DatePicker from 'react-datepicker'; // Date picker
+import { useState, useEffect } from 'react'; // State management
+import { ModalView } from '@components/Modal'; // Modal component
+import { getSession } from 'next-auth/client'; // Session handling
+import { EventCard } from '@components/Cards'; // Event card component
+import { TextInput } from '@components/Inputs'; // Text input component
+import styles from '@styles/pages/Events.module.scss'; // Page styling
+import { FilledButton, UnfilledButton } from '@components/Buttons'; // Button components
 
 // Modal content states enum
 const modalStates = Object.freeze({
@@ -62,7 +62,7 @@ export default function Events({ session }) {
    * Opens edit event modal
    * @param {Number} i index for event to edit
    */
-  const modalEditEvent = (i) => {
+  const modalEditEvent = i => {
     setModalContent(modalStates.editEvent); // Set modal content
     setModalOpen(true); // Open modal
     setEventToEdit(i); // Set index of event to edit
@@ -75,7 +75,7 @@ export default function Events({ session }) {
     setLoading(true); // Toggle loading
 
     // Collect and set events from endpoint
-    const response = await axios.get("/api/events/collect");
+    const response = await axios.get('/api/events/collect');
     const events = response.data;
     setEvents(events);
 
@@ -93,9 +93,7 @@ export default function Events({ session }) {
           <h1>Events</h1>
 
           {/* If user is admin, enable event creation */}
-          {session.isAdmin ? (
-            <FilledButton onClick={modalNewEvent}>Add Event</FilledButton>
-          ) : null}
+          {session.isAdmin ? <FilledButton onClick={modalNewEvent}>Add Event</FilledButton> : null}
         </div>
 
         {/* Events page events list */}
@@ -126,9 +124,7 @@ export default function Events({ session }) {
                   // Enable creation of new event if admin
                   <>
                     <h3>Create your first event</h3>
-                    <FilledButton onClick={modalNewEvent}>
-                      Add Event
-                    </FilledButton>
+                    <FilledButton onClick={modalNewEvent}>Add Event</FilledButton>
                   </>
                 ) : null}
               </div>
@@ -157,16 +153,16 @@ export default function Events({ session }) {
  * @returns {HTMLElement} of modal content
  */
 function NewEvent({ setModalOpen, reloadEvents }) {
-  const [title, setTitle] = useState(""); // Event title
+  const [title, setTitle] = useState(''); // Event title
   const [date, setDate] = useState(new Date()); // Event date
-  const [judges, setJudges] = useState(["", "", ""]); // Event judges
+  const [judges, setJudges] = useState(['', '', '']); // Event judges
 
   /**
    * Submits new event creation
    */
   const submitEvent = async () => {
     // Post /api/events/create
-    await axios.post("/api/events/create", {
+    await axios.post('/api/events/create', {
       // With required data
       title,
       date,
@@ -193,7 +189,7 @@ function NewEvent({ setModalOpen, reloadEvents }) {
    */
   const addJudge = () => {
     // Judges + ""
-    setJudges([...judges, ""]);
+    setJudges([...judges, '']);
   };
 
   return (
@@ -205,12 +201,12 @@ function NewEvent({ setModalOpen, reloadEvents }) {
         type="text"
         placeholder="Event title"
         value={title}
-        onChange={(e) => setTitle(e.target.value)}
+        onChange={e => setTitle(e.target.value)}
         fullWidth
       />
 
       {/* Event date */}
-      <DatePicker selected={date} onChange={(date) => setDate(date)} />
+      <DatePicker selected={date} onChange={date => setDate(date)} />
 
       {/* Event judges */}
       {judges.map((judge, i) => {
@@ -221,7 +217,7 @@ function NewEvent({ setModalOpen, reloadEvents }) {
             type="text"
             placeholder="email placeholder"
             value={judge}
-            onChange={(e) => updateJudge(i, e.target.value)}
+            onChange={e => updateJudge(i, e.target.value)}
             fullWidth
             key={i}
           />
@@ -258,7 +254,7 @@ function EditEvent({ event, setModalOpen, reloadEvents }) {
    */
   const editEvent = async () => {
     // Post /api/events/edit
-    await axios.post("/api/events/edit", {
+    await axios.post('/api/events/edit', {
       // With id of event to edit
       id: event.id,
       // And data to patch
@@ -276,7 +272,7 @@ function EditEvent({ event, setModalOpen, reloadEvents }) {
    */
   const removeEvent = async () => {
     // Post /api/events/delete endpoint
-    await axios.post("/api/events/delete", {
+    await axios.post('/api/events/delete', {
       // With id of event to delete
       id: event.id,
     });
@@ -301,7 +297,7 @@ function EditEvent({ event, setModalOpen, reloadEvents }) {
    */
   const addJudge = () => {
     // Judges + ""
-    setJudges([...judges, ""]);
+    setJudges([...judges, '']);
   };
 
   return (
@@ -318,12 +314,12 @@ function EditEvent({ event, setModalOpen, reloadEvents }) {
         type="text"
         placeholder="Event title"
         value={title}
-        onChange={(e) => setTitle(e.target.value)}
+        onChange={e => setTitle(e.target.value)}
         fullWidth
       />
 
       {/* Event date input */}
-      <DatePicker selected={date} onChange={(date) => setDate(date)} />
+      <DatePicker selected={date} onChange={date => setDate(date)} />
 
       {judges.map((judge, i) => {
         // For all judges in judges array
@@ -333,7 +329,7 @@ function EditEvent({ event, setModalOpen, reloadEvents }) {
             type="text"
             placeholder="email placeholder"
             value={judge}
-            onChange={(e) => updateJudge(i, e.target.value)}
+            onChange={e => updateJudge(i, e.target.value)}
             fullWidth
             key={i}
           />
@@ -363,7 +359,7 @@ export async function getServerSideProps(context) {
     return {
       redirect: {
         // Redirect user to login page
-        destination: "/login",
+        destination: '/login',
         permanent: false,
       },
     };

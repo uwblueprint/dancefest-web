@@ -1,5 +1,5 @@
-import prisma from "@prisma/index"; // Prisma client
-import { getSession } from "next-auth/client"; // Session handling
+import prisma from '@prisma/index'; // Prisma client
+import { getSession } from 'next-auth/client'; // Session handling
 
 export default async (req, res) => {
   // Collect session from request
@@ -13,7 +13,7 @@ export default async (req, res) => {
     // If id exists
     if (id) {
       // Delete event
-      const deletedEvent = await prisma.events.delete({
+      const deletedEvent = await prisma.event.delete({
         // With
         where: {
           // Specified id

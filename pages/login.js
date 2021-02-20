@@ -1,19 +1,19 @@
-import { useState } from "react"; // State management
-import Layout from "@components/Layout"; // Layout wrapper
-import { TextInput } from "@components/Inputs"; // Text Input field
-import { FilledButton } from "@components/Buttons"; // FilledButton
-import styles from "@styles/pages/Login.module.scss"; // Component styles
-import { getSession, signIn } from "next-auth/client"; // Session management
+import { useState } from 'react'; // State management
+import Layout from '@components/Layout'; // Layout wrapper
+import { TextInput } from '@components/Inputs'; // Text Input field
+import { FilledButton } from '@components/Buttons'; // FilledButton
+import styles from '@styles/pages/Login.module.scss'; // Component styles
+import { getSession, signIn } from 'next-auth/client'; // Session management
 
 export default function Login() {
-  const [email, setEmail] = useState(""); // Store user inputted email
+  const [email, setEmail] = useState(''); // Store user inputted email
 
   /**
    * Process user sign in with inputted email
    */
   const signInWithEmail = () => {
     // Call Next-Auth sign in, passing email state
-    signIn("email", { email: email });
+    signIn('email', { email: email });
   };
 
   return (
@@ -27,8 +27,8 @@ export default function Login() {
           {/* Login card: text */}
           <h3>Log in to your account</h3>
           <p>
-            Please enter your email address to sign up or login to the Dancefest
-            Adjudication portal.
+            Please enter your email address to sign up or login to the Dancefest Adjudication
+            portal.
           </p>
 
           {/* Login card: input */}
@@ -36,7 +36,7 @@ export default function Login() {
             type="text"
             placeholder="email@address.com"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={e => setEmail(e.target.value)}
             fullWidth
             // Process sign in if user presses enter after email input
             onEnter={signInWithEmail}
@@ -63,7 +63,7 @@ export async function getServerSideProps(context) {
       // Always redirect "/login"
       redirect: {
         // To events page
-        destination: "/",
+        destination: '/',
         permanent: false,
       },
     };

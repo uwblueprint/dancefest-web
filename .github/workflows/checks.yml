@@ -23,9 +23,6 @@ jobs:
       - name: Install dependencies
         working-directory: .
         run: yarn install
-      - name: Build
-        working-directory: .
-        run: yarn run build-prod
       - name: Linting Prettier
         working-directory: .
         run: |
@@ -34,3 +31,4 @@ jobs:
         working-directory: .
         run: |
           yarn lint:eslint
+      # Test with Jest

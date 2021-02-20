@@ -1,5 +1,5 @@
-import prisma from "@prisma/index"; // Prisma client
-import { getSession } from "next-auth/client"; // Session handling
+import prisma from '@prisma/index'; // Prisma client
+import { getSession } from 'next-auth/client'; // Session handling
 
 export default async (req, res) => {
   // Collect session from request
@@ -13,7 +13,7 @@ export default async (req, res) => {
     // If all exist
     if (title && date && judges) {
       // Create new event
-      const event = await prisma.events.create({
+      const event = await prisma.event.create({
         data: {
           name: title,
           event_date: new Date(date),

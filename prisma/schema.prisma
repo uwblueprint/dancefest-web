@@ -7,31 +7,124 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model users {
+enum Role {
+  USER
+  JUDGE
+  ADMIN
+}
+
+enum SettingType {
+  COMPETITION_LEVEL
+  DANCE_SIZE
+  STYLE
+}
+
+model User {
   id             Int       @id @default(autoincrement())
   name           String?   @db.VarChar(255)
+  role           Role      @default(USER)
   email          String?   @unique @db.VarChar(255)
   email_verified DateTime? @db.Timestamptz(6)
   image          String?
   created_at     DateTime  @default(now()) @db.Timestamptz(6)
   updated_at     DateTime  @default(now()) @db.Timestamptz(6)
+
+  @@map(name: "users")
 }
 
-model verification_requests {
+model VerificationRequest {
   id         Int      @id @default(autoincrement())
   identifier String   @db.VarChar(255)
   token      String   @unique @db.VarChar(255)
   expires    DateTime @db.Timestamptz(6)
   created_at DateTime @default(now()) @db.Timestamptz(6)
   updated_at DateTime @default(now()) @db.Timestamptz(6)
+
+  @@map(name: "verification_requests")
 }
 
-model events {
+model Event {
   id               Int       @id @default(autoincrement())
   name             String    @db.VarChar(255)
+  location         String?   @db.VarChar(255)
   event_date       DateTime? @db.Timestamp(6)
   num_performances Int       @default(0)
   judges           Json?     @db.Json
   created_at       DateTime  @default(now()) @db.Timestamp(6)
   updated_at       DateTime  @default(now()) @db.Timestamp(6)
+
+  @@map(name: "events")
+}
+
+model School {
+  id               Int              @id @default(autoincrement())
+  contacts         Contact[]
+  created_at       DateTime         @default(now()) @db.Timestamp(6)
+  updated_at       DateTime         @default(now()) @db.Timestamp(6)
+
+  @@map(name: "schools")
+}
+
+model Setting {
+  id               Int          @id @default(autoincrement())
+  setting_type     SettingType 
+  setting_value    String?      @db.VarChar(255) 
+  created_at       DateTime     @default(now()) @db.Timestamp(6)
+  updated_at       DateTime     @default(now()) @db.Timestamp(6)
+
+  @@map(name: "settings")
+}
+
+model Performance {
+  id                Int          @id @default(autoincrement())
+  academic_level    String?      @db.VarChar(255)
+  performers        String[]     @db.VarChar(255)
+  choreographers    String[]     @db.VarChar(255)
+  competition_level String?      @db.VarChar(255)
+  dance_size        String?      @db.VarChar(255)
+  dance_entry       Int
+  dance_style       String?      @db.VarChar(255)
+  dance_title       String?      @db.VarChar(255)
+
+  event             Event        @relation(fields: [event_id], references: [id])
+  event_id          Int          // relation scalar field  (used in the `@relation` attribute above)
+
+  school            School       @relation(fields: [school_id], references: [id])
+  school_id         Int          // relation scalar field  (used in the `@relation` attribute above)
+
+  adjudications     Adjudication[]
+  created_at        DateTime     @default(now()) @db.Timestamp(6)
+  updated_at        DateTime     @default(now()) @db.Timestamp(6)
+
+  @@map(name: "performances")
+}
+
+model Adjudication {
+  id               Int          @id @default(autoincrement())
+  artistic_mark    Int
+  technical_mark   Int
+  cumulative_mark  Int
+  audio_url        String       @db.VarChar(255)
+  notes            String       @db.VarChar(255)
+  special_award    String       @db.VarChar(255)
+  performance      Performance  @relation(fields: [performance_id], references: [id])
+  performance_id   Int          // relation scalar field  (used in the `@relation` attribute above)
+  created_at       DateTime     @default(now()) @db.Timestamp(6)
+  updated_at       DateTime     @default(now()) @db.Timestamp(6)
+
+  @@map(name: "adjudications")
+}
+
+model Contact {
+  id               Int          @id @default(autoincrement())
+  school           School       @relation(fields: [school_id], references: [id])
+  school_id        Int          // relation scalar field  (used in the `@relation` attribute above)
+  year             Int?
+  name             String       @db.VarChar(255)
+  email            String       @db.VarChar(255)
+  phone            String?      @db.VarChar(255)
+  created_at       DateTime     @default(now()) @db.Timestamp(6)
+  updated_at       DateTime     @default(now()) @db.Timestamp(6)
+
+  @@map(name: "contacts")
 }
