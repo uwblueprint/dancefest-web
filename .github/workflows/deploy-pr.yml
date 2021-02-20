@@ -1,4 +1,4 @@
-name: Deploy Dancefest Website by PR
+name: Deploy Dancefest Website by Pull Request
 on:
   issue_comment:
     types: [created]
