@@ -41,7 +41,6 @@ jobs:
           ref: ${{ fromJson(steps.get_pull_request_ref.outputs.data).head.ref }}
           environment: dancefest-pr
           auto_merge: false
-        run: echo ${{ fromJson(steps.get_pull_request_ref.outputs.data) }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
