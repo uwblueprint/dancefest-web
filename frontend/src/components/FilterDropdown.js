@@ -14,9 +14,17 @@ export default function FilterDropdown({
 }) {
   const [open, setOpen] = useState(false);
 
-  const handleButtonClick = () => setOpen(!open);
+  const handleButtonClick = () => {
+    if (open) {
+      onSubmit();
+    }
+    setOpen(!open);
+  };
 
-  const handleCloseOptions = () => setOpen(false);
+  const handleCloseOptions = () => {
+    onSubmit();
+    setOpen(false);
+  };
 
   const handleClearFilter = () => {
     const newOptions = {};
@@ -59,15 +67,7 @@ export default function FilterDropdown({
 
   return (
     <div className={styles.filterDropdown__wrapper}>
-      {open && (
-        <div
-          className={styles.filterDropdown__overlay}
-          onClick={() => {
-            handleCloseOptions();
-            onSubmit();
-          }}
-        />
-      )}
+      {open && <div className={styles.filterDropdown__overlay} onClick={handleCloseOptions} />}
       <button
         className={`${styles.filterDropdown__button} ${open &&
           `${styles.filterDropdown__buttonOpen} ${styles.bringToFront}`}`}
