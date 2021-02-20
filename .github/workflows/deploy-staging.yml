@@ -1,0 +1,15 @@
+name: Deploy Dancefest Staging Website
+on:
+  push:
+    branches: [staging]
+jobs:
+  deploy-production:
+    runs-on: ubuntu-latest
+    environment: dancefest-staging
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.11.10
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: "dancefest-dev"
+          heroku_email: "dancefest@uwblueprint.org"
