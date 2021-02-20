@@ -81,6 +81,22 @@ yarn
 yarn dev
 ```
 
+## Development
+
+To run the linters:
+
+```bash
+# Runs linting
+yarn lint
+
+# Corrects linting issues
+yarn fix
+```
+
+If you want to deploy a branch for testing, open a PR against staging and comment /deploy in the
+PR!  
+Make sure someone else isn't using the deployment environment at the same time as you.
+
 ## Deploy
 
 Deployment occurs automatically on-push to the

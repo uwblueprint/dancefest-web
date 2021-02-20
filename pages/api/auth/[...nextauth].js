@@ -1,7 +1,8 @@
 import NextAuth from 'next-auth'; // Next Authentication
 import Providers from 'next-auth/providers'; // Next Authentication providers
-import Adapters from 'next-auth/adapters'; // Next Authentication adapters
-import prisma from 'pages/index';
+// TODO retrieve custom ORM model using Prisma adapter
+// import Adapters from 'next-auth/adapters'; // Next Authentication adapters
+// import prisma from 'pages/index';
 
 // Database Configuration
 const databaseConfig = {
@@ -33,14 +34,14 @@ export default NextAuth({
       maxAge: 24 * 60, // 1 hour max life for login request
     }),
   ],
-  adapter: Adapters.Prisma.Adapter({
-    prisma,
-    modelMapping: {
-      User: 'user',
-      Session: 'session',
-      VerificationRequest: 'verificationRequest',
-    },
-  }),
+  // adapter: Adapters.Prisma.Adapter({
+  //   prisma,
+  //   modelMapping: {
+  //     User: 'user',
+  //     Session: 'session',
+  //     VerificationRequest: 'verificationRequest',
+  //   },
+  // }),
   pages: {
     // On errors, redirect to home
     error: '/',
