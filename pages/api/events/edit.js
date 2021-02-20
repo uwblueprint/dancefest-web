@@ -31,10 +31,10 @@ export default async (req, res) => {
       // If event updating is successful, return updated event
       if (updatedEvent) res.send(updatedEvent);
       // Else, return server error
-      else res.status(500);
+      else res.status(500).end();
     }
   }
 
   // Else, throw unauthenticated for all
-  res.status(401);
+  res.status(401).end();
 };

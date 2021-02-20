@@ -37,5 +37,5 @@ export default async (req, res) => {
   }
 
   // Else, return 401 for all failures
-  res.status(401);
+  res.status(401).end();
 };

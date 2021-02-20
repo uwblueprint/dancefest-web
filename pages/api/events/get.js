@@ -30,7 +30,7 @@ export default async (req, res) => {
             res.send(event);
         }
       } catch (error) {
-        res.status(401);
+        res.status(401).end();
       }
     }
   }
