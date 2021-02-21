@@ -1,11 +1,11 @@
-import React from "react"; // React
-import PropTypes from "prop-types"; // PropTypes
-import DatePicker from "react-datepicker"; // React DatePicker
+import React from 'react'; // React
+import PropTypes from 'prop-types'; // PropTypes
+import DatePicker from 'react-datepicker'; // React DatePicker
 
-import TextInput from "@components/Input"; // Input
-import CalendarSVG from "@assets/calendar.svg"; // Calendar Icon
-import ChevronLeftSVG from "@assets/chevron-left.svg"; // Chevron Left Icon
-import ChevronRightSVG from "@assets/chevron-right.svg"; // Chevron Right Icon
+import TextInput from '@components/Input'; // Input
+import CalendarSVG from '@assets/calendar.svg'; // Calendar Icon
+import ChevronLeftSVG from '@assets/chevron-left.svg'; // Chevron Left Icon
+import ChevronRightSVG from '@assets/chevron-right.svg'; // Chevron Right Icon
 
 function Calendar() {
   return <img src={CalendarSVG} />;
@@ -22,9 +22,9 @@ function ChevronRight() {
 export default function CustomDatePicker({
   date = new Date(),
   setDate,
-  calendarClassName = "",
-  inputClassName = "",
-  wrapperClassName = "",
+  calendarClassName = '',
+  inputClassName = '',
+  wrapperClassName = '',
   fullWidth,
 }) {
   const DatePickerInput = ({ onClick, value }) => (
@@ -46,7 +46,7 @@ export default function CustomDatePicker({
       nextMonthButtonLabel={<ChevronRight />}
       previousMonthButtonLabel={<ChevronLeft />}
       selected={date}
-      onChange={(date) => setDate(date)}
+      onChange={date => setDate(date)}
       useWeekdaysShort
     />
   );

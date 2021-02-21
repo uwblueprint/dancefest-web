@@ -1,9 +1,9 @@
-import React from "react"; // React
-import PropTypes from "prop-types"; // PropTypes
+import React from 'react'; // React
+import PropTypes from 'prop-types'; // PropTypes
 
-import styles from "@styles/components/Title.module.scss"; // Component styles
+import styles from '@styles/components/Title.module.scss'; // Component styles
 
-export default function Title({ children, className = "" }) {
+export default function Title({ children, className = '' }) {
   return <h1 className={`${styles.title} ${className}`}>{children}</h1>;
 }
 
