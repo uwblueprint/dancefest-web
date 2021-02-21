@@ -1,3 +1,5 @@
+import React from 'react';
+import PropTypes from 'prop-types'; // PropTypes
 import styles from '@styles/components/Inputs.module.scss'; // Input component styles
 
 /**
@@ -9,7 +11,18 @@ import styles from '@styles/components/Inputs.module.scss'; // Input component s
  * @param {Boolean} fullWidth if 100% of width of parent
  * @returns {HTMLElement} standard input field
  */
-function TextInput({ type, value, onChange, onEnter, fullWidth, ...props }) {
+export default function TextInput({
+  className = '',
+  type,
+  value,
+  onChange,
+  onEnter,
+  fullWidth,
+  inputRef = null,
+  icon: Icon,
+  onIconClick = () => {},
+  ...props
+}) {
   /**
    * Handles execution on enter
    * @param {Event} e event
@@ -20,21 +33,37 @@ function TextInput({ type, value, onChange, onEnter, fullWidth, ...props }) {
   };
 
   return (
-    <input
-      className={`${styles.input__text} ${
+    <div
+      className={`${styles.input__wrapper}  ${
         // If fullWidth boolean, style with fullwidth class
         fullWidth ? styles.input__fullwidth : null
       }`}
-      type={type}
-      value={value}
-      onChange={onChange}
-      // If onEnter provided, handleEnter, else do nothing
-      onKeyPress={onEnter ? handleEnter : null}
-      // Pass remaining props
-      {...props}
-    />
+    >
+      <input
+        className={`${styles.input} ${className} ${Icon && styles.input_withIcon}`}
+        ref={inputRef}
+        // If onEnter provided, handleEnter, else do nothing
+        onKeyPress={onEnter ? handleEnter : null}
+        type={type}
+        value={value}
+        onChange={onChange}
+        {...props}
+      />
+      {Icon && (
+        <div className={styles.input__icon} onClick={onIconClick}>
+          <Icon />
+        </div>
+      )}
+    </div>
   );
 }
 
-// Export inputs
-export { TextInput };
+TextInput.propTypes = {
+  className: PropTypes.string,
+  icon: PropTypes.object,
+  inputRef: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.elementType }),
+  ]),
+  onIconClick: PropTypes.func,
+};
