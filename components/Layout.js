@@ -86,11 +86,6 @@ function Header() {
                 </Link>
               </li>
               <li>
-                <Link href="/performances">
-                  <a>Performances</a>
-                </Link>
-              </li>
-              <li>
                 <Link href="/settings">
                   <a>Settings</a>
                 </Link>
