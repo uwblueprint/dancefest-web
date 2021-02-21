@@ -1,36 +1,30 @@
 import { getSession } from 'next-auth/client'; // Session handling
 import { getPerformances } from '../performances/collect';
 import { getSchools } from '../schools/collect';
-
-//TODO should this be in a different file and exported in?
-const nodemailer = require('nodemailer');
-const AWS = require('aws-sdk');
-AWS.config.update({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  region: process.env.AWS_REGION,
-});
-
-const transporter = nodemailer.createTransport({
-  SES: new AWS.SES({
-    apiVersion: '2010-12-01',
-  }),
-});
+import { transporter } from 'aws/index';
 
 export default async (req, res) => {
   const session = await getSession({ req });
 
   if (session) {
-    let schools = await getSchools();
+    const { schoolIDs } = req.query;
+
+    // Set filter to obtain schools with schoolIDs passed in. If schoolIDs is not passed in, we want to get all schools.
+    const schoolFilter = schoolIDs ? { id: { in: schoolIDs.split(',').map(i => +i) } } : {};
+    const schools = await getSchools(schoolFilter);
+
+    // If no schools are returned from the filter
     if (!schools.length) return res.status(400).json({ error: 'No schools to email feedback.' });
 
-    let filter = {
+    // Filter for obtaining performances for the schools
+    const performanceFilter = {
       school_id: {
         in: schools.map(school => school.id),
       },
     };
 
-    let performances = await getPerformances(filter);
+    // Obtain all performances matching the performanceFilter
+    const performances = await getPerformances(performanceFilter);
 
     // Build a map where we can access all the performances of a school using the school id
     let performancesMap = {};
@@ -45,10 +39,9 @@ export default async (req, res) => {
     // Send email for each school
     schools.forEach(school => {
       // if there are performances for the school and the school has a contact email
-      if (school.id in performancesMap && 'contacts' in school && !school.contacts.length) {
+      if (school.id in performancesMap && 'contacts' in school && school.contacts.length) {
         // Obtain the first contact email for the school
         const toEmail = school.contacts[0].email;
-
         // Send all performance data for the school
         transporter.sendMail(
           {
@@ -66,6 +59,7 @@ export default async (req, res) => {
       }
     });
 
+    // When all emails are sent successfully
     res.status(200).json({ message: 'Successfully shared feedback with all schools.' });
   }
 
