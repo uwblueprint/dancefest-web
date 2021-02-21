@@ -18,7 +18,7 @@ export default async (req, res) => {
     // If schoolIDs exist, we convert it into an array of integers to add to the filter
     if (schoolIDs) filter.school_id = { in: schoolIDs.split(',').map(i => +i) };
 
-    let performances = await getPerformances(filter);
+    const performances = await getPerformances(filter);
     res.send(performances);
   }
 

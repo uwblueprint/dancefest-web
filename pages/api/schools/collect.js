@@ -13,7 +13,7 @@ export default async (req, res) => {
     if (schoolIDs) filter.id = { in: schoolIDs.split(',').map(i => +i) };
 
     // Collect schools
-    let schools = await getSchools(filter);
+    const schools = await getSchools(filter);
     res.send(schools);
   }
 
