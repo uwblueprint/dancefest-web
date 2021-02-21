@@ -25,7 +25,7 @@ export default async (req, res) => {
     // If required fields exist
     if (danceEntry && eventID && schoolID) {
       // Create new performance
-      const event = await prisma.performance.create({
+      const performance = await prisma.performance.create({
         data: {
           name: name,
           academic_level: academicLevel,
@@ -43,7 +43,7 @@ export default async (req, res) => {
 
       // If performance creation is successful, return performance
       // Else, return server error
-      if (event) {
+      if (performance) {
         res.send(performance);
       } else {
         res.status(500).end();
