@@ -10,7 +10,7 @@ export default async (req, res) => {
     // Collect all adjudications from database
     const adjudications = await prisma.adjudication.findMany();
 
-    res.send(adjudications); 
+    res.send(adjudications);
   }
 
   // Else, return 401 for all failures
