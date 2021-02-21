@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; // React
+import React, { useState, useRef } from 'react'; // React
 import Layout from '@components/Layout'; // Layout wrapper
 
 import Button from '@components/Button'; // Button
@@ -22,6 +22,8 @@ import data, { columns } from '../../data/mockParticipants';
 export default function Performances() {
   const [modalOpen, setModalOpen] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+  const tableInstance = useRef(null);
+
   // const entryContent = <Table></Table>;
 
   return (
@@ -41,6 +43,9 @@ export default function Performances() {
           <Input
             className={styles.performances__header__search}
             placeholder="Search"
+            onChange={e => {
+              tableInstance.current.setGlobalFilter(e.target.value);
+            }}
             icon={() => <img src={Search} />}
           />
           <Button
@@ -73,7 +78,7 @@ export default function Performances() {
           <Tabs
             firstTabName="Entry View"
             secondTabName="Judging View"
-            firstTabContent={<EntryTable />}
+            firstTabContent={<Table columns={columns} data={data} ref={tableInstance} />}
             secondTabContent={<JudgingTable />}
           />
         </div>
@@ -83,10 +88,10 @@ export default function Performances() {
   );
 }
 
-// Entries Table
-const EntryTable = () => {
-  return <Table columns={columns} data={data} />;
-};
+// // Entries Table
+// const EntryTable = tableInstance => {
+//   return <Table columns={columns} data={data} ref={tableInstance} />;
+// };
 
 // Judging Table
 const JudgingTable = () => {
