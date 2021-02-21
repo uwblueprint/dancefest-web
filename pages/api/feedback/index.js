@@ -45,7 +45,7 @@ export default async (req, res) => {
         // Send all performance data for the school
         transporter.sendMail(
           {
-            from: 'info@dancefest.dev',
+            from: process.env.FEEDBACK_EMAIL_FROM,
             to: toEmail,
             subject: `Feedback for ${school.name}`,
             //TODO: format the response with HTML
