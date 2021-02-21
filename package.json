@@ -20,6 +20,7 @@
     "dayjs": "^1.10.4",
     "next": "10.0.7",
     "next-auth": "^3.4.2",
+    "next-images": "^1.7.0",
     "pg": "^8.5.1",
     "react": "17.0.1",
     "react-datepicker": "^3.5.0",

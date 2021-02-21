@@ -1,0 +1,164 @@
+/*
+****************************************
+DatePicker: Popper
+****************************************
+*/
+.react-datepicker-popper {
+  z-index: 99;
+}
+
+/*
+****************************************
+DatePicker: Calendar
+****************************************
+*/
+.react-datepicker {
+  position: relative;
+  width: 320px;
+  padding: 16px;
+  background: #ffffff;
+  box-shadow: 0px 3px 5px rgba(9, 30, 66, 0.2), 0px 0px 1px rgba(9, 30, 66, 0.31);
+  border-radius: 3px;
+  box-sizing: border-box;
+}
+
+/* Month navigation buttons */
+.react-datepicker__navigation {
+  position: absolute;
+  height: 24px;
+  width: 24px;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.react-datepicker__navigation svg {
+  height: 24px;
+  width: 24px;
+}
+
+/* Previous month button */
+.react-datepicker__navigation--previous {
+  left: 24px;
+}
+
+/* Next month button */
+.react-datepicker__navigation--next {
+  left: calc(100% - 48px);
+}
+
+/* Month container (header, dates) */
+.react-datepicker__month-container {
+  display: block;
+  flex-flow: row wrap;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+/* Header */
+.react-datepicker__header {
+  height: 60px;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+/* Current month header */
+.react-datepicker__current-month {
+  height: 16px;
+  padding: 4px;
+  margin-bottom: 20px;
+  text-align: center;
+
+  font-family: DM Sans;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 16px;
+  color: var(--system-navy);
+}
+
+/*
+****************************************
+DatePicker: Week
+****************************************
+*/
+/* Container for one week of dates */
+.react-datepicker__week {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+}
+
+/*
+****************************************
+DatePicker: WeekDay
+****************************************
+*/
+/* Day names container (SUN, MON, etc) */
+.react-datepicker__day-names {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+}
+
+/* One day name (eg. SUN) */
+.react-datepicker__day-name {
+  display: flex;
+  flex-flow: row nowrap;
+  height: 16px;
+  width: 41px;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--system-neutral-grey);
+  font-family: DM Sans;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 11px;
+  line-height: 16px;
+  text-transform: uppercase;
+}
+
+/*
+****************************************
+DatePicker: Day
+****************************************
+*/
+/* One day on the calendar */
+.react-datepicker__day {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  width: 41px;
+  height: 32px;
+
+  font-family: DM Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--system-navy);
+
+  cursor: pointer;
+}
+
+.react-datepicker__day:hover {
+  border: 2px solid var(--system-light-blue);
+  box-sizing: border-box;
+  border-radius: 3px;
+}
+
+/* Currently selected day */
+.react-datepicker__day--selected {
+  text-decoration: underline var(--system-light-blue);
+  text-decoration-thickness: 2px;
+  text-underline-position: under;
+}
+
+/* One day on the calendar outside of the current month */
+.react-datepicker__day--outside-month {
+  color: var(--system-neutral-grey);
+}

@@ -1,5 +1,5 @@
 import '@styles/globals.scss'; // Global styles
-import 'react-datepicker/dist/react-datepicker.css'; // React datepicker styles
+import '@styles/DatePicker.scss'; // Custom Date Picker Styles
 
 import { Provider } from 'next-auth/client'; // Authentication provider
 

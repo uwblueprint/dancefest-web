@@ -1,42 +1,44 @@
 .page__login {
-  text-align: center;
   padding-top: 50px;
+  margin-left: -40px;
+}
 
-  // Logo
-  img {
-    width: 100%;
-    max-width: 300px;
-    padding-bottom: 20px;
-  }
+.page__login_row{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.page__login_col {
+  display: flex;
+  flex-direction: column;
+}
+
+.page__login_illustration {
+  margin-left: auto;
+  max-width: 744px;
+  max-height: 662px;
 }
 
 .page__login_card {
-  background: #ffffff;
-  box-shadow: 0px 0px 40px rgba(92, 92, 92, 0.1);
-  width: calc(100% - 40px);
-  max-width: 400px;
-  padding: 30px 20px;
-  border-radius: 8px;
-  margin: 0px auto;
-
+  display: flex;
+  flex-direction: column;
   h3 {
-    color: var(--brand-other-red);
-    font-size: 28px;
+    color: var(--brand-pop-blue);
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 21px;
     margin: 0px;
   }
 
-  p {
-    color: var(--brand-pop-blue);
-    font-size: 17px;
-    margin-block-start: 10px;
-    line-height: 150%;
-  }
-
   input {
-    margin-top: 10px;
+    margin-top: 12px;
+    max-width: 300px;
   }
 
   button {
-    margin-top: 10px;
+    margin-top: 20px;
+    max-width: 140px;
+
   }
 }

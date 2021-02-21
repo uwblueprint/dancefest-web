@@ -1,16 +1,65 @@
 /*
 ****************************************
-Input: Text
+Input: Wrapper
 ****************************************
 */
-.input__text {
+.input__wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+/*
+****************************************
+Input
+****************************************
+*/
+.input {
+  height: 40px;
+  width: 100%;
   background-color: #fafafa;
-  border: 2px solid #dfe1e6;
+  border: 2px solid var(--system-light-grey);
   border-radius: 3px;
   padding: 10px 0px 10px 8px;
-  color: var(--system-neutral-grey);
+  box-sizing: border-box;
+
+  font-family: DM Sans;
+  font-style: normal;
+  font-weight: normal;
   font-size: 14px;
   line-height: 20px;
+  color: var(--system-neutral-grey);
+}
+
+/* Increase right padding when icon is included */
+.input_withIcon {
+  padding-right: 36px;
+}
+
+.input::placeholder {
+  font-family: DM Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--system-neutral-grey);
+}
+
+/*
+****************************************
+Input: Icon
+****************************************
+*/
+.input__icon {
+  position: absolute;
+  top: 0;
+  left: calc(100% - 35px);
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  height: 40px;
+  padding: 3px;
+  box-sizing: border-box;
+  cursor: pointer;
 }
 
 /*
@@ -20,4 +69,5 @@ Input: Common
 */
 .input__fullwidth {
   width: calc(100% - 12px);
+  max-width: 300px;
 }

@@ -20,7 +20,11 @@ const databaseConfig = {
 };
 
 // Administrator emails
-const adminEmails = ['contact+admin@anishagnihotri.com', 'ericli@uwblueprint.org'];
+const adminEmails = [
+  'contact+admin@anishagnihotri.com',
+  'mayankkanoria@uwblueprint.org',
+  'oustanding@uwblueprint.org',
+];
 
 export default NextAuth({
   // Site URL
