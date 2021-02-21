@@ -18,12 +18,17 @@ export default async (req, res) => {
     // If schoolIDs exist, we convert it into an array of integers to add to the filter
     if (schoolIDs) filter.school_id = { in: schoolIDs.split(',').map(i => +i) };
 
-    let performances = await prisma.performance.findMany({
-      where: filter,
-    });
+    let performances = await getPerformances(filter);
     res.send(performances);
   }
 
   // Else, return 401 for all failures
   res.status(401).end();
+};
+
+export const getPerformances = async filter => {
+  // Collect event with eventID
+  return await prisma.performance.findMany({
+    where: filter,
+  });
 };

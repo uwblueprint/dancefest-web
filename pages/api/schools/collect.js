@@ -8,7 +8,11 @@ export default async (req, res) => {
   // If session exists (thus, user is authenticated)
   if (session && session.isAdmin) {
     // Collect all schools
-    let schools = await prisma.schools.findMany();
+    let schools = await prisma.school.findMany({
+      include: {
+        contacts: true,
+      },
+    });
     res.send(schools);
   }
 
