@@ -15,6 +15,9 @@ import ChevronDown from '@assets/chevron-down.svg'; // Chevron down icon
 import ChevronDownGrey from '@assets/chevron-down-grey.svg'; // Chevron down grey icon
 import styles from '@styles/pages/Performances.module.scss'; // Page styles
 
+import DancerRedJump from '@assets/dancer-red-jump.svg'; // Jumping Dancer SVG
+import DancerYellowBlue from '@assets/dancer-yellow-blue.svg'; // Jumping Dancer SVG
+
 // Temp constants
 import data, { columns } from '../../data/mockParticipants';
 
@@ -78,7 +81,14 @@ export default function Performances() {
           <Tabs
             firstTabName="Entry View"
             secondTabName="Judging View"
-            firstTabContent={<Table columns={columns} data={data} ref={tableInstance} />}
+            firstTabContent={
+              <Table
+                columns={columns}
+                data={data}
+                emptyComponent={<EmptyTableComponent />}
+                ref={tableInstance}
+              />
+            }
             secondTabContent={<JudgingTable />}
           />
         </div>
@@ -87,6 +97,20 @@ export default function Performances() {
     </Layout>
   );
 }
+
+const EmptyTableComponent = () => {
+  return (
+    <div className={styles.page__performances_list_empty}>
+      <img src={DancerYellowBlue} />
+      <div>
+        <h2>No Performances Listed</h2>
+        <h3>Create your first performance</h3>
+        {/* <Button onClick={modalNewEvent}>Add Event</Button> */}
+      </div>
+      <img src={DancerRedJump} />
+    </div>
+  );
+};
 
 // // Entries Table
 // const EntryTable = tableInstance => {

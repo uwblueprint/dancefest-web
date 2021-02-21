@@ -17,7 +17,7 @@ import styles from '@styles/components/Table.module.scss'; // Component styles
 //   );
 // };
 
-const Table = React.forwardRef(({ columns, data }, ref) => {
+const Table = React.forwardRef(({ columns, data, emptyComponent }, ref) => {
   // const filterTypes = React.useMemo(
   //   () => ({
   //     text: (rows, id, filterValue) => {
@@ -56,37 +56,59 @@ const Table = React.forwardRef(({ columns, data }, ref) => {
 
   return (
     <div className={styles.table__div}>
-      <table {...getTableProps()}>
-        <thead>
-          {headerGroups.map((headerGroup, i) => (
-            <tr key={i} {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column, i) => (
-                <th key={i} {...column.getHeaderProps(column.getSortByToggleProps())}>
-                  {column.render('Header')}
-                  {/* <div>{column.canFilter ? column.render('Filter') : null}</div> */}
-                  <span>{column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}</span>
-                </th>
+      {!data.length ? (
+        <>
+          <table {...getTableProps()}>
+            <thead>
+              {headerGroups.map((headerGroup, i) => (
+                <tr key={i} {...headerGroup.getHeaderGroupProps()}>
+                  {headerGroup.headers.map((column, i) => (
+                    <th key={i} {...column.getHeaderProps(column.getSortByToggleProps())}>
+                      {column.render('Header')}
+                      {/* <div>{column.canFilter ? column.render('Filter') : null}</div> */}
+                      <span>{column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}</span>
+                    </th>
+                  ))}
+                </tr>
               ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {rows.map((row, i) => {
-            prepareRow(row);
-            return (
-              <tr key={i} {...row.getRowProps()}>
-                {row.cells.map((cell, i) => {
-                  return (
-                    <td key={i} {...cell.getCellProps()}>
-                      {cell.render('Cell')}
-                    </td>
-                  );
-                })}
+            </thead>
+          </table>
+          {emptyComponent}
+        </>
+      ) : (
+        <table {...getTableProps()}>
+          <thead>
+            {headerGroups.map((headerGroup, i) => (
+              <tr key={i} {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column, i) => (
+                  <th key={i} {...column.getHeaderProps(column.getSortByToggleProps())}>
+                    {column.render('Header')}
+                    {/* <div>{column.canFilter ? column.render('Filter') : null}</div> */}
+                    <span>{column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}</span>
+                  </th>
+                ))}
               </tr>
-            );
-          })}
-        </tbody>
-      </table>
+            ))}
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {rows.map((row, i) => {
+              prepareRow(row);
+              return (
+                <tr key={i} {...row.getRowProps()}>
+                  {row.cells.map((cell, i) => {
+                    return (
+                      <td key={i} {...cell.getCellProps()}>
+                        {cell.render('Cell')}
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+          )
+        </table>
+      )}
     </div>
   );
 });
