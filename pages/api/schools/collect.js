@@ -8,14 +8,19 @@ export default async (req, res) => {
   // If session exists (thus, user is authenticated)
   if (session && session.isAdmin) {
     // Collect all schools
-    let schools = await prisma.school.findMany({
-      include: {
-        contacts: true,
-      },
-    });
+    let schools = await getSchools();
     res.send(schools);
   }
 
   // Else, return 401 for all failures
   res.status(401).end();
+};
+
+export const getSchools = async () => {
+  // Collect event with eventID
+  return await prisma.school.findMany({
+    include: {
+      contacts: true,
+    },
+  });
 };
