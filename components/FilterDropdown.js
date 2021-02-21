@@ -1,10 +1,10 @@
 import React, { useState, useCallback } from 'react'; // React
 import PropTypes from 'prop-types'; // PropTypes
 
-import Button from 'components/Button'; // Button
-import { ReactComponent as ChevronDown } from 'assets/chevron-down.svg'; // Chevron Down Icon
-import { ReactComponent as Checkmark } from 'assets/checkmark.svg'; // Checkmark Icon
-import styles from '@styles/components/FilterDropdown.module.css'; // Component styles
+import Button from '@components/Buttons'; // Button
+import ChevronDown from '@assets/chevron-down.svg'; // Chevron Down Icon
+import Checkmark from '@assets/checkmark.svg'; // Checkmark Icon
+import styles from '@styles/components/FilterDropdown.module.scss'; // Component styles
 
 export default function FilterDropdown({
   buttonText = '',
@@ -60,7 +60,7 @@ export default function FilterDropdown({
           selected && styles.filterDropdown__optionSelected
         }`}
       >
-        <div onClick={toggleOption(option)}>{selected && <Checkmark />}</div>
+        <div onClick={toggleOption(option)}>{selected && <img src={Checkmark} />}</div>
         <div>{options[option].label}</div>
       </div>
     );
@@ -77,7 +77,7 @@ export default function FilterDropdown({
       >
         {buttonText}
         <span className={styles.filterDropdown__button_iconWrapper}>
-          <ChevronDown />
+          <img src={ChevronDown} />
         </span>
       </button>
       {open && (

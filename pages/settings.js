@@ -1,11 +1,12 @@
 import Layout from '@components/Layout'; // Layout wrapper
 import { getSession } from 'next-auth/client'; // Session handling
-
+import FilterDropdown from '@components/FilterDropdown';
 // Page: Settings
 export default function Settings() {
   return (
     <Layout>
       <h1>Design blocker: Settings</h1>
+      <FilterDropdown />
     </Layout>
   );
 }
