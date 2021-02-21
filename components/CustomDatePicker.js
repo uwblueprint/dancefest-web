@@ -2,7 +2,7 @@ import React from "react"; // React
 import PropTypes from "prop-types"; // PropTypes
 import DatePicker from "react-datepicker"; // React DatePicker
 
-import TextInput from "@components/Inputs"; // Input
+import TextInput from "@components/Input"; // Input
 import CalendarSVG from "@assets/calendar.svg"; // Calendar Icon
 import ChevronLeftSVG from "@assets/chevron-left.svg"; // Chevron Left Icon
 import ChevronRightSVG from "@assets/chevron-right.svg"; // Chevron Right Icon

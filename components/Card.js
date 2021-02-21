@@ -41,7 +41,7 @@ function EventCard({ event, isAdmin, openEditModal }) {
           <span>{event.event_date ? dayjs(event.event_date).format('MM/DD/YYYY') : ''}</span>
 
           {/* Event number of performances */}
-          <span>{event.num_performances ? event.num_performances : 0} Performances</span>
+          <span>{event.num_performances || 0} Performances</span>
         </div>
 
         {/* Event judges */}

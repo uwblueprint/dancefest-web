@@ -13,10 +13,8 @@ export default async (req, res) => {
     // If eventID is provided
     if (eventID) {
       try {
-        console.log('In here');
         // Collect event with eventID
         let event = await getEventByID(eventID);
-        console.log(event);
         // Parse and filter event judges
         event.judges = JSON.parse(event.judges).filter(judge => judge !== '');
 

@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 import '@styles/globals.scss'; // Global styles
 import '@styles/DatePicker.css'; // Custom Date Picker Styles
+=======
+import "@styles/globals.scss"; // Global styles
+import "@styles/DatePicker.scss"; // Custom Date Picker Styles
+>>>>>>> Changes based on review
 
 import { Provider } from 'next-auth/client'; // Authentication provider
 

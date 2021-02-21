@@ -1,7 +1,7 @@
 import { useState } from 'react'; // State management
 import Layout from '@components/Layout'; // Layout wrapper
-import TextInput from '@components/Inputs'; // Text Input field
-import Button from '@components/Buttons';
+import TextInput from '@components/Input'; // Text Input field
+import Button from '@components/Button';
 import styles from '@styles/pages/Login.module.scss'; // Component styles
 import { getSession, signIn } from 'next-auth/client'; // Session management
 import LoginDancers from '@assets/login-dancers.svg';
