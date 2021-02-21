@@ -161,3 +161,35 @@ Settings: Discard and Save Changes buttons
     margin-right: 32px;
   }
 }
+
+/*
+****************************************
+Settings: Confirm Delete Modal
+****************************************
+*/
+.settings__modal {
+  height: auto;
+  width: 576px;
+  padding: 48px 54px;
+
+  // Title
+  h1 {
+    font-family: DM Sans;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 31px;
+  }
+
+  // Warning description
+  p {
+    font-family: DM Sans;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 26px;
+    margin: 6px 0 20px 0;
+
+    color: var(--system-neutral-grey);
+  }
+}

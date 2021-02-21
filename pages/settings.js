@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'; // React
+import React, { useState, useEffect } from 'react'; // React
 import PropTypes from 'prop-types'; // PropTypes
 import Layout from '@components/Layout'; // Layout wrapper
 import { getSession } from 'next-auth/client'; // Session handling
@@ -8,6 +8,7 @@ import Title from '@components/Title'; // Title
 import Dropdown from '@components/Dropdown'; // Dropdown
 import Button from '@components/Button'; // Button
 import Input from '@components/Input'; // Input
+import Modal from '@components/Modal'; // Modal
 import Delete from '@assets/delete.svg'; // Delete icon
 import styles from '@styles/pages/Settings.module.scss';
 
@@ -22,24 +23,29 @@ const SETTINGS_OPTIONS = [
 export default function Settings() {
   const [category, setCategory] = useState(null);
   const [values, setValues] = useState([]);
-  const newValueInputRef = useRef(null);
+  const [newValue, setNewValue] = useState('');
+  const [valueToDelete, setValueToDelete] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
 
   // TODO: Call APIs in the following endpoints
   const handleAddValue = () => {
-    if (!newValueInputRef || !newValueInputRef.current) {
+    if (newValue === '') {
       return;
     }
-    const value = newValueInputRef.current.value;
-    if (!value) {
-      return;
-    }
-    setValues([...values, value]);
-    newValueInputRef.current.value = '';
+    setValues([...values, newValue]);
+    setNewValue('');
   };
 
-  const handleDeleteValue = valueToDelete => {
+  const handleDeleteButtonClick = valueToDelete => {
+    setValueToDelete(valueToDelete);
+    setModalOpen(true);
+  };
+
+  const handleDeleteValue = () => {
     const newValues = values.filter(value => value !== valueToDelete);
     setValues(newValues);
+    setValueToDelete(null);
+    setModalOpen(false);
   };
 
   const handleInputKeyDown = event => {
@@ -50,7 +56,7 @@ export default function Settings() {
   };
 
   useEffect(() => {
-    setValues(CATEGORY_VALUES[category]);
+    setValues(CATEGORY_VALUES[category] || []);
   }, [category]);
 
   return (
@@ -74,7 +80,7 @@ export default function Settings() {
                     <CategoryValue
                       key={i}
                       value={value}
-                      onDelete={() => handleDeleteValue(value)}
+                      onDelete={() => handleDeleteButtonClick(value)}
                     />
                   ))
                 : 'No values yet'}
@@ -86,10 +92,11 @@ export default function Settings() {
               <Input
                 wrapperClassName={styles.settings__addCategoryValue__input__textBox__wrapper}
                 placeholder="Add New Option"
-                inputRef={newValueInputRef}
+                value={newValue}
                 onKeyDown={handleInputKeyDown}
+                onChange={event => setNewValue(event.target.value)}
               />
-              <Button variant="contained" onClick={handleAddValue}>
+              <Button variant="contained" onClick={handleAddValue} disabled={newValue === ''}>
                 Add
               </Button>
             </div>
@@ -102,6 +109,18 @@ export default function Settings() {
           </div>
         </div>
       </div>
+      <Modal
+        containerClassName={styles.settings__modal}
+        title={`Delete ${valueToDelete}?`}
+        open={modalOpen}
+        cancelText="Cancel"
+        submitText="Confirm"
+        setModalOpen={setModalOpen}
+        onCancel={() => setModalOpen(false)}
+        onSubmit={handleDeleteValue}
+      >
+        <p>Deleted category values cannot be restored.</p>
+      </Modal>
     </Layout>
   );
 }
