@@ -2,7 +2,7 @@ import React from 'react'; // React
 import PropTypes from 'prop-types'; // PropTypes
 
 import Select, { components } from 'react-select'; // React Select
-import ChevronDownGrey from '@assets/chevron-down.svg'; // Chevron Down Icon
+import ChevronDownGrey from '@assets/chevron-down-grey.svg'; // Chevron Down Icon
 import styles from '@styles/components/Dropdown.module.scss'; // Component styles (local)
 
 const DropdownIndicator = props => (

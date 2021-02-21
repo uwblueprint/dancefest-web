@@ -7,11 +7,16 @@ import Input from '@components/Input'; // Input
 import Tabs from '@components/Tabs'; // Tabs
 import Modal from '@components/Modal'; // Modal
 import Dropdown from '@components/Dropdown'; // Dropdown
+import FilterDropdown from '@components/FilterDropdown'; // Filter Dropdown
+import Table from '@components/Table'; // Table
 import BackArrow from '@assets/back-arrow.svg'; // Back arrow icon
 import Search from '@assets/search.svg'; // Search icon
 import ChevronDown from '@assets/chevron-down.svg'; // Chevron down icon
 import ChevronDownGrey from '@assets/chevron-down-grey.svg'; // Chevron down grey icon
 import styles from '@styles/pages/Performances.module.scss'; // Page styles
+
+// Temp constants
+import data, { columns } from '../../data/mockParticipants';
 
 // Page: Performances
 export default function Performances() {
@@ -52,13 +57,24 @@ export default function Performances() {
             Add Performance
           </Button>
         </div>
-        {showFilters && <div className={styles.performances__filters}>filters</div>}
+        {showFilters && (
+          <div className={styles.performances__filters}>
+            <div className={styles.performances__filters__buttons}>
+              <FilterDropdown buttonText="School" />
+              <FilterDropdown buttonText="Academic Level" />
+              <FilterDropdown buttonText="Competition Level" />
+              <FilterDropdown buttonText="Style" />
+              <FilterDropdown buttonText="Size" />
+            </div>
+            <div className={styles.performances__filters__appliedFilters}>applied filters</div>
+          </div>
+        )}
         <div className={styles.performances__content}>
           <Tabs
             firstTabName="Entry View"
             secondTabName="Judging View"
-            firstTabContent="first tab content"
-            secondTabContent="second tab content"
+            firstTabContent={<EntryTable />}
+            secondTabContent={<JudgingTable />}
           />
         </div>
       </div>
@@ -67,6 +83,16 @@ export default function Performances() {
   );
 }
 
+// Entries Table
+const EntryTable = () => {
+  return <Table columns={columns} data={data} />;
+};
+
+// Judging Table
+const JudgingTable = () => {
+  return <Table columns={columns} data={[]} />;
+};
+
 // New Performance Modal
 const PerformanceModal = ({ mode, open, setOpen }) => {
   return (
@@ -74,7 +100,7 @@ const PerformanceModal = ({ mode, open, setOpen }) => {
       containerClassName={styles.modal__container}
       title={mode === 'edit' ? 'Edit Performance' : 'New Performance'}
       open={open}
-      setOpen={setOpen}
+      setModalOpen={setOpen}
       cancelText="Discard"
       submitText="Add Performance"
       onCancel={() => setOpen(false)}

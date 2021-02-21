@@ -83,7 +83,15 @@ Performances: Navigation header
   ****************************************
   */
 .performances__filters {
-  height: 40px;
+  margin: 20px 0 32px 0;
+
+  .performances__filters__buttons {
+    margin-bottom: 12px;
+
+    div:not(:last-child) {
+      margin-right: 8px;
+    }
+  }
 }
 
 /*
@@ -92,17 +100,18 @@ Performances: Navigation header
   ****************************************
   */
 .performances__content {
-  margin-top: 36px;
+  margin: 36px 0;
 }
 
 /*
-  ****************************************
-  Performances: Modals
-  ****************************************
-  */
+****************************************
+Performances: Modals
+****************************************
+*/
 .modal__container {
   height: 704px;
   width: 1024px;
+  max-width: 1024px;
 }
 
 .modal {
@@ -169,4 +178,13 @@ Performances: Navigation header
 /* Entry Id field */
 .modal > div:first-child input {
   width: 128px;
+}
+
+/*
+****************************************
+Performances: Table
+****************************************
+*/
+.performances__content table {
+  width: 100%;
 }
