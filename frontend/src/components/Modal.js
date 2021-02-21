@@ -6,8 +6,9 @@ import Title from 'components/Title'; // Title
 import Button from 'components/Button'; // Button
 import styles from 'styles/components/Modal.module.css'; // Component styles
 
-export default function DancefestModal({
+export default function Modal({
   children,
+  containerClassName = '',
   title = 'Title',
   open = true,
   cancelText = 'Cancel',
@@ -19,7 +20,7 @@ export default function DancefestModal({
   return (
     <ReactModal
       isOpen={open}
-      className={styles.modal__container}
+      className={`${styles.modal__container} ${containerClassName}`}
       overlayClassName={styles.modal__overlay}
       onRequestClose={onCancel}
       {...props}
@@ -42,9 +43,10 @@ export default function DancefestModal({
   );
 }
 
-DancefestModal.propTypes = {
+Modal.propTypes = {
   cancelText: PropTypes.string,
   children: PropTypes.any,
+  containerClassName: PropTypes.string,
   onCancel: PropTypes.func,
   onSubmit: PropTypes.func,
   open: PropTypes.bool,

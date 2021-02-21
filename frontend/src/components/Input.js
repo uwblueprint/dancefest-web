@@ -5,13 +5,14 @@ import styles from 'styles/components/Input.module.css'; // Component styles
 
 export default function Input({
   className = '',
+  wrapperClassName = '',
   inputRef = null,
   icon: Icon,
   onIconClick = () => {},
   ...props
 }) {
   return (
-    <div className={styles.input__wrapper}>
+    <div className={`${styles.input__wrapper} ${wrapperClassName}`}>
       <input
         className={`${styles.input} ${className} ${Icon && styles.input_withIcon}`}
         ref={inputRef}
@@ -28,6 +29,7 @@ export default function Input({
 
 Input.propTypes = {
   className: PropTypes.string,
+  wrapperClassName: PropTypes.string,
   icon: PropTypes.object,
   inputRef: PropTypes.oneOfType([
     PropTypes.func,

@@ -4,6 +4,10 @@ Button
 ****************************************
 */
 .button {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+
   box-sizing: border-box;
   padding: 10px 40px;
   border: 1px solid var(--brand-pop-blue);
@@ -29,6 +33,10 @@ Button
 .button__contained {
   background-color: var(--brand-pop-blue);
   color: #ffffff;
+}
+
+.button__contained > svg > path {
+  fill: #ffffff;
 }
 
 /* Edit button */

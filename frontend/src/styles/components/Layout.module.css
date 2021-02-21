@@ -83,7 +83,7 @@ Layout: Content
 ****************************************
 */
 .layout__content {
-  padding: 30px 0px 64px 64px;
+  padding: 30px 64px 0 64px;
 }
 
 /*
