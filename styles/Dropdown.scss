@@ -1,10 +1,13 @@
 /*
-  ****************************************
-  Dropdown: Select
-  ****************************************
-  */
+****************************************
+Dropdown: Select
+****************************************
+*/
 /* Select component */
 .dropdown__control {
+  display: flex;
+  flex-flow: row nowrap;
+  align-content: center;
   height: 40px;
   background: var(--system-lightest-grey);
 
