@@ -1,34 +1,17 @@
-<<<<<<< HEAD
 import axios from 'axios'; // Axios requests
 import Layout from '@components/Layout'; // Layout wrapper
 import Loader from 'react-loader-spinner'; // Spinning loader
 import { useState, useEffect } from 'react'; // State management
 import DancefestModal from '@components/Modal'; // Modal component
 import { getSession } from 'next-auth/client'; // Session handling
-import { EventCard } from '@components/Cards'; // Event card component
-import TextInput from '@components/Inputs'; // Text input component
+import { EventCard } from '@components/Card'; // Event card component
+import TextInput from '@components/Input'; // Text input component
 import styles from '@styles/pages/Events.module.scss'; // Page styling
-import Button from '@components/Buttons'; // Button components
+import Button from '@components/Button'; // Button components
 import Title from '@components/Title';
 import DancerRedJump from '@assets/dancer-red-jump.svg'; // Jumping Dancer SVG
 import DancerRedTall from '@assets/dancer-red-tall.svg'; // Jumping Dancer SVG
 import CustomDatePicker from '@components/CustomDatePicker';
-=======
-import axios from "axios"; // Axios requests
-import Layout from "@components/Layout"; // Layout wrapper
-import Loader from "react-loader-spinner"; // Spinning loader
-import { useState, useEffect } from "react"; // State management
-import DancefestModal from "@components/Modal"; // Modal component
-import { getSession } from "next-auth/client"; // Session handling
-import { EventCard } from "@components/Card"; // Event card component
-import TextInput from "@components/Input"; // Text input component
-import styles from "@styles/pages/Events.module.scss"; // Page styling
-import Button from "@components/Button"; // Button components
-import Title from "@components/Title";
-import DancerRedJump from "@assets/dancer-red-jump.svg"; // Jumping Dancer SVG
-import DancerRedTall from "@assets/dancer-red-tall.svg"; // Jumping Dancer SVG
-import CustomDatePicker from "@components/CustomDatePicker";
->>>>>>> Changes based on review
 
 // Modal content states enum
 const modalStates = Object.freeze({
@@ -168,8 +151,8 @@ export default function Events({ session }) {
       </div>
 
       {/* Events modal */}
-      <DancefestModal isOpen={modalOpen} setModalOpen={setModalOpen}>
-        {renderModalContent()}
+      <DancefestModal title={modalTitle} isOpen={modalOpen} setModalOpen={setModalOpen}>
+        {renderModalContent()}©
       </DancefestModal>
     </Layout>
   );
@@ -223,7 +206,6 @@ function NewEvent({ setModalOpen, reloadEvents }) {
 
   return (
     <div>
-      <Title>New Event</Title>
       <div className={styles.modal__children}>
         {/* Event title */}
         <div>
@@ -248,7 +230,7 @@ function NewEvent({ setModalOpen, reloadEvents }) {
           // For each judge in array of judges
           return (
             // Return text input to edit judge
-            <div>
+            <div key={i}>
               <h4>Judge {i + 1}</h4>
               <TextInput
                 type="text"
@@ -325,16 +307,17 @@ function EditEvent({ event, setModalOpen, reloadEvents }) {
   /**
    * Deletes event
    */
-  const removeEvent = async () => {
-    // Post /api/events/delete endpoint
-    await axios.post('/api/events/delete', {
-      // With id of event to delete
-      id: event.id,
-    });
+  // TODO: Add remove event button
+  // const removeEvent = async () => {
+  //   // Post /api/events/delete endpoint
+  //   await axios.post('/api/events/delete', {
+  //     // With id of event to delete
+  //     id: event.id,
+  //   });
 
-    reloadEvents(); // Begin reloading events in background
-    setModalOpen(false); // Close modal
-  };
+  //   reloadEvents(); // Begin reloading events in background
+  //   setModalOpen(false); // Close modal
+  // };
 
   /**
    * Updates judge email at index
@@ -357,7 +340,6 @@ function EditEvent({ event, setModalOpen, reloadEvents }) {
 
   return (
     <div>
-      <Title>Edit Event</Title>
       <div className={styles.modal__children}>
         {/* Event title */}
         <div>
@@ -382,7 +364,7 @@ function EditEvent({ event, setModalOpen, reloadEvents }) {
           // For each judge in array of judges
           return (
             // Return text input to edit judge
-            <div>
+            <div key={i}>
               <h4>Judge {i + 1}</h4>
               <TextInput
                 type="text"
