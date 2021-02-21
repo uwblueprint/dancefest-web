@@ -9,27 +9,27 @@ export default async (req, res) => {
   if (session && session.isAdmin) {
     // Collect data for new adjudication
     const {
-      artistic_mark,
-      technical_mark,
-      cumulative_mark,
-      audio_url,
+      artisticMark,
+      technicalMark,
+      cumulativeMark,
+      audioUrl,
       notes,
-      special_award,
-      performance_id,
+      specialAward,
+      performanceID,
     } = req.body;
 
     // If all exist
-    if (artistic_mark && technical_mark && cumulative_mark && performance_id) {
-      // Create new adjudication
+    if (artisticMark && technicalMark && cumulativeMark && performanceID) {
+      // Create new cumulativeMark
       const adjudication = await prisma.adjudication.create({
         data: {
-          artistic_mark: parseInt(artistic_mark),
-          technical_mark: parseInt(technical_mark),
-          cumulative_mark: parseInt(cumulative_mark),
-          audio_url: audio_url,
+          artistic_mark: parseInt(artisticMark),
+          technical_mark: parseInt(technicalMark),
+          cumulative_mark: parseInt(cumulativeMark),
+          audio_url: audioUrl,
           notes: notes,
-          special_award: special_award,
-          performance_id: parseInt(performance_id),
+          special_award: specialAward,
+          performance_id: parseInt(performanceID),
         },
       });
 
