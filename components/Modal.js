@@ -13,8 +13,9 @@ import styles from '@styles/components/Modal.module.scss'; // Component styles
  * @param {HTMLElement} children to populate modal
  * @returns {HTMLElement} modal
  */
-export default function DancefestModal({
+export default function Modal({
   children,
+  containerClassName = '',
   title = '',
   open = true,
   cancelText = '',
@@ -27,7 +28,7 @@ export default function DancefestModal({
   return (
     <ReactModal
       isOpen={open}
-      className={styles.modal__container}
+      className={`${styles.modal__container} ${containerClassName}`}
       overlayClassName={styles.modal__overlay}
       onRequestClose={() => setModalOpen(false)}
       {...props}
@@ -52,12 +53,14 @@ export default function DancefestModal({
   );
 }
 
-DancefestModal.propTypes = {
+Modal.propTypes = {
   cancelText: PropTypes.string,
   children: PropTypes.any,
+  containerClassName: PropTypes.string,
   onCancel: PropTypes.func,
   onSubmit: PropTypes.func,
   open: PropTypes.bool,
+  setModalOpen: PropTypes.func.isRequired,
   submitText: PropTypes.string,
   title: PropTypes.string,
 };

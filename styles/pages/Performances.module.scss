@@ -1,0 +1,172 @@
+/*
+****************************************
+Performances: Navigation header
+****************************************
+*/
+.performances__navigation__button {
+  display: flex;
+  padding: 6px 12px 6px 8px;
+}
+
+.performances__navigation__button > img {
+  margin-right: 2px;
+}
+
+.performances__navigation__eventName {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 24px 0 0 0;
+
+  font-family: DM Sans;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 21px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+
+  color: var(--brand-pop-blue);
+}
+
+/*
+  ****************************************
+  Performances: Header
+  ****************************************
+  */
+.performances__header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.performances__header > button {
+  height: 40px;
+}
+
+.performances__header__pageTitle {
+  display: inline;
+  margin-right: 72px;
+}
+
+.performances__header__search {
+  width: 240px;
+  margin-right: 8px;
+}
+
+.performances__header__filtersButton {
+  padding-left: 12px;
+  padding-right: 12px;
+  margin-right: 8px;
+
+  border: 2px solid var(--system-light-grey);
+  border-radius: 4px;
+
+  font-family: DM Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.performances__header__filtersButtonOpen {
+  border: 2px solid var(--brand-pop-blue);
+}
+
+.performances__header__filtersButton > img {
+  margin-left: 4px;
+}
+
+/*
+  ****************************************
+  Performances: Filters
+  ****************************************
+  */
+.performances__filters {
+  height: 40px;
+}
+
+/*
+  ****************************************
+  Performances: Content
+  ****************************************
+  */
+.performances__content {
+  margin-top: 36px;
+}
+
+/*
+  ****************************************
+  Performances: Modals
+  ****************************************
+  */
+.modal__container {
+  height: 704px;
+  width: 1024px;
+}
+
+.modal {
+  flex: 1 0 0;
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: flex-start;
+  align-content: space-between;
+
+  width: 100%;
+  height: 100%;
+}
+
+/* Field name */
+.modal h2 {
+  font-family: DM Sans;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 21px;
+  margin: 0 0 12px 0;
+
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+
+  color: var(--system-neutral-grey);
+}
+
+/* Field caption/note */
+.modal h3 {
+  font-family: DM Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 18px;
+  margin: 6px 0 0 0;
+
+  color: var(--system-neutral-grey);
+}
+
+/* Field container */
+.modal > div {
+  width: 45%;
+  margin-bottom: 32px;
+}
+
+/* Last field each  column */
+.modal > div:nth-child(4),
+.modal > div:last-child {
+  margin-bottom: 0;
+}
+
+/* Second last field in second column */
+.modal > div:nth-child(7) {
+  padding-bottom: 24px;
+}
+
+/* Input and dropdown fields */
+.modal input,
+.modal__dropdown {
+  width: 408px;
+}
+
+/* Entry Id field */
+.modal > div:first-child input {
+  width: 128px;
+}

@@ -1,0 +1,32 @@
+/*
+  ****************************************
+  Dropdown: Select
+  ****************************************
+  */
+/* Select component */
+.dropdown__control {
+  height: 40px;
+  background: var(--system-lightest-grey);
+
+  box-sizing: border-box;
+  border: 2px solid var(--system-light-grey) !important;
+  border-radius: 3px;
+}
+
+.dropdown__control:focus {
+  background: #ffffff !important;
+  border: 2px solid var(--system-light-blue);
+}
+
+/* Placeholder text */
+.dropdown__placeholder,
+.dropdown__single-value,
+.dropdown__input > input {
+  font-family: DM Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 20px;
+
+  color: var(--system-neutral-grey) !important;
+}

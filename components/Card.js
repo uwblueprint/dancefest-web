@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'; // Date parsing
 import { useRouter } from 'next/router'; // Routing (with buttons)
-import styles from '@styles/components/Cards.module.scss'; // Component styles
+import styles from '@styles/components/Card.module.scss'; // Component styles
 
 /**
  * Individual cards for event page

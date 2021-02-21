@@ -1,6 +1,6 @@
 import React from 'react'; // React
 import PropTypes from 'prop-types'; // PropTypes
-import DatePicker from 'react-datepicker'; // React DatePicker
+import ReactDatePicker from 'react-datepicker'; // React DatePicker
 
 import TextInput from '@components/Input'; // Input
 import CalendarSVG from '@assets/calendar.svg'; // Calendar Icon
@@ -19,7 +19,7 @@ function ChevronRight() {
   return <img src={ChevronRightSVG} />;
 }
 
-export default function CustomDatePicker({
+export default function DatePicker({
   date = new Date(),
   setDate,
   calendarClassName = '',
@@ -39,7 +39,7 @@ export default function CustomDatePicker({
   );
 
   return (
-    <DatePicker
+    <ReactDatePicker
       customInput={<DatePickerInput />}
       calendarClassName={calendarClassName}
       wrapperClassName={wrapperClassName} // Wraps input component
@@ -52,7 +52,7 @@ export default function CustomDatePicker({
   );
 }
 
-CustomDatePicker.propTypes = {
+DatePicker.propTypes = {
   calendarClassName: PropTypes.string,
   date: PropTypes.instanceOf(Date).isRequired,
   inputClassName: PropTypes.string,

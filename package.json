@@ -27,6 +27,7 @@
     "react-dom": "17.0.1",
     "react-loader-spinner": "^4.0.0",
     "react-modal": "^3.12.1",
+    "react-select": "^4.1.0",
     "sass": "^1.32.7",
     "yocto-queue": "^0.1.0"
   },

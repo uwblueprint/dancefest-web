@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types'; // PropTypes
-import styles from '@styles/components/Inputs.module.scss'; // Input component styles
+import styles from '@styles/components/Input.module.scss'; // Input component styles
 
 /**
  * Standard input field
@@ -13,6 +13,7 @@ import styles from '@styles/components/Inputs.module.scss'; // Input component s
  */
 export default function TextInput({
   className = '',
+  wrapperClassName = '',
   type,
   value,
   onChange,
@@ -34,10 +35,10 @@ export default function TextInput({
 
   return (
     <div
-      className={`${styles.input__wrapper}  ${
+      className={`${styles.input__wrapper} ${
         // If fullWidth boolean, style with fullwidth class
         fullWidth ? styles.input__fullwidth : null
-      }`}
+      } ${wrapperClassName}`}
     >
       <input
         className={`${styles.input} ${className} ${Icon && styles.input_withIcon}`}
@@ -60,10 +61,18 @@ export default function TextInput({
 
 TextInput.propTypes = {
   className: PropTypes.string,
+  fullWidth: PropTypes.any,
   icon: PropTypes.object,
   inputRef: PropTypes.oneOfType([
+    PropTypes.shape({
+      current: PropTypes.elementType,
+    }),
     PropTypes.func,
-    PropTypes.shape({ current: PropTypes.elementType }),
   ]),
+  onChange: PropTypes.any,
+  onEnter: PropTypes.func,
   onIconClick: PropTypes.func,
+  type: PropTypes.any,
+  value: PropTypes.any,
+  wrapperClassName: PropTypes.string,
 };

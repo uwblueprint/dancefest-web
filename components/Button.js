@@ -1,8 +1,8 @@
-import styles from '@styles/components/Buttons.module.scss'; // Button component styles
 import React from 'react'; // React
 import PropTypes from 'prop-types'; // PropTypes
 
 import Edit from '@assets/edit.svg'; // Edit Icon
+import styles from '@styles/components/Button.module.scss'; // Button component styles
 
 export default function Button({
   className = '',

@@ -13,6 +13,10 @@ Button
 ****************************************
 */
 .button {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+
   box-sizing: border-box;
   padding: 10px 40px;
   border: 1px solid var(--brand-pop-blue);

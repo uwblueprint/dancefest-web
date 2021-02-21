@@ -11,7 +11,7 @@ import Button from '@components/Button'; // Button components
 import Title from '@components/Title';
 import DancerRedJump from '@assets/dancer-red-jump.svg'; // Jumping Dancer SVG
 import DancerRedTall from '@assets/dancer-red-tall.svg'; // Jumping Dancer SVG
-import CustomDatePicker from '@components/CustomDatePicker';
+import DatePicker from '@components/DatePicker';
 
 // Modal content states enum
 const modalStates = Object.freeze({
@@ -222,7 +222,7 @@ function NewEvent({ setModalOpen, reloadEvents }) {
         {/* Event date */}
         <div>
           <h3>START DATE</h3>
-          <CustomDatePicker date={date} setDate={setDate} fullWidth />
+          <DatePicker date={date} setDate={setDate} fullWidth />
         </div>
 
         {/* Event judges */}
@@ -356,7 +356,7 @@ function EditEvent({ event, setModalOpen, reloadEvents }) {
         {/* Event date */}
         <div>
           <h3>START DATE</h3>
-          <CustomDatePicker date={date} setDate={setDate} fullWidth />
+          <DatePicker date={date} setDate={setDate} fullWidth />
         </div>
 
         {/* Event judges */}
