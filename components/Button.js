@@ -2,7 +2,7 @@ import styles from '@styles/components/Buttons.module.scss'; // Button component
 import React from 'react'; // React
 import PropTypes from 'prop-types'; // PropTypes
 
-import { ReactComponent as Edit } from '@assets/edit.svg'; // Edit Icon
+import Edit from '@assets/edit.svg'; // Edit Icon
 
 export default function Button({
   className = '',
@@ -23,7 +23,7 @@ export default function Button({
           onClick={onClick}
           {...props}
         >
-          <Edit />
+          <img src={Edit} />
         </button>
       );
     case 'outlined':

@@ -70,14 +70,6 @@ Filter Dropdown: Button
   width: 24px;
 }
 
-.filterDropdown__button > .filterDropdown__button_iconWrapper > svg > path {
-  fill: var(--brand-pop-blue);
-}
-
-.filterDropdown__buttonOpen > .filterDropdown__button_iconWrapper > svg > path {
-  fill: #ffffff;
-}
-
 /*
 ****************************************
 Filter Dropdown: Options
@@ -146,7 +138,7 @@ Filter Dropdown: Option
   border: 2px solid var(--system-light-blue);
 }
 
-.filterDropdown__option > div:first-child > svg {
+.filterDropdown__option > div:first-child > img {
   position: absolute;
   top: 2px;
   left: 1px;

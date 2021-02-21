@@ -1,8 +1,9 @@
 import React, { useState, useCallback } from 'react'; // React
 import PropTypes from 'prop-types'; // PropTypes
 
-import Button from '@components/Buttons'; // Button
+import Button from '@components/Button'; // Button
 import ChevronDown from '@assets/chevron-down.svg'; // Chevron Down Icon
+import ChevronDownGrey from '@assets/chevron-down-grey.svg'; // Chevron Down Icon Grey
 import Checkmark from '@assets/checkmark.svg'; // Checkmark Icon
 import styles from '@styles/components/FilterDropdown.module.scss'; // Component styles
 
@@ -77,7 +78,7 @@ export default function FilterDropdown({
       >
         {buttonText}
         <span className={styles.filterDropdown__button_iconWrapper}>
-          <img src={ChevronDown} />
+          <img src={open ? ChevronDown : ChevronDownGrey} />
         </span>
       </button>
       {open && (
