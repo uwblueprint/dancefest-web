@@ -56,8 +56,9 @@ export default function FilterDropdown({
     } = options;
     return (
       <div
-        className={`${styles.filterDropdown__option} ${selected &&
-          styles.filterDropdown__optionSelected}`}
+        className={`${styles.filterDropdown__option} ${
+          selected && styles.filterDropdown__optionSelected
+        }`}
       >
         <div onClick={toggleOption(option)}>{selected && <Checkmark />}</div>
         <div>{options[option].label}</div>
@@ -69,8 +70,9 @@ export default function FilterDropdown({
     <div className={styles.filterDropdown__wrapper}>
       {open && <div className={styles.filterDropdown__overlay} onClick={handleCloseOptions} />}
       <button
-        className={`${styles.filterDropdown__button} ${open &&
-          `${styles.filterDropdown__buttonOpen} ${styles.bringToFront}`}`}
+        className={`${styles.filterDropdown__button} ${
+          open && `${styles.filterDropdown__buttonOpen} ${styles.bringToFront}`
+        }`}
         onClick={handleButtonClick}
       >
         {buttonText}
