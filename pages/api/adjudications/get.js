@@ -7,7 +7,7 @@ export default async (req, res) => {
 
   // If session exists (thus, user is authenticated)
   if (session) {
-    // Collect adjudication id 
+    // Collect adjudication id
     const { id } = req.query;
 
     // If adjudicationID is provided
@@ -15,7 +15,6 @@ export default async (req, res) => {
       try {
         // Collect adjudication with adjudicationID
         const adjudication = await getAdjudicationByID(id);
-
         res.send(adjudication);
       } catch (error) {
         res.status(401).end();

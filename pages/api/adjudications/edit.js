@@ -9,18 +9,18 @@ export default async (req, res) => {
   if (session && session.isAdmin) {
     // Collect params from request body
     const {
-        id,
-        artistic_mark, 
-        technical_mark, 
-        cumulative_mark,
-        audio_url,
-        notes,
-        special_award,
-        performance_id
+      id,
+      artistic_mark,
+      technical_mark,
+      cumulative_mark,
+      audio_url,
+      notes,
+      special_award,
+      performance_id,
     } = req.body;
 
     // If all params exist
-    if (id && artistic_mark && technical_mark && cumulative_mark && audio_url && notes && special_award && performance_id) {
+    if (id && artistic_mark && technical_mark && cumulative_mark && performance_id) {
       // Update adjudication
       const updatedAdjudication = await prisma.adjudication.update({
         // Where
@@ -30,13 +30,13 @@ export default async (req, res) => {
         },
         // With
         data: {
-          artistic_mark: parseInt(artistic_mark), 
-          technical_mark: parseInt(technical_mark), 
+          artistic_mark: parseInt(artistic_mark),
+          technical_mark: parseInt(technical_mark),
           cumulative_mark: parseInt(cumulative_mark),
           audio_url: audio_url,
           notes: notes,
           special_award: special_award,
-          performance_id: parseInt(performance_id)
+          performance_id: parseInt(performance_id),
         },
       });
 
