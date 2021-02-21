@@ -15,7 +15,6 @@ export default async (req, res) => {
       try {
         // Collect event with eventID
         let event = await getEventByID(eventID);
-
         // Parse and filter event judges
         event.judges = JSON.parse(event.judges).filter(judge => judge !== '');
 

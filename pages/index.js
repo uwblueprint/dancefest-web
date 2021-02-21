@@ -1,14 +1,17 @@
 import axios from 'axios'; // Axios requests
 import Layout from '@components/Layout'; // Layout wrapper
 import Loader from 'react-loader-spinner'; // Spinning loader
-import DatePicker from 'react-datepicker'; // Date picker
 import { useState, useEffect } from 'react'; // State management
-import { ModalView } from '@components/Modal'; // Modal component
+import DancefestModal from '@components/Modal'; // Modal component
 import { getSession } from 'next-auth/client'; // Session handling
-import { EventCard } from '@components/Cards'; // Event card component
-import { TextInput } from '@components/Inputs'; // Text input component
+import { EventCard } from '@components/Card'; // Event card component
+import TextInput from '@components/Input'; // Text input component
 import styles from '@styles/pages/Events.module.scss'; // Page styling
-import { FilledButton, UnfilledButton } from '@components/Buttons'; // Button components
+import Button from '@components/Button'; // Button components
+import Title from '@components/Title';
+import DancerRedJump from '@assets/dancer-red-jump.svg'; // Jumping Dancer SVG
+import DancerRedTall from '@assets/dancer-red-tall.svg'; // Jumping Dancer SVG
+import DatePicker from '@components/DatePicker';
 
 // Modal content states enum
 const modalStates = Object.freeze({
@@ -19,10 +22,11 @@ const modalStates = Object.freeze({
 // Page: Events
 export default function Events({ session }) {
   const [events, setEvents] = useState([]); // Available events
-  const [loading, setLoading] = useState(false); // Loading state
+  const [loading, setLoading] = useState(true); // Loading state
   const [modalOpen, setModalOpen] = useState(false); // Modal state
   const [eventToEdit, setEventToEdit] = useState(null); // Event to edit index
   const [modalContent, setModalContent] = useState(null); // Model content state
+  const [modalTitle, setModalTitle] = useState('');
 
   /**
    * Renders model content based on modalContent
@@ -54,6 +58,7 @@ export default function Events({ session }) {
    * Opens new event modal
    */
   const modalNewEvent = () => {
+    setModalTitle('New Event');
     setModalContent(modalStates.newEvent); // Set modal content
     setModalOpen(true); // Open modal
   };
@@ -63,6 +68,7 @@ export default function Events({ session }) {
    * @param {Number} i index for event to edit
    */
   const modalEditEvent = i => {
+    setModalTitle('Edit Event');
     setModalContent(modalStates.editEvent); // Set modal content
     setModalOpen(true); // Open modal
     setEventToEdit(i); // Set index of event to edit
@@ -90,10 +96,9 @@ export default function Events({ session }) {
       <div className={styles.page__events}>
         {/* Events page header */}
         <div className={styles.page__events_header}>
-          <h1>Events</h1>
-
+          <Title>Events</Title>
           {/* If user is admin, enable event creation */}
-          {session.isAdmin ? <FilledButton onClick={modalNewEvent}>Add Event</FilledButton> : null}
+          {session.isAdmin ? <Button onClick={modalNewEvent}>Add Event</Button> : null}
         </div>
 
         {/* Events page events list */}
@@ -117,16 +122,23 @@ export default function Events({ session }) {
               </div>
             ) : (
               // Else, if length of events array !> 0, return empty
-              <div className={styles.page__events_list_empty}>
-                <h2>No Events Listed</h2>
-
+              <div className={styles.page__events_list_empty_parent}>
                 {session.isAdmin ? (
                   // Enable creation of new event if admin
-                  <>
-                    <h3>Create your first event</h3>
-                    <FilledButton onClick={modalNewEvent}>Add Event</FilledButton>
-                  </>
-                ) : null}
+                  <div className={styles.page__events_list_empty}>
+                    <img src={DancerRedTall} />
+                    <div>
+                      <h2>No Events Listed</h2>
+                      <h3>Create your first event</h3>
+                      <Button onClick={modalNewEvent}>Add Event</Button>
+                    </div>
+                    <img src={DancerRedJump} />
+                  </div>
+                ) : (
+                  <div className={styles.page__events_list_empty}>
+                    <h2>No Events Listed</h2>
+                  </div>
+                )}
               </div>
             )
           ) : (
@@ -139,9 +151,9 @@ export default function Events({ session }) {
       </div>
 
       {/* Events modal */}
-      <ModalView isOpen={modalOpen} setIsOpen={setModalOpen}>
-        {renderModalContent()}
-      </ModalView>
+      <DancefestModal title={modalTitle} isOpen={modalOpen} setModalOpen={setModalOpen}>
+        {renderModalContent()}©
+      </DancefestModal>
     </Layout>
   );
 }
@@ -194,45 +206,70 @@ function NewEvent({ setModalOpen, reloadEvents }) {
 
   return (
     <div>
-      <h1>Create Event</h1>
-
-      {/* Event title */}
-      <TextInput
-        type="text"
-        placeholder="Event title"
-        value={title}
-        onChange={e => setTitle(e.target.value)}
-        fullWidth
-      />
-
-      {/* Event date */}
-      <DatePicker selected={date} onChange={date => setDate(date)} />
-
-      {/* Event judges */}
-      {judges.map((judge, i) => {
-        // For each judge in array of judges
-        return (
-          // Return text input to edit judge
+      <div className={styles.modal__children}>
+        {/* Event title */}
+        <div>
+          <h3>EVENT TITLE</h3>
           <TextInput
             type="text"
-            placeholder="email placeholder"
-            value={judge}
-            onChange={e => updateJudge(i, e.target.value)}
+            placeholder="Event title"
+            value={title}
+            onChange={e => setTitle(e.target.value)}
             fullWidth
-            key={i}
           />
-        );
-      })}
+        </div>
 
-      {/* Add judge button (increment array) */}
-      <FilledButton onClick={addJudge} fullWidth>
-        Add Judge
-      </FilledButton>
+        {/* Event date */}
+        <div>
+          <h3>START DATE</h3>
+          <DatePicker date={date} setDate={setDate} fullWidth />
+        </div>
 
-      {/* Create event button */}
-      <FilledButton onClick={submitEvent} fullWidth>
-        Create event
-      </FilledButton>
+        {/* Event judges */}
+        {judges.map((judge, i) => {
+          // For each judge in array of judges
+          return (
+            // Return text input to edit judge
+            <div key={i}>
+              <h4>Judge {i + 1}</h4>
+              <TextInput
+                type="text"
+                placeholder="email@example.com"
+                value={judge}
+                onChange={e => updateJudge(i, e.target.value)}
+                fullWidth
+                key={i}
+              />
+            </div>
+          );
+        })}
+        <div style={{ position: 'relative' }}>
+          <Button
+            variant="outlined"
+            style={{
+              maxWidth: '300px',
+              width: '100%',
+              height: '40px',
+              position: 'absolute',
+              bottom: 0,
+            }}
+            onClick={addJudge}
+          >
+            + Add Judge
+          </Button>
+        </div>
+      </div>
+      <div className={styles.modal__footer}>
+        {/* Add judge button (increment array) */}
+        <Button variant="outlined" onClick={() => setModalOpen(false)}>
+          Discard
+        </Button>
+
+        {/* Create event button */}
+        <Button variant="contained" style={{ marginLeft: '32px' }} onClick={submitEvent}>
+          Add Event
+        </Button>
+      </div>
     </div>
   );
 }
@@ -270,16 +307,17 @@ function EditEvent({ event, setModalOpen, reloadEvents }) {
   /**
    * Deletes event
    */
-  const removeEvent = async () => {
-    // Post /api/events/delete endpoint
-    await axios.post('/api/events/delete', {
-      // With id of event to delete
-      id: event.id,
-    });
+  // TODO: Add remove event button
+  // const removeEvent = async () => {
+  //   // Post /api/events/delete endpoint
+  //   await axios.post('/api/events/delete', {
+  //     // With id of event to delete
+  //     id: event.id,
+  //   });
 
-    reloadEvents(); // Begin reloading events in background
-    setModalOpen(false); // Close modal
-  };
+  //   reloadEvents(); // Begin reloading events in background
+  //   setModalOpen(false); // Close modal
+  // };
 
   /**
    * Updates judge email at index
@@ -302,49 +340,70 @@ function EditEvent({ event, setModalOpen, reloadEvents }) {
 
   return (
     <div>
-      <h1>Edit Event</h1>
-
-      {/* Remove event button */}
-      <UnfilledButton onClick={removeEvent} fullWidth>
-        Remove Event
-      </UnfilledButton>
-
-      {/* Event title input */}
-      <TextInput
-        type="text"
-        placeholder="Event title"
-        value={title}
-        onChange={e => setTitle(e.target.value)}
-        fullWidth
-      />
-
-      {/* Event date input */}
-      <DatePicker selected={date} onChange={date => setDate(date)} />
-
-      {judges.map((judge, i) => {
-        // For all judges in judges array
-        return (
-          // Render input field to edit judge email
+      <div className={styles.modal__children}>
+        {/* Event title */}
+        <div>
+          <h3>EVENT TITLE</h3>
           <TextInput
             type="text"
-            placeholder="email placeholder"
-            value={judge}
-            onChange={e => updateJudge(i, e.target.value)}
+            placeholder="Event title"
+            value={title}
+            onChange={e => setTitle(e.target.value)}
             fullWidth
-            key={i}
           />
-        );
-      })}
+        </div>
 
-      {/* Add judge button */}
-      <FilledButton onClick={addJudge} fullWidth>
-        Add Judge
-      </FilledButton>
+        {/* Event date */}
+        <div>
+          <h3>START DATE</h3>
+          <DatePicker date={date} setDate={setDate} fullWidth />
+        </div>
 
-      {/* Save button */}
-      <FilledButton onClick={editEvent} fullWidth>
-        Save Edits
-      </FilledButton>
+        {/* Event judges */}
+        {judges.map((judge, i) => {
+          // For each judge in array of judges
+          return (
+            // Return text input to edit judge
+            <div key={i}>
+              <h4>Judge {i + 1}</h4>
+              <TextInput
+                type="text"
+                placeholder="email@example.com"
+                value={judge}
+                onChange={e => updateJudge(i, e.target.value)}
+                fullWidth
+                key={i}
+              />
+            </div>
+          );
+        })}
+        <div style={{ position: 'relative' }}>
+          <Button
+            variant="outlined"
+            style={{
+              maxWidth: '300px',
+              width: '100%',
+              height: '40px',
+              position: 'absolute',
+              bottom: 0,
+            }}
+            onClick={addJudge}
+          >
+            + Add Judge
+          </Button>
+        </div>
+      </div>
+      <div className={styles.modal__footer}>
+        {/* Add judge button (increment array) */}
+        <Button variant="outlined" onClick={() => setModalOpen(false)}>
+          Cancel
+        </Button>
+
+        {/* Create event button */}
+        <Button variant="contained" style={{ marginLeft: '32px' }} onClick={editEvent}>
+          Save Edits
+        </Button>
+      </div>
     </div>
   );
 }

@@ -22,6 +22,8 @@ const databaseConfig = {
 // Administrator emails
 const adminEmails = [
   'contact+admin@anishagnihotri.com',
+  'mayankkanoria@uwblueprint.org',
+  'oustanding@uwblueprint.org',
   'ericli@uwblueprint.org',
   'ericfeng@uwblueprint.org',
 ];
