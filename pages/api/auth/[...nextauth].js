@@ -1,8 +1,7 @@
 import NextAuth from 'next-auth'; // Next Authentication
+import prisma from '@prisma/index'; // Prisma client
+import Adapters from 'next-auth/adapters'; // Next Authentication adapters
 import Providers from 'next-auth/providers'; // Next Authentication providers
-// TODO retrieve custom ORM model using Prisma adapter
-// import Adapters from 'next-auth/adapters'; // Next Authentication adapters
-// import prisma from 'pages/index';
 
 // Database Configuration
 const databaseConfig = {
@@ -19,15 +18,6 @@ const databaseConfig = {
   },
 };
 
-// Administrator emails
-const adminEmails = [
-  'contact+admin@anishagnihotri.com',
-  'mayankkanoria@uwblueprint.org',
-  'oustanding@uwblueprint.org',
-  'ericli@uwblueprint.org',
-  'ericfeng@uwblueprint.org',
-];
-
 export default NextAuth({
   // Site URL
   site: process.env.NEXTAUTH_URL || 'http://localhost:3000',
@@ -40,14 +30,16 @@ export default NextAuth({
       maxAge: 24 * 60, // 1 hour max life for login request
     }),
   ],
-  // adapter: Adapters.Prisma.Adapter({
-  //   prisma,
-  //   modelMapping: {
-  //     User: 'user',
-  //     Session: 'session',
-  //     VerificationRequest: 'verificationRequest',
-  //   },
-  // }),
+  // Custom DB adapter
+  adapter: Adapters.Prisma.Adapter({
+    // Pass PrismaClient
+    prisma,
+    // Map custom models from Prisma schema
+    modelMapping: {
+      User: 'user',
+      VerificationRequest: 'verificationRequest',
+    },
+  }),
   pages: {
     // On errors, redirect to home
     error: '/',
@@ -66,10 +58,19 @@ export default NextAuth({
   callbacks: {
     // On session request
     session: async (session, user) => {
-      // If user email is included among admins, attach isAdmin === true to session
-      session.isAdmin = adminEmails.includes(user.email) ? true : false;
+      // Attach user role to session
+      session.role = user.role;
+
       // Return altered session
       return Promise.resolve(session);
+    },
+    // On JWT request (runs before session request)
+    jwt: async (token, user) => {
+      // If user exists, collect user role and assign to token
+      user ? (token.role = user.role) : null;
+
+      // Return altered token
+      return Promise.resolve(token);
     },
   },
   // Pass previously configured database config
