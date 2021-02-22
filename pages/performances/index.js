@@ -9,10 +9,6 @@ import Modal from '@components/Modal'; // Modal
 import Dropdown from '@components/Dropdown'; // Dropdown
 import FilterDropdown from '@components/FilterDropdown'; // Filter Dropdown
 import Table from '@components/Table'; // Table
-import BackArrow from '@assets/back-arrow.svg'; // Back arrow icon
-import Search from '@assets/search.svg'; // Search icon
-import ChevronDown from '@assets/chevron-down.svg'; // Chevron down icon
-import ChevronDownGrey from '@assets/chevron-down-grey.svg'; // Chevron down grey icon
 import styles from '@styles/pages/Performances.module.scss'; // Page styles
 
 // Temp constants
@@ -29,7 +25,7 @@ export default function Performances() {
       <div>
         <div className={styles.performances__navigation}>
           <Button className={styles.performances__navigation__button} variant="outlined">
-            <img src={BackArrow} />
+            <img src="/vectors/back-arrow.svg" />
             Back to Events
           </Button>
           <h2 className={styles.performances__navigation__eventName}>
@@ -41,7 +37,7 @@ export default function Performances() {
           <Input
             className={styles.performances__header__search}
             placeholder="Search"
-            icon={() => <img src={Search} />}
+            icon={() => <img src="/vectors/search.svg" />}
           />
           <Button
             className={`${styles.performances__header__filtersButton} ${
@@ -51,7 +47,9 @@ export default function Performances() {
             onClick={() => setShowFilters(!showFilters)}
           >
             Filters
-            <img src={showFilters ? ChevronDown : ChevronDownGrey} />
+            <img
+              src={showFilters ? '/vectors/chevron-down.svg' : '/vectors/chevron-down-grey.svg'}
+            />
           </Button>
           <Button variant="contained" onClick={() => setModalOpen(true)}>
             Add Performance

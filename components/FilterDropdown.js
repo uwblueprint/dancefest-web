@@ -2,9 +2,6 @@ import React, { useState, useCallback } from 'react'; // React
 import PropTypes from 'prop-types'; // PropTypes
 
 import Button from '@components/Button'; // Button
-import ChevronDown from '@assets/chevron-down.svg'; // Chevron Down Icon
-import ChevronDownGrey from '@assets/chevron-down-grey.svg'; // Chevron Down Icon Grey
-import Checkmark from '@assets/checkmark.svg'; // Checkmark Icon
 import styles from '@styles/components/FilterDropdown.module.scss'; // Component styles
 
 export default function FilterDropdown({
@@ -61,7 +58,7 @@ export default function FilterDropdown({
           selected && styles.filterDropdown__optionSelected
         }`}
       >
-        <div onClick={toggleOption(option)}>{selected && <img src={Checkmark} />}</div>
+        <div onClick={toggleOption(option)}>{selected && <img src="/vectors/checkmark.svg" />}</div>
         <div>{options[option].label}</div>
       </div>
     );
@@ -78,7 +75,7 @@ export default function FilterDropdown({
       >
         {buttonText}
         <span className={styles.filterDropdown__button_iconWrapper}>
-          <img src={open ? ChevronDown : ChevronDownGrey} />
+          <img src={open ? '/vectors/chevron-down.svg' : '/vectors/chevron-down-grey.svg'} />
         </span>
       </button>
       {open && (

@@ -7,7 +7,6 @@ import DatePicker from '@components/DatePicker';
 import FilterDropdown from '@components/FilterDropdown';
 import Input from '@components/Input';
 import Modal from '@components/Modal';
-import Calendar from '@assets/calendar.svg';
 import { useState } from 'react';
 
 // Page: Settings
@@ -22,7 +21,7 @@ export default function Settings() {
       <Button variant="edit" />
       <DatePicker />
       <FilterDropdown buttonText="dropdown" />
-      <Input placeholder="input" icon={() => <img src={Calendar} />} />
+      <Input placeholder="input" icon={() => <img src="/vectors/calendar.svg" />} />
       <Modal open={open} setModalOpen={setOpen} title="Modal">
         modal content
       </Modal>

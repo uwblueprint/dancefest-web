@@ -4,7 +4,6 @@ import TextInput from '@components/Input'; // Text Input field
 import Button from '@components/Button';
 import styles from '@styles/pages/Login.module.scss'; // Component styles
 import { getSession, signIn } from 'next-auth/client'; // Session management
-import LoginDancers from '@assets/login-dancers.svg';
 
 export default function Login() {
   const [email, setEmail] = useState(''); // Store user inputted email
@@ -44,7 +43,7 @@ export default function Login() {
               <Button onClick={signInWithEmail}>Log In</Button>
             </div>
           </div>
-          <img src={LoginDancers} className={styles.page__login_illustration} />
+          <img src="/vectors/login-dancers.svg" className={styles.page__login_illustration} />
         </div>
       </div>
     </Layout>

@@ -3,20 +3,17 @@ import PropTypes from 'prop-types'; // PropTypes
 import ReactDatePicker from 'react-datepicker'; // React DatePicker
 
 import TextInput from '@components/Input'; // Input
-import CalendarSVG from '@assets/calendar.svg'; // Calendar Icon
-import ChevronLeftSVG from '@assets/chevron-left.svg'; // Chevron Left Icon
-import ChevronRightSVG from '@assets/chevron-right.svg'; // Chevron Right Icon
 
 function Calendar() {
-  return <img src={CalendarSVG} />;
+  return <img src="/vectors/calendar.svg" />;
 }
 
 function ChevronLeft() {
-  return <img src={ChevronLeftSVG} />;
+  return <img src="/vectors/chevron-left.svg" />;
 }
 
 function ChevronRight() {
-  return <img src={ChevronRightSVG} />;
+  return <img src="/vectors/chevron-right.svg" />;
 }
 
 export default function DatePicker({

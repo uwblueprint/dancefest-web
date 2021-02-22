@@ -9,8 +9,6 @@ import TextInput from '@components/Input'; // Text input component
 import styles from '@styles/pages/Events.module.scss'; // Page styling
 import Button from '@components/Button'; // Button components
 import Title from '@components/Title';
-import DancerRedJump from '@assets/dancer-red-jump.svg'; // Jumping Dancer SVG
-import DancerRedTall from '@assets/dancer-red-tall.svg'; // Jumping Dancer SVG
 import DatePicker from '@components/DatePicker';
 
 // Modal content states enum
@@ -126,13 +124,13 @@ export default function Events({ session }) {
                 {session.isAdmin ? (
                   // Enable creation of new event if admin
                   <div className={styles.page__events_list_empty}>
-                    <img src={DancerRedTall} />
+                    <img src="/vectors/dancer-red-tall.svg" />
                     <div>
                       <h2>No Events Listed</h2>
                       <h3>Create your first event</h3>
                       <Button onClick={modalNewEvent}>Add Event</Button>
                     </div>
-                    <img src={DancerRedJump} />
+                    <img src="/vectors/dancer-red-jump.svg" />
                   </div>
                 ) : (
                   <div className={styles.page__events_list_empty}>
