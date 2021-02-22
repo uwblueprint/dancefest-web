@@ -13,7 +13,7 @@ export default async (req, res) => {
   // TODO check they have access to this event
   if (session && eventID) {
     // Collect all events from database
-    let filter = { event_id: parseInt(eventID) };
+    const filter = { event_id: parseInt(eventID) };
 
     // If schoolIDs exist, we convert it into an array of integers to add to the filter
     if (schoolIDs) filter.school_id = { in: schoolIDs.split(',').map(i => +i) };

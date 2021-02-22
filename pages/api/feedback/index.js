@@ -14,7 +14,8 @@ export default async (req, res) => {
     const schools = await getSchools(schoolFilter);
 
     // If no schools are returned from the filter
-    if (!schools.length) return res.status(400).json({ error: 'No schools to email feedback.' });
+    if (schools.length === 0)
+      return res.status(400).json({ error: 'No schools to email feedback to.' });
 
     // Filter for obtaining performances for the schools
     const performanceFilter = {
@@ -27,7 +28,7 @@ export default async (req, res) => {
     const performances = await getPerformances(performanceFilter);
 
     // Build a map where we can access all the performances of a school using the school id
-    let performancesMap = {};
+    const performancesMap = {};
     performances.forEach(performance => {
       if (performance.school_id in performancesMap) {
         performancesMap[performance.school_id].push(performance);
@@ -39,7 +40,7 @@ export default async (req, res) => {
     // Send email for each school
     schools.forEach(school => {
       // if there are performances for the school and the school has a contact email
-      if (school.id in performancesMap && 'contacts' in school && school.contacts.length) {
+      if (school.id in performancesMap && 'contacts' in school && school.contacts.length > 0) {
         // Obtain the first contact email for the school
         const toEmail = school.contacts[0].email;
         // Send all performance data for the school

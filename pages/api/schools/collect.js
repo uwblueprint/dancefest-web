@@ -9,7 +9,7 @@ export default async (req, res) => {
   if (session && session.isAdmin) {
     const { schoolIDs } = req.query;
 
-    let filter = {};
+    const filter = {};
     if (schoolIDs) filter.id = { in: schoolIDs.split(',').map(i => +i) };
 
     // Collect schools
