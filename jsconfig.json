@@ -4,8 +4,7 @@
     "paths": {
       "@prisma/*": ["prisma/*"],
       "@styles/*": ["styles/*"],
-      "@components/*": ["components/*"],
-      "@assets/*": ["assets/*"]
+      "@components/*": ["components/*"]
     }
   }
 }
