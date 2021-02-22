@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types'; // PropTypes
 import styles from '@styles/components/Input.module.scss'; // Input component styles
 

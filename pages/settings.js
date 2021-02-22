@@ -2,8 +2,8 @@ import Layout from '@components/Layout'; // Layout wrapper
 import { getSession } from 'next-auth/client'; // Session handling
 
 // Test components
-import Button from '@components/Button';
-import DatePicker from '@components/DatePicker';
+import { Button } from '@components/Button';
+import { DatePicker } from '@components/DatePicker';
 import FilterDropdown from '@components/FilterDropdown';
 import Input from '@components/Input';
 import Modal from '@components/Modal';

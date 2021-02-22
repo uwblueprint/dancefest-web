@@ -1,17 +1,19 @@
-import React from 'react'; // React
 import PropTypes from 'prop-types'; // PropTypes
-
 import styles from '@styles/components/Button.module.scss'; // Button component styles
 
-export default function Button({
-  className = '',
-  children,
-  variant,
-  fullWidth,
-  onClick,
-  ...props
-}) {
+/**
+ * Buttons
+ * @param {String} className Optional class names
+ * @param {HTMLElement} children child HTML content
+ * @param {String} variant type of button
+ * @param {Boolean} fullWidth if button takes full width of container
+ * @param {Function} onClick handler
+ * @returns {HTMLElement} individual button
+ */
+function Button({ className = '', children, variant, fullWidth, onClick, ...props }) {
+  // Render different button based on variant type
   switch (variant) {
+    // Edit button
     case 'edit':
       return (
         <button
@@ -22,9 +24,10 @@ export default function Button({
           onClick={onClick}
           {...props}
         >
-          <img src="/vectors/edit.svg" />
+          <img src="/vectors/edit.svg" alt="Edit" />
         </button>
       );
+    // Outlined, no-fill button
     case 'outlined':
       return (
         <button
@@ -38,6 +41,7 @@ export default function Button({
           {children}
         </button>
       );
+    // Default filled button
     default:
       return (
         <button
@@ -54,8 +58,12 @@ export default function Button({
   }
 }
 
+// Button PropTypes
 Button.propTypes = {
   children: PropTypes.any,
   className: PropTypes.string,
   variant: PropTypes.oneOf(['outlined', 'contained', 'edit']),
 };
+
+// Export buttons
+export { Button };

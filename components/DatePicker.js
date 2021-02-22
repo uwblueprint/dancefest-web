@@ -1,22 +1,18 @@
-import React from 'react'; // React
 import PropTypes from 'prop-types'; // PropTypes
+import TextInput from '@components/Input'; // Input
 import ReactDatePicker from 'react-datepicker'; // React DatePicker
 
-import TextInput from '@components/Input'; // Input
-
-function Calendar() {
-  return <img src="/vectors/calendar.svg" />;
-}
-
-function ChevronLeft() {
-  return <img src="/vectors/chevron-left.svg" />;
-}
-
-function ChevronRight() {
-  return <img src="/vectors/chevron-right.svg" />;
-}
-
-export default function DatePicker({
+/**
+ * DatePicker
+ * @param {Date} date default selected date
+ * @param {Function} setDate update handler
+ * @param {String} calendarClassName optional
+ * @param {String} inputClassName optional
+ * @param {String} wrapperClassName optional
+ * @param {Boolean} fullWidth if takes up 100% of width of container
+ * @returns {HTMLElement} DatePicker component
+ */
+function DatePicker({
   date = new Date(),
   setDate,
   calendarClassName = '',
@@ -24,6 +20,7 @@ export default function DatePicker({
   wrapperClassName = '',
   fullWidth,
 }) {
+  // DatePicker Custom Input handler
   const DatePickerInput = ({ onClick, value }) => (
     <TextInput
       className={inputClassName}
@@ -36,6 +33,7 @@ export default function DatePicker({
   );
 
   return (
+    // Date Picker with Custom Input handler
     <ReactDatePicker
       customInput={<DatePickerInput />}
       calendarClassName={calendarClassName}
@@ -49,6 +47,7 @@ export default function DatePicker({
   );
 }
 
+// DatePicker PropTypes
 DatePicker.propTypes = {
   calendarClassName: PropTypes.string,
   date: PropTypes.instanceOf(Date).isRequired,
@@ -56,3 +55,30 @@ DatePicker.propTypes = {
   setDate: PropTypes.func.isRequired,
   wrapperClassName: PropTypes.string,
 };
+
+/**
+ * Calendar icon
+ * @returns {HTMLElement} image
+ */
+function Calendar() {
+  return <img src="/vectors/calendar.svg" />;
+}
+
+/**
+ * Chevron Left icon
+ * @returns {HTMLElement} image
+ */
+function ChevronLeft() {
+  return <img src="/vectors/chevron-left.svg" />;
+}
+
+/**
+ * Chevron Right icon
+ * @returns {HTMLElement} image
+ */
+function ChevronRight() {
+  return <img src="/vectors/chevron-right.svg" />;
+}
+
+// Export datepicker
+export { DatePicker };

@@ -1,4 +1,5 @@
 import dayjs from 'dayjs'; // Date parsing
+import PropTypes from 'prop-types'; // PropTypes
 import { useRouter } from 'next/router'; // Routing (with buttons)
 import styles from '@styles/components/Card.module.scss'; // Component styles
 
@@ -66,6 +67,13 @@ function EventCard({ event, isAdmin, openEditModal }) {
     </div>
   );
 }
+
+// EventCard PropTypes
+EventCard.PropTypes = {
+  event: PropTypes.object,
+  isAdmin: PropTypes.bool,
+  openEditModal: PropTypes.func,
+};
 
 // Export cards
 export { EventCard };

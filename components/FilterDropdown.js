@@ -1,7 +1,6 @@
-import React, { useState, useCallback } from 'react'; // React
 import PropTypes from 'prop-types'; // PropTypes
-
-import Button from '@components/Button'; // Button
+import { Button } from '@components/Button'; // Button
+import { useState, useCallback } from 'react'; // State management
 import styles from '@styles/components/FilterDropdown.module.scss'; // Component styles
 
 export default function FilterDropdown({

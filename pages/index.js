@@ -7,9 +7,9 @@ import { getSession } from 'next-auth/client'; // Session handling
 import { EventCard } from '@components/Card'; // Event card component
 import TextInput from '@components/Input'; // Text input component
 import styles from '@styles/pages/Events.module.scss'; // Page styling
-import Button from '@components/Button'; // Button components
-import Title from '@components/Title';
-import DatePicker from '@components/DatePicker';
+import { Button } from '@components/Button'; // Button components
+import { Title } from '@components/Title';
+import { DatePicker } from '@components/DatePicker';
 
 // Modal content states enum
 const modalStates = Object.freeze({

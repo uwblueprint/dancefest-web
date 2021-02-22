@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; // React
+import { useState } from 'react'; // React
 import PropTypes from 'prop-types'; // PropTypes
 
 import styles from '@styles/components/Tabs.module.scss'; // Component styles

@@ -1,9 +1,7 @@
-import React from 'react'; // React
 import PropTypes from 'prop-types'; // PropTypes
 import ReactModal from 'react-modal'; // React Modal
-
-import Title from '@components/Title'; // Title
-import Button from '@components/Button'; // Button
+import { Title } from '@components/Title'; // Title
+import { Button } from '@components/Button'; // Button
 import styles from '@styles/components/Modal.module.scss'; // Component styles
 
 /**

@@ -1,4 +1,3 @@
-import React from 'react'; // React
 import { useTable } from 'react-table'; // React table
 
 import styles from '@styles/components/Table.module.scss'; // Component styles

@@ -1,5 +1,6 @@
 import Link from 'next/link'; // Dynamic routing
 import Head from 'next/head'; // HTML head handling
+import PropTypes from 'prop-types'; // PropTypes
 import { signOut, useSession } from 'next-auth/client'; // Authentication
 import styles from '@styles/components/Layout.module.scss'; // Component styles
 
@@ -22,6 +23,11 @@ export default function Layout({ children }) {
     </div>
   );
 }
+
+// Layout PropTypes
+Layout.PropTypes = {
+  children: PropTypes.any,
+};
 
 // Meta
 function Meta() {

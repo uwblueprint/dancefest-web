@@ -1,12 +1,12 @@
-import React, { useState } from 'react'; // React
+import { useState } from 'react'; // React
 import Layout from '@components/Layout'; // Layout wrapper
 
-import Button from '@components/Button'; // Button
-import Title from '@components/Title'; // Title
+import { Button } from '@components/Button'; // Button
+import { Title } from '@components/Title'; // Title
 import Input from '@components/Input'; // Input
 import Tabs from '@components/Tabs'; // Tabs
 import Modal from '@components/Modal'; // Modal
-import Dropdown from '@components/Dropdown'; // Dropdown
+import { Dropdown } from '@components/Dropdown'; // Dropdown
 import FilterDropdown from '@components/FilterDropdown'; // Filter Dropdown
 import Table from '@components/Table'; // Table
 import styles from '@styles/pages/Performances.module.scss'; // Page styles

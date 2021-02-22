@@ -1,6 +1,6 @@
 import '@styles/globals.scss'; // Global styles
-import '@styles/DatePicker.scss'; // Date Picker styles
-import '@styles/Dropdown.scss'; // Dropdown styles
+import '@styles/global/Dropdown.scss'; // Dropdown styles
+import '@styles/global/DatePicker.scss'; // Date Picker styles
 
 import { Provider } from 'next-auth/client'; // Authentication provider
 
