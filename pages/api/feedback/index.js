@@ -1,6 +1,6 @@
 import { getSession } from 'next-auth/client'; // Session handling
-import { getPerformances } from '../performances/collect';
-import { getSchools } from '../schools/collect';
+import { getPerformances } from '@pages/api/performances/collect';
+import { getSchools } from '@pages/api/schools/collect';
 import { transporter } from 'aws/index';
 
 export default async (req, res) => {
