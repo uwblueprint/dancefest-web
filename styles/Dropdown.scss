@@ -16,6 +16,11 @@ Dropdown: Select
   border-radius: 3px;
 }
 
+.dropdown__control--is-focused {
+  box-shadow: none !important;
+  border: 2px solid var(--system-light-blue) !important;
+}
+
 .dropdown__control:focus {
   background: #ffffff !important;
   border: 2px solid var(--system-light-blue);

@@ -153,9 +153,11 @@ DatePicker: Day
 
 /* Currently selected day */
 .react-datepicker__day--selected {
-  text-decoration: underline var(--system-light-blue);
-  text-decoration-thickness: 2px;
-  text-underline-position: under;
+  background-color: var(--system-light-blue);
+  border: 2px solid var(--system-light-blue);
+  box-sizing: border-box;
+  border-radius: 3px;
+  color: #ffffff;
 }
 
 /* One day on the calendar outside of the current month */

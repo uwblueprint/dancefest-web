@@ -46,6 +46,10 @@ button:disabled {
 input {
   // Force input font
   font-family: 'DM Sans', sans-serif;
+
+  &:focus {
+    outline: 2px auto var(--system-light-blue);
+  }
 }
 
 // React Modal overrides

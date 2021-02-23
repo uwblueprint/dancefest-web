@@ -1,4 +1,4 @@
-import React from 'react'; // React
+import React, { useRef } from 'react'; // React
 import PropTypes from 'prop-types'; // PropTypes
 import ReactDatePicker from 'react-datepicker'; // React DatePicker
 
@@ -27,6 +27,8 @@ export default function DatePicker({
   wrapperClassName = '',
   fullWidth,
 }) {
+  const datePickerInputRef = useRef(null);
+
   const DatePickerInput = ({ onClick, value }) => (
     <TextInput
       className={inputClassName}
@@ -35,6 +37,7 @@ export default function DatePicker({
       onClick={onClick}
       value={value}
       fullWidth={fullWidth}
+      inputRef={datePickerInputRef}
     />
   );
 
@@ -47,6 +50,11 @@ export default function DatePicker({
       previousMonthButtonLabel={<ChevronLeft />}
       selected={date}
       onChange={date => setDate(date)}
+      onCalendarOpen={() => {
+        if (datePickerInputRef && datePickerInputRef.current) {
+          datePickerInputRef.current.focus();
+        }
+      }}
       useWeekdaysShort
     />
   );
