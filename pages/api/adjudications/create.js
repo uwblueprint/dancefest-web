@@ -6,7 +6,7 @@ export default async (req, res) => {
   const session = await getSession({ req });
 
   // If user is authenticated and is an admin
-  if (session && session.isAdmin) {
+  if (session && session.role === 'ADMIN') {
     // Collect data for new adjudication
     const {
       artisticMark,

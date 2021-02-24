@@ -6,7 +6,7 @@ export default async (req, res) => {
   const session = await getSession({ req });
 
   // If session exists (thus, user is authenticated)
-  if (session && session.isAdmin) {
+  if (session && session.role === 'ADMIN') {
     // Collect all schools
     let schools = await prisma.schools.findMany();
     res.send(schools);
