@@ -37,27 +37,28 @@ export default async (req, res) => {
       }
     });
 
+    const mailerPromises = [];
+
     // Send email for each school
     schools.forEach(school => {
       // if there are performances for the school and the school has a contact email
       if (school.id in performancesMap && 'contacts' in school && school.contacts.length > 0) {
         // Obtain the first contact email for the school
-        const toEmail = school.contacts[0].email;
+        const mailData = {
+          from: process.env.FEEDBACK_EMAIL_FROM,
+          to: school.contacts[0].email,
+          subject: `Feedback for ${school.name}`,
+          //TODO: format the response with HTML
+          text: JSON.stringify(performancesMap[school.id]),
+        };
+
         // Send all performance data for the school
-        transporter.sendMail(
-          {
-            from: process.env.FEEDBACK_EMAIL_FROM,
-            to: toEmail,
-            subject: `Feedback for ${school.name}`,
-            //TODO: format the response with HTML
-            text: JSON.stringify(performancesMap[school.id]),
-          },
-          err => {
-            //TODO: Figure out what happens if one email fails when sending batch
-            if (err) return res.status(400).json({ error: 'Could not send email.' });
-          }
-        );
+        mailerPromises.push(transporter.sendMail(mailData));
       }
+    });
+
+    await Promise.all(mailerPromises).catch(() => {
+      return res.status(400).json({ error: 'Could not send email.' });
     });
 
     // When all emails are sent successfully
