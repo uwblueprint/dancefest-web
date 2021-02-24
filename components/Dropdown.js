@@ -20,7 +20,7 @@ export default function Dropdown({
   options,
   placeholder = 'placeholder',
   selected,
-  onChange = () => {},
+  onChange = () => {}, // selectedValue => setSelectedValue(selectedValue.value)
 }) {
   return (
     <div className={`${styles.dropdown__wrapper} ${wrapperClassName}`}>
