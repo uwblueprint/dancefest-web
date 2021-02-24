@@ -5,7 +5,8 @@
       "@prisma/*": ["prisma/*"],
       "@styles/*": ["styles/*"],
       "@components/*": ["components/*"],
-      "@assets/*": ["assets/*"]
+      "@assets/*": ["assets/*"],
+      "@pages/*": ["pages/*"]
     }
   }
 }
