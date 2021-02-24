@@ -18,7 +18,7 @@ export default async (req, res) => {
     }));
 
     // If the authenticated user is an admin
-    if (session.isAdmin) {
+    if (session.role === 'ADMIN') {
       // Send all events
       res.send(events);
     } else {

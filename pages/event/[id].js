@@ -54,7 +54,7 @@ export async function getServerSideProps(context) {
   event.judges = JSON.parse(event.judges).filter(judge => judge !== '');
 
   // Check if user has access to event
-  if (!session.isAdmin && !event.judges.includes(session.user.email)) {
+  if (!session.role === 'ADMIN' && !event.judges.includes(session.user.email)) {
     return {
       redirect: {
         // Redirect user to events page

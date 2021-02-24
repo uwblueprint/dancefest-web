@@ -98,7 +98,7 @@ export default function Events({ session }) {
         <div className={styles.page__events_header}>
           <Title>Events</Title>
           {/* If user is admin, enable event creation */}
-          {session.isAdmin ? <Button onClick={modalNewEvent}>Add Event</Button> : null}
+          {session.role === 'ADMIN' ? <Button onClick={modalNewEvent}>Add Event</Button> : null}
         </div>
 
         {/* Events page events list */}
@@ -114,7 +114,7 @@ export default function Events({ session }) {
                     <EventCard
                       event={event}
                       key={i}
-                      isAdmin={session.isAdmin}
+                      isAdmin={session.role === 'ADMIN'}
                       openEditModal={() => modalEditEvent(i)}
                     />
                   );
@@ -123,7 +123,7 @@ export default function Events({ session }) {
             ) : (
               // Else, if length of events array !> 0, return empty
               <div className={styles.page__events_list_empty_parent}>
-                {session.isAdmin ? (
+                {session.role === 'ADMIN' ? (
                   // Enable creation of new event if admin
                   <div className={styles.page__events_list_empty}>
                     <img src={DancerRedTall} />
