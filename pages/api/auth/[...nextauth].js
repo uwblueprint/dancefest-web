@@ -1,9 +1,11 @@
-import NextAuth from "next-auth"; // Next Authentication
-import Providers from "next-auth/providers"; // Next Authentication providers
+import NextAuth from 'next-auth'; // Next Authentication
+import prisma from '@prisma/index'; // Prisma client
+import Adapters from 'next-auth/adapters'; // Next Authentication adapters
+import Providers from 'next-auth/providers'; // Next Authentication providers
 
 // Database Configuration
 const databaseConfig = {
-  type: "postgres",
+  type: 'postgres',
   host: process.env.POSTGRES_HOST,
   port: 5432,
   username: process.env.POSTGRES_USER,
@@ -11,17 +13,14 @@ const databaseConfig = {
   database: process.env.POSTGRES_DBNAME,
   // Bypass SSL rejectUnauthorized (Heroku, etc)
   ssl: {
-    sslmode: "require",
+    sslmode: 'require',
     rejectUnauthorized: false,
   },
 };
 
-// Administrator emails
-const adminEmails = ["contact+admin@anishagnihotri.com"];
-
 export default NextAuth({
   // Site URL
-  site: process.env.NEXTAUTH_URL || "http://localhost:3000",
+  site: process.env.NEXTAUTH_URL || 'http://localhost:3000',
   // Supported authentication providers
   providers: [
     // Email authentication
@@ -31,9 +30,19 @@ export default NextAuth({
       maxAge: 24 * 60, // 1 hour max life for login request
     }),
   ],
+  // Custom DB adapter
+  adapter: Adapters.Prisma.Adapter({
+    // Pass PrismaClient
+    prisma,
+    // Map custom models from Prisma schema
+    modelMapping: {
+      User: 'user',
+      VerificationRequest: 'verificationRequest',
+    },
+  }),
   pages: {
     // On errors, redirect to home
-    error: "/",
+    error: '/',
   },
   // Session handling
   session: {
@@ -49,10 +58,19 @@ export default NextAuth({
   callbacks: {
     // On session request
     session: async (session, user) => {
-      // If user email is included among admins, attach isAdmin === true to session
-      session.isAdmin = adminEmails.includes(user.email) ? true : false;
+      // Attach user role to session
+      session.role = user.role;
+
       // Return altered session
       return Promise.resolve(session);
+    },
+    // On JWT request (runs before session request)
+    jwt: async (token, user) => {
+      // If user exists, collect user role and assign to token
+      user ? (token.role = user.role) : null;
+
+      // Return altered token
+      return Promise.resolve(token);
     },
   },
   // Pass previously configured database config

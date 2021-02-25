@@ -1,0 +1,28 @@
+/*
+****************************************
+Dropdown: Wrapper
+****************************************
+*/
+.dropdown__wrapper {
+  width: 200px;
+}
+
+/*
+****************************************
+Dropdown: Options
+****************************************
+*/
+.dropdown__option {
+  display: flex !important;
+  flex-flow: row nowrap;
+  align-items: center;
+  height: 32px;
+
+  font-family: DM Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px !important;
+  line-height: 20px;
+
+  color: var(--system-navy);
+}

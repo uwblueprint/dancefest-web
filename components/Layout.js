@@ -1,7 +1,7 @@
-import Link from "next/link"; // Dynamic routing
-import Head from "next/head"; // HTML head handling
-import { signOut, useSession } from "next-auth/client"; // Authentication
-import styles from "@styles/components/Layout.module.scss"; // Component styles
+import Link from 'next/link'; // Dynamic routing
+import Head from 'next/head'; // HTML head handling
+import { signOut, useSession } from 'next-auth/client'; // Authentication
+import styles from '@styles/components/Layout.module.scss'; // Component styles
 
 export default function Layout({ children }) {
   return (
@@ -31,19 +31,13 @@ function Meta() {
       {/* Primary meta tags */}
       <title>Dancefest Adjudication Portal</title>
       <meta name="title" content="Dancefest Adjudication Portal" />
-      <meta
-        name="description"
-        content="Explore and assess performances at Dancefest!"
-      />
+      <meta name="description" content="Explore and assess performances at Dancefest!" />
 
       {/* Open Graph / Facebook */}
       <meta property="og:type" content="website" />
       <meta property="og:url" content="https://dancefest.dev/" />
       <meta property="og:title" content="Dancefest Adjudication Portal" />
-      <meta
-        property="og:description"
-        content="Explore and assess performances at Dancefest!"
-      />
+      <meta property="og:description" content="Explore and assess performances at Dancefest!" />
 
       {/* Twitter */}
       <meta property="twitter:card" content="summary_large_image" />
@@ -121,7 +115,7 @@ function Footer() {
     <div className={styles.layout__footer}>
       <p>&copy; 2020 Dancefest Adjudication Portal. v0.0.1.</p>
       <p>
-        A project by{" "}
+        A project by{' '}
         <a
           // Open-in-new-tab link to UWBlueprint
           href="https://uwblueprint.org/"

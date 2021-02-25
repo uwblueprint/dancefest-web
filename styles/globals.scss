@@ -14,7 +14,7 @@ html {
   --system-light-blue: #4c9aff;
 
   // Fonts
-  font-family: "DM Sans", sans-serif;
+  font-family: 'DM Sans', sans-serif;
 }
 
 body {
@@ -30,7 +30,7 @@ button {
   // Pointer on hover
   cursor: pointer;
   // Force button font
-  font-family: "DM Sans", sans-serif;
+  font-family: 'DM Sans', sans-serif;
 }
 
 button:focus {
@@ -45,7 +45,11 @@ button:disabled {
 
 input {
   // Force input font
-  font-family: "DM Sans", sans-serif;
+  font-family: 'DM Sans', sans-serif;
+
+  &:focus {
+    outline: 2px auto var(--system-light-blue);
+  }
 }
 
 // React Modal overrides

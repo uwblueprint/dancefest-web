@@ -1,6 +1,6 @@
-import dayjs from "dayjs"; // Date parsing
-import { useRouter } from "next/router"; // Routing (with buttons)
-import styles from "@styles/components/Cards.module.scss"; // Component styles
+import dayjs from 'dayjs'; // Date parsing
+import { useRouter } from 'next/router'; // Routing (with buttons)
+import styles from '@styles/components/Card.module.scss'; // Component styles
 
 /**
  * Individual cards for event page
@@ -16,7 +16,7 @@ function EventCard({ event, isAdmin, openEditModal }) {
    * Handles event card click
    * @param {Event} e event
    */
-  const handleClick = (e) => {
+  const handleClick = e => {
     e.preventDefault(); // Prevent default synthetic vent
     router.push(`/event/${event.id}`); // Route to "/event/:id" page
   };
@@ -38,14 +38,10 @@ function EventCard({ event, isAdmin, openEditModal }) {
         {/* Event statistics */}
         <div className={styles.card__event_stats}>
           {/* Event date */}
-          <span>
-            {event.event_date
-              ? dayjs(event.event_date).format("MM/DD/YYYY")
-              : ""}
-          </span>
+          <span>{event.event_date ? dayjs(event.event_date).format('MM/DD/YYYY') : ''}</span>
 
           {/* Event number of performances */}
-          <span>{event.num_performances} Performances</span>
+          <span>{event.num_performances || 0} Performances</span>
         </div>
 
         {/* Event judges */}
@@ -63,11 +59,8 @@ function EventCard({ event, isAdmin, openEditModal }) {
 
       {isAdmin ? (
         // If admin with editing permissions, also show edit button
-        <button
-          className={styles.card__event_edit}
-          onClick={() => openEditModal()}
-        >
-          Edit Event
+        <button className={styles.card__event_edit} onClick={() => openEditModal()}>
+          Edit
         </button>
       ) : null}
     </div>

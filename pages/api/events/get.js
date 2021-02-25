@@ -1,5 +1,5 @@
-import prisma from "@prisma/index"; // Prisma client
-import { getSession } from "next-auth/client"; // Session handling
+import prisma from '@prisma/index'; // Prisma client
+import { getSession } from 'next-auth/client'; // Session handling
 
 export default async (req, res) => {
   // Collect session from request
@@ -8,19 +8,18 @@ export default async (req, res) => {
   // If session exists (thus, user is authenticated)
   if (session) {
     // Collect eventID from URL query
-    const { id: eventID } = req.query;
+    const { eventID } = req.query;
 
     // If eventID is provided
     if (eventID) {
       try {
         // Collect event with eventID
         let event = await getEventByID(eventID);
-
         // Parse and filter event judges
-        event.judges = JSON.parse(event.judges).filter((judge) => judge !== "");
+        event.judges = JSON.parse(event.judges).filter(judge => judge !== '');
 
         // If admin
-        if (session.isAdmin) {
+        if (session.role === 'ADMIN') {
           // Send event immediately
           res.send(event);
         } else {
@@ -30,7 +29,7 @@ export default async (req, res) => {
             res.send(event);
         }
       } catch (error) {
-        res.status(401);
+        res.status(401).end();
       }
     }
   }
@@ -48,9 +47,9 @@ const eventFieldSelection = {
   judges: true,
 };
 
-export const getEventByID = async (id) => {
+export const getEventByID = async id => {
   // Collect event with eventID
-  return await prisma.events.findUnique({
+  return await prisma.event.findUnique({
     where: {
       id: parseInt(id),
     },
