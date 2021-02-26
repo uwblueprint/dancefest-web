@@ -46,12 +46,14 @@ model Event {
 }
 
 model School {
-  id          Int           @id @default(autoincrement())
-  name        String?       @db.VarChar(255)
-  created_at  DateTime      @default(now()) @db.Timestamp(6)
-  updated_at  DateTime      @default(now()) @db.Timestamp(6)
-  contacts    Contact[]
-  Performance Performance[]
+  id           Int           @id @default(autoincrement())
+  school_name  String        @db.VarChar(255)
+  contact_name String?       @db.VarChar(255)
+  email        String        @db.VarChar(255)
+  phone        String?       @db.VarChar(255)
+  created_at   DateTime      @default(now()) @db.Timestamp(6)
+  updated_at   DateTime      @default(now()) @db.Timestamp(6)
+  Performance  Performance[]
 
   @@map("schools")
 }
@@ -102,20 +104,6 @@ model Adjudication {
   performance     Performance @relation(fields: [performance_id], references: [id])
 
   @@map("adjudications")
-}
-
-model Contact {
-  id         Int      @id @default(autoincrement())
-  school_id  Int
-  year       Int
-  name       String   @db.VarChar(255)
-  email      String   @db.VarChar(255)
-  phone      String?  @db.VarChar(255)
-  created_at DateTime @default(now()) @db.Timestamp(6)
-  updated_at DateTime @default(now()) @db.Timestamp(6)
-  school     School   @relation(fields: [school_id], references: [id])
-
-  @@map("contacts")
 }
 
 enum role {
