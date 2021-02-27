@@ -37,6 +37,7 @@ performance scoring.
 │   ├── migrations
 │   ├── schema.prisma # Prisma schema
 │   └── schema.sql # SQL schema conforming to Prisma
+│   └── seed.js # Prisma seeding scripts
 ├── public # Public outputs
 │   ├── favicon.ico
 │   └── vectors
@@ -69,6 +70,9 @@ heroku pg:psql -a YOUR_APP_NAME -f prisma/schema.sql
 
 # Regenerate Prisma schema and client
 npx prisma introspect && npx prisma generate
+
+# Seeding the database with sample data
+npx prisma db seed --preview-feature
 ```
 
 To run the application:
