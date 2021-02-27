@@ -193,3 +193,14 @@ Settings: Confirm Delete Modal
     color: var(--system-neutral-grey);
   }
 }
+
+/*
+****************************************
+Settings: Loading spinner
+****************************************
+*/
+.settings__loadingSpinner {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
