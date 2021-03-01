@@ -83,11 +83,32 @@ CREATE TABLE adjudications (
   cumulative_mark INTEGER NOT NULL,
   audio_url VARCHAR(255),
   notes TEXT,
-  special_award VARCHAR(255),
   performance_id INTEGER NOT NULL,
+  user_id INTEGER NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY(performance_id) REFERENCES performances(id)
+  FOREIGN KEY(performance_id) REFERENCES performances(id),
+  FOREIGN KEY(user_id) REFERENCES users(id)
+);
+
+-- Create awards table
+CREATE TABLE awards (
+  id SERIAL PRIMARY KEY NOT NULL,
+  title VARCHAR(255) NOT NULL,
+  is_finalized BIT NOT NULL,
+  user_id INTEGER NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY(user_id) REFERENCES users(id)
+);
+
+-- Create awards_performances table
+CREATE TABLE awards_performances (
+  award_id INTEGER NOT NULL,
+  performance_id INTEGER NOT NULL,
+  FOREIGN KEY(award_id) REFERENCES awards(id),
+  FOREIGN KEY(performance_id) REFERENCES performances(id),
+  PRIMARY KEY (award_id, performance_id)
 );
 
 -- Create contacts table

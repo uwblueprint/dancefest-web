@@ -14,7 +14,6 @@ export default async (req, res) => {
       cumulativeMark,
       audioUrl,
       notes,
-      specialAward,
       performanceID,
     } = req.body;
 
@@ -28,7 +27,6 @@ export default async (req, res) => {
           cumulative_mark: parseInt(cumulativeMark),
           audio_url: audioUrl,
           notes: notes,
-          special_award: specialAward,
           performance_id: parseInt(performanceID),
         },
       });

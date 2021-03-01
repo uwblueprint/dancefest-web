@@ -26,6 +26,7 @@ export default async (req, res) => {
   res.status(401).end();
 };
 
+//TODO: add in getting performance by award id?????
 export const getPerformances = async filter => {
   // Collect event with eventID
   return await prisma.performance.findMany({

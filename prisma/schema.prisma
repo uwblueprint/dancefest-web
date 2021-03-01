@@ -16,6 +16,7 @@ model User {
   image         String?
   created_at    DateTime  @default(now()) @db.Timestamptz(6)
   updated_at    DateTime  @default(now()) @db.Timestamptz(6)
+  awards        awards[]  @relation("awardsTousers")
 
   @@map("users")
 }
@@ -67,23 +68,24 @@ model Setting {
 }
 
 model Performance {
-  id                Int            @id @default(autoincrement())
-  name              String?        @db.VarChar(255)
-  academic_level    String?        @db.VarChar(255)
-  performers        String[]       @db.VarChar(255)
-  choreographers    String[]       @db.VarChar(255)
-  competition_level String?        @db.VarChar(255)
-  dance_size        String?        @db.VarChar(255)
-  dance_entry       Int
-  dance_style       String?        @db.VarChar(255)
-  dance_title       String?        @db.VarChar(255)
-  event_id          Int
-  school_id         Int
-  created_at        DateTime       @default(now()) @db.Timestamp(6)
-  updated_at        DateTime       @default(now()) @db.Timestamp(6)
-  event             Event          @relation(fields: [event_id], references: [id])
-  school            School         @relation(fields: [school_id], references: [id])
-  adjudications     Adjudication[]
+  id                  Int                   @id @default(autoincrement())
+  name                String?               @db.VarChar(255)
+  academic_level      String?               @db.VarChar(255)
+  performers          String[]              @db.VarChar(255)
+  choreographers      String[]              @db.VarChar(255)
+  competition_level   String?               @db.VarChar(255)
+  dance_size          String?               @db.VarChar(255)
+  dance_entry         Int
+  dance_style         String?               @db.VarChar(255)
+  dance_title         String?               @db.VarChar(255)
+  event_id            Int
+  school_id           Int
+  created_at          DateTime              @default(now()) @db.Timestamp(6)
+  updated_at          DateTime              @default(now()) @db.Timestamp(6)
+  event               Event                 @relation(fields: [event_id], references: [id])
+  school              School                @relation(fields: [school_id], references: [id])
+  adjudications       Adjudication[]
+  awards_performances awards_performances[] @relation("awards_performancesToperformances")
 
   @@map("performances")
 }
@@ -95,7 +97,6 @@ model Adjudication {
   cumulative_mark Int
   audio_url       String?     @db.VarChar(255)
   notes           String?
-  special_award   String?     @db.VarChar(255)
   performance_id  Int
   created_at      DateTime    @default(now()) @db.Timestamp(6)
   updated_at      DateTime    @default(now()) @db.Timestamp(6)
@@ -116,6 +117,26 @@ model Contact {
   school     School   @relation(fields: [school_id], references: [id])
 
   @@map("contacts")
+}
+
+model awards {
+  id                  Int                   @id @default(autoincrement())
+  title               String                @db.VarChar(255)
+  is_finalized        String                @db.Bit(1)
+  user_id             Int
+  created_at          DateTime              @default(now()) @db.Timestamp(6)
+  updated_at          DateTime              @default(now()) @db.Timestamp(6)
+  users               User                  @relation("awardsTousers", fields: [user_id], references: [id])
+  awards_performances awards_performances[]
+}
+
+model awards_performances {
+  award_id       Int
+  performance_id Int
+  awards         awards      @relation(fields: [award_id], references: [id])
+  performances   Performance @relation("awards_performancesToperformances", fields: [performance_id], references: [id])
+
+  @@id([award_id, performance_id])
 }
 
 enum role {
