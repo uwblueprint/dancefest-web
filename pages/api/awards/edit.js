@@ -9,6 +9,7 @@ export default async (req, res) => {
   // If authenticated and admin
   if (session && session.role === 'ADMIN') {
     // Collect award information from request body
+    // TODO: should userID be stored in session or will it be passed in from frontend?
     const { id, title, isFinalized, userID, performanceID } = req.body;
 
     // If all fields exist

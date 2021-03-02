@@ -103,7 +103,7 @@ model Adjudication {
   created_at      DateTime    @default(now()) @db.Timestamp(6)
   updated_at      DateTime    @default(now()) @db.Timestamp(6)
   performance     Performance @relation(fields: [performance_id], references: [id])
-  users           User        @relation("adjudicationsTousers", fields: [user_id], references: [id])
+  user            User        @relation("adjudicationsTousers", fields: [user_id], references: [id])
 
   @@map("adjudications")
 }
@@ -129,7 +129,7 @@ model Award {
   user_id      Int
   created_at   DateTime           @default(now()) @db.Timestamp(6)
   updated_at   DateTime           @default(now()) @db.Timestamp(6)
-  users        User               @relation("awardsTousers", fields: [user_id], references: [id])
+  user         User               @relation("awardsTousers", fields: [user_id], references: [id])
   performances AwardPerformance[]
 
   @@map("awards")

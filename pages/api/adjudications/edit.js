@@ -21,6 +21,7 @@ export default async (req, res) => {
     // If all params exist
     if (id && artisticMark && technicalMark && cumulativeMark && performanceID) {
       // Update adjudication
+      // TODO: set user_id from session???
       const updatedAdjudication = await prisma.adjudication.update({
         // Where
         where: {

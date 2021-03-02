@@ -20,6 +20,7 @@ export default async (req, res) => {
     // If all exist
     if (artisticMark && technicalMark && cumulativeMark && performanceID) {
       // Create new cumulativeMark
+      // TODO: set user_id from session???
       const adjudication = await prisma.adjudication.create({
         data: {
           artistic_mark: parseInt(artisticMark),
