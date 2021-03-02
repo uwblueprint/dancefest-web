@@ -80,6 +80,33 @@ const events = [
     size: 'Medium Group',
     score: '95',
   },
+  {
+    ID: 10,
+    title: 'Somebody To Love',
+    school: 'Bluevale Collegiate Institute',
+    performanceLevel: 'Advance 1',
+    style: 'Jazz',
+    size: 'Creative Collaboration',
+    score: '95',
+  },
+  {
+    ID: 11,
+    title: 'Somebody To Love',
+    school: 'Bluevale Collegiate Institute',
+    performanceLevel: 'Advance 1',
+    style: 'Jazz',
+    size: 'Medium Group',
+    score: '95',
+  },
+  {
+    ID: 12,
+    title: 'Somebody To Love',
+    school: 'Bluevale Collegiate Institute',
+    performanceLevel: 'Advance 1',
+    style: 'Jazz',
+    size: 'Medium Group',
+    score: '95',
+  },
 ];
 
 export const columns = [

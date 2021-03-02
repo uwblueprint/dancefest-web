@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'; // React
+import React, { useState, useCallback, useEffect } from 'react'; // React
 import PropTypes from 'prop-types'; // PropTypes
 
 import Button from '@components/Button'; // Button
@@ -9,11 +9,19 @@ import styles from '@styles/components/FilterDropdown.module.scss'; // Component
 
 export default function FilterDropdown({
   buttonText = '',
-  options = {},
+  options,
   setOptions,
   onSubmit = () => {},
+  // updateFilters,
+  // field,
 }) {
   const [open, setOpen] = useState(false);
+  const [lastUpdatedOption, setLastUpdatedOption] = useState({});
+
+  useEffect(() => {
+    console.log('Options to start off with');
+    console.log(options);
+  }, []);
 
   const handleButtonClick = () => {
     if (open) {
@@ -38,15 +46,42 @@ export default function FilterDropdown({
     setOptions(newOptions);
   };
 
+  useEffect(() => {
+    console.log('Something changed inside the dropdown');
+    console.log(options);
+    // if (!lastUpdatedOption.selected) {
+    //   updateFilters(filters => [
+    //     ...filters,
+    //     {
+    //       id: field,
+    //       value: lastUpdatedOption.label,
+    //     },
+    //   ]);
+    // } else {
+    //   console.log('Calling else');
+    //   updateFilters(oldFilters => {
+    //     console.log(oldFilters);
+    //     return oldFilters.filter(item => item.value != lastUpdatedOption.label);
+    //   });
+    // }
+  }, [options]);
+
+  useEffect(() => {
+    console.log('Text changed');
+    console.log(lastUpdatedOption);
+  }, [lastUpdatedOption]);
+
   const toggleOption = useCallback(
-    option => () =>
+    option => () => {
+      setLastUpdatedOption({ label: options[option].label, selected: options[option].selected });
       setOptions(options => ({
         ...options,
         [option]: {
           ...options[option],
           selected: !options[option].selected,
         },
-      })),
+      }));
+    },
     []
   );
 

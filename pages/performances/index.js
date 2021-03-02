@@ -1,6 +1,7 @@
-import React, { useState, useRef } from 'react'; // React
+import React, { useState, useRef, useEffect } from 'react'; // React
 import Layout from '@components/Layout'; // Layout wrapper
 
+import ReactPaginate from 'react-paginate';
 import Button from '@components/Button'; // Button
 import Title from '@components/Title'; // Title
 import Input from '@components/Input'; // Input
@@ -20,14 +21,94 @@ import DancerYellowBlue from '@assets/dancer-yellow-blue.svg'; // Jumping Dancer
 
 // Temp constants
 import data, { columns } from '../../data/mockParticipants';
+// import { setNestedObjectValues } from 'formik';
+
+function useCustomFilter() {
+  const [options, setOptions] = useState({});
+
+  return [options, setOptions];
+}
+
+function fillOptions(field, tableInstance, setOptions) {
+  // Build set of options for the specified field
+  const optionsSeen = new Set();
+  tableInstance.current.preFilteredRows.forEach(row => {
+    if (!optionsSeen.has(row.values[field])) {
+      optionsSeen.add(row.values[field]);
+      const newOption = {
+        label: row.values[field],
+        selected: false,
+      };
+      setOptions(options => ({
+        ...options,
+        [row.values[field]]: { ...newOption },
+      }));
+    }
+  });
+}
 
 // Page: Performances
 export default function Performances() {
   const [modalOpen, setModalOpen] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const tableInstance = useRef(null);
+  const [searchText, setSearchText] = useState('');
 
-  // const entryContent = <Table></Table>;
+  const [schoolOptions, setSchoolOptions] = useCustomFilter('school');
+  const [performanceLevelOptions, setPerformanceLevelOptions] = useCustomFilter('performanceLevel');
+  const [styleOptions, setStyleOptions] = useCustomFilter('style');
+  const [sizeOptions, setSizeOptions] = useCustomFilter('size');
+
+  useEffect(() => {
+    fillOptions('school', tableInstance, setSchoolOptions);
+    fillOptions('performanceLevel', tableInstance, setPerformanceLevelOptions);
+    fillOptions('style', tableInstance, setStyleOptions);
+    fillOptions('size', tableInstance, setSizeOptions);
+  }, []);
+
+  useEffect(() => {
+    console.log('Something changed in options');
+    console.log(schoolOptions);
+    console.log('Change in filters?');
+    console.log(tableInstance.current.state.filters);
+  }, [schoolOptions]);
+
+  // Set up options for the filters
+  // useEffect(() => {
+  //   const filterOptionsCopy = {
+  //     school: {},
+  //     performanceLevel: {},
+  //     style: {},
+  //     size: {},
+  //   };
+  //   Object.keys(filterOptions).forEach(col => {
+  //     const options = new Set();
+  //     tableInstance.current.preFilteredRows.forEach(row => {
+  //       if (!options.has(row.values[col])) {
+  //         options.add(row.values[col]);
+  //         const newOption = {
+  //           label: row.values[col],
+  //           selected: false,
+  //         };
+  //         filterOptionsCopy[col] = {
+  //           ...filterOptionsCopy[col],
+  //           [row.values[col]]: { ...newOption },
+  //         };
+  //       }
+  //     });
+  //   });
+  //   console.log('Current state of options is');
+  //   console.log(filterOptionsCopy);
+  //   setFilterOptions(filterOptionsCopy);
+  // }, []);
+
+  const handlePageChange = res => {
+    console.log('Changing page');
+    console.log(res.selected);
+    const currentPage = res.selected;
+    tableInstance.current.gotoPage(currentPage);
+    console.log(tableInstance.current.pageOptions.length);
+  };
 
   return (
     <Layout>
@@ -38,15 +119,20 @@ export default function Performances() {
             Back to Events
           </Button>
           <h2 className={styles.performances__navigation__eventName}>
-            {`OSSDF2021- Let's Dis-dance`}
+            {/* Event Name */}
+            {searchText ? `Search results for` : `OSSDF2021- Let's Dis-dance`}
           </h2>
         </div>
         <div className={styles.performances__header}>
-          <Title className={styles.performances__header__pageTitle}>Performances</Title>
+          <Title className={styles.performances__header__pageTitle}>
+            {/* Heading */}
+            {searchText ? `${searchText}` : `Performances`}
+          </Title>
           <Input
             className={styles.performances__header__search}
             placeholder="Search"
             onChange={e => {
+              setSearchText(e.target.value);
               tableInstance.current.setGlobalFilter(e.target.value);
             }}
             icon={() => <img src={Search} />}
@@ -68,11 +154,35 @@ export default function Performances() {
         {showFilters && (
           <div className={styles.performances__filters}>
             <div className={styles.performances__filters__buttons}>
-              <FilterDropdown buttonText="School" />
+              <FilterDropdown
+                buttonText="School"
+                options={schoolOptions}
+                setOptions={setSchoolOptions}
+                updateFilters={tableInstance.current.setAllFilters}
+                field="school"
+              />
               <FilterDropdown buttonText="Academic Level" />
-              <FilterDropdown buttonText="Competition Level" />
-              <FilterDropdown buttonText="Style" />
-              <FilterDropdown buttonText="Size" />
+              <FilterDropdown
+                buttonText="Competition Level"
+                options={performanceLevelOptions}
+                setOptions={setPerformanceLevelOptions}
+                field="performanceLevel"
+                updateFilters={tableInstance.current.setAllFilters}
+              />
+              <FilterDropdown
+                buttonText="Style"
+                updateFilters={tableInstance.current.setAllFilters}
+                options={styleOptions}
+                setOptions={setStyleOptions}
+                field="style"
+              />
+              <FilterDropdown
+                buttonText="Size"
+                updateFilters={tableInstance.current.setAllFilter}
+                options={sizeOptions}
+                setOptions={setSizeOptions}
+                field="size"
+              />
             </div>
             <div className={styles.performances__filters__appliedFilters}>applied filters</div>
           </div>
@@ -89,10 +199,20 @@ export default function Performances() {
                 ref={tableInstance}
               />
             }
-            secondTabContent={<JudgingTable />}
+            secondTabContent={
+              <Table columns={columns} emptyComponent={<EmptyTableComponent />} data={[]} />
+            }
           />
         </div>
       </div>
+      <ReactPaginate
+        containerClassName={styles.performances__pagination}
+        pageCount={10}
+        pageRangeDisplayed={5}
+        marginPagesDisplayed={2}
+        onPageChange={handlePageChange}
+      />
+
       <PerformanceModal mode="new" open={modalOpen} setOpen={setModalOpen} />
     </Layout>
   );
@@ -118,9 +238,9 @@ const EmptyTableComponent = () => {
 // };
 
 // Judging Table
-const JudgingTable = () => {
-  return <Table columns={columns} data={[]} />;
-};
+// const JudgingTable = () => {
+//   return <Table columns={columns} data={[]} />;
+// };
 
 // New Performance Modal
 const PerformanceModal = ({ mode, open, setOpen }) => {

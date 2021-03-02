@@ -224,3 +224,15 @@ Performances: Table - empty component styling
     max-height: 400px;
   }
 }
+
+.performances__pagination {
+  ul {
+  display: inline-block;
+  padding-left: 15px;
+  padding-right: 15px;
+  }
+
+  li {
+    display: inline-block;
+  }
+}
