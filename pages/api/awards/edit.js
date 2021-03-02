@@ -1,6 +1,7 @@
 import prisma from '@prisma/index'; // Prisma client
 import { getSession } from 'next-auth/client'; // Session handling
 
+// Edit award
 export default async (req, res) => {
   // Collect session from request
   const session = await getSession({ req });
@@ -12,31 +13,37 @@ export default async (req, res) => {
 
     // If all fields exist
     if (id && title && isFinalized && userID && performanceID) {
-      const updatedAward = await prisma.awards_performances.update({
+      const updatedAward = await prisma.award.update({
         where: {
           award_id: id,
         },
         data: {
-          performance_id: performanceID,
-          awards: {
-            update: {
-              title: title,
-              is_finalized: isFinalized,
-              user_id: userID,
-            },
+          title: title,
+          is_finalized: isFinalized,
+          user_id: userID,
+          performances: {
+            create: [
+              {
+                performance_id: performanceID,
+              },
+            ],
           },
         },
       });
 
       // If event updating is successful, return updated event
       if (updatedAward) {
-        res.send(updatedAward);
+        res.status(200).send(updatedAward);
       } else {
-        res.status(500).end();
+        res.status(500).send({
+          error: 'Error updating award with provided id',
+        });
       }
+    } else {
+      // Else, throw unauthenticated for all
+      res.status(401).send({
+        error: 'Unauthorized',
+      });
     }
-
-    // Else, throw unauthenticated for all
-    res.status(401).end();
   }
 };

@@ -104,11 +104,11 @@ CREATE TABLE awards (
 
 -- Create awards_performances table
 CREATE TABLE awards_performances (
-  award_id INTEGER NOT NULL,
-  performance_id INTEGER NOT NULL,
+  id SERIAL PRIMARY KEY NOT NULL,
+  award_id INTEGER,
+  performance_id INTEGER,
   FOREIGN KEY(award_id) REFERENCES awards(id),
-  FOREIGN KEY(performance_id) REFERENCES performances(id),
-  PRIMARY KEY (award_id, performance_id)
+  FOREIGN KEY(performance_id) REFERENCES performances(id)
 );
 
 -- Create contacts table
