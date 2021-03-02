@@ -16,6 +16,7 @@ export default async (req, res) => {
       where: {
         id: parseInt(id),
       },
+      //TODO: add information about awards
     });
     if (performance) {
       res.send(performance);

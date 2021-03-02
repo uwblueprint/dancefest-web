@@ -31,5 +31,6 @@ export const getPerformances = async filter => {
   // Collect event with eventID
   return await prisma.performance.findMany({
     where: filter,
+    //TODO: add information about awards
   });
 };
