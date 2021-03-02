@@ -11,6 +11,7 @@ import Button from '@components/Button'; // Button
 import Input from '@components/Input'; // Input
 import Modal from '@components/Modal'; // Modal
 import Delete from '@assets/delete.svg'; // Delete icon
+import Error from '@assets/error.svg'; // Error icon
 import styles from '@styles/pages/Settings.module.scss';
 
 const SETTINGS_OPTIONS = [
@@ -22,11 +23,22 @@ const SETTINGS_OPTIONS = [
 // Page: Settings
 export default function Setting() {
   const [loading, setLoading] = useState(false);
+
+  // Category state
   const [category, setCategory] = useState(null);
   const [values, setValues] = useState([]);
   const [newValue, setNewValue] = useState('');
   const [valueToDelete, setValueToDelete] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [deleteValueError, setDeleteValueError] = useState(false);
+
+  // Edit schools state
+  const [newSchool, setNewSchool] = useState('');
+  const [newSchoolContactEmail, setNewSchoolContactEmail] = useState('');
+
+  // Edit admins state
+  const [newAdminName, setNewAdminName] = useState('');
+  const [newAdminEmail, setNewAdminEmail] = useState('');
 
   const getSettingValuesOfType = async type => {
     setLoading(true);
@@ -79,7 +91,10 @@ export default function Setting() {
       setValueToDelete(null);
     } catch {
       // Empty catch block
+      setDeleteValueError(true);
     }
+
+    setLoading(false);
   };
 
   // TODO: Call APIs in the following endpoints
@@ -117,12 +132,19 @@ export default function Setting() {
     }
   }, [category]);
 
+  // Hide red outline and error text after 3 seconds of failed delete
+  useEffect(() => {
+    if (deleteValueError) {
+      setTimeout(() => setDeleteValueError(false), 3000);
+    }
+  }, [deleteValueError]);
+
   return (
     <Layout>
       <div className={styles.settings}>
         <Title className={styles.settings__title}>Settings</Title>
         <div className={styles.settings__categorySelection}>
-          <h2>Select the category you would like to edit:</h2>
+          <h2>Edit Category</h2>
           <h3>Category</h3>
           <Dropdown
             wrapperClassName={styles.settings__categoryDropdown}
@@ -143,15 +165,24 @@ export default function Setting() {
                     key={i}
                     value={value.value}
                     onDelete={() => handleDeleteButtonClick(value)}
+                    hasError={deleteValueError && valueToDelete.id === value.id}
                   />
                 ))
               ) : (
                 'No values yet'
               )}
             </div>
+            <div className={styles.settings__error}>
+              {deleteValueError && !loading && (
+                <>
+                  <img src={Error} />
+                  <p>Options in use cannot be deleted</p>
+                </>
+              )}
+            </div>
           </div>
           <div className={styles.settings__addCategoryValue}>
-            <h2>Add a new option to the selected category here:</h2>
+            <h3>Add new option to selected category</h3>
             <div className={styles.settings__addCategoryValue__input}>
               <Input
                 wrapperClassName={styles.settings__addCategoryValue__input__textBox__wrapper}
@@ -162,6 +193,7 @@ export default function Setting() {
                 disabled={!category || loading}
               />
               <Button
+                className={styles.settings__addCategoryValue__button}
                 variant="contained"
                 onClick={handleAddValue}
                 disabled={newValue === '' || !category || loading}
@@ -170,13 +202,51 @@ export default function Setting() {
               </Button>
             </div>
           </div>
-          <div className={styles.settings__buttons}>
-            <Button variant="outlined" onClick={() => {}}>
-              {' '}
-              {/* TODO: Handle discard functionality */}
-              Discard
-            </Button>
-            <Button variant="contained">Save Changes</Button>
+          <div className={styles.settings__editSchools}>
+            <h2>Edit Schools</h2>
+            <h3>Add new school</h3>
+            <div className={styles.settings__editSchools__input}>
+              <Input
+                placeholder="Enter School Name"
+                value={newSchool}
+                onChange={event => setNewSchool(event.target.value)}
+              />
+              <Input
+                placeholder="Enter School Contact Email"
+                value={newSchoolContactEmail}
+                onChange={event => setNewSchoolContactEmail(event.target.value)}
+              />
+              <Button
+                className={styles.settings__editSchools__button}
+                variant="contained"
+                disabled={newSchool === '' || newSchoolContactEmail === '' || loading}
+              >
+                Add
+              </Button>
+            </div>
+          </div>
+          <div className={styles.settings__editAdmins}>
+            <h2>Edit Admins</h2>
+            <h3>Add new admin</h3>
+            <div className={styles.settings__editAdmins__input}>
+              <Input
+                placeholder="Enter Admin Name"
+                value={newAdminName}
+                onChange={event => setNewAdminName(event.target.value)}
+              />
+              <Input
+                placeholder="Enter Admin Email"
+                value={newAdminEmail}
+                onChange={event => setNewAdminEmail(event.target.value)}
+              />
+              <Button
+                className={styles.settings__editAdmins__button}
+                variant="contained"
+                disabled={newAdminName === '' || newAdminEmail === '' || loading}
+              >
+                Add
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -197,9 +267,13 @@ export default function Setting() {
 }
 
 // Category Value
-const CategoryValue = ({ value, onDelete }) => {
+const CategoryValue = ({ value, onDelete, hasError }) => {
   return (
-    <div className={styles.settings__categoryValues__categoryValue}>
+    <div
+      className={`${styles.settings__categoryValues__categoryValue} ${
+        hasError && styles.settings__categoryValues__categoryValue__error
+      }`}
+    >
       {value}
       <img src={Delete} onClick={onDelete} />
     </div>
@@ -207,6 +281,7 @@ const CategoryValue = ({ value, onDelete }) => {
 };
 
 CategoryValue.propTypes = {
+  hasError: PropTypes.bool.isRequired,
   onDelete: PropTypes.func.isRequired,
   value: PropTypes.string.isRequired,
 };
