@@ -8,18 +8,17 @@ export default async (req, res) => {
 
   //TODO: add functionality of getting awards by performance id
 
-  // If session exists (thus, user is authenticated)
-  if (session && session.role === 'ADMIN') {
-    // Collect all awards from database
-    const awards = await getAwards();
-
-    res.status(200).send(awards);
-  } else {
-    //  Else, return 401 for all failures
-    res.status(401).send({
+  // If session does not exists
+  if (!session) {
+    return res.status(401).send({
       error: 'Unauthorized',
     });
   }
+
+  // Collect all awards from database
+  const awards = await getAwards();
+
+  return res.send(awards);
 };
 
 export const getAwards = async () => {
@@ -34,6 +33,8 @@ export const getAwards = async () => {
       },
     },
   });
+
+  if (!awards) return;
 
   // Remove the relation table data
   return awards.map(award => {

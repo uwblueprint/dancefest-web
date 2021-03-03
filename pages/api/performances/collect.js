@@ -11,7 +11,7 @@ export default async (req, res) => {
   // If session exists and eventID provided (thus, user is authenticated)
   // only judges and admins
   // TODO check they have access to this event
-  if (session && eventID) {
+  if (session && eventID && session.role === 'ADMIN') {
     // Collect all events from database
     const filter = { event_id: parseInt(eventID) };
 
@@ -29,8 +29,25 @@ export default async (req, res) => {
 //TODO: add in getting performance by award id?????
 export const getPerformances = async filter => {
   // Collect event with eventID
-  return await prisma.performance.findMany({
+  const performances = await prisma.performance.findMany({
     where: filter,
-    //TODO: add information about awards
+    //TODO: Add flag to get award information with performance
+    include: {
+      awards: {
+        include: {
+          awards: true,
+        },
+      },
+    },
+  });
+
+  if (!performances) return;
+
+  // Remove the relation table data
+  return performances.map(performance => {
+    return {
+      ...performance,
+      awards: performance.awards.map(award => award.awards),
+    };
   });
 };
