@@ -7,19 +7,8 @@ Settings: Container
   margin-top: 34px;
   padding: 64px;
   background-color: white;
-}
 
-.settings__title {
-  margin-bottom: 20px;
-}
-
-/*
-****************************************
-Settings: Category selection
-****************************************
-*/
-.settings__categorySelection {
-  // Select category text
+  // Settings page section titles
   h2 {
     font-family: DM Sans;
     font-style: normal;
@@ -31,7 +20,7 @@ Settings: Category selection
     color: var(--brand-pop-blue);
   }
 
-  // Dropdown label
+  // Settings page field labels
   h3 {
     font-family: DM Sans;
     font-style: normal;
@@ -46,6 +35,70 @@ Settings: Category selection
     color: var(--system-neutral-grey);
   }
 
+  // Settings page submit buttons
+  button {
+    height: 40px;
+    box-sizing: border-box;
+    border-color: var(--brand-other-red);
+    background-color: var(--brand-other-red);
+
+    &:disabled {
+      border-color: var(--system-neutral-grey);
+      background-color: var(--system-neutral-grey);
+      color: var(--system-light-grey);
+    }
+  }
+}
+
+.settings__title {
+  margin-bottom: 20px;
+}
+
+/*
+****************************************
+Settings: Error
+****************************************
+*/
+.settings__error {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 16px;
+
+  img {
+    height: 16px;
+    width: 16px;
+  }
+
+  p {
+    font-family: DM Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 16px;
+
+    letter-spacing: -0.084px;
+
+    color: var(--brand-red);
+  }
+}
+
+/*
+****************************************
+Settings: Category selection
+****************************************
+*/
+.settings__categorySelection {
+  // Select category text
+  h2 {
+    margin: 0 0 36px 0;
+  }
+
+  // Dropdown label
+  h3 {
+    margin: 0 0 12px 0;
+  }
+
   // Dropdown select component
   .settings__categoryDropdown {
     width: 100%;
@@ -55,8 +108,8 @@ Settings: Category selection
 
 // Dropdown category values
 .settings__categoryValues__wrapper {
-  height: 176px;
-  margin-bottom: 12px;
+  max-height: 176px;
+  margin-bottom: 24px;
   overflow-y: auto;
 
   .settings__categoryValues {
@@ -65,6 +118,7 @@ Settings: Category selection
     justify-content: flex-start;
     align-content: center;
 
+    margin-bottom: 4px;
     padding: 10px 20px;
     min-height: 26px;
     background: var(--system-lightest-grey);
@@ -88,7 +142,9 @@ Settings: Category selection
       margin: 6px 9px;
 
       background: #ffffff;
+      border: 1px solid transparent;
       border-radius: 3px;
+      box-sizing: border-box;
 
       font-family: DM Sans;
       font-style: normal;
@@ -106,6 +162,11 @@ Settings: Category selection
         cursor: pointer;
       }
     }
+
+    // Category value with delete error outline
+    .settings__categoryValues__categoryValue__error {
+      border: 1px solid var(--brand-red);
+    }
   }
 }
 
@@ -115,18 +176,11 @@ Settings: Add category value
 ****************************************
 */
 .settings__addCategoryValue {
-  margin-bottom: 56px;
+  margin-bottom: 64px;
 
   // Add category value text
   h2 {
-    font-family: DM Sans;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 20px;
-    line-height: 26px;
     margin: 0 0 26px 0;
-
-    color: var(--brand-pop-blue);
   }
 
   // Input and Add button
@@ -141,24 +195,42 @@ Settings: Add category value
     input {
       width: 278px;
     }
+  }
+}
 
-    button {
-      height: 40px;
-      box-sizing: border-box;
+/*
+****************************************
+Settings: Edit Schools
+****************************************
+*/
+.settings__editSchools {
+  margin-bottom: 64px;
+
+  .settings__editSchools__input {
+    display: flex;
+    align-items: center;
+
+    div {
+      width: 295px;
+      margin-right: 24px;
     }
   }
 }
 
 /*
 ****************************************
-Settings: Discard and Save Changes buttons
+Settings: Edit Admins
 ****************************************
 */
-.settings__buttons {
-  text-align: right;
+.settings__editAdmins {
+  .settings__editAdmins__input {
+    display: flex;
+    align-items: center;
 
-  button:first-child {
-    margin-right: 32px;
+    div {
+      width: 295px;
+      margin-right: 24px;
+    }
   }
 }
 
@@ -192,4 +264,15 @@ Settings: Confirm Delete Modal
 
     color: var(--system-neutral-grey);
   }
+}
+
+/*
+****************************************
+Settings: Loading spinner
+****************************************
+*/
+.settings__loadingSpinner {
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
