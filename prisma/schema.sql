@@ -103,3 +103,4 @@ CREATE TABLE contacts (
   FOREIGN KEY(school_id) REFERENCES schools(id)
 );
 
+ALTER TABLE settings ADD CONSTRAINT "settings_unique" UNIQUE (type, value);
