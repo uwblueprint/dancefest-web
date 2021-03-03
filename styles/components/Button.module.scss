@@ -44,6 +44,13 @@ Button
   color: #ffffff;
 }
 
+// Contained button (disabled)
+.button__contained:disabled {
+  border-color: var(--system-neutral-grey);
+  background-color: var(--system-neutral-grey);
+  color: var(--system-light-grey);
+}
+
 /* Edit button */
 .button__edit {
   height: 24px;

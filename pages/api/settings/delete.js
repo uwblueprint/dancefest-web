@@ -6,7 +6,7 @@ export default async (req, res) => {
   const session = await getSession({ req });
 
   // If authenticated and admin
-  if (session && session.isAdmin) {
+  if (session && session.role === 'ADMIN') {
     // Collect id of setting to delete
     const { id } = req.body;
 

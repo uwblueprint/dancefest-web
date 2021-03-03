@@ -19,7 +19,7 @@ export default async (req, res) => {
         event.judges = JSON.parse(event.judges).filter(judge => judge !== '');
 
         // If admin
-        if (session.isAdmin) {
+        if (session.role === 'ADMIN') {
           // Send event immediately
           res.send(event);
         } else {

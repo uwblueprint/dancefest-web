@@ -9,7 +9,7 @@ export default function Button({
   children,
   variant,
   fullWidth,
-  onClick,
+  onClick = () => {},
   ...props
 }) {
   switch (variant) {
@@ -58,5 +58,8 @@ export default function Button({
 Button.propTypes = {
   children: PropTypes.any,
   className: PropTypes.string,
+  disabled: PropTypes.bool,
+  fullWidth: PropTypes.any,
+  onClick: PropTypes.any,
   variant: PropTypes.oneOf(['outlined', 'contained', 'edit']),
 };

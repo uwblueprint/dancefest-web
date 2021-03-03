@@ -1,0 +1,195 @@
+/*
+****************************************
+Settings: Container
+****************************************
+*/
+.settings {
+  margin-top: 34px;
+  padding: 64px;
+  background-color: white;
+}
+
+.settings__title {
+  margin-bottom: 20px;
+}
+
+/*
+****************************************
+Settings: Category selection
+****************************************
+*/
+.settings__categorySelection {
+  // Select category text
+  h2 {
+    font-family: DM Sans;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 26px;
+    margin: 0 0 36px 0;
+
+    color: var(--brand-pop-blue);
+  }
+
+  // Dropdown label
+  h3 {
+    font-family: DM Sans;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 21px;
+    margin: 0 0 12px 0;
+
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+
+    color: var(--system-neutral-grey);
+  }
+
+  // Dropdown select component
+  .settings__categoryDropdown {
+    width: 100%;
+    margin-bottom: 12px;
+  }
+}
+
+// Dropdown category values
+.settings__categoryValues__wrapper {
+  height: 176px;
+  margin-bottom: 12px;
+  overflow-y: auto;
+
+  .settings__categoryValues {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    align-content: center;
+
+    padding: 10px 20px;
+    min-height: 26px;
+    background: var(--system-lightest-grey);
+    border-radius: 3px;
+    box-sizing: border-box;
+
+    // Placeholder text styles
+    font-family: DM Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--system-neutral-grey);
+
+    // Category value
+    .settings__categoryValues__categoryValue {
+      display: inline-flex;
+      flex-direction: row;
+      align-items: center;
+      padding: 2px 6px;
+      margin: 6px 9px;
+
+      background: #ffffff;
+      border-radius: 3px;
+
+      font-family: DM Sans;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 20px;
+
+      color: var(--brand-pop-blue);
+
+      img {
+        height: 7px;
+        width: 7px;
+        padding-left: 10px;
+
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+/*
+****************************************
+Settings: Add category value
+****************************************
+*/
+.settings__addCategoryValue {
+  margin-bottom: 56px;
+
+  // Add category value text
+  h2 {
+    font-family: DM Sans;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 26px;
+    margin: 0 0 26px 0;
+
+    color: var(--brand-pop-blue);
+  }
+
+  // Input and Add button
+  .settings__addCategoryValue__input {
+    display: flex;
+    align-items: center;
+
+    .settings__addCategoryValue__input__textBox__wrapper {
+      margin-right: 12px;
+    }
+
+    input {
+      width: 278px;
+    }
+
+    button {
+      height: 40px;
+      box-sizing: border-box;
+    }
+  }
+}
+
+/*
+****************************************
+Settings: Discard and Save Changes buttons
+****************************************
+*/
+.settings__buttons {
+  text-align: right;
+
+  button:first-child {
+    margin-right: 32px;
+  }
+}
+
+/*
+****************************************
+Settings: Confirm Delete Modal
+****************************************
+*/
+.settings__modal {
+  height: auto;
+  width: 576px;
+  padding: 48px 54px;
+
+  // Title
+  h1 {
+    font-family: DM Sans;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 31px;
+  }
+
+  // Warning description
+  p {
+    font-family: DM Sans;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 26px;
+    margin: 6px 0 20px 0;
+
+    color: var(--system-neutral-grey);
+  }
+}

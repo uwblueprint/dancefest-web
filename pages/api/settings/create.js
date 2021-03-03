@@ -6,7 +6,7 @@ export default async (req, res) => {
   const session = await getSession({ req });
 
   // If user is authenticated and is an admin
-  if (session && session.isAdmin) {
+  if (session && session.role === 'ADMIN') {
     // Collect setting type and setting value (see Prisma SettingType enum)
     // type must be string in all capitals matching corresponding enum
     const { type, value } = req.body;

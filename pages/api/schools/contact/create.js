@@ -6,7 +6,7 @@ export default async (req, res) => {
   const session = await getSession({ req });
 
   // If user is authenticated and is an admin
-  if (session && session.isAdmin) {
+  if (session && session.role === 'ADMIN') {
     // Collect name, email, year, school_id and phone of school contact
     const { name, email, year, phone, schoolID } = req.body;
 
