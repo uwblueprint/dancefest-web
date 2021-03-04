@@ -92,3 +92,5 @@ CREATE TABLE adjudications (
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY(performance_id) REFERENCES performances(id)
 );
+
+ALTER TABLE settings ADD CONSTRAINT "settings_unique" UNIQUE (type, value);
