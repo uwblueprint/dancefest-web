@@ -1,13 +1,29 @@
-import React from 'react'; // React
-import { useTable } from 'react-table'; // React table
+import React, { useEffect } from 'react'; // React
+import { useTable, useFilters } from 'react-table'; // React table
 
 import styles from '@styles/components/Table.module.scss'; // Component styles
 
-export default function Table({ columns, data }) {
-  const { getTableBodyProps, getTableProps, headerGroups, rows, prepareRow } = useTable({
-    columns,
-    data,
-  });
+export default function Table({ columns, data, query, filters = [] }) {
+  const {
+    getTableBodyProps,
+    getTableProps,
+    headerGroups,
+    rows,
+    prepareRow,
+    setFilter,
+    setAllFilters,
+  } = useTable(
+    {
+      columns,
+      data,
+    },
+    useFilters
+  );
+
+  useEffect(() => {
+    setAllFilters(filters);
+    setFilter('title', query);
+  }, [query]);
 
   return (
     <div className={styles.table__div}>

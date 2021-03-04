@@ -187,4 +187,8 @@ Performances: Table
 */
 .performances__content table {
   width: 100%;
+
+  .entryTable__editCell {
+    text-align: center;
+  }
 }

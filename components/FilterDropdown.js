@@ -104,6 +104,11 @@ export default function FilterDropdown({
 FilterDropdown.propTypes = {
   buttonText: PropTypes.string,
   onSubmit: PropTypes.func,
-  options: PropTypes.object.isRequired,
+  options: PropTypes.objectOf(
+    PropTypes.shape({
+      value: PropTypes.string.isRequired,
+      selected: PropTypes.bool.isRequired,
+    })
+  ).isRequired,
   setOptions: PropTypes.func.isRequired,
 };

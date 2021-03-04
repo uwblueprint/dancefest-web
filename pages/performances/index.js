@@ -1,4 +1,5 @@
-import React, { useState } from 'react'; // React
+import React, { useState, useEffect } from 'react'; // React
+import axios from 'axios'; // axios
 import Layout from '@components/Layout'; // Layout wrapper
 
 import Button from '@components/Button'; // Button
@@ -22,7 +23,57 @@ import data, { columns } from '../../data/mockParticipants';
 export default function Performances() {
   const [modalOpen, setModalOpen] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
-  // const entryContent = <Table></Table>;
+  const [query, setQuery] = useState('');
+  const [academicLevelOptions, setAcademicLevelOptions] = useState({});
+  const [performanceLevelOptions, setPerformanceLevelOptions] = useState({});
+  const [danceStyleOptions, setDanceStyleOptions] = useState({});
+  const [danceSizeOptions, setDanceSizeOptions] = useState({});
+
+  useEffect(() => {
+    const getSettings = async () => {
+      // Get settings values
+      const settingsResponse = await axios({
+        method: 'GET',
+        url: '/api/settings/collect',
+      });
+      const settings = settingsResponse.data;
+      const academicLevelSettings = {};
+      const performanceLevelSettings = {};
+      const danceStyleSettings = {};
+      const danceSizeSettings = {};
+      for (const setting of settings) {
+        switch (setting.type) {
+          case 'COMPETITION_LEVEL':
+            performanceLevelSettings[setting.value] = {
+              label: setting.value,
+              selected: false,
+            };
+            break;
+          case 'STYLE':
+            danceStyleSettings[setting.value] = {
+              label: setting.value,
+              selected: false,
+            };
+            break;
+          case 'DANCE_SIZE':
+            danceSizeSettings[setting.value] = {
+              label: setting.value,
+              selected: false,
+            };
+            break;
+          default:
+            throw new Error('Invalid setting type');
+        }
+      }
+
+      setAcademicLevelOptions(academicLevelSettings);
+      setPerformanceLevelOptions(performanceLevelSettings);
+      setDanceStyleOptions(danceStyleSettings);
+      setDanceSizeOptions(danceSizeSettings);
+    };
+
+    getSettings();
+  }, []);
 
   return (
     <Layout>
@@ -42,6 +93,8 @@ export default function Performances() {
             className={styles.performances__header__search}
             placeholder="Search"
             icon={() => <img src={Search} />}
+            value={query}
+            onChange={event => setQuery(event.target.value)}
           />
           <Button
             className={`${styles.performances__header__filtersButton} ${
@@ -61,10 +114,26 @@ export default function Performances() {
           <div className={styles.performances__filters}>
             <div className={styles.performances__filters__buttons}>
               <FilterDropdown buttonText="School" />
-              <FilterDropdown buttonText="Academic Level" />
-              <FilterDropdown buttonText="Competition Level" />
-              <FilterDropdown buttonText="Style" />
-              <FilterDropdown buttonText="Size" />
+              <FilterDropdown
+                buttonText="Academic Level"
+                options={academicLevelOptions}
+                setOptions={setAcademicLevelOptions}
+              />
+              <FilterDropdown
+                buttonText="Competition Level"
+                options={performanceLevelOptions}
+                setOptions={setPerformanceLevelOptions}
+              />
+              <FilterDropdown
+                buttonText="Style"
+                options={danceStyleOptions}
+                setOptions={setDanceStyleOptions}
+              />
+              <FilterDropdown
+                buttonText="Size"
+                options={danceSizeOptions}
+                setOptions={setDanceSizeOptions}
+              />
             </div>
             <div className={styles.performances__filters__appliedFilters}>applied filters</div>
           </div>
@@ -73,7 +142,7 @@ export default function Performances() {
           <Tabs
             firstTabName="Entry View"
             secondTabName="Judging View"
-            firstTabContent={<EntryTable />}
+            firstTabContent={<EntryTable query={query} />}
             secondTabContent={<JudgingTable />}
           />
         </div>
@@ -84,8 +153,54 @@ export default function Performances() {
 }
 
 // Entries Table
-const EntryTable = () => {
-  return <Table columns={columns} data={data} />;
+const EntryTable = ({ query, filters }) => {
+  const columns = [
+    {
+      Header: 'Edit',
+      accessor: 'edit',
+      // eslint-disable-next-line react/display-name
+      Cell: () => (
+        <div className={styles.entryTable__editCell}>
+          <Button variant="edit" />
+        </div>
+      ),
+    },
+    {
+      Header: 'ID',
+      accessor: 'ID',
+    },
+    {
+      Header: 'Title',
+      accessor: 'title',
+    },
+    {
+      Header: 'School',
+      accessor: 'school',
+      filter: 'equals',
+    },
+    {
+      Header: 'Level',
+      accessor: 'performanceLevel',
+      filter: 'equals',
+    },
+    {
+      Header: 'Style',
+      accessor: 'style',
+      filter: 'equals',
+    },
+    {
+      Header: 'Size',
+      accessor: 'size',
+      filter: 'equals',
+    },
+    {
+      Header: 'Score',
+      accessor: 'score',
+      filter: 'equals',
+    },
+  ];
+
+  return <Table columns={columns} data={data} query={query} />;
 };
 
 // Judging Table

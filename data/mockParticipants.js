@@ -1,7 +1,7 @@
 const events = [
   {
     ID: 1,
-    title: 'Somebody To Love',
+    title: 'Somebody To',
     school: 'Bluevale Collegiate Institute',
     performanceLevel: 'Advance 1',
     style: 'Jazz',
@@ -10,7 +10,7 @@ const events = [
   },
   {
     ID: 2,
-    title: 'Somebody To Love',
+    title: 'Somebody To Love 2',
     school: 'Bluevale Collegiate Institute',
     performanceLevel: 'Advance 1',
     style: 'Jazz',
@@ -19,7 +19,7 @@ const events = [
   },
   {
     ID: 3,
-    title: 'Somebody To Love',
+    title: 'Somebody To Love 3',
     school: 'Bluevale Collegiate Institute',
     performanceLevel: 'Advance 1',
     style: 'Jazz',
@@ -28,7 +28,7 @@ const events = [
   },
   {
     ID: 4,
-    title: 'Somebody To Love',
+    title: 'Somebody To Loveeeeeeeeeee',
     school: 'Bluevale Collegiate Institute',
     performanceLevel: 'Advance 1',
     style: 'Jazz',
@@ -37,7 +37,7 @@ const events = [
   },
   {
     ID: 5,
-    title: 'Somebody To Love',
+    title: 'Somebody To Loveasdfasdf',
     school: 'Bluevale Collegiate Institute',
     performanceLevel: 'Advance 1',
     style: 'Jazz',
@@ -46,7 +46,7 @@ const events = [
   },
   {
     ID: 6,
-    title: 'Somebody To Love',
+    title: 'Somebody To Loveasdf as as ',
     school: 'Cardinal Carter Catholic Secondary School',
     performanceLevel: 'Advance 1',
     style: 'Jazz',
@@ -55,7 +55,7 @@ const events = [
   },
   {
     ID: 7,
-    title: 'Somebody To Love',
+    title: 'Somebody To Love 45 2 1',
     school: 'Bluevale Collegiate Institute',
     performanceLevel: 'Advance 1',
     style: 'Jazz',
@@ -64,7 +64,7 @@ const events = [
   },
   {
     ID: 8,
-    title: 'Somebody To Love',
+    title: 'Somebody To Love %@#$',
     school: 'Bluevale Collegiate Institute',
     performanceLevel: 'Advance 1',
     style: 'Jazz',
@@ -73,7 +73,7 @@ const events = [
   },
   {
     ID: 9,
-    title: 'Somebody To Love',
+    title: 'Somebody To Love 098234',
     school: 'Bluevale Collegiate Institute',
     performanceLevel: 'Advance 1',
     style: 'Jazz',
@@ -90,6 +90,7 @@ export const columns = [
   {
     Header: 'Title',
     accessor: 'title',
+    // filter: 'equals',
   },
   {
     Header: 'School',
