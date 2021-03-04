@@ -6,24 +6,32 @@ export default async (req, res) => {
   // Collect session from request
   const session = await getSession({ req });
 
-  const { id } = req.query;
-
-  // If session exists and eventID provided (thus, user is authenticated)
-  // TODO check they have access to this event via roles
-  if (session && id) {
-    // Collect all events from database
-    const filter = { id: parseInt(id) };
-    const performance = await getPerformance(filter);
-
-    if (performance) {
-      res.send(performance);
-    } else {
-      res.status(404).end();
-    }
+  // If not authenticated
+  if (!session) {
+    return res.status(401).send({
+      error: 'Unauthorized',
+    });
   }
 
-  // Else, return 401 for all failures
-  res.status(401).end();
+  const { id } = req.query;
+
+  // If performance id was not provided
+  if (!id) {
+    return res.status(400).send({
+      error: 'Performance id was not provided',
+    });
+  }
+
+  const filter = { id: parseInt(id) };
+  const performance = await getPerformance(filter);
+
+  if (performance) {
+    return res.status(200).send(performance);
+  } else {
+    return res.status(400).send({
+      error: 'Could not retrieve performance',
+    });
+  }
 };
 
 export const getPerformance = async filter => {
@@ -35,6 +43,11 @@ export const getPerformance = async filter => {
       awards: {
         include: {
           awards: true,
+        },
+      },
+      school: {
+        select: {
+          name: true,
         },
       },
     },

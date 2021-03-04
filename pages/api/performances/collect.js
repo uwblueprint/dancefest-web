@@ -6,27 +6,33 @@ export default async (req, res) => {
   // Collect session from request
   const session = await getSession({ req });
 
+  //TODO: if it is required, I think it should be request body?
   const { eventID, schoolIDs } = req.query;
 
-  // If session exists and eventID provided (thus, user is authenticated)
-  // only judges and admins
-  // TODO check they have access to this event
-  if (session && eventID && session.role === 'ADMIN') {
-    // Collect all events from database
-    const filter = { event_id: parseInt(eventID) };
-
-    // If schoolIDs exist, we convert it into an array of integers to add to the filter
-    if (schoolIDs) filter.school_id = { in: schoolIDs.split(',').map(i => +i) };
-
-    const performances = await getPerformances(filter);
-    res.send(performances);
+  // If not authenticated
+  if (!session) {
+    return res.status(401).send({
+      error: 'Unauthorized',
+    });
   }
 
-  // Else, return 401 for all failures
-  res.status(401).end();
+  if (!eventID) {
+    return res.status(400).send({
+      error: 'eventID not provided',
+    });
+  }
+
+  // Collect all events from database
+  const filter = { event_id: parseInt(eventID) };
+
+  // If schoolIDs exist, we convert it into an array of integers to add to the filter
+  if (schoolIDs) filter.school_id = { in: schoolIDs.split(',').map(i => +i) };
+
+  const performances = await getPerformances(filter);
+  return res.status(200).send(performances);
 };
 
-//TODO: add in getting performance by award id?????
+//TODO: add in getting performance by award id?
 export const getPerformances = async filter => {
   // Collect event with eventID
   const performances = await prisma.performance.findMany({
@@ -36,6 +42,11 @@ export const getPerformances = async filter => {
       awards: {
         include: {
           awards: true,
+        },
+      },
+      school: {
+        select: {
+          name: true,
         },
       },
     },
