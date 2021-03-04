@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'; // React
+import React, { useState, useEffect, useRef } from 'react'; // React
 import PropTypes from 'prop-types'; // PropTypes
 import axios from 'axios'; // axios
 import Layout from '@components/Layout'; // Layout wrapper
@@ -10,6 +10,7 @@ import Dropdown from '@components/Dropdown'; // Dropdown
 import Button from '@components/Button'; // Button
 import Input from '@components/Input'; // Input
 import Modal from '@components/Modal'; // Modal
+import Table from '@components/Table'; // Table
 import Delete from '@assets/delete.svg'; // Delete icon
 import Error from '@assets/error.svg'; // Error icon
 import styles from '@styles/pages/Settings.module.scss';
@@ -20,8 +21,49 @@ const SETTINGS_OPTIONS = [
   { label: 'Performance Level', value: 'COMPETITION_LEVEL' },
 ];
 
+const SCHOOLS_COLUMNS = [
+  {
+    Header: 'Edit',
+    accessor: 'edit',
+    // eslint-disable-next-line react/display-name
+    Cell: () => <Button variant="edit" />,
+  },
+  {
+    Header: 'School Name',
+    accessor: 'school_name',
+  },
+  {
+    Header: 'Contact Name',
+    accessor: 'contact_name',
+  },
+  {
+    Header: 'Contact Email',
+    accessor: 'email',
+  },
+  {
+    Header: 'Phone Number',
+    accessor: 'phone',
+  },
+];
+
+const ADMINS_COLUMNS = [
+  {
+    Header: 'Edit',
+    accessor: 'edit',
+  },
+  {
+    Header: 'Admin Name',
+    accessor: 'adminName',
+  },
+  {
+    Header: 'Admin Email',
+    accessor: 'adminEmail',
+  },
+];
+
 // Page: Settings
 export default function Setting() {
+  const addCategoryValueInputRef = useRef(null);
   const [loading, setLoading] = useState(false);
 
   // Category state
@@ -32,13 +74,12 @@ export default function Setting() {
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteValueError, setDeleteValueError] = useState(false);
 
-  // Edit schools state
-  const [newSchool, setNewSchool] = useState('');
-  const [newSchoolContactEmail, setNewSchoolContactEmail] = useState('');
+  // Add Schools state
+  const [addSchoolModalOpen, setAddSchoolModalOpen] = useState(false);
+  const [schools, setSchools] = useState([]);
 
-  // Edit admins state
-  const [newAdminName, setNewAdminName] = useState('');
-  const [newAdminEmail, setNewAdminEmail] = useState('');
+  // Add Admins state
+  const [addAdminModalOpen, setAddAdminModalOpen] = useState(false);
 
   const getSettingValuesOfType = async type => {
     setLoading(true);
@@ -76,6 +117,9 @@ export default function Setting() {
     }
 
     setLoading(false);
+    if (addCategoryValueInputRef && addCategoryValueInputRef.current) {
+      addCategoryValueInputRef.current.focus();
+    }
   };
 
   const deleteSettingValue = async id => {
@@ -89,15 +133,31 @@ export default function Setting() {
       });
 
       setValueToDelete(null);
-    } catch {
-      // Empty catch block
+    } catch (err) {
+      console.log(err.error);
       setDeleteValueError(true);
     }
 
     setLoading(false);
   };
 
-  // TODO: Call APIs in the following endpoints
+  const getSchools = async () => {
+    setLoading(true);
+
+    try {
+      const response = await axios({
+        method: 'GET',
+        url: '/api/schools/collect',
+      });
+      const schools = response.data;
+      setSchools(schools);
+    } catch {
+      // Empty catch block
+    }
+
+    setLoading(false);
+  };
+
   const handleAddValue = async () => {
     if (newValue === '') {
       return;
@@ -125,6 +185,10 @@ export default function Setting() {
     }
     return;
   };
+
+  useEffect(() => {
+    getSchools();
+  }, []);
 
   useEffect(() => {
     if (category) {
@@ -191,6 +255,7 @@ export default function Setting() {
                 onKeyDown={handleInputKeyDown}
                 onChange={event => setNewValue(event.target.value)}
                 disabled={!category || loading}
+                inputRef={addCategoryValueInputRef}
               />
               <Button
                 className={styles.settings__addCategoryValue__button}
@@ -203,49 +268,35 @@ export default function Setting() {
             </div>
           </div>
           <div className={styles.settings__editSchools}>
-            <h2>Edit Schools</h2>
-            <h3>Add new school</h3>
-            <div className={styles.settings__editSchools__input}>
-              <Input
-                placeholder="Enter School Name"
-                value={newSchool}
-                onChange={event => setNewSchool(event.target.value)}
-              />
-              <Input
-                placeholder="Enter School Contact Email"
-                value={newSchoolContactEmail}
-                onChange={event => setNewSchoolContactEmail(event.target.value)}
-              />
+            <div className={styles.settings__editSchools__header}>
+              <h2>Edit Schools</h2>
               <Button
                 className={styles.settings__editSchools__button}
                 variant="contained"
-                disabled={newSchool === '' || newSchoolContactEmail === '' || loading}
+                disabled={loading}
+                onClick={() => setAddSchoolModalOpen(true)}
               >
-                Add
+                Add School
               </Button>
+            </div>
+            <div className={styles.settings__editSchools__tableWrapper}>
+              <Table columns={SCHOOLS_COLUMNS} data={schools} />
             </div>
           </div>
           <div className={styles.settings__editAdmins}>
-            <h2>Edit Admins</h2>
-            <h3>Add new admin</h3>
-            <div className={styles.settings__editAdmins__input}>
-              <Input
-                placeholder="Enter Admin Name"
-                value={newAdminName}
-                onChange={event => setNewAdminName(event.target.value)}
-              />
-              <Input
-                placeholder="Enter Admin Email"
-                value={newAdminEmail}
-                onChange={event => setNewAdminEmail(event.target.value)}
-              />
+            <div className={styles.settings__editAdmins__header}>
+              <h2>Edit Admins</h2>
               <Button
                 className={styles.settings__editAdmins__button}
                 variant="contained"
-                disabled={newAdminName === '' || newAdminEmail === '' || loading}
+                disabled={loading}
+                onClick={() => setAddAdminModalOpen(true)}
               >
-                Add
+                Add Admin
               </Button>
+            </div>
+            <div className={styles.settings__editAdmins__tableWrapper}>
+              <Table columns={ADMINS_COLUMNS} data={[]} />
             </div>
           </div>
         </div>
@@ -262,6 +313,17 @@ export default function Setting() {
       >
         <p>Deleted category values cannot be restored.</p>
       </Modal>
+      <AddSchoolModal
+        setLoading={setLoading}
+        open={addSchoolModalOpen}
+        setOpen={setAddSchoolModalOpen}
+        getSchools={getSchools}
+      />
+      <AddAdminModal
+        setLoading={setLoading}
+        open={addAdminModalOpen}
+        setOpen={setAddAdminModalOpen}
+      />
     </Layout>
   );
 }
@@ -284,6 +346,140 @@ CategoryValue.propTypes = {
   hasError: PropTypes.bool.isRequired,
   onDelete: PropTypes.func.isRequired,
   value: PropTypes.string.isRequired,
+};
+
+// Add School Modal
+const AddSchoolModal = ({ setLoading, open, setOpen, getSchools }) => {
+  const [schoolName, setSchoolName] = useState('');
+  const [contactName, setContactName] = useState('');
+  const [contactEmail, setContactEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+
+  const addSchool = async () => {
+    setLoading(true);
+
+    try {
+      await axios({
+        method: 'POST',
+        url: '/api/schools/create',
+        data: {
+          schoolName,
+          contactName,
+          email: contactEmail,
+          phone: phoneNumber,
+        },
+      });
+
+      getSchools();
+    } catch {
+      // Empty catch block
+    }
+
+    setLoading(false);
+  };
+
+  return (
+    <Modal
+      containerClassName={styles.settings__addSchoolModal__container}
+      title="Add School"
+      open={open}
+      cancelText="Discard"
+      submitText="Add School"
+      setModalOpen={setOpen}
+      onCancel={() => setOpen(false)}
+      onSubmit={addSchool}
+      disableSubmitButton={!schoolName || !contactName || !contactEmail || !phoneNumber}
+    >
+      <div className={styles.settings__addSchoolModal}>
+        <div>
+          <h2>School Name</h2>
+          <Input
+            placeholder="School Name"
+            value={schoolName}
+            onChange={event => setSchoolName(event.target.value)}
+          />
+        </div>
+        <div>
+          <h2>Contact Name</h2>
+          <Input
+            placeholder="Contact Name"
+            value={contactName}
+            onChange={event => setContactName(event.target.value)}
+          />
+        </div>
+        <div>
+          <h2>Contact Email</h2>
+          <Input
+            placeholder="Contact Email"
+            value={contactEmail}
+            onChange={event => setContactEmail(event.target.value)}
+          />
+        </div>
+        <div>
+          <h2>Phone Number</h2>
+          <Input
+            placeholder="Phone Number"
+            value={phoneNumber}
+            onChange={event => setPhoneNumber(event.target.value)}
+          />
+        </div>
+      </div>
+    </Modal>
+  );
+};
+
+AddSchoolModal.propTypes = {
+  getSchools: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+  setLoading: PropTypes.func.isRequired,
+  setOpen: PropTypes.func.isRequired,
+};
+
+// Add Admin Modal
+const AddAdminModal = ({ setLoading, open, setOpen }) => {
+  const [adminName, setAdminName] = useState('');
+  const [adminEmail, setAdminEmail] = useState('');
+
+  const addAdmin = async () => {
+    setLoading(true);
+
+    // TODO: Integrate with admin API
+
+    setLoading(false);
+  };
+
+  return (
+    <Modal
+      containerClassName={styles.settings__addAdminModal__container}
+      title="Add Admin"
+      open={open}
+      cancelText="Discard"
+      submitText="Add Admin"
+      setModalOpen={setOpen}
+      onCancel={() => setOpen(false)}
+      onSubmit={addAdmin}
+      disableSubmitButton={!adminName || !adminEmail}
+    >
+      <div className={styles.settings__addAdminModal}>
+        <div>
+          <h2>Admin Name</h2>
+          <Input
+            placeholder="Admin Name"
+            value={adminName}
+            onChange={event => setAdminName(event.target.value)}
+          />
+        </div>
+        <div>
+          <h2>Admin Email</h2>
+          <Input
+            placeholder="Admin Email"
+            value={adminEmail}
+            onChange={event => setAdminEmail(event.target.value)}
+          />
+        </div>
+      </div>
+    </Modal>
+  );
 };
 
 // Run: server side
