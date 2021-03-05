@@ -30,11 +30,20 @@
   max-width: 507px;
   width: 100%;
   box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.1);
+  background-color: white;
 }
 
 .performance_details__tabs {
-  padding: 30px;
   background-color: #fff;
+
+  button {
+    padding: 30px;
+    border: none;
+    background-color: #fff;
+    text-align: left;
+    position: relative;
+    width: 100%;
+  }
 
   h3 {
     color: var(--brand-pop-blue);
@@ -42,6 +51,12 @@
     line-height: 31px;
     margin: 0px;
     font-weight: 700;
+  }
+}
+
+.performance_details__tabs_selected {
+  button {
+    border-left: 8px solid #FFAB00;
   }
 }
 
@@ -67,14 +82,13 @@
 
 
 .judge__tab {
-  flex: 1;
+  // flex: 1;
   display: flex;
   flex-direction: column;
 
   // max-width: 507px;
   // width: 100%;
   background-color: #fff;
-  // transition: 100ms ease-in-out;
   text-align: left;
   position: relative;
   border: none;
@@ -154,11 +168,48 @@
   }
 }
 
+.performance_details__awards_list {
+  padding-left: 52px;
+
+  h2 {
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 21px;
+    margin: 0 0 12px 0;
+
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+
+    color: var(--system-neutral-grey);
+  }
+}
+
+.performance_details__awards_list ul {
+  list-style-type: none;
+  padding: 0px;
+  margin: 0px;
+}
+
+.performance_details__awards_list li {
+  font-family: DM Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 26px;
+  /* Navy */
+  color: #172B4D;
+}
+
+.performance_details__awards_list li:not(:last-child) {
+  margin: 0 0 5px 0;
+}
+
 
 .modal__container {
-  height: 400px;
+  height: 365px;
   width: 100%;
-  padding: 52px;
+  padding: 52px 52px 0px 52px;
 }
 
 .modal {
@@ -185,22 +236,6 @@
   text-transform: uppercase;
 
   color: var(--system-neutral-grey);
-}
-
-.modal__container ul {
-  list-style-type: none;
-  padding: 0px;
-  margin: 0px;
-}
-
-.modal__container li {
-  font-family: DM Sans;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 20px;
-  line-height: 26px;
-  /* Navy */
-  color: #172B4D;
 }
 
 /* Field caption/note */
@@ -243,23 +278,11 @@
   padding-bottom: 24px;
 }
 
-/* Input and dropdown fields */
-.modal input,
-.modal__dropdown {
-  width: 408px;
-}
-
-/* Entry Id field */
-.modal > div:first-child input {
-  width: 128px;
-}
-
 .performance_details__score_content {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding-top: 35px;
-  padding-bottom: 35px;
+  padding: 35px 52px;
 }
 
 .performance_details__score_card {
@@ -283,7 +306,13 @@
   }
 
   h2 {
-    color: #172B4D;
+    font-size: 16px;
+    line-height: 21px;
+    margin: 0 0 12px 0;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+
+    color: var(--system-neutral-grey);
   }
 }
 
@@ -292,4 +321,95 @@
   h1, h2 {
     color: #fff;
   }
+}
+
+.judge__feedback_container {
+  width: 100%;
+  padding: 50px;
+
+  p {
+    font-size: 20px;
+    line-height: 140.62%;
+    color: #172B4D;
+  }
+
+  h2 {
+    font-size: 16px;
+    line-height: 21px;
+    margin: 0;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+}
+
+.judge__feedback_header {
+  box-sizing: border-box;
+  display: flex;
+  flex: row;
+  justify-content: space-between;
+
+  h2 {
+    color: var(--system-neutral-grey);
+  }
+
+  button {
+    max-height: 40px;
+  }
+}
+
+.judge__feedback_buttons_spacing {
+  margin-right: 45px;
+}
+
+.judge__feedback_audio_player {
+  box-sizing: border-box;
+  display: flex;
+  flex: row;
+  justify-content: space-between;
+  padding: 0 24px ;
+  border: 1px solid #0B0504;
+  box-sizing: border-box;
+  border-radius: 5px;
+  margin-bottom: 2em;
+
+  span {
+    display: flex;
+    flex: row;
+  }
+}
+
+.judge__feedback_notes_input {
+  width: 100%;
+  padding: 20px 0px;
+
+  textarea {
+    width: 100%;
+    resize:none;
+    height: 140px;
+    max-height: 140px;
+    border: 2px solid #DFE1E6;
+    box-sizing: border-box;
+    border-radius: 3px;
+    outline: none;
+
+    font-family: DM Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 20px;
+    line-height: 140.62%;
+    /* or 28px */
+    color: #6B778C;
+  }
+}
+
+.judge__feedback_dropdown_wrapper {
+  max-width: 400px;
+  width: 100%;
+  margin: 20px 0px;
+}
+
+.judge__feedback_input_wrapper {
+  max-width: 260px;
+  width: 100%;
+  margin: 20px 0px;
 }
