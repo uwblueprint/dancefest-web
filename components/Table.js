@@ -3,27 +3,34 @@ import { useTable, useFilters } from 'react-table'; // React table
 
 import styles from '@styles/components/Table.module.scss'; // Component styles
 
-export default function Table({ columns, data, query, filters = [] }) {
+export default function Table({ columns, data, filters = [] }) {
   const {
     getTableBodyProps,
     getTableProps,
     headerGroups,
     rows,
     prepareRow,
-    setFilter,
     setAllFilters,
   } = useTable(
     {
       columns,
       data,
+      filterTypes: {
+        matchEnum: (rows, id, filterValues) => {
+          // Match an array of enum values
+          return rows.filter(row => {
+            const rowValue = row.values[id];
+            return rowValue !== undefined ? filterValues.includes(String(rowValue)) : true;
+          });
+        },
+      },
     },
     useFilters
   );
 
   useEffect(() => {
     setAllFilters(filters);
-    setFilter('title', query);
-  }, [query]);
+  }, [filters]);
 
   return (
     <div className={styles.table__div}>

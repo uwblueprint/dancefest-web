@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'; // React
 import axios from 'axios'; // axios
+import Link from 'next/link'; // Next link
 import Layout from '@components/Layout'; // Layout wrapper
 
 import Button from '@components/Button'; // Button
@@ -10,6 +11,7 @@ import Modal from '@components/Modal'; // Modal
 import Dropdown from '@components/Dropdown'; // Dropdown
 import FilterDropdown from '@components/FilterDropdown'; // Filter Dropdown
 import Table from '@components/Table'; // Table
+import Pill from '@components/Pill'; // Pill
 import BackArrow from '@assets/back-arrow.svg'; // Back arrow icon
 import Search from '@assets/search.svg'; // Search icon
 import ChevronDown from '@assets/chevron-down.svg'; // Chevron down icon
@@ -19,16 +21,24 @@ import styles from '@styles/pages/Performances.module.scss'; // Page styles
 // Temp constants
 import data, { columns } from '../../data/mockParticipants';
 
+// Get the active filters (list of column accessors) from an object of filter dropdown values
+const getActiveFilters = options => {
+  return Object.keys(options).filter(option => options[option].selected);
+};
+
 // Page: Performances
 export default function Performances() {
   const [modalOpen, setModalOpen] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [query, setQuery] = useState('');
+  const [schoolOptions, setSchoolOptions] = useState({});
   const [academicLevelOptions, setAcademicLevelOptions] = useState({});
   const [performanceLevelOptions, setPerformanceLevelOptions] = useState({});
   const [danceStyleOptions, setDanceStyleOptions] = useState({});
   const [danceSizeOptions, setDanceSizeOptions] = useState({});
+  const [filters, setFilters] = useState([]);
 
+  // Get initial filter options
   useEffect(() => {
     const getSettings = async () => {
       // Get settings values
@@ -66,6 +76,8 @@ export default function Performances() {
         }
       }
 
+      // TODO: Get schools
+
       setAcademicLevelOptions(academicLevelSettings);
       setPerformanceLevelOptions(performanceLevelSettings);
       setDanceStyleOptions(danceStyleSettings);
@@ -75,14 +87,151 @@ export default function Performances() {
     getSettings();
   }, []);
 
+  // Update table filters
+  useEffect(() => {
+    const newFilters = [];
+    const schoolFilters = getActiveFilters(schoolOptions);
+    const academicLevelFilters = getActiveFilters(academicLevelOptions);
+    const performanceLevelFilters = getActiveFilters(performanceLevelOptions);
+    const danceStyleFilters = getActiveFilters(danceStyleOptions);
+    const danceSizeFilters = getActiveFilters(danceSizeOptions);
+    if (query) {
+      newFilters.push({
+        id: 'title',
+        value: query,
+      });
+    }
+    if (schoolFilters.length > 0) {
+      newFilters.push({
+        id: 'school',
+        value: schoolFilters,
+      });
+    }
+    if (academicLevelFilters.length > 0) {
+      newFilters.push({
+        id: 'academic_level',
+        value: academicLevelFilters,
+      });
+    }
+    if (performanceLevelFilters.length > 0) {
+      newFilters.push({
+        id: 'competition_level',
+        value: performanceLevelFilters,
+      });
+    }
+    if (danceStyleFilters.length > 0) {
+      newFilters.push({
+        id: 'dance_style',
+        value: danceStyleFilters,
+      });
+    }
+    if (danceSizeFilters.length > 0) {
+      newFilters.push({
+        id: 'dance_size',
+        value: danceSizeFilters,
+      });
+    }
+
+    setFilters(newFilters);
+  }, [
+    query,
+    schoolOptions,
+    academicLevelOptions,
+    performanceLevelOptions,
+    danceStyleOptions,
+    danceSizeOptions,
+  ]);
+
+  // Render filter pills
+  const renderActiveFilters = () => {
+    let elements = [];
+    for (const { id, value: activeFilters } of filters) {
+      switch (id) {
+        case 'school':
+          elements = [
+            ...elements,
+            ...activeFilters.map((f, i) => (
+              <Pill
+                key={i}
+                value={f}
+                onDelete={() => setSchoolOptions(schoolOptions.filter(option => option !== f))}
+              />
+            )),
+          ];
+          break;
+        case 'academic_level':
+          elements = [
+            ...elements,
+            ...activeFilters.map((f, i) => (
+              <Pill
+                key={i}
+                value={f}
+                onDelete={() =>
+                  setAcademicLevelOptions(academicLevelOptions.filter(option => option !== f))
+                }
+              />
+            )),
+          ];
+          break;
+        case 'competition_level':
+          elements = [
+            ...elements,
+            ...activeFilters.map((f, i) => (
+              <Pill
+                key={i}
+                value={f}
+                onDelete={() =>
+                  setPerformanceLevelOptions(performanceLevelOptions.filter(option => option !== f))
+                }
+              />
+            )),
+          ];
+          break;
+        case 'dance_style':
+          elements = [
+            ...elements,
+            ...activeFilters.map((f, i) => (
+              <Pill
+                key={i}
+                value={f}
+                onDelete={() =>
+                  setDanceStyleOptions(danceStyleOptions.filter(option => option !== f))
+                }
+              />
+            )),
+          ];
+          break;
+        case 'dance_size':
+          elements = [
+            ...elements,
+            ...activeFilters.map((f, i) => (
+              <Pill
+                key={i}
+                value={f}
+                onDelete={() =>
+                  setDanceSizeOptions(danceSizeOptions.filter(option => option !== f))
+                }
+              />
+            )),
+          ];
+          break;
+      }
+    }
+
+    return elements;
+  };
+
   return (
     <Layout>
       <div>
         <div className={styles.performances__navigation}>
-          <Button className={styles.performances__navigation__button} variant="outlined">
-            <img src={BackArrow} />
-            Back to Events
-          </Button>
+          <Link href="/events">
+            <Button className={styles.performances__navigation__button} variant="outlined">
+              <img src={BackArrow} />
+              Back to Events
+            </Button>
+          </Link>
+
           <h2 className={styles.performances__navigation__eventName}>
             {`OSSDF2021- Let's Dis-dance`}
           </h2>
@@ -113,7 +262,11 @@ export default function Performances() {
         {showFilters && (
           <div className={styles.performances__filters}>
             <div className={styles.performances__filters__buttons}>
-              <FilterDropdown buttonText="School" />
+              <FilterDropdown
+                buttonText="School"
+                options={schoolOptions}
+                setOptions={setSchoolOptions}
+              />
               <FilterDropdown
                 buttonText="Academic Level"
                 options={academicLevelOptions}
@@ -135,14 +288,16 @@ export default function Performances() {
                 setOptions={setDanceSizeOptions}
               />
             </div>
-            <div className={styles.performances__filters__appliedFilters}>applied filters</div>
+            <div className={styles.performances__filters__appliedFilters}>
+              {renderActiveFilters()}
+            </div>
           </div>
         )}
         <div className={styles.performances__content}>
           <Tabs
             firstTabName="Entry View"
             secondTabName="Judging View"
-            firstTabContent={<EntryTable query={query} />}
+            firstTabContent={<EntryTable filters={filters} />}
             secondTabContent={<JudgingTable />}
           />
         </div>
@@ -153,7 +308,7 @@ export default function Performances() {
 }
 
 // Entries Table
-const EntryTable = ({ query, filters }) => {
+const EntryTable = ({ filters }) => {
   const columns = [
     {
       Header: 'Edit',
@@ -176,31 +331,31 @@ const EntryTable = ({ query, filters }) => {
     {
       Header: 'School',
       accessor: 'school',
-      filter: 'equals',
+      filter: 'matchEnum',
     },
     {
       Header: 'Level',
-      accessor: 'performanceLevel',
-      filter: 'equals',
+      accessor: 'competition_level',
+      filter: 'matchEnum',
     },
     {
       Header: 'Style',
-      accessor: 'style',
-      filter: 'equals',
+      accessor: 'dance_style',
+      filter: 'matchEnum',
     },
     {
       Header: 'Size',
-      accessor: 'size',
-      filter: 'equals',
+      accessor: 'dance_size',
+      filter: 'matchEnum',
     },
     {
       Header: 'Score',
       accessor: 'score',
-      filter: 'equals',
+      filter: 'matchEnum',
     },
   ];
 
-  return <Table columns={columns} data={data} query={query} />;
+  return <Table columns={columns} data={data} filters={filters} />;
 };
 
 // Judging Table

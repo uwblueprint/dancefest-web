@@ -78,10 +78,10 @@ Performances: Navigation header
 }
 
 /*
-  ****************************************
-  Performances: Filters
-  ****************************************
-  */
+****************************************
+Performances: Filters
+****************************************
+*/
 .performances__filters {
   margin: 20px 0 32px 0;
 
@@ -94,11 +94,17 @@ Performances: Navigation header
   }
 }
 
+.performances__filters__appliedFilters {
+  & > div {
+    margin: 0 8px 0 0;
+  }
+}
+
 /*
-  ****************************************
-  Performances: Content
-  ****************************************
-  */
+****************************************
+Performances: Content
+****************************************
+*/
 .performances__content {
   margin: 36px 0;
 }

@@ -93,7 +93,7 @@ export default function FilterDropdown({
             variant="contained"
             onClick={handleClearFilter}
           >
-            Clear Filter
+            <span>Clear Filter</span>
           </Button>
         </div>
       )}
