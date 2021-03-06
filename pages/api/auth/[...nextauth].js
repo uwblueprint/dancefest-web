@@ -43,6 +43,8 @@ export default NextAuth({
   pages: {
     // On errors, redirect to home
     error: '/',
+    // On email verification request, redirect to verify page
+    verifyRequest: '/verify',
   },
   // Session handling
   session: {
