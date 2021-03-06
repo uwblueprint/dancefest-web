@@ -7,24 +7,26 @@ export default async (req, res) => {
 
   // If user is authenticated and is an admin
   if (session && session.role === 'ADMIN') {
-    // Collect name of school
-    const { schoolName, contactName, email, phone } = req.body;
+    // Collect name, email and role
+    const { id } = req.query;
+    const { name, email } = req.body;
 
-    // If name exist
-    if (schoolName && email) {
-      // Create new school
-      const school = await prisma.school.create({
+    // If email exists
+    if (id && name && email) {
+      // User update
+      const user = await prisma.user.update({
+        where: {
+          id: parseInt(id),
+        },
         data: {
-          school_name: schoolName,
-          contact_name: contactName,
+          name: name,
           email: email,
-          phone: phone,
         },
       });
 
-      // If school creation is successful, return school
-      if (school) {
-        res.send(school);
+      // If user updated send it back
+      if (user) {
+        res.send(user);
       }
       // Else, return server error
       else {
@@ -32,7 +34,6 @@ export default async (req, res) => {
       }
     }
   }
-
   // Return unauthorized for all other requests
   res.status(401).end();
 };

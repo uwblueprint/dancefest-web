@@ -12,32 +12,22 @@ export default async (req, res) => {
 
     // If id exists
     if (id) {
-      // Delete event and its associated contacts with school id
-      const deletedContacts = prisma.contact.deleteMany({
-        where: {
-          school_id: id,
-        },
-      });
-      const deletedSchool = prisma.school.delete({
+      // Delete school
+      const deletedSchool = await prisma.school.delete({
         // With
         where: {
           // Specified id
           id: id,
         },
       });
-      const [deletedContactsResult, deletedSchoolResult] = await prisma.$transaction([
-        deletedContacts,
-        deletedSchool,
-      ]);
-      if (deletedContactsResult && deletedSchoolResult) {
-        // Return deleted school
-        res.send(deletedSchoolResult);
-      } else {
-        // internal server error
-        res.status(500).end();
-      }
+
+      // Return deleted performance
+      res.send(deletedSchool);
+    } else {
+      res.status(404).end();
     }
   }
+
   // Else, throw unauthenticated
   res.status(401).end();
 };
