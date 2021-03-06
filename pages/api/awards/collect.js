@@ -6,13 +6,13 @@ export default async (req, res) => {
   // Collect session from request
   const session = await getSession({ req });
 
+  console.log(session);
+
   //TODO: add functionality of getting awards by performance id
 
   // If session does not exists
   if (!session) {
-    return res.status(401).send({
-      error: 'Unauthorized',
-    });
+    return res.status(401).end();
   }
 
   // Collect all awards from database

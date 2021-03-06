@@ -8,9 +8,7 @@ export default async (req, res) => {
 
   // If not authenticated, return error
   if (!session) {
-    return res.status(401).send({
-      error: 'Unauthorized',
-    });
+    return res.status(401).end();
   }
 
   // TODO: I think this should be path rather than query parameter

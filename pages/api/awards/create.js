@@ -8,9 +8,7 @@ export default async (req, res) => {
 
   // If user is not authenticated
   if (!session) {
-    return res.status(401).send({
-      error: 'Unauthorized',
-    });
+    return res.status(401).end();
   }
   // Collect award information from request body
   // TODO: should userID be stored in session or will it be passed in from frontend?
