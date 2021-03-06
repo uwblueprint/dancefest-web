@@ -29,7 +29,7 @@ export default NextAuth({
       server: process.env.NA_EMAIL_SERVER, // SES mailserver
       from: process.env.NA_EMAIL_FROM, // From address for authentication emails
       maxAge: 24 * 60, // 1 hour max life for login request
-      sendVerificationRequest: sendVerificationRequest, // Custom verification request handler
+      sendVerificationRequest, // Custom verification request handler
     }),
   ],
   // Custom DB adapter
