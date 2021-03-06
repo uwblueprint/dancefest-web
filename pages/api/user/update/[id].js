@@ -1,0 +1,39 @@
+import prisma from '@prisma/index'; // Prisma client
+import { getSession } from 'next-auth/client'; // Session handling
+
+export default async (req, res) => {
+  // Collect session from request
+  const session = await getSession({ req });
+
+  // If user is authenticated and is an admin
+  if (session && session.role === 'ADMIN') {
+    // Collect name, email and role
+    const { id } = req.query;
+    const { name, email } = req.body;
+
+    // If email exists
+    if (id && name && email) {
+      // User update
+      const user = await prisma.user.update({
+        where: {
+          id: parseInt(id),
+        },
+        data: {
+          name: name,
+          email: email,
+        },
+      });
+
+      // If user updated send it back
+      if (user) {
+        res.send(user);
+      }
+      // Else, return server error
+      else {
+        res.status(500).end();
+      }
+    }
+  }
+  // Return unauthorized for all other requests
+  res.status(401).end();
+};

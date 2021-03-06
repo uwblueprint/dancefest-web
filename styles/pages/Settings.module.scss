@@ -5,6 +5,7 @@ Settings: Container
 */
 .settings {
   margin-top: 34px;
+  margin-bottom: 36px;
   padding: 64px;
   background-color: white;
 
@@ -227,45 +228,11 @@ Settings: Edit Schools
 
       & > table {
         width: 100%;
+
+        .settings__schoolsTable__editCell {
+          text-align: center;
+        }
       }
-    }
-  }
-}
-
-.settings__addSchoolModal__container {
-  height: 512px;
-  width: 1028px;
-  max-width: 1028px;
-
-  .settings__addSchoolModal {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: space-between;
-
-    // Input name
-    h2 {
-      font-family: DM Sans;
-      font-style: normal;
-      font-weight: bold;
-      font-size: 16px;
-      line-height: 21px;
-      margin: 0 0 12px 0;
-
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-
-      color: var(--system-neutral-grey);
-    }
-
-    // Wrapper for input name and field
-    & > div {
-      width: 408px;
-      margin-bottom: 32px;
-    }
-
-    // Input text fields
-    & input {
-      width: 408px;
     }
   }
 }
@@ -297,45 +264,11 @@ Settings: Edit Admins
 
       & > table {
         width: 100%;
+
+        .settings__adminsTable__editCell {
+          text-align: center;
+        }
       }
-    }
-  }
-}
-
-.settings__addAdminModal__container {
-  height: 412px;
-  width: 1028px;
-  max-width: 1028px;
-
-  .settings__addAdminModal {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: space-between;
-
-    // Input name
-    h2 {
-      font-family: DM Sans;
-      font-style: normal;
-      font-weight: bold;
-      font-size: 16px;
-      line-height: 21px;
-      margin: 0 0 12px 0;
-
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-
-      color: var(--system-neutral-grey);
-    }
-
-    // Wrapper for input name and field
-    & > div {
-      width: 408px;
-      margin-bottom: 32px;
-    }
-
-    // Input text fields
-    & input {
-      width: 408px;
     }
   }
 }

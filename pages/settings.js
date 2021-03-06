@@ -4,6 +4,8 @@ import axios from 'axios'; // axios
 import Layout from '@components/Layout'; // Layout wrapper
 import { getSession } from 'next-auth/client'; // Session handling
 
+import SchoolModal from '@components/settings/SchoolModal'; // School Modal
+import AdminModal from '@components/settings/AdminModal'; // Admin Modal
 import Loader from 'react-loader-spinner'; // Loading spinner
 import Title from '@components/Title'; // Title
 import Dropdown from '@components/Dropdown'; // Dropdown
@@ -21,46 +23,6 @@ const SETTINGS_OPTIONS = [
   { label: 'Performance Level', value: 'COMPETITION_LEVEL' },
 ];
 
-const SCHOOLS_COLUMNS = [
-  {
-    Header: 'Edit',
-    accessor: 'edit',
-    // eslint-disable-next-line react/display-name
-    Cell: () => <Button variant="edit" />,
-  },
-  {
-    Header: 'School Name',
-    accessor: 'school_name',
-  },
-  {
-    Header: 'Contact Name',
-    accessor: 'contact_name',
-  },
-  {
-    Header: 'Contact Email',
-    accessor: 'email',
-  },
-  {
-    Header: 'Phone Number',
-    accessor: 'phone',
-  },
-];
-
-const ADMINS_COLUMNS = [
-  {
-    Header: 'Edit',
-    accessor: 'edit',
-  },
-  {
-    Header: 'Admin Name',
-    accessor: 'adminName',
-  },
-  {
-    Header: 'Admin Email',
-    accessor: 'adminEmail',
-  },
-];
-
 // Page: Settings
 export default function Setting() {
   const addCategoryValueInputRef = useRef(null);
@@ -75,11 +37,76 @@ export default function Setting() {
   const [deleteValueError, setDeleteValueError] = useState(false);
 
   // Add Schools state
-  const [addSchoolModalOpen, setAddSchoolModalOpen] = useState(false);
+  const [schoolModalOpen, setSchoolModalOpen] = useState(false);
   const [schools, setSchools] = useState([]);
+  const [schoolToEdit, setSchoolToEdit] = useState(null);
 
   // Add Admins state
-  const [addAdminModalOpen, setAddAdminModalOpen] = useState(false);
+  const [adminModalOpen, setAdminModalOpen] = useState(false);
+  const [admins, setAdmins] = useState([]);
+  const [adminToEdit, setAdminToEdit] = useState(null);
+
+  const SCHOOLS_COLUMNS = [
+    {
+      Header: 'Edit',
+      accessor: 'edit',
+      // eslint-disable-next-line react/display-name
+      Cell: ({ row: { original } }) => (
+        <div className={styles.schoolsTable__editCell}>
+          <Button
+            variant="edit"
+            onClick={() => {
+              setSchoolToEdit(original);
+              setSchoolModalOpen(true);
+            }}
+          />
+        </div>
+      ),
+    },
+    {
+      Header: 'School Name',
+      accessor: 'school_name',
+    },
+    {
+      Header: 'Contact Name',
+      accessor: 'contact_name',
+    },
+    {
+      Header: 'Contact Email',
+      accessor: 'email',
+    },
+    {
+      Header: 'Phone Number',
+      accessor: 'phone',
+    },
+  ];
+
+  const ADMINS_COLUMNS = [
+    {
+      Header: 'Edit',
+      accessor: 'edit',
+      // eslint-disable-next-line react/display-name
+      Cell: ({ row: { original } }) => (
+        <div className={styles.adminsTable__editCell}>
+          <Button
+            variant="edit"
+            onClick={() => {
+              setAdminToEdit(original);
+              setAdminModalOpen(true);
+            }}
+          />
+        </div>
+      ),
+    },
+    {
+      Header: 'Admin Name',
+      accessor: 'name',
+    },
+    {
+      Header: 'Admin Email',
+      accessor: 'email',
+    },
+  ];
 
   const getSettingValuesOfType = async type => {
     setLoading(true);
@@ -158,6 +185,23 @@ export default function Setting() {
     setLoading(false);
   };
 
+  const getAdmins = async () => {
+    setLoading(true);
+
+    try {
+      const response = await axios({
+        method: 'GET',
+        url: '/api/user/collect',
+      });
+      const admins = response.data;
+      setAdmins(admins);
+    } catch {
+      // Empty catch block
+    }
+
+    setLoading(false);
+  };
+
   const handleAddValue = async () => {
     if (newValue === '') {
       return;
@@ -188,6 +232,7 @@ export default function Setting() {
 
   useEffect(() => {
     getSchools();
+    getAdmins();
   }, []);
 
   useEffect(() => {
@@ -274,7 +319,7 @@ export default function Setting() {
                 className={styles.settings__editSchools__button}
                 variant="contained"
                 disabled={loading}
-                onClick={() => setAddSchoolModalOpen(true)}
+                onClick={() => setSchoolModalOpen(true)}
               >
                 Add School
               </Button>
@@ -290,13 +335,13 @@ export default function Setting() {
                 className={styles.settings__editAdmins__button}
                 variant="contained"
                 disabled={loading}
-                onClick={() => setAddAdminModalOpen(true)}
+                onClick={() => setAdminModalOpen(true)}
               >
                 Add Admin
               </Button>
             </div>
             <div className={styles.settings__editAdmins__tableWrapper}>
-              <Table columns={ADMINS_COLUMNS} data={[]} />
+              <Table columns={ADMINS_COLUMNS} data={admins} />
             </div>
           </div>
         </div>
@@ -313,16 +358,21 @@ export default function Setting() {
       >
         <p>Deleted category values cannot be restored.</p>
       </Modal>
-      <AddSchoolModal
+      <SchoolModal
         setLoading={setLoading}
-        open={addSchoolModalOpen}
-        setOpen={setAddSchoolModalOpen}
+        open={schoolModalOpen}
+        setOpen={setSchoolModalOpen}
         getSchools={getSchools}
+        schoolToEdit={schoolToEdit}
+        setSchoolToEdit={setSchoolToEdit}
       />
-      <AddAdminModal
+      <AdminModal
         setLoading={setLoading}
-        open={addAdminModalOpen}
-        setOpen={setAddAdminModalOpen}
+        open={adminModalOpen}
+        setOpen={setAdminModalOpen}
+        getAdmins={getAdmins}
+        adminToEdit={adminToEdit}
+        setAdminToEdit={setAdminToEdit}
       />
     </Layout>
   );
@@ -346,140 +396,6 @@ CategoryValue.propTypes = {
   hasError: PropTypes.bool.isRequired,
   onDelete: PropTypes.func.isRequired,
   value: PropTypes.string.isRequired,
-};
-
-// Add School Modal
-const AddSchoolModal = ({ setLoading, open, setOpen, getSchools }) => {
-  const [schoolName, setSchoolName] = useState('');
-  const [contactName, setContactName] = useState('');
-  const [contactEmail, setContactEmail] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-
-  const addSchool = async () => {
-    setLoading(true);
-
-    try {
-      await axios({
-        method: 'POST',
-        url: '/api/schools/create',
-        data: {
-          schoolName,
-          contactName,
-          email: contactEmail,
-          phone: phoneNumber,
-        },
-      });
-
-      getSchools();
-    } catch {
-      // Empty catch block
-    }
-
-    setLoading(false);
-  };
-
-  return (
-    <Modal
-      containerClassName={styles.settings__addSchoolModal__container}
-      title="Add School"
-      open={open}
-      cancelText="Discard"
-      submitText="Add School"
-      setModalOpen={setOpen}
-      onCancel={() => setOpen(false)}
-      onSubmit={addSchool}
-      disableSubmitButton={!schoolName || !contactName || !contactEmail || !phoneNumber}
-    >
-      <div className={styles.settings__addSchoolModal}>
-        <div>
-          <h2>School Name</h2>
-          <Input
-            placeholder="School Name"
-            value={schoolName}
-            onChange={event => setSchoolName(event.target.value)}
-          />
-        </div>
-        <div>
-          <h2>Contact Name</h2>
-          <Input
-            placeholder="Contact Name"
-            value={contactName}
-            onChange={event => setContactName(event.target.value)}
-          />
-        </div>
-        <div>
-          <h2>Contact Email</h2>
-          <Input
-            placeholder="Contact Email"
-            value={contactEmail}
-            onChange={event => setContactEmail(event.target.value)}
-          />
-        </div>
-        <div>
-          <h2>Phone Number</h2>
-          <Input
-            placeholder="Phone Number"
-            value={phoneNumber}
-            onChange={event => setPhoneNumber(event.target.value)}
-          />
-        </div>
-      </div>
-    </Modal>
-  );
-};
-
-AddSchoolModal.propTypes = {
-  getSchools: PropTypes.func.isRequired,
-  open: PropTypes.bool.isRequired,
-  setLoading: PropTypes.func.isRequired,
-  setOpen: PropTypes.func.isRequired,
-};
-
-// Add Admin Modal
-const AddAdminModal = ({ setLoading, open, setOpen }) => {
-  const [adminName, setAdminName] = useState('');
-  const [adminEmail, setAdminEmail] = useState('');
-
-  const addAdmin = async () => {
-    setLoading(true);
-
-    // TODO: Integrate with admin API
-
-    setLoading(false);
-  };
-
-  return (
-    <Modal
-      containerClassName={styles.settings__addAdminModal__container}
-      title="Add Admin"
-      open={open}
-      cancelText="Discard"
-      submitText="Add Admin"
-      setModalOpen={setOpen}
-      onCancel={() => setOpen(false)}
-      onSubmit={addAdmin}
-      disableSubmitButton={!adminName || !adminEmail}
-    >
-      <div className={styles.settings__addAdminModal}>
-        <div>
-          <h2>Admin Name</h2>
-          <Input
-            placeholder="Admin Name"
-            value={adminName}
-            onChange={event => setAdminName(event.target.value)}
-          />
-        </div>
-        <div>
-          <h2>Admin Email</h2>
-          <Input
-            placeholder="Admin Email"
-            value={adminEmail}
-            onChange={event => setAdminEmail(event.target.value)}
-          />
-        </div>
-      </div>
-    </Modal>
-  );
 };
 
 // Run: server side
