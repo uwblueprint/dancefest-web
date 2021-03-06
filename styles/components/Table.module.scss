@@ -51,3 +51,29 @@ Table: Styles
 .table__div > table td:last-child {
   border-right: 0;
 }
+
+/*
+****************************************
+Table: Header
+****************************************
+*/
+.table__div > table th > div {
+  display: flex;
+  align-items: center;
+
+  & > div {
+    display: flex;
+    align-items: center;
+    height: 24px;
+  }
+
+  .table__sortDescArrow,
+  .table__sortAscArrow {
+    height: 24px;
+    width: 24px;
+  }
+
+  .table__sortAscArrow {
+    transform: rotate(180deg);
+  }
+}

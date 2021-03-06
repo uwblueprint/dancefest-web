@@ -1,16 +1,27 @@
 import React, { useEffect } from 'react'; // React
-import { useTable, useFilters } from 'react-table'; // React table
+import { useTable, useFilters, useSortBy, usePagination } from 'react-table'; // React table
 
+import ArrowDown from '@assets/arrow-down.svg'; // Arrow down icon
 import styles from '@styles/components/Table.module.scss'; // Component styles
 
-export default function Table({ columns, data, filters = [] }) {
+export default function Table({
+  columns,
+  data,
+  filters,
+  pageNumber,
+  pageSize = 10,
+  paginate = true,
+}) {
   const {
     getTableBodyProps,
     getTableProps,
     headerGroups,
     rows,
+    page,
     prepareRow,
     setAllFilters,
+    gotoPage,
+    setPageSize,
   } = useTable(
     {
       columns,
@@ -25,8 +36,18 @@ export default function Table({ columns, data, filters = [] }) {
         },
       },
     },
-    useFilters
+    useFilters,
+    useSortBy,
+    usePagination
   );
+
+  useEffect(() => {
+    setPageSize(pageSize);
+  }, []);
+
+  useEffect(() => {
+    gotoPage(pageNumber);
+  }, [pageNumber]);
 
   useEffect(() => {
     setAllFilters(filters);
@@ -39,15 +60,24 @@ export default function Table({ columns, data, filters = [] }) {
           {headerGroups.map((headerGroup, i) => (
             <tr key={i} {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column, i) => (
-                <th key={i} {...column.getHeaderProps()}>
-                  {column.render('Header')}
+                <th key={i} {...column.getHeaderProps(column.getSortByToggleProps())}>
+                  <div>
+                    {column.isSorted ? (
+                      column.isSortedDesc ? (
+                        <img className={styles.table__sortDescArrow} src={ArrowDown} />
+                      ) : (
+                        <img className={styles.table__sortAscArrow} src={ArrowDown} />
+                      )
+                    ) : null}
+                    <div>{column.render('Header')}</div>
+                  </div>
                 </th>
               ))}
             </tr>
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {rows.map((row, i) => {
+          {(paginate ? page : rows).map((row, i) => {
             prepareRow(row);
             return (
               <tr key={i} {...row.getRowProps()}>

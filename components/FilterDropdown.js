@@ -106,7 +106,7 @@ FilterDropdown.propTypes = {
   onSubmit: PropTypes.func,
   options: PropTypes.objectOf(
     PropTypes.shape({
-      value: PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired,
       selected: PropTypes.bool.isRequired,
     })
   ).isRequired,

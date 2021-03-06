@@ -12,6 +12,7 @@ import Dropdown from '@components/Dropdown'; // Dropdown
 import FilterDropdown from '@components/FilterDropdown'; // Filter Dropdown
 import Table from '@components/Table'; // Table
 import Pill from '@components/Pill'; // Pill
+import Pagination from '@components/Pagination'; // Pagination
 import BackArrow from '@assets/back-arrow.svg'; // Back arrow icon
 import Search from '@assets/search.svg'; // Search icon
 import ChevronDown from '@assets/chevron-down.svg'; // Chevron down icon
@@ -21,9 +22,18 @@ import styles from '@styles/pages/Performances.module.scss'; // Page styles
 // Temp constants
 import data, { columns } from '../../data/mockParticipants';
 
+const PAGE_SIZE = 3; // Rows per page
+
 // Get the active filters (list of column accessors) from an object of filter dropdown values
 const getActiveFilters = options => {
   return Object.keys(options).filter(option => options[option].selected);
+};
+
+// Remove key from object (returns new object)
+const removeKeyFromObject = (object, key) => {
+  // eslint-disable-next-line no-unused-vars
+  const { [key]: _, ...rest } = object;
+  return rest;
 };
 
 // Page: Performances
@@ -37,6 +47,7 @@ export default function Performances() {
   const [danceStyleOptions, setDanceStyleOptions] = useState({});
   const [danceSizeOptions, setDanceSizeOptions] = useState({});
   const [filters, setFilters] = useState([]);
+  const [pageNumber, setPageNumber] = useState(0);
 
   // Get initial filter options
   useEffect(() => {
@@ -133,6 +144,7 @@ export default function Performances() {
     }
 
     setFilters(newFilters);
+    setPageNumber(0);
   }, [
     query,
     schoolOptions,
@@ -154,7 +166,7 @@ export default function Performances() {
               <Pill
                 key={i}
                 value={f}
-                onDelete={() => setSchoolOptions(schoolOptions.filter(option => option !== f))}
+                onDelete={() => setSchoolOptions(removeKeyFromObject(schoolOptions, f))}
               />
             )),
           ];
@@ -167,7 +179,7 @@ export default function Performances() {
                 key={i}
                 value={f}
                 onDelete={() =>
-                  setAcademicLevelOptions(academicLevelOptions.filter(option => option !== f))
+                  setAcademicLevelOptions(removeKeyFromObject(academicLevelOptions, f))
                 }
               />
             )),
@@ -181,7 +193,7 @@ export default function Performances() {
                 key={i}
                 value={f}
                 onDelete={() =>
-                  setPerformanceLevelOptions(performanceLevelOptions.filter(option => option !== f))
+                  setPerformanceLevelOptions(removeKeyFromObject(performanceLevelOptions, f))
                 }
               />
             )),
@@ -194,9 +206,7 @@ export default function Performances() {
               <Pill
                 key={i}
                 value={f}
-                onDelete={() =>
-                  setDanceStyleOptions(danceStyleOptions.filter(option => option !== f))
-                }
+                onDelete={() => setDanceStyleOptions(removeKeyFromObject(danceStyleOptions, f))}
               />
             )),
           ];
@@ -208,9 +218,7 @@ export default function Performances() {
               <Pill
                 key={i}
                 value={f}
-                onDelete={() =>
-                  setDanceSizeOptions(danceSizeOptions.filter(option => option !== f))
-                }
+                onDelete={() => setDanceSizeOptions(removeKeyFromObject(danceSizeOptions, f))}
               />
             )),
           ];
@@ -225,7 +233,7 @@ export default function Performances() {
     <Layout>
       <div>
         <div className={styles.performances__navigation}>
-          <Link href="/events">
+          <Link href="/">
             <Button className={styles.performances__navigation__button} variant="outlined">
               <img src={BackArrow} />
               Back to Events
@@ -237,27 +245,37 @@ export default function Performances() {
           </h2>
         </div>
         <div className={styles.performances__header}>
-          <Title className={styles.performances__header__pageTitle}>Performances</Title>
-          <Input
-            className={styles.performances__header__search}
-            placeholder="Search"
-            icon={() => <img src={Search} />}
-            value={query}
-            onChange={event => setQuery(event.target.value)}
-          />
-          <Button
-            className={`${styles.performances__header__filtersButton} ${
-              showFilters && styles.performances__header__filtersButtonOpen
-            }`}
-            variant={showFilters ? 'contained' : 'outlined'}
-            onClick={() => setShowFilters(!showFilters)}
-          >
-            Filters
-            <img src={showFilters ? ChevronDown : ChevronDownGrey} />
-          </Button>
-          <Button variant="contained" onClick={() => setModalOpen(true)}>
-            Add Performance
-          </Button>
+          <div>
+            <Title className={styles.performances__header__pageTitle}>Performances</Title>
+            <Input
+              className={styles.performances__header__search}
+              placeholder="Search"
+              icon={() => <img src={Search} />}
+              value={query}
+              onChange={event => setQuery(event.target.value)}
+            />
+            <Button
+              className={`${styles.performances__header__filtersButton} ${
+                showFilters && styles.performances__header__filtersButtonOpen
+              }`}
+              variant={showFilters ? 'contained' : 'outlined'}
+              onClick={() => setShowFilters(!showFilters)}
+            >
+              Filters
+              <img src={showFilters ? ChevronDown : ChevronDownGrey} />
+            </Button>
+            <Button variant="contained" onClick={() => setModalOpen(true)}>
+              Add Performance
+            </Button>
+          </div>
+          <div>
+            <Pagination
+              rowsCount={data.length}
+              pageNumber={pageNumber}
+              pageSize={PAGE_SIZE}
+              onPageChange={({ selected }) => setPageNumber(selected)}
+            />
+          </div>
         </div>
         {showFilters && (
           <div className={styles.performances__filters}>
@@ -297,7 +315,7 @@ export default function Performances() {
           <Tabs
             firstTabName="Entry View"
             secondTabName="Judging View"
-            firstTabContent={<EntryTable filters={filters} />}
+            firstTabContent={<EntryTable filters={filters} pageNumber={pageNumber} />}
             secondTabContent={<JudgingTable />}
           />
         </div>
@@ -308,7 +326,7 @@ export default function Performances() {
 }
 
 // Entries Table
-const EntryTable = ({ filters }) => {
+const EntryTable = props => {
   const columns = [
     {
       Header: 'Edit',
@@ -355,12 +373,12 @@ const EntryTable = ({ filters }) => {
     },
   ];
 
-  return <Table columns={columns} data={data} filters={filters} />;
+  return <Table columns={columns} data={data} pageSize={PAGE_SIZE} {...props} />;
 };
 
 // Judging Table
 const JudgingTable = () => {
-  return <Table columns={columns} data={[]} />;
+  return <Table columns={columns} data={[]} filters={[]} />;
 };
 
 // New Performance Modal
