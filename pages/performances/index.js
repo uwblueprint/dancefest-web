@@ -48,6 +48,7 @@ export default function Performances() {
   const [danceSizeOptions, setDanceSizeOptions] = useState({});
   const [filters, setFilters] = useState([]);
   const [pageNumber, setPageNumber] = useState(0);
+  const [pageCount, setPageCount] = useState(0);
 
   // Get initial filter options
   useEffect(() => {
@@ -270,9 +271,8 @@ export default function Performances() {
           </div>
           <div>
             <Pagination
-              rowsCount={data.length}
+              pageCount={pageCount}
               pageNumber={pageNumber}
-              pageSize={PAGE_SIZE}
               onPageChange={({ selected }) => setPageNumber(selected)}
             />
           </div>
@@ -315,7 +315,9 @@ export default function Performances() {
           <Tabs
             firstTabName="Entry View"
             secondTabName="Judging View"
-            firstTabContent={<EntryTable filters={filters} pageNumber={pageNumber} />}
+            firstTabContent={
+              <EntryTable filters={filters} pageNumber={pageNumber} setPageCount={setPageCount} />
+            }
             secondTabContent={<JudgingTable />}
           />
         </div>

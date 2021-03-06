@@ -6,9 +6,7 @@ import ChevronLeft from '@assets/chevron-left.svg'; // Chevron left icon
 import ChevronRight from '@assets/chevron-right.svg'; // Chevron right icon
 import styles from '@styles/components/Pagination.module.scss';
 
-export default function Pagination({ rowsCount, pageNumber, pageSize = 10, onPageChange }) {
-  const pageCount = Math.ceil(rowsCount / pageSize);
-
+export default function Pagination({ pageCount, pageNumber, onPageChange }) {
   return (
     <ReactPaginate
       containerClassName={styles.pagination} // Pagination container
@@ -30,6 +28,6 @@ export default function Pagination({ rowsCount, pageNumber, pageSize = 10, onPag
 
 Pagination.propTypes = {
   onPageChange: PropTypes.func.isRequired,
-  pageSize: PropTypes.number,
-  rowsCount: PropTypes.number.isRequired,
+  pageCount: PropTypes.number.isRequired,
+  pageNumber: PropTypes.number.isRequired,
 };

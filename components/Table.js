@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'; // React
+import PropTypes from 'prop-types'; // PropTypes
 import { useTable, useFilters, useSortBy, usePagination } from 'react-table'; // React table
 
 import ArrowDown from '@assets/arrow-down.svg'; // Arrow down icon
@@ -9,6 +10,7 @@ export default function Table({
   data,
   filters,
   pageNumber,
+  setPageCount = null,
   pageSize = 10,
   paginate = true,
 }) {
@@ -44,6 +46,12 @@ export default function Table({
   useEffect(() => {
     setPageSize(pageSize);
   }, []);
+
+  useEffect(() => {
+    if (paginate && setPageCount) {
+      setPageCount(Math.ceil(rows.length / pageSize));
+    }
+  }, [rows, pageSize]);
 
   useEffect(() => {
     gotoPage(pageNumber);
@@ -96,3 +104,18 @@ export default function Table({
     </div>
   );
 }
+
+Table.propTypes = {
+  columns: PropTypes.array,
+  data: PropTypes.array,
+  filters: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      value: PropTypes.any,
+    })
+  ),
+  pageNumber: PropTypes.number.isRequired,
+  pageSize: PropTypes.number,
+  paginate: PropTypes.bool,
+  setPageCount: PropTypes.func,
+};
