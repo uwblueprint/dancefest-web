@@ -55,7 +55,8 @@ CREATE TABLE settings (
   type SettingType NOT NULL,
   value VARCHAR(255),
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT settings_unique UNIQUE (type, value)
 );
 
 -- Create performances table
@@ -92,5 +93,3 @@ CREATE TABLE adjudications (
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY(performance_id) REFERENCES performances(id)
 );
-
-ALTER TABLE settings ADD CONSTRAINT "settings_unique" UNIQUE (type, value);
