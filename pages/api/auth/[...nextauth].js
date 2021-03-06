@@ -60,6 +60,7 @@ export default NextAuth({
     session: async (session, user) => {
       // Attach user role to session
       session.role = user.role;
+      session.id = user.id;
 
       // Return altered session
       return Promise.resolve(session);
@@ -68,6 +69,7 @@ export default NextAuth({
     jwt: async (token, user) => {
       // If user exists, collect user role and assign to token
       user ? (token.role = user.role) : null;
+      user ? (token.id = user.id) : null;
 
       // Return altered token
       return Promise.resolve(token);

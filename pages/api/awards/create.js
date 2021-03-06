@@ -10,12 +10,14 @@ export default async (req, res) => {
   if (!session) {
     return res.status(401).end();
   }
+
+  const userID = session.id;
+
   // Collect award information from request body
-  // TODO: should userID be stored in session or will it be passed in from frontend?
-  const { title, isFinalized, userID, performanceID } = req.body;
+  const { title, isFinalized, performanceID } = req.body;
 
   // If required fields do not exist
-  if (!title || !isFinalized || !userID || !performanceID) {
+  if (!title || !isFinalized || !performanceID || !userID) {
     return res.status(400).send({
       error: 'Required fields not provided',
     });

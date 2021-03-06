@@ -1,7 +1,7 @@
 import prisma from '@prisma/index'; // Prisma client
 import { getSession } from 'next-auth/client'; // Session handling
 
-// Edit award
+// Edit award to change title
 export default async (req, res) => {
   // Collect session from request
   const session = await getSession({ req });
@@ -12,12 +12,11 @@ export default async (req, res) => {
   }
 
   // Collect award information from request body
-  // TODO: should userID be stored in session or will it be passed in from frontend?
-  const { id, title, isFinalized, userID, performanceID } = req.body;
+  const { id, title } = req.body;
 
-  if (!id || !title || !isFinalized || !userID || !performanceID) {
+  if (!id || !title) {
     return res.status(400).send({
-      error: 'Required fields not provided',
+      error: 'Required award id not provided',
     });
   }
 
@@ -27,15 +26,6 @@ export default async (req, res) => {
     },
     data: {
       title: title,
-      is_finalized: isFinalized,
-      user_id: userID,
-      performances: {
-        create: [
-          {
-            performance_id: performanceID,
-          },
-        ],
-      },
     },
   });
 
