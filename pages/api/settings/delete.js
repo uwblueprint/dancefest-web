@@ -12,7 +12,7 @@ export default async (req, res) => {
 
     // Check that id exists
     if (!id) {
-      res.status(400).send({
+      return res.status(400).json({
         error: 'ID was not provided',
       });
     }
@@ -24,7 +24,7 @@ export default async (req, res) => {
       },
     });
     if (!setting) {
-      res.status(400).send({
+      return res.status(400).json({
         error: 'The specified setting ID does not exist',
       });
     }
@@ -47,8 +47,8 @@ export default async (req, res) => {
     const performancesUsingSetting = await prisma.performance.findMany({
       where: performancesFilter,
     });
-    if (performancesUsingSetting) {
-      res.status(400).send({
+    if (performancesUsingSetting.length > 0) {
+      return res.status(400).json({
         error: 'Options in use cannot be deleted',
       });
     }

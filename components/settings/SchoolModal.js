@@ -19,15 +19,12 @@ export default function SchoolModal({
   const [contactEmail, setContactEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
 
-  useEffect(() => {
-    if (schoolToEdit) {
-      const { school_name, contact_name, email, phone } = schoolToEdit;
-      setSchoolName(school_name);
-      setContactName(contact_name);
-      setContactEmail(email);
-      setPhoneNumber(phone);
-    }
-  }, [schoolToEdit]);
+  const clearFields = () => {
+    setSchoolName('');
+    setContactName('');
+    setContactEmail('');
+    setPhoneNumber('');
+  };
 
   const updateSchool = async () => {
     setLoading(true);
@@ -78,6 +75,18 @@ export default function SchoolModal({
     setOpen(false);
   };
 
+  useEffect(() => {
+    if (schoolToEdit) {
+      const { school_name, contact_name, email, phone } = schoolToEdit;
+      setSchoolName(school_name);
+      setContactName(contact_name);
+      setContactEmail(email);
+      setPhoneNumber(phone);
+    } else {
+      clearFields();
+    }
+  }, [schoolToEdit]);
+
   return (
     <Modal
       containerClassName={styles.schoolModal__container}
@@ -86,7 +95,11 @@ export default function SchoolModal({
       cancelText="Discard"
       submitText={schoolToEdit ? 'Edit School' : 'Add School'}
       setModalOpen={setOpen}
-      onCancel={() => setOpen(false)}
+      onCancel={() => {
+        setOpen(false);
+        setSchoolToEdit(null);
+        clearFields();
+      }}
       onSubmit={schoolToEdit ? updateSchool : addSchool}
       disableSubmitButton={!schoolName || !contactName || !contactEmail || !phoneNumber}
     >
