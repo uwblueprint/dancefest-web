@@ -32,8 +32,6 @@ export default async (req, res) => {
     },
   });
 
-  console.log(awardPerformance);
-
   // If it does not exist
   if (!awardPerformance) {
     return res.status(400).json({
@@ -55,6 +53,22 @@ export default async (req, res) => {
     },
     data: {
       is_finalized: true,
+      performances: {
+        update: {
+          where: {
+            awards_performances_unique: {
+              award_id: awardID,
+              performance_id: performanceID,
+            },
+          },
+          data: {
+            status: 'FINALIST',
+          },
+        },
+      },
+    },
+    include: {
+      performances: true,
     },
   });
 

@@ -7,7 +7,7 @@ export default async (req, res) => {
   const session = await getSession({ req });
 
   // If user is not authenticated
-  if (!session) {
+  if (!session || session.role !== 'ADMIN') {
     return res.status(401).end();
   }
 

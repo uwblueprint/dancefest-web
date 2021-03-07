@@ -4,6 +4,9 @@ CREATE TYPE Role AS ENUM('USER', 'JUDGE', 'ADMIN');
 -- Create settings enum
 CREATE TYPE SettingType as ENUM('COMPETITION_LEVEL', 'DANCE_SIZE', 'STYLE');
 
+-- Create award status enum
+CREATE TYPE AwardPerformanceStatus as ENUM('NOMINEE', 'FINALIST');
+
 -- Create users table
 CREATE TABLE users (
   id SERIAL PRIMARY KEY NOT NULL,
@@ -108,6 +111,7 @@ CREATE TABLE awards_performances (
   award_id INTEGER,
   performance_id INTEGER,
   nominee_count INTEGER DEFAULT 0,
+  status AwardPerformanceStatus NOT NULL DEFAULT 'NOMINEE',
   FOREIGN KEY(award_id) REFERENCES awards(id),
   FOREIGN KEY(performance_id) REFERENCES performances(id),
   CONSTRAINT "awards_performances_unique" UNIQUE (award_id, performance_id)

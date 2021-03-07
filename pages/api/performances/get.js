@@ -60,6 +60,7 @@ export const getPerformance = async filter => {
       return {
         ...award.awards,
         nominee_count: award.nominee_count,
+        status: award.status,
       };
     }),
   };

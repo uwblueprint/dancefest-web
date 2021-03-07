@@ -42,6 +42,7 @@ export const getAwards = async () => {
         return {
           ...performance.performances,
           nominee_count: performance.nominee_count,
+          status: performance.status,
         };
       }),
     };
