@@ -6,8 +6,6 @@ export default async (req, res) => {
   // Collect session from request
   const session = await getSession({ req });
 
-  //TODO: add functionality of getting awards by performance id
-
   // If session does not exists
   if (!session) {
     return res.status(401).end();
@@ -21,7 +19,6 @@ export default async (req, res) => {
 
 export const getAwards = async () => {
   // Collect awards with performanceID
-  // TODO: perhaps add flag to include the performances
   const awards = await prisma.award.findMany({
     include: {
       performances: {

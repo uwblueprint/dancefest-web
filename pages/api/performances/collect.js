@@ -30,12 +30,10 @@ export default async (req, res) => {
   return res.status(200).json(performances);
 };
 
-//TODO: add in getting performance by award id?
 export const getPerformances = async filter => {
   // Collect event with eventID
   const performances = await prisma.performance.findMany({
     where: filter,
-    //TODO: Add flag to get award information with performance
     include: {
       awards: {
         include: {

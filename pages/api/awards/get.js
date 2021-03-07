@@ -34,7 +34,6 @@ export default async (req, res) => {
 
 export const getAward = async filter => {
   // Get award with the provided id
-  // TODO: add flag for including performance data
   const award = await prisma.award.findFirst({
     where: filter,
     include: {
