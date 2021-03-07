@@ -15,7 +15,7 @@ export default async (req, res) => {
   const { id } = req.query;
 
   if (!id) {
-    return res.status(400).send({
+    return res.status(400).json({
       error: 'Award id not provided',
     });
   }
@@ -24,9 +24,9 @@ export default async (req, res) => {
   const award = await getAward(filter);
 
   if (award) {
-    return res.status(200).send(award);
+    return res.status(200).json(award);
   } else {
-    return res.status(404).send({
+    return res.status(404).json({
       error: 'Award with provided id not found',
     });
   }
@@ -51,6 +51,11 @@ export const getAward = async filter => {
   // Remove the relation table data
   return {
     ...award,
-    performances: award.performances.map(performance => performance.performances),
+    performances: award.performances.map(performance => {
+      return {
+        ...performance.performances,
+        nominee_count: performance.nominee_count,
+      };
+    }),
   };
 };

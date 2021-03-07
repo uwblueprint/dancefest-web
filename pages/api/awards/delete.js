@@ -7,7 +7,7 @@ export default async (req, res) => {
   const session = await getSession({ req });
 
   // If not authenticated, return error
-  if (!session) {
+  if (!session || session.role !== 'ADMIN') {
     return res.status(401).end();
   }
 
@@ -15,7 +15,7 @@ export default async (req, res) => {
   const { id } = req.body;
 
   if (!id) {
-    return res.status(400).send({
+    return res.status(400).json({
       error: 'Required award id not provided',
     });
   }
@@ -35,10 +35,10 @@ export default async (req, res) => {
   try {
     await prisma.$transaction([deletedAwardPerformance, deletedAward]);
   } catch {
-    return res.status(400).send({
+    return res.status(400).json({
       error: 'Error deleting award',
     });
   }
 
-  return res.status(200).send({ message: 'Deleted award successfully.' });
+  return res.status(200).json({ message: 'Deleted award successfully.' });
 };

@@ -15,22 +15,36 @@ export default async (req, res) => {
   const { awardID, performanceID } = req.body;
 
   if (!awardID || !performanceID) {
-    return res.status(400).send({
+    return res.status(400).json({
       error: 'Required fields not provided',
     });
   }
 
-  const awardPerformance = await prisma.awardPerformance.findFirst({
+  const awardPerformance = await prisma.awardPerformance.findUnique({
     where: {
-      award_id: awardID,
-      performance_id: performanceID,
+      awards_performances_unique: {
+        award_id: awardID,
+        performance_id: performanceID,
+      },
+    },
+    include: {
+      awards: true,
     },
   });
 
+  console.log(awardPerformance);
+
   // If it does not exist
   if (!awardPerformance) {
-    return res.status(400).send({
+    return res.status(400).json({
       error: 'Performance is not nominated for the provided award',
+    });
+  }
+
+  const isFinalized = awardPerformance.awards ? awardPerformance.awards.is_finalized : false;
+  if (isFinalized) {
+    return res.status(400).json({
+      error: 'Award is already finalized',
     });
   }
 
@@ -40,9 +54,9 @@ export default async (req, res) => {
       id: awardID,
     },
     data: {
-      is_finalized: '1',
+      is_finalized: true,
     },
   });
 
-  res.status(200).send(finalizedAward);
+  res.status(200).json(finalizedAward);
 };

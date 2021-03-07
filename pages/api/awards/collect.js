@@ -16,7 +16,7 @@ export default async (req, res) => {
   // Collect all awards from database
   const awards = await getAwards();
 
-  return res.send(awards);
+  return res.json(awards);
 };
 
 export const getAwards = async () => {
@@ -38,7 +38,12 @@ export const getAwards = async () => {
   return awards.map(award => {
     return {
       ...award,
-      performances: award.performances.map(performance => performance.performances),
+      performances: award.performances.map(performance => {
+        return {
+          ...performance.performances,
+          nominee_count: performance.nominee_count,
+        };
+      }),
     };
   });
 };

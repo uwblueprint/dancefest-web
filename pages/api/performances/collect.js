@@ -11,13 +11,11 @@ export default async (req, res) => {
 
   // If not authenticated
   if (!session) {
-    return res.status(401).send({
-      error: 'Unauthorized',
-    });
+    return res.status(401).end();
   }
 
   if (!eventID) {
-    return res.status(400).send({
+    return res.status(400).json({
       error: 'eventID not provided',
     });
   }
@@ -29,7 +27,7 @@ export default async (req, res) => {
   if (schoolIDs) filter.school_id = { in: schoolIDs.split(',').map(i => +i) };
 
   const performances = await getPerformances(filter);
-  return res.status(200).send(performances);
+  return res.status(200).json(performances);
 };
 
 //TODO: add in getting performance by award id?
@@ -58,7 +56,12 @@ export const getPerformances = async filter => {
   return performances.map(performance => {
     return {
       ...performance,
-      awards: performance.awards.map(award => award.awards),
+      awards: performance.awards.map(award => {
+        return {
+          ...award.awards,
+          nominee_count: award.nominee_count,
+        };
+      }),
     };
   });
 };

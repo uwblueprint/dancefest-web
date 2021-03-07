@@ -12,28 +12,30 @@ export default async (req, res) => {
   }
 
   // Collect award information from request body
-  const { id, title } = req.body;
+  const { id, title, isFinalized } = req.body;
 
-  if (!id || !title) {
-    return res.status(400).send({
+  if (!id) {
+    return res.status(400).json({
       error: 'Required award id not provided',
     });
   }
 
+  const editData = {};
+  if (title) editData.title = title;
+  if (isFinalized === false) editData.is_finalized = isFinalized;
+
   const updatedAward = await prisma.award.update({
     where: {
-      id: id,
+      id,
     },
-    data: {
-      title: title,
-    },
+    data: editData,
   });
 
   // If updating award is successful, return updated event
   if (updatedAward) {
-    res.status(200).send(updatedAward);
+    res.status(200).json(updatedAward);
   } else {
-    res.status(400).send({
+    res.status(400).json({
       error: 'Error updating award with provided id',
     });
   }

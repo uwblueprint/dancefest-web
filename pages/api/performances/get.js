@@ -8,16 +8,14 @@ export default async (req, res) => {
 
   // If not authenticated
   if (!session) {
-    return res.status(401).send({
-      error: 'Unauthorized',
-    });
+    return res.status(401).end();
   }
 
   const { id } = req.query;
 
   // If performance id was not provided
   if (!id) {
-    return res.status(400).send({
+    return res.status(400).json({
       error: 'Performance id was not provided',
     });
   }
@@ -26,9 +24,9 @@ export default async (req, res) => {
   const performance = await getPerformance(filter);
 
   if (performance) {
-    return res.status(200).send(performance);
+    return res.status(200).json(performance);
   } else {
-    return res.status(400).send({
+    return res.status(400).json({
       error: 'Could not retrieve performance',
     });
   }
@@ -58,6 +56,11 @@ export const getPerformance = async filter => {
   // Remove the relation table data
   return {
     ...performance,
-    awards: performance.awards.map(award => award.awards),
+    awards: performance.awards.map(award => {
+      return {
+        ...award.awards,
+        nominee_count: award.nominee_count,
+      };
+    }),
   };
 };

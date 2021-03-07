@@ -125,7 +125,7 @@ model Contact {
 model Award {
   id           Int                @id @default(autoincrement())
   title        String             @db.VarChar(255)
-  is_finalized String             @db.Bit(1)
+  is_finalized Boolean            @default(false)
   user_id      Int
   created_at   DateTime           @default(now()) @db.Timestamp(6)
   updated_at   DateTime           @default(now()) @db.Timestamp(6)
@@ -139,9 +139,11 @@ model AwardPerformance {
   id             Int          @id @default(autoincrement())
   award_id       Int?
   performance_id Int?
+  nominee_count  Int?         @default(0)
   awards         Award?       @relation(fields: [award_id], references: [id])
   performances   Performance? @relation("awards_performancesToperformances", fields: [performance_id], references: [id])
 
+  @@unique([award_id, performance_id], name: "awards_performances_unique")
   @@map("awards_performances")
 }
 

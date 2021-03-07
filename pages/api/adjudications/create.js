@@ -5,18 +5,15 @@ export default async (req, res) => {
   // Collect session from request
   const session = await getSession({ req });
 
+  if (!session || session.role !== 'ADMIN') {
+    return res.status(401).end();
+  }
+
+  // Collect data for new adjudication
+  const { artisticMark, technicalMark, cumulativeMark, audioUrl, notes, performanceID } = req.body;
+
   // If user is authenticated and is an admin
   if (session && session.role === 'ADMIN') {
-    // Collect data for new adjudication
-    const {
-      artisticMark,
-      technicalMark,
-      cumulativeMark,
-      audioUrl,
-      notes,
-      performanceID,
-    } = req.body;
-
     // If all exist
     if (artisticMark && technicalMark && cumulativeMark && performanceID) {
       // Create new cumulativeMark

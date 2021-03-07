@@ -95,7 +95,7 @@ CREATE TABLE adjudications (
 CREATE TABLE awards (
   id SERIAL PRIMARY KEY NOT NULL,
   title VARCHAR(255) NOT NULL,
-  is_finalized BIT NOT NULL,
+  is_finalized BOOLEAN NOT NULL DEFAULT FALSE,
   user_id INTEGER NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -107,8 +107,10 @@ CREATE TABLE awards_performances (
   id SERIAL PRIMARY KEY NOT NULL,
   award_id INTEGER,
   performance_id INTEGER,
+  nominee_count INTEGER DEFAULT 0,
   FOREIGN KEY(award_id) REFERENCES awards(id),
-  FOREIGN KEY(performance_id) REFERENCES performances(id)
+  FOREIGN KEY(performance_id) REFERENCES performances(id),
+  CONSTRAINT "awards_performances_unique" UNIQUE (award_id, performance_id)
 );
 
 -- Create contacts table
@@ -123,4 +125,3 @@ CREATE TABLE contacts (
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY(school_id) REFERENCES schools(id)
 );
-
