@@ -31,7 +31,10 @@ export default function Modal({
       isOpen={open}
       className={`${styles.modal__container} ${containerClassName}`}
       overlayClassName={styles.modal__overlay}
-      onRequestClose={() => setModalOpen(false)}
+      onRequestClose={() => {
+        onCancel();
+        setModalOpen(false);
+      }}
       {...props}
     >
       {title ? <Title>{title}</Title> : null}

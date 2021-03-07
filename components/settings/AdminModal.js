@@ -17,13 +17,10 @@ export default function AdminModal({
   const [adminName, setAdminName] = useState('');
   const [adminEmail, setAdminEmail] = useState('');
 
-  useEffect(() => {
-    if (adminToEdit) {
-      const { name, email } = adminToEdit;
-      setAdminName(name);
-      setAdminEmail(email);
-    }
-  }, [adminToEdit]);
+  const clearFields = () => {
+    setAdminName('');
+    setAdminEmail('');
+  };
 
   const updateAdmin = async () => {
     setLoading(true);
@@ -48,13 +45,13 @@ export default function AdminModal({
     setOpen(false);
   };
 
-  const upsertAdmin = async () => {
+  const addAdmin = async () => {
     setLoading(true);
 
     try {
       await axios({
-        method: 'PUT',
-        url: '/api/user/upsert',
+        method: 'POST',
+        url: '/api/user/create',
         data: {
           name: adminName,
           email: adminEmail,
@@ -71,6 +68,16 @@ export default function AdminModal({
     setOpen(false);
   };
 
+  useEffect(() => {
+    if (adminToEdit) {
+      const { name, email } = adminToEdit;
+      setAdminName(name);
+      setAdminEmail(email);
+    } else {
+      clearFields();
+    }
+  }, [adminToEdit]);
+
   return (
     <Modal
       containerClassName={styles.adminModal__container}
@@ -79,8 +86,12 @@ export default function AdminModal({
       cancelText="Discard"
       submitText={adminToEdit ? 'Edit Admin' : 'Add Admin'}
       setModalOpen={setOpen}
-      onCancel={() => setOpen(false)}
-      onSubmit={adminToEdit ? updateAdmin : upsertAdmin}
+      onCancel={() => {
+        setOpen(false);
+        setAdminToEdit(null);
+        clearFields();
+      }}
+      onSubmit={adminToEdit ? updateAdmin : addAdmin}
       disableSubmitButton={!adminName || !adminEmail}
     >
       <div className={styles.adminModal}>

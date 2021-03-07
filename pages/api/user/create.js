@@ -13,13 +13,23 @@ export default async (req, res) => {
     // If name and email are defined
     if (name && email) {
       // Create new user
-      const user = await prisma.user.create({
-        data: {
-          name,
-          role: role || 'USER',
-          email,
-        },
-      });
+      let user;
+      try {
+        user = await prisma.user.create({
+          data: {
+            name,
+            role: role || 'USER',
+            email,
+          },
+        });
+      } catch (err) {
+        if (err.code === 'P2002' && err.meta.target.includes('email')) {
+          // Fails unique email check
+          return res.status(400).json({
+            error: `A user already exists with email ${email}`,
+          });
+        }
+      }
 
       // If user creation is successful, return user
       if (user) {
