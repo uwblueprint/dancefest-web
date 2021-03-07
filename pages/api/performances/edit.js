@@ -26,30 +26,42 @@ export default async (req, res) => {
     schoolID,
   } = req.body;
 
-  if (!id) {
+  if (
+    !id ||
+    !name ||
+    !academicLevel ||
+    !performers ||
+    !choreographers ||
+    !competitionLevel ||
+    !danceSize ||
+    !danceEntry ||
+    !danceStyle ||
+    !danceTitle ||
+    !eventID ||
+    !schoolID
+  ) {
     return res.status(400).json({
-      error: 'Required performance id not provided',
+      error: 'Required fields to update performance were not provided',
     });
   }
-
-  const editData = {};
-  if (name) editData.name = name;
-  if (academicLevel) editData.academic_level = academicLevel;
-  if (performers) editData.performers = performers;
-  if (choreographers) editData.choreographers = choreographers;
-  if (competitionLevel) editData.competition_level = competitionLevel;
-  if (danceSize) editData.dance_size = danceSize;
-  if (danceEntry) editData.dance_entry = danceEntry;
-  if (danceStyle) editData.dance_style = danceStyle;
-  if (danceTitle) editData.dance_title = danceTitle;
-  if (eventID) editData.event_id = eventID;
-  if (schoolID) editData.school_id = schoolID;
 
   const updatedPerformance = await prisma.performance.update({
     where: {
       id,
     },
-    data: editData,
+    data: {
+      name: name,
+      academic_level: academicLevel,
+      performers: performers,
+      choreographers: choreographers,
+      competition_level: competitionLevel,
+      dance_size: danceSize,
+      dance_entry: danceEntry,
+      dance_style: danceStyle,
+      dance_title: danceTitle,
+      event_id: eventID,
+      school_id: schoolID,
+    },
   });
 
   if (updatedPerformance) {
