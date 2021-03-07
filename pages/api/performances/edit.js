@@ -31,7 +31,6 @@ export default async (req, res) => {
       error: 'Required performance id not provided',
     });
   }
-  console.log(danceTitle);
 
   const editData = {};
   if (name) editData.name = name;
@@ -45,8 +44,6 @@ export default async (req, res) => {
   if (danceTitle) editData.dance_title = danceTitle;
   if (eventID) editData.event_id = eventID;
   if (schoolID) editData.school_id = schoolID;
-
-  console.log(editData);
 
   const updatedPerformance = await prisma.performance.update({
     where: {

@@ -34,7 +34,6 @@ export default async (req, res) => {
 
 export const getPerformance = async filter => {
   // Get award with the provided id
-  // TODO: add flag for including performance data
   const performance = await prisma.performance.findUnique({
     where: filter,
     include: {
