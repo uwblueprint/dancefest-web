@@ -16,9 +16,6 @@ export default async (req, res) => {
       where: {
         id: parseInt(id),
       },
-      include: {
-        contacts: true,
-      },
     });
     if (school) {
       res.send(school);
