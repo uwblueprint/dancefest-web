@@ -30,58 +30,64 @@ Performances: Navigation header
 }
 
 /*
-  ****************************************
-  Performances: Header
-  ****************************************
-  */
+****************************************
+Performances: Header
+****************************************
+*/
 .performances__header {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
   align-items: center;
-}
 
-.performances__header > button {
-  height: 40px;
-}
+  & > div {
+    display: flex;
+    align-items: center;
+  }
 
-.performances__header__pageTitle {
-  display: inline;
-  margin-right: 72px;
-}
+  button {
+    height: 40px;
+  }
 
-.performances__header__search {
-  width: 240px;
-  margin-right: 8px;
-}
+  .performances__header__pageTitle {
+    display: inline;
+    margin-right: 72px;
+  }
 
-.performances__header__filtersButton {
-  padding-left: 12px;
-  padding-right: 12px;
-  margin-right: 8px;
+  .performances__header__search {
+    width: 240px;
+    margin-right: 8px;
+  }
 
-  border: 2px solid var(--system-light-grey);
-  border-radius: 4px;
+  .performances__header__filtersButton {
+    padding-left: 12px;
+    padding-right: 12px;
+    margin-right: 8px;
 
-  font-family: DM Sans;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 20px;
-}
+    border: 2px solid var(--system-light-grey);
+    border-radius: 4px;
 
-.performances__header__filtersButtonOpen {
-  border: 2px solid var(--brand-pop-blue);
-}
+    font-family: DM Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+  }
 
-.performances__header__filtersButton > img {
-  margin-left: 4px;
+  .performances__header__filtersButtonOpen {
+    border: 2px solid var(--brand-pop-blue);
+  }
+
+  .performances__header__filtersButton > img {
+    margin-left: 4px;
+  }
 }
 
 /*
-  ****************************************
-  Performances: Filters
-  ****************************************
-  */
+****************************************
+Performances: Filters
+****************************************
+*/
 .performances__filters {
   margin: 20px 0 32px 0;
 
@@ -94,11 +100,17 @@ Performances: Navigation header
   }
 }
 
+.performances__filters__appliedFilters {
+  & > div {
+    margin: 0 8px 0 0;
+  }
+}
+
 /*
-  ****************************************
-  Performances: Content
-  ****************************************
-  */
+****************************************
+Performances: Content
+****************************************
+*/
 .performances__content {
   margin: 36px 0;
 }
@@ -187,4 +199,8 @@ Performances: Table
 */
 .performances__content table {
   width: 100%;
+
+  .entryTable__editCell {
+    text-align: center;
+  }
 }

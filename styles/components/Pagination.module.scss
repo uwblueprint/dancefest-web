@@ -1,0 +1,85 @@
+/*
+****************************************
+Pagination
+****************************************
+*/
+.pagination {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  margin: 0;
+
+  height: 40px;
+
+  background: #ffffff;
+
+  border: 2px solid var(--system-light-grey);
+  box-sizing: border-box;
+  border-radius: 4px;
+
+  list-style: none;
+
+  // Buttons
+  .pagination__pageButton,
+  .pagination__breakButton,
+  .pagination__previousButton,
+  .pagination__nextButton {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    width: 36px;
+    height: 36px;
+    margin: 0;
+    box-sizing: border-box;
+
+    border-radius: 3px;
+
+    list-style: none;
+
+    & > a {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      font-family: DM Sans;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 20px;
+
+      color: var(--brand-pop-blue);
+      cursor: pointer;
+
+      &:focus {
+        outline: 2px auto var(--system-light-blue);
+      }
+    }
+  }
+
+  // Break, previous and next buttons: override width
+  .pagination__breakButton,
+  .pagination__previousButton,
+  .pagination__nextButton {
+    width: 28px;
+  }
+
+  // Previous and next button icons
+  .pagination__previousButton img,
+  .pagination__nextButton img {
+    height: 24px;
+    width: 24px;
+  }
+
+  // Selected page button
+  .pagination__selectedPageButton {
+    background-color: var(--brand-pop-blue);
+
+    & > a {
+      color: var(--system-lightest-grey);
+    }
+  }
+}

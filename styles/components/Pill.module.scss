@@ -1,0 +1,31 @@
+/*
+****************************************
+Pill
+****************************************
+*/
+.pill {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 2px 6px;
+  margin: 6px 9px;
+
+  background: #ffffff;
+  border-radius: 3px;
+
+  font-family: DM Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 20px;
+
+  color: var(--brand-pop-blue);
+
+  img {
+    height: 7px;
+    width: 7px;
+    padding-left: 10px;
+
+    cursor: pointer;
+  }
+}
