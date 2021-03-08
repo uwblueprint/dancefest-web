@@ -75,43 +75,56 @@ async function dataSeed() {
 }
 
 async function userSeed() {
-  const eric = await prisma.user.upsert({
-    where: { email: 'ericli@uwblueprint.org' },
-    update: {
-      role: 'ADMIN',
-      name: 'Eric',
-    },
-    create: {
-      role: 'ADMIN',
-      email: `ericli@uwblueprint.org`,
-      name: 'Eric',
-    },
-  });
-  const julia = await prisma.user.upsert({
-    where: { email: 'juliasim@uwblueprint.org' },
-    update: {
-      role: 'ADMIN',
-      name: 'Julia',
-    },
-    create: {
-      role: 'ADMIN',
-      email: `juliasim@uwblueprint.org`,
-      name: 'Julia',
-    },
-  });
-  const dancefest = await prisma.user.upsert({
-    where: { email: 'dancefest@uwblueprint.org' },
-    update: {
-      role: 'ADMIN',
-      name: 'Dancefest',
-    },
-    create: {
-      role: 'ADMIN',
-      email: `dancefest@uwblueprint.org`,
-      name: 'Dancefest',
-    },
-  });
-  console.log({ eric, julia, dancefest });
+  const admins = [
+    { name: 'Eric L', email: 'ericli+admin@uwblueprint.org' },
+    { name: 'Julia', email: 'juliasim+admin@uwblueprint.org' },
+    { name: 'Mayank', email: 'mayankkanoria+admin@uwblueprint.org' },
+    { name: 'Oustan', email: 'oustanding+admin@uwblueprint.org' },
+    { name: 'Eric F', email: 'ericfeng+admin@uwblueprint.org' },
+    { name: 'Anish', email: 'anishagnihotri+admin@uwblueprint.org' },
+    { name: 'Chidi', email: 'chidi+admin@uwblueprint.org' },
+  ];
+  const users = [
+    { name: 'Eric L', email: 'ericli@uwblueprint.org' },
+    { name: 'Julia', email: 'juliasim@uwblueprint.org' },
+    { name: 'Mayank', email: 'mayankkanoria@uwblueprint.org' },
+    { name: 'Oustan', email: 'oustanding@uwblueprint.org' },
+    { name: 'Eric F', email: 'ericfeng@uwblueprint.org' },
+    { name: 'Anish', email: 'anishagnihotri@uwblueprint.org' },
+    { name: 'Chidi', email: 'chidi@uwblueprint.org' },
+  ];
+
+  for (let admin of admins) {
+    const adminUpsert = await prisma.user.upsert({
+      where: { email: admin['email'] },
+      update: {
+        role: 'ADMIN',
+        name: admin['name'],
+      },
+      create: {
+        role: 'ADMIN',
+        email: admin['email'],
+        name: admin['name'],
+      },
+    });
+    console.log({ adminUpsert });
+  }
+
+  for (let user of users) {
+    const userUpsert = await prisma.user.upsert({
+      where: { email: user['email'] },
+      update: {
+        role: 'ADMIN',
+        name: user['name'],
+      },
+      create: {
+        role: 'ADMIN',
+        email: user['email'],
+        name: user['name'],
+      },
+    });
+    console.log({ userUpsert });
+  }
 }
 
 main()
