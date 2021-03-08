@@ -9,7 +9,7 @@ async function main() {
 }
 
 async function dataSeed() {
-  // TODO: seed some sample data
+  // seed some sample data
   const sizeSettings = ['Small Group', 'Medium Group', 'Large Group', 'Creative Collaboration'];
   const styleSettings = [
     'Jazz',
@@ -24,9 +24,8 @@ async function dataSeed() {
     'Live Vocals',
   ];
   const levelSettings = ['Easy', 'Intermediate', 'Advanced'];
-  // TODO: add some logging for batch upserts
   for (let size of sizeSettings) {
-    await prisma.setting.upsert({
+    const setting = await prisma.setting.upsert({
       where: {
         settings_unique: {
           type: 'DANCE_SIZE',
@@ -39,10 +38,11 @@ async function dataSeed() {
         value: size,
       },
     });
+    console.log(setting);
   }
 
   for (let style of styleSettings) {
-    await prisma.setting.upsert({
+    const setting = await prisma.setting.upsert({
       where: {
         settings_unique: {
           type: 'STYLE',
@@ -55,10 +55,11 @@ async function dataSeed() {
         value: style,
       },
     });
+    console.log(setting);
   }
 
   for (let level of levelSettings) {
-    await prisma.setting.upsert({
+    const setting = await prisma.setting.upsert({
       where: {
         settings_unique: {
           type: 'COMPETITION_LEVEL',
@@ -71,6 +72,7 @@ async function dataSeed() {
         value: level,
       },
     });
+    console.log(setting);
   }
 }
 
