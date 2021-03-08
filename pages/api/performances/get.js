@@ -6,24 +6,61 @@ export default async (req, res) => {
   // Collect session from request
   const session = await getSession({ req });
 
-  const { id } = req.query;
-
-  // If session exists and eventID provided (thus, user is authenticated)
-  // TODO check they have access to this event via roles
-  if (session && id) {
-    // Collect all events from database
-    let performance = await prisma.performance.findUnique({
-      where: {
-        id: parseInt(id),
-      },
-    });
-    if (performance) {
-      res.send(performance);
-    } else {
-      res.status(404).end();
-    }
+  // If not authenticated
+  if (!session) {
+    return res.status(401).end();
   }
 
-  // Else, return 401 for all failures
-  res.status(401).end();
+  const { id } = req.query;
+
+  // If performance id was not provided
+  if (!id) {
+    return res.status(400).json({
+      error: 'Performance id was not provided',
+    });
+  }
+
+  const filter = { id: parseInt(id) };
+  const performance = await getPerformance(filter);
+
+  if (performance) {
+    return res.status(200).json(performance);
+  } else {
+    return res.status(400).json({
+      error: 'Could not retrieve performance',
+    });
+  }
+};
+
+export const getPerformance = async filter => {
+  // Get award with the provided id
+  const performance = await prisma.performance.findUnique({
+    where: filter,
+    include: {
+      awards: {
+        include: {
+          awards: true,
+        },
+      },
+      school: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  });
+
+  if (!performance) return;
+
+  // Remove the relation table data
+  return {
+    ...performance,
+    awards: performance.awards.map(award => {
+      return {
+        ...award.awards,
+        nominee_count: award.nominee_count,
+        status: award.status,
+      };
+    }),
+  };
 };

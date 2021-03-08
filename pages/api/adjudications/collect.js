@@ -5,14 +5,12 @@ export default async (req, res) => {
   // Collect session from request
   const session = await getSession({ req });
 
-  // If session exists (thus, user is authenticated)
-  if (session) {
-    // Collect all adjudications from database
-    const adjudications = await prisma.adjudication.findMany();
-
-    res.send(adjudications);
+  // If session does not exist
+  if (!session) {
+    return res.status(401).end();
   }
 
-  // Else, return 401 for all failures
-  res.status(401).end();
+  const adjudications = await prisma.adjudication.findMany();
+
+  return res.status(200).json(adjudications);
 };

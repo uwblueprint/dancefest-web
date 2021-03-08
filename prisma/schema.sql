@@ -4,6 +4,9 @@ CREATE TYPE Role AS ENUM('USER', 'JUDGE', 'ADMIN');
 -- Create settings enum
 CREATE TYPE SettingType as ENUM('COMPETITION_LEVEL', 'DANCE_SIZE', 'STYLE');
 
+-- Create award status enum
+CREATE TYPE AwardPerformanceStatus as ENUM('NOMINEE', 'FINALIST');
+
 -- Create users table
 CREATE TABLE users (
   id SERIAL PRIMARY KEY NOT NULL,
@@ -87,9 +90,33 @@ CREATE TABLE adjudications (
   cumulative_mark INTEGER NOT NULL,
   audio_url VARCHAR(255),
   notes TEXT,
-  special_award VARCHAR(255),
   performance_id INTEGER NOT NULL,
+  user_id INTEGER NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY(performance_id) REFERENCES performances(id)
+  FOREIGN KEY(performance_id) REFERENCES performances(id),
+  FOREIGN KEY(user_id) REFERENCES users(id)
+);
+
+-- Create awards table
+CREATE TABLE awards (
+  id SERIAL PRIMARY KEY NOT NULL,
+  title VARCHAR(255) NOT NULL,
+  is_finalized BOOLEAN NOT NULL DEFAULT FALSE,
+  user_id INTEGER NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY(user_id) REFERENCES users(id)
+);
+
+-- Create awards_performances table
+CREATE TABLE awards_performances (
+  id SERIAL PRIMARY KEY NOT NULL,
+  award_id INTEGER,
+  performance_id INTEGER,
+  nominee_count INTEGER DEFAULT 0,
+  status AwardPerformanceStatus NOT NULL DEFAULT 'NOMINEE',
+  FOREIGN KEY(award_id) REFERENCES awards(id),
+  FOREIGN KEY(performance_id) REFERENCES performances(id),
+  CONSTRAINT "awards_performances_unique" UNIQUE (award_id, performance_id)
 );
