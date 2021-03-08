@@ -2,6 +2,7 @@ import NextAuth from 'next-auth'; // Next Authentication
 import prisma from '@prisma/index'; // Prisma client
 import Adapters from 'next-auth/adapters'; // Next Authentication adapters
 import Providers from 'next-auth/providers'; // Next Authentication providers
+import sendVerificationRequest from '@utils/sendVerificationRequest'; // Next Authentication email handler
 
 // Database Configuration
 const databaseConfig = {
@@ -28,6 +29,7 @@ export default NextAuth({
       server: process.env.NA_EMAIL_SERVER, // SES mailserver
       from: process.env.NA_EMAIL_FROM, // From address for authentication emails
       maxAge: 24 * 60, // 1 hour max life for login request
+      sendVerificationRequest, // Custom verification request handler
     }),
   ],
   // Custom DB adapter
@@ -43,6 +45,8 @@ export default NextAuth({
   pages: {
     // On errors, redirect to home
     error: '/',
+    // On email verification request, redirect to verify page
+    verifyRequest: '/verify',
   },
   // Session handling
   session: {

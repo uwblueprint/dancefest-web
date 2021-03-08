@@ -5,14 +5,18 @@ import Button from '@components/Button';
 import styles from '@styles/pages/Login.module.scss'; // Component styles
 import { getSession, signIn } from 'next-auth/client'; // Session management
 import LoginDancers from '@assets/login-dancers.svg';
+import useLocalStorage from '@utils/useLocalStorage'; // Local storage hooks
 
 export default function Login() {
   const [email, setEmail] = useState(''); // Store user inputted email
+  const [, setLocalStorageEmail] = useLocalStorage('dancefest-email-redirect', ''); // Store email in local storage
 
   /**
    * Process user sign in with inputted email
    */
   const signInWithEmail = () => {
+    // Update email in local storage
+    setLocalStorageEmail(email);
     // Call Next-Auth sign in, passing email state
     signIn('email', { email: email });
   };
