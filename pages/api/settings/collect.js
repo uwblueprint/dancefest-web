@@ -5,7 +5,6 @@ import { getSession } from 'next-auth/client'; // Session handling
 export default async (req, res) => {
   // Collect session from request
   const session = await getSession({ req });
-
   const { type } = req.query;
 
   // If session exists (user authenticated) and type provided

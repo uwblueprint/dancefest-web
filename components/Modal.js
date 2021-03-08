@@ -23,6 +23,7 @@ export default function Modal({
   onCancel = () => {},
   onSubmit = () => {},
   setModalOpen,
+  disableSubmitButton = false,
   ...props
 }) {
   return (
@@ -30,7 +31,10 @@ export default function Modal({
       isOpen={open}
       className={`${styles.modal__container} ${containerClassName}`}
       overlayClassName={styles.modal__overlay}
-      onRequestClose={() => setModalOpen(false)}
+      onRequestClose={() => {
+        onCancel();
+        setModalOpen(false);
+      }}
       {...props}
     >
       {title ? <Title>{title}</Title> : null}
@@ -44,6 +48,7 @@ export default function Modal({
             className={styles.modal__footer_submitButton}
             variant="contained"
             onClick={onSubmit}
+            disabled={disableSubmitButton}
           >
             {submitText}
           </Button>
@@ -57,6 +62,7 @@ Modal.propTypes = {
   cancelText: PropTypes.string,
   children: PropTypes.any,
   containerClassName: PropTypes.string,
+  disableSubmitButton: PropTypes.bool,
   onCancel: PropTypes.func,
   onSubmit: PropTypes.func,
   open: PropTypes.bool,
