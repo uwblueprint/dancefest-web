@@ -44,7 +44,10 @@ CREATE TABLE events (
 -- Create schools table
 CREATE TABLE schools (
   id SERIAL PRIMARY KEY NOT NULL,
-  name VARCHAR(255),
+  school_name VARCHAR(255) NOT NULL,
+  contact_name VARCHAR(255),
+  email VARCHAR(255) NOT NULL,
+  phone VARCHAR(255),
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -55,7 +58,8 @@ CREATE TABLE settings (
   type SettingType NOT NULL,
   value VARCHAR(255),
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT settings_unique UNIQUE (type, value)
 );
 
 -- Create performances table
@@ -115,17 +119,4 @@ CREATE TABLE awards_performances (
   FOREIGN KEY(award_id) REFERENCES awards(id),
   FOREIGN KEY(performance_id) REFERENCES performances(id),
   CONSTRAINT "awards_performances_unique" UNIQUE (award_id, performance_id)
-);
-
--- Create contacts table
-CREATE TABLE contacts (
-  id SERIAL PRIMARY KEY NOT NULL,
-  school_id INTEGER NOT NULL,
-  year INTEGER NOT NULL,
-  name VARCHAR(255) NOT NULL,
-  email VARCHAR(255) NOT NULL,
-  phone VARCHAR(255),
-  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY(school_id) REFERENCES schools(id)
 );
