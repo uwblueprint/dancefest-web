@@ -9,7 +9,7 @@ export default function Table({
   columns,
   data,
   filters,
-  pageNumber,
+  pageNumber = 0,
   setPageCount = null,
   pageSize = 10,
   paginate = true,
@@ -114,7 +114,7 @@ Table.propTypes = {
       value: PropTypes.any,
     })
   ),
-  pageNumber: PropTypes.number.isRequired,
+  pageNumber: PropTypes.number,
   pageSize: PropTypes.number,
   paginate: PropTypes.bool,
   setPageCount: PropTypes.func,

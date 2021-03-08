@@ -325,7 +325,7 @@ export default function Setting() {
               </Button>
             </div>
             <div className={styles.settings__editSchools__tableWrapper}>
-              <Table columns={SCHOOLS_COLUMNS} data={schools} />
+              <Table columns={SCHOOLS_COLUMNS} data={schools} filters={[]} />
             </div>
           </div>
           <div className={styles.settings__editAdmins}>
@@ -341,7 +341,7 @@ export default function Setting() {
               </Button>
             </div>
             <div className={styles.settings__editAdmins__tableWrapper}>
-              <Table columns={ADMINS_COLUMNS} data={admins} />
+              <Table columns={ADMINS_COLUMNS} data={admins} filters={[]} />
             </div>
           </div>
         </div>
