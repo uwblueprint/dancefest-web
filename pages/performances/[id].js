@@ -136,8 +136,8 @@ const EmptyComponent = () => {
 const PerformanceSummary = () => {
   return (
     <div>
-      <div className={styles.modal__container}>
-        <div className={styles.modal}>
+      <div className={styles.performance__summary_container}>
+        <div className={styles.performance__summary_col}>
           <div>
             <h2>Entry ID</h2>
             <span>{`1`}</span>
@@ -153,6 +153,8 @@ const PerformanceSummary = () => {
             <h2>Choreographer(s)</h2>
             <span>{`Nancy Vaillancourt & Robbie-Lynn Schreindler`}</span>
           </div>
+        </div>
+        <div className={styles.performance__summary_col}>
           <div>
             <h2>School</h2>
             <span>{`Bluevale Collegiate Institute`}</span>
@@ -311,7 +313,7 @@ const JudgeFeedback = () => {
         )}
       </div>
 
-      <div className={styles.performance_details__score_content}>
+      <div className={styles.performance_summary__score_content}>
         <div className={styles.performance_details__score_card}>
           <div style={{ textAlign: 'center' }}>
             <h1>{`88`}</h1>
