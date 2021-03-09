@@ -282,18 +282,6 @@
   color: var(--system-neutral-grey);
 }
 
-/* Field caption/note */
-.performance__summary_col h3 {
-  font-family: DM Sans;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 18px;
-  margin: 6px 0 0 0;
-
-  color: var(--system-neutral-grey);
-}
-
 .performance__summary_col span {
   font-family: DM Sans;
   font-style: normal;
@@ -309,16 +297,6 @@
 .performance__summary_col > div {
   width: 80%;
   margin-bottom: 32px;
-}
-
-/* Last field each  column */
-.performance__summary_col > div:last-child {
-  margin-bottom: 0;
-}
-
-/* Second last field in second column */
-.performance__summary_col > div:nth-child(7) {
-  padding-bottom: 24px;
 }
 
 .performance_summary__score_content {

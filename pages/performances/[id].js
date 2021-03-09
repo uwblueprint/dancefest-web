@@ -12,12 +12,12 @@ import styles from '@styles/pages/PerformanceDetails.module.scss';
 
 // Page: Settings
 export default function PerformanceDetails() {
-  const [selectedTab, setSelectedTab] = useState(0);
-  const [showPerformanceSummary, setShowPerformanceSummary] = useState(false);
+  const [selectedTab, setSelectedTab] = useState(-1);
+  const [showPerformanceSummary, setShowPerformanceSummary] = useState(true);
   const [feedbackAvailable, setFeedbackAvailable] = useState(true);
 
   const handleTabClick = () => {
-    setFeedbackAvailable(old => !old); // TODO: Change this!!
+    setFeedbackAvailable(!feedbackAvailable); // TODO: Change this!!
     setShowPerformanceSummary(false);
   };
 
