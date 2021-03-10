@@ -63,7 +63,7 @@ export default function Table({
     setAllFilters(filters);
   }, [filters]);
 
-  const handleClick = row => () => {
+  const handleCellClick = row => () => {
     // Call the prop - onRowClick
     onRowClick(row);
   };
@@ -114,7 +114,7 @@ export default function Table({
             {(paginate ? page : rows).map((row, i) => {
               prepareRow(row);
               return (
-                <tr key={i} {...row.getRowProps()}>
+                <tr key={i} {...row.getRowProps()} onClick={handleRowClick(row)}>
                   {row.cells.map((cell, i) => {
                     return (
                       <td key={i} {...cell.getCellProps()}>
