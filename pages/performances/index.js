@@ -454,7 +454,6 @@ const EmptyTableComponent = () => {
       <div>
         <h2>No Performances Listed</h2>
         <h3>Create your first performance</h3>
-        {/* <Button onClick={modalNewEvent}>Add Event</Button> */}
       </div>
       <img src={DancerRedJump} />
     </div>
