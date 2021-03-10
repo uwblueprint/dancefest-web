@@ -63,7 +63,7 @@ export default function Table({
     setAllFilters(filters);
   }, [filters]);
 
-  const handleCellClick = row => () => {
+  const handleRowClick = row => () => {
     // Call the prop - onRowClick
     onRowClick(row);
   };
