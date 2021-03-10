@@ -12,12 +12,12 @@ import styles from '@styles/pages/PerformanceDetails.module.scss';
 
 // Page: Settings
 export default function PerformanceDetails() {
-  const [selectedTab, setSelectedTab] = useState(0);
-  const [showPerformanceSummary, setShowPerformanceSummary] = useState(false);
+  const [selectedTab, setSelectedTab] = useState(-1);
+  const [showPerformanceSummary, setShowPerformanceSummary] = useState(true);
   const [feedbackAvailable, setFeedbackAvailable] = useState(true);
 
   const handleTabClick = () => {
-    setFeedbackAvailable(old => !old); // TODO: Change this!!
+    setFeedbackAvailable(!feedbackAvailable); // TODO: Change this!!
     setShowPerformanceSummary(false);
   };
 
@@ -136,8 +136,8 @@ const EmptyComponent = () => {
 const PerformanceSummary = () => {
   return (
     <div>
-      <div className={styles.modal__container}>
-        <div className={styles.modal}>
+      <div className={styles.performance__summary_container}>
+        <div className={styles.performance__summary_col}>
           <div>
             <h2>Entry ID</h2>
             <span>{`1`}</span>
@@ -153,6 +153,8 @@ const PerformanceSummary = () => {
             <h2>Choreographer(s)</h2>
             <span>{`Nancy Vaillancourt & Robbie-Lynn Schreindler`}</span>
           </div>
+        </div>
+        <div className={styles.performance__summary_col}>
           <div>
             <h2>School</h2>
             <span>{`Bluevale Collegiate Institute`}</span>
@@ -311,7 +313,7 @@ const JudgeFeedback = () => {
         )}
       </div>
 
-      <div className={styles.performance_details__score_content}>
+      <div className={styles.performance_summary__score_content}>
         <div className={styles.performance_details__score_card}>
           <div style={{ textAlign: 'center' }}>
             <h1>{`88`}</h1>

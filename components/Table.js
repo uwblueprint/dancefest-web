@@ -14,6 +14,7 @@ export default function Table({
   pageSize = 10,
   paginate = true,
   emptyComponent,
+  onRowClick = () => {},
 }) {
   const {
     getTableBodyProps,
@@ -62,6 +63,11 @@ export default function Table({
     setAllFilters(filters);
   }, [filters]);
 
+  const handleRowClick = row => () => {
+    // Call the prop - onRowClick
+    onRowClick(row);
+  };
+
   return (
     <div className={styles.table__div}>
       {!data.length ? (
@@ -108,7 +114,7 @@ export default function Table({
             {(paginate ? page : rows).map((row, i) => {
               prepareRow(row);
               return (
-                <tr key={i} {...row.getRowProps()}>
+                <tr key={i} {...row.getRowProps()} onClick={handleRowClick(row)}>
                   {row.cells.map((cell, i) => {
                     return (
                       <td key={i} {...cell.getCellProps()}>
@@ -136,6 +142,7 @@ Table.propTypes = {
       value: PropTypes.any,
     })
   ),
+  onRowClick: PropTypes.func,
   pageNumber: PropTypes.number,
   pageSize: PropTypes.number,
   paginate: PropTypes.bool,
