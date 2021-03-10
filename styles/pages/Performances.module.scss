@@ -204,3 +204,38 @@ Performances: Table
     text-align: center;
   }
 }
+
+/*
+****************************************
+Performances: Table - empty component styling
+****************************************
+*/
+
+.page__performances_list_empty {
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  h2 {
+    font-size: 32px;
+    line-height: 42px;
+    color: var(--brand-pop-blue);
+    margin-block-end: 16px;
+  }
+
+  h3 {
+    font-size: 16px;
+    line-height: 21px;
+    letter-spacing: 5%;
+    text-transform: uppercase;
+    color: var(--brand-pop-blue);
+    margin-block-end: 24px;
+  }
+
+  img {
+    max-width: 230px;
+    max-height: 400px;
+  }
+}

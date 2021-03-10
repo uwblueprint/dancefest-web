@@ -17,6 +17,8 @@ import BackArrow from '@assets/back-arrow.svg'; // Back arrow icon
 import Search from '@assets/search.svg'; // Search icon
 import ChevronDown from '@assets/chevron-down.svg'; // Chevron down icon
 import ChevronDownGrey from '@assets/chevron-down-grey.svg'; // Chevron down grey icon
+import DancerRedJump from '@assets/dancer-red-jump.svg'; // Jumping Dancer SVG
+import DancerYellowBlue from '@assets/dancer-yellow-blue.svg'; // Jumping Dancer SVG
 import styles from '@styles/pages/Performances.module.scss'; // Page styles
 
 // Temp constants
@@ -375,12 +377,22 @@ const EntryTable = props => {
     },
   ];
 
-  return <Table columns={columns} data={data} pageSize={PAGE_SIZE} {...props} />;
+  return (
+    <Table
+      columns={columns}
+      data={data}
+      pageSize={PAGE_SIZE}
+      {...props}
+      emptyComponent={<EmptyTableComponent />}
+    />
+  );
 };
 
 // Judging Table
 const JudgingTable = () => {
-  return <Table columns={columns} data={[]} filters={[]} />;
+  return (
+    <Table columns={columns} data={[]} filters={[]} emptyComponent={<EmptyTableComponent />} />
+  );
 };
 
 // New Performance Modal
@@ -432,5 +444,18 @@ const PerformanceModal = ({ mode, open, setOpen }) => {
         </div>
       </div>
     </Modal>
+  );
+};
+
+const EmptyTableComponent = () => {
+  return (
+    <div className={styles.page__performances_list_empty}>
+      <img src={DancerYellowBlue} />
+      <div>
+        <h2>No Performances Listed</h2>
+        <h3>Create your first performance</h3>
+      </div>
+      <img src={DancerRedJump} />
+    </div>
   );
 };
