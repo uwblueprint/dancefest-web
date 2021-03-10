@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'; // React
+import { useRouter } from 'next/router'; // Routing (with buttons)
 import axios from 'axios'; // axios
 import Link from 'next/link'; // Next link
 import Layout from '@components/Layout'; // Layout wrapper
@@ -331,6 +332,8 @@ export default function Performances() {
 
 // Entries Table
 const EntryTable = props => {
+  const router = useRouter(); // Collect router
+
   const columns = [
     {
       Header: 'Edit',
@@ -377,13 +380,19 @@ const EntryTable = props => {
     },
   ];
 
+  const goToPerformanceDetails = row => {
+    // Go to /performances/[id] page
+    router.push(`/performances/${row.id}`); // Route to "/performance/:id" page
+  };
+
   return (
     <Table
       columns={columns}
       data={data}
       pageSize={PAGE_SIZE}
-      {...props}
       emptyComponent={<EmptyTableComponent />}
+      onRowClick={goToPerformanceDetails}
+      {...props}
     />
   );
 };
