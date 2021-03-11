@@ -10,13 +10,13 @@ import styles from '@styles/pages/AwardDetails.module.scss';
 
 // Page: Award Details
 export default function AwardDetails() {
-  const [selectedTab, setSelectedTab] = useState(0);
-  const [showPerformanceSummary, setShowPerformanceSummary] = useState(false);
+  const [selectedTab, setSelectedTab] = useState(-1);
+  const [showAwardSummary, setShowAwardSummary] = useState(true);
   const [feedbackAvailable, setFeedbackAvailable] = useState(true);
 
   const handleTabClick = () => {
-    setFeedbackAvailable(old => !old); // TODO: Change this!!
-    setShowPerformanceSummary(false);
+    setFeedbackAvailable(!feedbackAvailable); // TODO: Change this!!
+    setShowAwardSummary(false);
   };
 
   return (
@@ -34,12 +34,12 @@ export default function AwardDetails() {
           <div className={styles.performance_details__tabs_container}>
             <div
               className={`${styles.performance_details__tabs} ${
-                showPerformanceSummary && styles.performance_details__tabs_selected
+                showAwardSummary && styles.performance_details__tabs_selected
               }`}
             >
               <button
                 onClick={() => {
-                  setShowPerformanceSummary(true);
+                  setShowAwardSummary(true);
                   setFeedbackAvailable(true);
                   setSelectedTab(-1);
                 }}
@@ -52,6 +52,7 @@ export default function AwardDetails() {
               setSelectedTab={setSelectedTab}
               tabIndex={0}
               handleClick={handleTabClick}
+              nominations={`1/3 Judges`}
             >
               You’re The One That I Want
             </Tab>
@@ -60,6 +61,7 @@ export default function AwardDetails() {
               setSelectedTab={setSelectedTab}
               tabIndex={1}
               handleClick={handleTabClick}
+              nominations={`3/3 Judges`}
             >
               You’re The One That I Want
             </Tab>
@@ -68,6 +70,7 @@ export default function AwardDetails() {
               setSelectedTab={setSelectedTab}
               tabIndex={2}
               handleClick={handleTabClick}
+              nominations={`2/3 Judges`}
             >
               You’re The One That I Want
             </Tab>
@@ -77,7 +80,7 @@ export default function AwardDetails() {
               !feedbackAvailable && styles.performance_details__no_content_container
             }`}
           >
-            {showPerformanceSummary ? (
+            {showAwardSummary ? (
               <AwardSummary />
             ) : feedbackAvailable ? (
               <JudgeFeedback />
@@ -105,7 +108,7 @@ function Tab(props) {
 
         <div className={styles.judge__tab_stats}>
           {/* Nominated By */}
-          <span>NOMINATED BY {props.nominator}</span>
+          <h2>NOMINATED BY {props.nominations}</h2>
         </div>
       </button>
     </div>
@@ -126,17 +129,15 @@ const EmptyComponent = () => {
 
 const AwardSummary = () => {
   return (
-    <div>
-      <div className={styles.modal__container}>
-        <div className={styles.modal}>
-          <div>
-            <h2>Type</h2>
-            <span>{`Performance`}</span>
-          </div>
-          <div>
-            <h2>No. of Nominations</h2>
-            <span>{`1`}</span>
-          </div>
+    <div className={styles.award__summary_container}>
+      <div className={styles.award__summary}>
+        <div>
+          <h2>Type</h2>
+          <span>{`Performance`}</span>
+        </div>
+        <div>
+          <h2>No. of Nominations</h2>
+          <span>{`1`}</span>
         </div>
       </div>
     </div>

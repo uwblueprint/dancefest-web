@@ -35,6 +35,7 @@
 
 .performance_details__tabs {
   background-color: #fff;
+  border-bottom: 2px solid var(--system-light-grey);
 
   button {
     padding: 30px;
@@ -108,13 +109,21 @@
     line-height: 21px;
     font-weight: 700;
     color: var(--system-neutral-grey);
+
+    h2 {
+      font-size: 16px;
+      line-height: 21px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #6b778c;
+    }
   }
 }
 
 .judge__tab > button {
   padding: 24px;
   border: none;
-  border-top: 2px solid var(--system-light-grey);
+  border-bottom: 2px solid var(--system-light-grey);
   background-color: #fff;
   text-align: left;
   position: relative;
@@ -190,75 +199,49 @@
   margin: 0 0 5px 0;
 }
 
-.modal__container {
-  height: 365px;
+.award__summary_container {
   width: 100%;
   padding: 52px 52px 0px 52px;
 }
 
-.modal {
-  flex: 1 0 0;
+.award__summary {
   display: flex;
-  flex-flow: column wrap;
-  justify-content: flex-start;
+  flex-direction: row;
   align-content: space-between;
 
   width: 100%;
   height: 100%;
-}
 
-/* Field name */
-.modal__container h2 {
-  font-family: DM Sans;
-  font-style: normal;
-  font-weight: bold;
-  font-size: 16px;
-  line-height: 21px;
-  margin: 0 0 12px 0;
+  /* Field name */
+  h2 {
+    font-family: DM Sans;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 21px;
+    margin: 0 0 12px 0;
 
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
 
-  color: var(--system-neutral-grey);
-}
+    color: var(--system-neutral-grey);
+  }
 
-/* Field caption/note */
-.modal h3 {
-  font-family: DM Sans;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 18px;
-  margin: 6px 0 0 0;
+  span {
+    font-family: DM Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 20px;
+    line-height: 26px;
 
-  color: var(--system-neutral-grey);
-}
-
-.modal span {
-  font-family: DM Sans;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 20px;
-  line-height: 26px;
-
-  /* Navy */
-  color: #172b4d;
+    color: #172b4d;
+  }
 }
 
 /* Field container */
-.modal > div {
-  width: 45%;
+.award__summary > div {
+  width: 60%;
   margin-bottom: 32px;
-}
-
-/* Last field each  column */
-.modal > div:last-child {
-  margin-bottom: 0;
-}
-
-/* Second last field in second column */
-.modal > div:nth-child(7) {
-  padding-bottom: 24px;
 }
 
 .performance_details__score_content {
