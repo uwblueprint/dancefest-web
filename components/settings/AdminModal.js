@@ -66,6 +66,7 @@ export default function AdminModal({
 
     setLoading(false);
     setOpen(false);
+    clearFields();
   };
 
   useEffect(() => {

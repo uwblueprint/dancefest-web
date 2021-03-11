@@ -5,48 +5,54 @@ export default async (req, res) => {
   // Collect session from request
   const session = await getSession({ req });
 
-  // If authenticated and admin
-  if (session && session.role === 'ADMIN') {
-    // Collect params from request body
-    const {
-      id,
-      artisticMark,
-      technicalMark,
-      cumulativeMark,
-      audioUrl,
-      notes,
-      specialAward,
-      performanceID,
-    } = req.body;
-
-    // If all params exist
-    if (id && artisticMark && technicalMark && cumulativeMark && performanceID) {
-      // Update adjudication
-      const updatedAdjudication = await prisma.adjudication.update({
-        // Where
-        where: {
-          // Id is passed
-          id: id,
-        },
-        // With
-        data: {
-          artistic_mark: parseInt(artisticMark),
-          technical_mark: parseInt(technicalMark),
-          cumulative_mark: parseInt(cumulativeMark),
-          audio_url: audioUrl,
-          notes: notes,
-          special_award: specialAward,
-          performance_id: parseInt(performanceID),
-        },
-      });
-
-      // If adjudication updating is successful, return updated adjudication
-      if (updatedAdjudication) res.send(updatedAdjudication);
-      // Else, return server error
-      else res.status(500).end();
-    }
+  // If session does not exist
+  if (!session) {
+    return res.status(401).end();
   }
 
-  // Else, throw unauthenticated for all
-  res.status(401).end();
+  const userID = session.id;
+
+  // Collect params from request body
+  const {
+    id,
+    artisticMark,
+    technicalMark,
+    cumulativeMark,
+    audioUrl,
+    notes,
+    performanceID,
+  } = req.body;
+
+  // If required fields do not exist
+  if (!id || !artisticMark || !technicalMark || !cumulativeMark || !performanceID || !userID) {
+    return res.status(400).json({
+      error: 'Required fields to update adjudication were not provided',
+    });
+  }
+
+  const updatedAdjudication = await prisma.adjudication.update({
+    // Where
+    where: {
+      // Id is passed
+      id: id,
+    },
+    // With
+    data: {
+      artistic_mark: parseInt(artisticMark),
+      technical_mark: parseInt(technicalMark),
+      cumulative_mark: parseInt(cumulativeMark),
+      audio_url: audioUrl,
+      notes: notes,
+      performance_id: parseInt(performanceID),
+      user_id: userID,
+    },
+  });
+
+  if (updatedAdjudication) {
+    return res.status(200).json(updatedAdjudication);
+  } else {
+    return res.status(400).json({
+      error: 'Error updating ajudication',
+    });
+  }
 };

@@ -6,12 +6,13 @@ export default async (req, res) => {
   const session = await getSession({ req });
 
   // If not authenticated or is not an admin
-  if (!session || session.role !== 'ADMIN') {
+  if (!session) {
     return res.status(401).end();
   }
 
   // Collect performance information from request body
   const {
+    id,
     name,
     academicLevel,
     performers,
@@ -25,14 +26,29 @@ export default async (req, res) => {
     schoolID,
   } = req.body;
 
-  // If required fields were not provided, return an error
-  if (!danceEntry || !eventID || !schoolID) {
+  if (
+    !id ||
+    !name ||
+    !academicLevel ||
+    !performers ||
+    !choreographers ||
+    !competitionLevel ||
+    !danceSize ||
+    !danceEntry ||
+    !danceStyle ||
+    !danceTitle ||
+    !eventID ||
+    !schoolID
+  ) {
     return res.status(400).json({
-      error: 'Required fields danceEntry, eventId, or schoolID were not provided',
+      error: 'Required fields to update performance were not provided',
     });
   }
 
-  const performance = await prisma.performance.create({
+  const updatedPerformance = await prisma.performance.update({
+    where: {
+      id,
+    },
     data: {
       name: name,
       academic_level: academicLevel,
@@ -48,8 +64,8 @@ export default async (req, res) => {
     },
   });
 
-  if (performance) {
-    return res.status(200).json(performance);
+  if (updatedPerformance) {
+    return res.status(200).json(updatedPerformance);
   } else {
     return res.status(400).json({
       error: 'Performance was unable to be created',

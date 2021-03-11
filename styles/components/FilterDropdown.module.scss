@@ -103,6 +103,10 @@ Filter Dropdown: Options
   margin-top: 12px;
   padding-top: 0;
   padding-bottom: 0;
+
+  & > span {
+    margin: auto;
+  }
 }
 
 /*

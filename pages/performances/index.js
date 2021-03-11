@@ -1,4 +1,7 @@
-import React, { useState } from 'react'; // React
+import React, { useState, useEffect } from 'react'; // React
+import { useRouter } from 'next/router'; // Routing (with buttons)
+import axios from 'axios'; // axios
+import Link from 'next/link'; // Next link
 import Layout from '@components/Layout'; // Layout wrapper
 
 import Button from '@components/Button'; // Button
@@ -9,71 +12,315 @@ import Modal from '@components/Modal'; // Modal
 import Dropdown from '@components/Dropdown'; // Dropdown
 import FilterDropdown from '@components/FilterDropdown'; // Filter Dropdown
 import Table from '@components/Table'; // Table
+import Pill from '@components/Pill'; // Pill
+import Pagination from '@components/Pagination'; // Pagination
 import BackArrow from '@assets/back-arrow.svg'; // Back arrow icon
 import Search from '@assets/search.svg'; // Search icon
 import ChevronDown from '@assets/chevron-down.svg'; // Chevron down icon
 import ChevronDownGrey from '@assets/chevron-down-grey.svg'; // Chevron down grey icon
+import DancerRedJump from '@assets/dancer-red-jump.svg'; // Jumping Dancer SVG
+import DancerYellowBlue from '@assets/dancer-yellow-blue.svg'; // Jumping Dancer SVG
 import styles from '@styles/pages/Performances.module.scss'; // Page styles
 
 // Temp constants
 import data, { columns } from '../../data/mockParticipants';
 
+const PAGE_SIZE = 3; // Rows per page
+
+// Get the active filters (list of column accessors) from an object of filter dropdown values
+const getActiveFilters = options => {
+  return Object.keys(options).filter(option => options[option].selected);
+};
+
+// Remove key from object (returns new object)
+const removeKeyFromObject = (object, key) => {
+  // eslint-disable-next-line no-unused-vars
+  const { [key]: _, ...rest } = object;
+  return rest;
+};
+
 // Page: Performances
 export default function Performances() {
   const [modalOpen, setModalOpen] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
-  // const entryContent = <Table></Table>;
+  const [query, setQuery] = useState('');
+  const [schoolOptions, setSchoolOptions] = useState({});
+  const [academicLevelOptions, setAcademicLevelOptions] = useState({});
+  const [performanceLevelOptions, setPerformanceLevelOptions] = useState({});
+  const [danceStyleOptions, setDanceStyleOptions] = useState({});
+  const [danceSizeOptions, setDanceSizeOptions] = useState({});
+  const [filters, setFilters] = useState([]);
+  const [pageNumber, setPageNumber] = useState(0);
+  const [pageCount, setPageCount] = useState(0);
+
+  // Get initial filter options
+  useEffect(() => {
+    const getSettings = async () => {
+      // Get settings values
+      const settingsResponse = await axios({
+        method: 'GET',
+        url: '/api/settings/collect',
+      });
+      const settings = settingsResponse.data;
+      const academicLevelSettings = {};
+      const performanceLevelSettings = {};
+      const danceStyleSettings = {};
+      const danceSizeSettings = {};
+      for (const setting of settings) {
+        switch (setting.type) {
+          case 'COMPETITION_LEVEL':
+            performanceLevelSettings[setting.value] = {
+              label: setting.value,
+              selected: false,
+            };
+            break;
+          case 'STYLE':
+            danceStyleSettings[setting.value] = {
+              label: setting.value,
+              selected: false,
+            };
+            break;
+          case 'DANCE_SIZE':
+            danceSizeSettings[setting.value] = {
+              label: setting.value,
+              selected: false,
+            };
+            break;
+          default:
+            throw new Error('Invalid setting type');
+        }
+      }
+
+      // TODO: Get schools
+
+      setAcademicLevelOptions(academicLevelSettings);
+      setPerformanceLevelOptions(performanceLevelSettings);
+      setDanceStyleOptions(danceStyleSettings);
+      setDanceSizeOptions(danceSizeSettings);
+    };
+
+    getSettings();
+  }, []);
+
+  // Update table filters
+  useEffect(() => {
+    const newFilters = [];
+    const schoolFilters = getActiveFilters(schoolOptions);
+    const academicLevelFilters = getActiveFilters(academicLevelOptions);
+    const performanceLevelFilters = getActiveFilters(performanceLevelOptions);
+    const danceStyleFilters = getActiveFilters(danceStyleOptions);
+    const danceSizeFilters = getActiveFilters(danceSizeOptions);
+    if (query) {
+      newFilters.push({
+        id: 'title',
+        value: query,
+      });
+    }
+    if (schoolFilters.length > 0) {
+      newFilters.push({
+        id: 'school',
+        value: schoolFilters,
+      });
+    }
+    if (academicLevelFilters.length > 0) {
+      newFilters.push({
+        id: 'academic_level',
+        value: academicLevelFilters,
+      });
+    }
+    if (performanceLevelFilters.length > 0) {
+      newFilters.push({
+        id: 'competition_level',
+        value: performanceLevelFilters,
+      });
+    }
+    if (danceStyleFilters.length > 0) {
+      newFilters.push({
+        id: 'dance_style',
+        value: danceStyleFilters,
+      });
+    }
+    if (danceSizeFilters.length > 0) {
+      newFilters.push({
+        id: 'dance_size',
+        value: danceSizeFilters,
+      });
+    }
+
+    setFilters(newFilters);
+    setPageNumber(0);
+  }, [
+    query,
+    schoolOptions,
+    academicLevelOptions,
+    performanceLevelOptions,
+    danceStyleOptions,
+    danceSizeOptions,
+  ]);
+
+  // Render filter pills
+  const renderActiveFilters = () => {
+    let elements = [];
+    for (const { id, value: activeFilters } of filters) {
+      switch (id) {
+        case 'school':
+          elements = [
+            ...elements,
+            ...activeFilters.map((f, i) => (
+              <Pill
+                key={i}
+                value={f}
+                onDelete={() => setSchoolOptions(removeKeyFromObject(schoolOptions, f))}
+              />
+            )),
+          ];
+          break;
+        case 'academic_level':
+          elements = [
+            ...elements,
+            ...activeFilters.map((f, i) => (
+              <Pill
+                key={i}
+                value={f}
+                onDelete={() =>
+                  setAcademicLevelOptions(removeKeyFromObject(academicLevelOptions, f))
+                }
+              />
+            )),
+          ];
+          break;
+        case 'competition_level':
+          elements = [
+            ...elements,
+            ...activeFilters.map((f, i) => (
+              <Pill
+                key={i}
+                value={f}
+                onDelete={() =>
+                  setPerformanceLevelOptions(removeKeyFromObject(performanceLevelOptions, f))
+                }
+              />
+            )),
+          ];
+          break;
+        case 'dance_style':
+          elements = [
+            ...elements,
+            ...activeFilters.map((f, i) => (
+              <Pill
+                key={i}
+                value={f}
+                onDelete={() => setDanceStyleOptions(removeKeyFromObject(danceStyleOptions, f))}
+              />
+            )),
+          ];
+          break;
+        case 'dance_size':
+          elements = [
+            ...elements,
+            ...activeFilters.map((f, i) => (
+              <Pill
+                key={i}
+                value={f}
+                onDelete={() => setDanceSizeOptions(removeKeyFromObject(danceSizeOptions, f))}
+              />
+            )),
+          ];
+          break;
+      }
+    }
+
+    return elements;
+  };
 
   return (
     <Layout>
       <div>
         <div className={styles.performances__navigation}>
-          <Button className={styles.performances__navigation__button} variant="outlined">
-            <img src={BackArrow} />
-            Back to Events
-          </Button>
+          <Link href="/">
+            <Button className={styles.performances__navigation__button} variant="outlined">
+              <img src={BackArrow} />
+              Back to Events
+            </Button>
+          </Link>
+
           <h2 className={styles.performances__navigation__eventName}>
             {`OSSDF2021- Let's Dis-dance`}
           </h2>
         </div>
         <div className={styles.performances__header}>
-          <Title className={styles.performances__header__pageTitle}>Performances</Title>
-          <Input
-            className={styles.performances__header__search}
-            placeholder="Search"
-            icon={() => <img src={Search} />}
-          />
-          <Button
-            className={`${styles.performances__header__filtersButton} ${
-              showFilters && styles.performances__header__filtersButtonOpen
-            }`}
-            variant={showFilters ? 'contained' : 'outlined'}
-            onClick={() => setShowFilters(!showFilters)}
-          >
-            Filters
-            <img src={showFilters ? ChevronDown : ChevronDownGrey} />
-          </Button>
-          <Button variant="contained" onClick={() => setModalOpen(true)}>
-            Add Performance
-          </Button>
+          <div>
+            <Title className={styles.performances__header__pageTitle}>Performances</Title>
+            <Input
+              className={styles.performances__header__search}
+              placeholder="Search"
+              icon={() => <img src={Search} />}
+              value={query}
+              onChange={event => setQuery(event.target.value)}
+            />
+            <Button
+              className={`${styles.performances__header__filtersButton} ${
+                showFilters && styles.performances__header__filtersButtonOpen
+              }`}
+              variant={showFilters ? 'contained' : 'outlined'}
+              onClick={() => setShowFilters(!showFilters)}
+            >
+              Filters
+              <img src={showFilters ? ChevronDown : ChevronDownGrey} />
+            </Button>
+            <Button variant="contained" onClick={() => setModalOpen(true)}>
+              Add Performance
+            </Button>
+          </div>
+          <div>
+            <Pagination
+              pageCount={pageCount}
+              pageNumber={pageNumber}
+              onPageChange={({ selected }) => setPageNumber(selected)}
+            />
+          </div>
         </div>
         {showFilters && (
           <div className={styles.performances__filters}>
             <div className={styles.performances__filters__buttons}>
-              <FilterDropdown buttonText="School" />
-              <FilterDropdown buttonText="Academic Level" />
-              <FilterDropdown buttonText="Competition Level" />
-              <FilterDropdown buttonText="Style" />
-              <FilterDropdown buttonText="Size" />
+              <FilterDropdown
+                buttonText="School"
+                options={schoolOptions}
+                setOptions={setSchoolOptions}
+              />
+              <FilterDropdown
+                buttonText="Academic Level"
+                options={academicLevelOptions}
+                setOptions={setAcademicLevelOptions}
+              />
+              <FilterDropdown
+                buttonText="Competition Level"
+                options={performanceLevelOptions}
+                setOptions={setPerformanceLevelOptions}
+              />
+              <FilterDropdown
+                buttonText="Style"
+                options={danceStyleOptions}
+                setOptions={setDanceStyleOptions}
+              />
+              <FilterDropdown
+                buttonText="Size"
+                options={danceSizeOptions}
+                setOptions={setDanceSizeOptions}
+              />
             </div>
-            <div className={styles.performances__filters__appliedFilters}>applied filters</div>
+            <div className={styles.performances__filters__appliedFilters}>
+              {renderActiveFilters()}
+            </div>
           </div>
         )}
         <div className={styles.performances__content}>
           <Tabs
             firstTabName="Entry View"
             secondTabName="Judging View"
-            firstTabContent={<EntryTable />}
+            firstTabContent={
+              <EntryTable filters={filters} pageNumber={pageNumber} setPageCount={setPageCount} />
+            }
             secondTabContent={<JudgingTable />}
           />
         </div>
@@ -84,13 +331,77 @@ export default function Performances() {
 }
 
 // Entries Table
-const EntryTable = () => {
-  return <Table columns={columns} data={data} />;
+const EntryTable = props => {
+  const router = useRouter(); // Collect router
+
+  const columns = [
+    {
+      Header: 'Edit',
+      accessor: 'edit',
+      // eslint-disable-next-line react/display-name
+      Cell: () => (
+        <div className={styles.entryTable__editCell}>
+          <Button variant="edit" />
+        </div>
+      ),
+    },
+    {
+      Header: 'ID',
+      accessor: 'ID',
+    },
+    {
+      Header: 'Title',
+      accessor: 'title',
+    },
+    {
+      Header: 'School',
+      accessor: 'school',
+      filter: 'matchEnum',
+    },
+    {
+      Header: 'Level',
+      accessor: 'competition_level',
+      filter: 'matchEnum',
+    },
+    {
+      Header: 'Style',
+      accessor: 'dance_style',
+      filter: 'matchEnum',
+    },
+    {
+      Header: 'Size',
+      accessor: 'dance_size',
+      filter: 'matchEnum',
+    },
+    {
+      Header: 'Score',
+      accessor: 'score',
+      filter: 'matchEnum',
+    },
+  ];
+
+  const goToPerformanceDetails = row => {
+    // Go to /performances/[id] page
+    router.push(`/performances/${row.id}`); // Route to "/performance/:id" page
+  };
+
+  return (
+    <Table
+      columns={columns}
+      data={data}
+      pageSize={PAGE_SIZE}
+      emptyComponent={<EmptyTableComponent />}
+      onRowClick={goToPerformanceDetails}
+      {...props}
+    />
+  );
 };
 
 // Judging Table
 const JudgingTable = () => {
-  return <Table columns={columns} data={[]} />;
+  return (
+    <Table columns={columns} data={[]} filters={[]} emptyComponent={<EmptyTableComponent />} />
+  );
 };
 
 // New Performance Modal
@@ -142,5 +453,18 @@ const PerformanceModal = ({ mode, open, setOpen }) => {
         </div>
       </div>
     </Modal>
+  );
+};
+
+const EmptyTableComponent = () => {
+  return (
+    <div className={styles.page__performances_list_empty}>
+      <img src={DancerYellowBlue} />
+      <div>
+        <h2>No Performances Listed</h2>
+        <h3>Create your first performance</h3>
+      </div>
+      <img src={DancerRedJump} />
+    </div>
   );
 };

@@ -1,0 +1,67 @@
+.page__verify {
+  text-align: center;
+  min-height: 100vh;
+
+  // Center all content
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Top left return to /login
+.page__verify_redirect {
+  position: absolute;
+  top: 96px;
+  left: 64px;
+
+  a {
+    text-decoration: none;
+    color: var(--brand-pop-blue);
+    font-size: 16px;
+    transition: 100ms ease-in-out;
+
+    img {
+      vertical-align: middle;
+      transform: translateY(-2px);
+      padding-right: 5px;
+    }
+  }
+
+  a:hover {
+    border-bottom: 1px solid var(--brand-pop-blue);
+    opacity: 0.8;
+  }
+}
+
+// Page content and image
+.page__verify_request {
+  h3 {
+    color: var(--brand-pop-blue);
+    font-size: 24px;
+    line-height: 30px;
+    max-width: 640px;
+    display: block;
+    margin: 0px auto 36px auto;
+    padding: 0px 20px;
+  }
+
+  img {
+    max-width: 430px;
+    width: 80%;
+  }
+}
+
+// Responsive: Make text smaller on small displays and move accordingly
+@media screen and (max-width: 780px) {
+  .page__verify_redirect {
+    top: 30px;
+    left: 30px;
+  }
+
+  .page__verify_request {
+    h3 {
+      font-size: 20px;
+      line-height: 27px;
+    }
+  }
+}

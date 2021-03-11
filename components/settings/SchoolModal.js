@@ -73,6 +73,7 @@ export default function SchoolModal({
 
     setLoading(false);
     setOpen(false);
+    clearFields();
   };
 
   useEffect(() => {
