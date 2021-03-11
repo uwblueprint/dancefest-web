@@ -107,10 +107,6 @@ function Tab(props) {
           {/* Nominated By */}
           <span>NOMINATED BY {props.nominator}</span>
         </div>
-
-        <div className={styles.judge__tab_awards}>
-          <Button variant="contained">Finalize</Button>
-        </div>
       </button>
     </div>
   );
