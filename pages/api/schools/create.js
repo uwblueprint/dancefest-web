@@ -8,14 +8,17 @@ export default async (req, res) => {
   // If user is authenticated and is an admin
   if (session && session.role === 'ADMIN') {
     // Collect name of school
-    const { name } = req.body;
+    const { schoolName, contactName, email, phone } = req.body;
 
     // If name exist
-    if (name) {
-      // Create new setting
+    if (schoolName && email) {
+      // Create new school
       const school = await prisma.school.create({
         data: {
-          name: name,
+          school_name: schoolName,
+          contact_name: contactName,
+          email: email,
+          phone: phone,
         },
       });
 

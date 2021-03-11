@@ -8,14 +8,16 @@ datasource db {
 }
 
 model User {
-  id            Int       @id @default(autoincrement())
-  name          String?   @db.VarChar(255)
-  role          role      @default(USER)
-  email         String?   @unique @db.VarChar(255)
-  emailVerified DateTime? @map("email_verified") @db.Timestamptz(6)
+  id            Int            @id @default(autoincrement())
+  name          String?        @db.VarChar(255)
+  role          role           @default(USER)
+  email         String?        @unique @db.VarChar(255)
+  emailVerified DateTime?      @map("email_verified") @db.Timestamptz(6)
   image         String?
-  created_at    DateTime  @default(now()) @db.Timestamptz(6)
-  updated_at    DateTime  @default(now()) @db.Timestamptz(6)
+  created_at    DateTime       @default(now()) @db.Timestamptz(6)
+  updated_at    DateTime       @default(now()) @db.Timestamptz(6)
+  adjudications Adjudication[] @relation("adjudicationsTousers")
+  awards        Award[]        @relation("awardsTousers")
 
   @@map("users")
 }
@@ -46,12 +48,14 @@ model Event {
 }
 
 model School {
-  id          Int           @id @default(autoincrement())
-  name        String?       @db.VarChar(255)
-  created_at  DateTime      @default(now()) @db.Timestamp(6)
-  updated_at  DateTime      @default(now()) @db.Timestamp(6)
-  contacts    Contact[]
-  Performance Performance[]
+  id           Int           @id @default(autoincrement())
+  school_name  String        @db.VarChar(255)
+  contact_name String?       @db.VarChar(255)
+  email        String        @db.VarChar(255)
+  phone        String?       @db.VarChar(255)
+  created_at   DateTime      @default(now()) @db.Timestamp(6)
+  updated_at   DateTime      @default(now()) @db.Timestamp(6)
+  Performance  Performance[]
 
   @@map("schools")
 }
@@ -63,27 +67,29 @@ model Setting {
   created_at DateTime    @default(now()) @db.Timestamp(6)
   updated_at DateTime    @default(now()) @db.Timestamp(6)
 
+  @@unique([type, value], name: "settings_unique")
   @@map("settings")
 }
 
 model Performance {
-  id                Int            @id @default(autoincrement())
-  name              String?        @db.VarChar(255)
-  academic_level    String?        @db.VarChar(255)
-  performers        String[]       @db.VarChar(255)
-  choreographers    String[]       @db.VarChar(255)
-  competition_level String?        @db.VarChar(255)
-  dance_size        String?        @db.VarChar(255)
+  id                Int                @id @default(autoincrement())
+  name              String?            @db.VarChar(255)
+  academic_level    String?            @db.VarChar(255)
+  performers        String[]           @db.VarChar(255)
+  choreographers    String[]           @db.VarChar(255)
+  competition_level String?            @db.VarChar(255)
+  dance_size        String?            @db.VarChar(255)
   dance_entry       Int
-  dance_style       String?        @db.VarChar(255)
-  dance_title       String?        @db.VarChar(255)
+  dance_style       String?            @db.VarChar(255)
+  dance_title       String?            @db.VarChar(255)
   event_id          Int
   school_id         Int
-  created_at        DateTime       @default(now()) @db.Timestamp(6)
-  updated_at        DateTime       @default(now()) @db.Timestamp(6)
-  event             Event          @relation(fields: [event_id], references: [id])
-  school            School         @relation(fields: [school_id], references: [id])
+  created_at        DateTime           @default(now()) @db.Timestamp(6)
+  updated_at        DateTime           @default(now()) @db.Timestamp(6)
+  event             Event              @relation(fields: [event_id], references: [id])
+  school            School             @relation(fields: [school_id], references: [id])
   adjudications     Adjudication[]
+  awards            AwardPerformance[] @relation("awards_performancesToperformances")
 
   @@map("performances")
 }
@@ -95,27 +101,40 @@ model Adjudication {
   cumulative_mark Int
   audio_url       String?     @db.VarChar(255)
   notes           String?
-  special_award   String?     @db.VarChar(255)
   performance_id  Int
+  user_id         Int
   created_at      DateTime    @default(now()) @db.Timestamp(6)
   updated_at      DateTime    @default(now()) @db.Timestamp(6)
   performance     Performance @relation(fields: [performance_id], references: [id])
+  user            User        @relation("adjudicationsTousers", fields: [user_id], references: [id])
 
   @@map("adjudications")
 }
 
-model Contact {
-  id         Int      @id @default(autoincrement())
-  school_id  Int
-  year       Int
-  name       String   @db.VarChar(255)
-  email      String   @db.VarChar(255)
-  phone      String?  @db.VarChar(255)
-  created_at DateTime @default(now()) @db.Timestamp(6)
-  updated_at DateTime @default(now()) @db.Timestamp(6)
-  school     School   @relation(fields: [school_id], references: [id])
+model Award {
+  id           Int                @id @default(autoincrement())
+  title        String             @db.VarChar(255)
+  is_finalized Boolean            @default(false)
+  user_id      Int
+  created_at   DateTime           @default(now()) @db.Timestamp(6)
+  updated_at   DateTime           @default(now()) @db.Timestamp(6)
+  user         User               @relation("awardsTousers", fields: [user_id], references: [id])
+  performances AwardPerformance[]
 
-  @@map("contacts")
+  @@map("awards")
+}
+
+model AwardPerformance {
+  id             Int                    @id @default(autoincrement())
+  award_id       Int?
+  performance_id Int?
+  nominee_count  Int?                   @default(0)
+  status         awardperformancestatus @default(NOMINEE)
+  awards         Award?                 @relation(fields: [award_id], references: [id])
+  performances   Performance?           @relation("awards_performancesToperformances", fields: [performance_id], references: [id])
+
+  @@unique([award_id, performance_id], name: "awards_performances_unique")
+  @@map("awards_performances")
 }
 
 enum role {
@@ -128,4 +147,9 @@ enum settingtype {
   COMPETITION_LEVEL
   DANCE_SIZE
   STYLE
+}
+
+enum awardperformancestatus {
+  NOMINEE
+  FINALIST
 }

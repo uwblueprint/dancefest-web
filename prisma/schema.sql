@@ -4,6 +4,9 @@ CREATE TYPE Role AS ENUM('USER', 'JUDGE', 'ADMIN');
 -- Create settings enum
 CREATE TYPE SettingType as ENUM('COMPETITION_LEVEL', 'DANCE_SIZE', 'STYLE');
 
+-- Create award status enum
+CREATE TYPE AwardPerformanceStatus as ENUM('NOMINEE', 'FINALIST');
+
 -- Create users table
 CREATE TABLE users (
   id SERIAL PRIMARY KEY NOT NULL,
@@ -41,7 +44,10 @@ CREATE TABLE events (
 -- Create schools table
 CREATE TABLE schools (
   id SERIAL PRIMARY KEY NOT NULL,
-  name VARCHAR(255),
+  school_name VARCHAR(255) NOT NULL,
+  contact_name VARCHAR(255),
+  email VARCHAR(255) NOT NULL,
+  phone VARCHAR(255),
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -52,7 +58,8 @@ CREATE TABLE settings (
   type SettingType NOT NULL,
   value VARCHAR(255),
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT settings_unique UNIQUE (type, value)
 );
 
 -- Create performances table
@@ -83,23 +90,33 @@ CREATE TABLE adjudications (
   cumulative_mark INTEGER NOT NULL,
   audio_url VARCHAR(255),
   notes TEXT,
-  special_award VARCHAR(255),
   performance_id INTEGER NOT NULL,
+  user_id INTEGER NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY(performance_id) REFERENCES performances(id)
+  FOREIGN KEY(performance_id) REFERENCES performances(id),
+  FOREIGN KEY(user_id) REFERENCES users(id)
 );
 
--- Create contacts table
-CREATE TABLE contacts (
+-- Create awards table
+CREATE TABLE awards (
   id SERIAL PRIMARY KEY NOT NULL,
-  school_id INTEGER NOT NULL,
-  year INTEGER NOT NULL,
-  name VARCHAR(255) NOT NULL,
-  email VARCHAR(255) NOT NULL,
-  phone VARCHAR(255),
+  title VARCHAR(255) NOT NULL,
+  is_finalized BOOLEAN NOT NULL DEFAULT FALSE,
+  user_id INTEGER NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY(school_id) REFERENCES schools(id)
+  FOREIGN KEY(user_id) REFERENCES users(id)
 );
 
+-- Create awards_performances table
+CREATE TABLE awards_performances (
+  id SERIAL PRIMARY KEY NOT NULL,
+  award_id INTEGER,
+  performance_id INTEGER,
+  nominee_count INTEGER DEFAULT 0,
+  status AwardPerformanceStatus NOT NULL DEFAULT 'NOMINEE',
+  FOREIGN KEY(award_id) REFERENCES awards(id),
+  FOREIGN KEY(performance_id) REFERENCES performances(id),
+  CONSTRAINT "awards_performances_unique" UNIQUE (award_id, performance_id)
+);

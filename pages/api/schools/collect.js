@@ -25,8 +25,5 @@ export const getSchools = async filter => {
   // Collect event with eventID
   return await prisma.school.findMany({
     where: filter,
-    include: {
-      contacts: true,
-    },
   });
 };

@@ -5,31 +5,45 @@ export default async (req, res) => {
   // Collect session from request
   const session = await getSession({ req });
 
-  // If authenticated and admin
-  if (session && session.role === 'ADMIN') {
-    // Collect id of performance to delete
-    const { id } = req.body;
-
-    // If id exists
-    if (id) {
-      // Delete performance
-      // TODO DELETE associated adjudications in a transaction
-      // const deletedAdjudications = prisma.adjudication.deleteMany()
-      const deletedPerformance = await prisma.performance.delete({
-        // With
-        where: {
-          // Specified id
-          id: id,
-        },
-      });
-
-      // Return deleted performance
-      res.send(deletedPerformance);
-    } else {
-      res.status(404).end();
-    }
+  if (!session || session.role !== 'ADMIN') {
+    return res.status(401).end();
   }
 
-  // Else, throw unauthenticated
-  res.status(401).end();
+  // Collect id of performance to delete
+  const { id } = req.body;
+
+  if (!id) {
+    return res.status(400).json({
+      error: 'Performance id was not provided',
+    });
+  }
+
+  const deletedAwardPerformance = prisma.awardPerformance.deleteMany({
+    where: {
+      performance_id: id,
+    },
+  });
+
+  const deletedAdjudications = prisma.adjudication.deleteMany({
+    where: {
+      performance_id: id,
+    },
+  });
+
+  const deletedPerformance = prisma.performance.delete({
+    where: {
+      id: id,
+    },
+  });
+
+  try {
+    await prisma.$transaction([deletedAwardPerformance, deletedAdjudications, deletedPerformance]);
+  } catch {
+    return res.status(400).json({
+      error: 'Error deleting performance',
+    });
+  }
+
+  // Return deleted performance
+  return res.status(200).json({ message: 'Deleted performance successfully' });
 };

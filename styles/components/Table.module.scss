@@ -19,6 +19,7 @@ Table: Styles
 
 .table__div > table > tbody > tr:hover {
   background-color: #f5f6f7;
+  cursor: pointer;
 }
 
 .table__div > table th {
@@ -50,4 +51,30 @@ Table: Styles
 
 .table__div > table td:last-child {
   border-right: 0;
+}
+
+/*
+****************************************
+Table: Header
+****************************************
+*/
+.table__div > table th > div {
+  display: flex;
+  align-items: center;
+
+  & > div {
+    display: flex;
+    align-items: center;
+    height: 24px;
+  }
+
+  .table__sortDescArrow,
+  .table__sortAscArrow {
+    height: 24px;
+    width: 24px;
+  }
+
+  .table__sortAscArrow {
+    transform: rotate(180deg);
+  }
 }

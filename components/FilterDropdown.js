@@ -93,7 +93,7 @@ export default function FilterDropdown({
             variant="contained"
             onClick={handleClearFilter}
           >
-            Clear Filter
+            <span>Clear Filter</span>
           </Button>
         </div>
       )}
@@ -104,6 +104,11 @@ export default function FilterDropdown({
 FilterDropdown.propTypes = {
   buttonText: PropTypes.string,
   onSubmit: PropTypes.func,
-  options: PropTypes.object.isRequired,
+  options: PropTypes.objectOf(
+    PropTypes.shape({
+      label: PropTypes.string.isRequired,
+      selected: PropTypes.bool.isRequired,
+    })
+  ).isRequired,
   setOptions: PropTypes.func.isRequired,
 };
