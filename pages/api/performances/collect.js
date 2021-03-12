@@ -35,14 +35,9 @@ export const getPerformances = async filter => {
   const performances = await prisma.performance.findMany({
     where: filter,
     include: {
-      awards: {
-        include: {
-          awards: true,
-        },
-      },
       school: {
         select: {
-          name: true,
+          school_name: true,
         },
       },
       adjudications: true,
@@ -55,13 +50,13 @@ export const getPerformances = async filter => {
   return performances.map(performance => {
     return {
       ...performance,
-      awards: performance.awards.map(award => {
-        return {
-          ...award.awards,
-          nominee_count: award.nominee_count,
-          status: award.status,
-        };
-      }),
+      // awards: performance.awards.map(award => {
+      //   return {
+      //     ...award.awards,
+      //     nominee_count: award.nominee_count,
+      //     status: award.status,
+      //   };
+      // }),
     };
   });
 };
