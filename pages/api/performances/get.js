@@ -47,6 +47,7 @@ export const getPerformance = async filter => {
           name: true,
         },
       },
+      adjudications: true,
     },
   });
 
