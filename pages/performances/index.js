@@ -233,7 +233,7 @@ export default function Performances() {
     const activeDanceSizeFilters = getActiveFilters(danceSizeFilters);
     if (searchQuery) {
       updatedTableFilters.push({
-        id: 'title',
+        id: 'danceTitle',
         value: searchQuery,
       });
     }
