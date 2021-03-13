@@ -102,22 +102,22 @@ export default function PerformanceModal({
   useEffect(() => {
     if (performanceToEdit) {
       const {
-        dance_title,
+        danceTitle,
         performers,
         choreographers,
-        school: { school_name },
-        school_id,
-        competition_level,
-        dance_style,
-        dance_size,
+        schoolName,
+        schoolId,
+        performanceLevel,
+        danceStyle,
+        danceSize,
       } = performanceToEdit;
-      setDanceTitle(dance_title);
+      setDanceTitle(danceTitle);
       setDancersString(performers.join(', '));
       setChoreographersString(choreographers.join(', '));
-      setSchool({ label: school_name, value: school_id });
-      setCompetitionLevel({ label: competition_level, value: competition_level });
-      setDanceStyle({ label: dance_style, value: dance_style });
-      setDanceSize({ label: dance_size, value: dance_size });
+      setSchool({ label: schoolName, value: schoolId });
+      setCompetitionLevel({ label: performanceLevel, value: performanceLevel });
+      setDanceStyle({ label: danceStyle, value: danceStyle });
+      setDanceSize({ label: danceSize, value: danceSize });
     } else {
       clearFields();
     }

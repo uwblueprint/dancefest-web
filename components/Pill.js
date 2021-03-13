@@ -5,10 +5,10 @@ import Delete from '@assets/delete.svg'; // Delete icon
 import styles from '@styles/components/Pill.module.scss'; // Component styles
 
 // Filter Value
-export default function Pill({ className = '', value, onDelete }) {
+export default function Pill({ className = '', label, onDelete }) {
   return (
     <div className={`${styles.pill} ${className}`}>
-      {value}
+      {label}
       <img src={Delete} onClick={onDelete} />
     </div>
   );
@@ -17,5 +17,5 @@ export default function Pill({ className = '', value, onDelete }) {
 Pill.propTypes = {
   className: PropTypes.string,
   onDelete: PropTypes.func.isRequired,
-  value: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
 };

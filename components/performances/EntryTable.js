@@ -32,33 +32,32 @@ export default function EntryTable({ performances, setPerformanceToEdit, setModa
     },
     {
       Header: 'Title',
-      accessor: 'dance_title',
+      accessor: 'danceTitle',
     },
     {
       Header: 'School',
-      accessor: 'school.school_name',
+      accessor: 'schoolName',
       filter: 'matchEnum',
     },
     {
       Header: 'Level',
-      accessor: 'competition_level',
+      accessor: 'performanceLevel',
       filter: 'matchEnum',
     },
     {
       Header: 'Style',
-      accessor: 'dance_style',
+      accessor: 'danceStyle',
       filter: 'matchEnum',
     },
     {
       Header: 'Size',
-      accessor: 'dance_size',
+      accessor: 'danceSize',
       filter: 'matchEnum',
     },
-    // {
-    //   Header: 'Score',
-    //   accessor: 'score',
-    //   filter: 'matchEnum',
-    // },
+    {
+      Header: 'Score',
+      accessor: 'score',
+    },
   ];
 
   // const goToPerformanceDetails = row => {
@@ -72,6 +71,7 @@ export default function EntryTable({ performances, setPerformanceToEdit, setModa
       data={performances}
       pageSize={PAGE_SIZE}
       emptyComponent={<EmptyTableComponent />}
+      initialSort={[{ id: 'id' }]}
       // onRowClick={goToPerformanceDetails}
       {...props}
     />

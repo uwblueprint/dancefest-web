@@ -13,6 +13,7 @@ export default function Table({
   setPageCount = null,
   pageSize = 10,
   paginate = true,
+  initialSort = [],
   emptyComponent,
   // onRowClick = () => {},
 }) {
@@ -38,6 +39,9 @@ export default function Table({
             return rowValue !== undefined ? filterValues.includes(String(rowValue)) : true;
           });
         },
+      },
+      initialState: {
+        sortBy: initialSort,
       },
     },
     useFilters,
@@ -142,6 +146,10 @@ Table.propTypes = {
       value: PropTypes.any,
     })
   ),
+  initialSort: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    desc: PropTypes.bool,
+  }),
   onRowClick: PropTypes.func,
   pageNumber: PropTypes.number,
   pageSize: PropTypes.number,

@@ -12,7 +12,8 @@ import Button from '@components/Button'; // Button
 import Title from '@components/Title'; // Title
 import Input from '@components/Input'; // Input
 import Tabs from '@components/Tabs'; // Tabs
-import FilterDropdown from '@components/FilterDropdown'; // Filter Dropdown
+import { formatDropdownOptions } from '@components/Dropdown'; // Format dropdown options util
+import FilterDropdown, { formatFilterDropdownOptions } from '@components/FilterDropdown'; // Filter Dropdown + Format filter dropdown options util
 import Pill from '@components/Pill'; // Pill
 import Pagination from '@components/Pagination'; // Pagination
 import BackArrow from '@assets/back-arrow.svg'; // Back arrow icon
@@ -21,15 +22,32 @@ import ChevronDown from '@assets/chevron-down.svg'; // Chevron down icon
 import ChevronDownGrey from '@assets/chevron-down-grey.svg'; // Chevron down grey icon
 import styles from '@styles/pages/Performances.module.scss'; // Page styles
 
+import { formatSchools } from '@utils/schools'; // Format schools util
+import { formatPerformances } from '@utils/performances'; // Format performances util
+
 const DANCE_ENTRY = 1; // TEMPORARY. TODO: Figure out what this is for
 const EVENT_ID = 1; // TEMPORARY. TODO: REPLACE WITH STATE/STORE
 
-// Get the active filters (list of column accessors) from an object of filter dropdown values
+/**
+ * Get the active filters from an object of filter dropdown values
+ * @param {Object} options - Object of filters used in FilterDropdown component
+ * @returns {Object[]} - List of filters that have `selected: true`. Format: {label: <label>, value: <value>}
+ */
 const getActiveFilters = options => {
-  return Object.keys(options).filter(option => options[option].selected);
+  return Object.entries(options)
+    .filter(([key]) => options[key].selected)
+    .map(([value, { label }]) => ({
+      value,
+      label,
+    }));
 };
 
-// Remove key from object (returns new object)
+/**
+ * Remove key from object
+ * @param {Object} object - An object
+ * @param {*} key - A key in the object
+ * @returns {Object} A new object that is a copy of the `object` parameter with the `key` removed
+ */
 const removeKeyFromObject = (object, key) => {
   // eslint-disable-next-line no-unused-vars
   const { [key]: _, ...rest } = object;
@@ -38,107 +56,109 @@ const removeKeyFromObject = (object, key) => {
 
 // Page: Performances
 export default function Performances() {
-  const [loading, setLoading] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [showFilters, setShowFilters] = useState(false);
-  const [query, setQuery] = useState('');
+  const [loading, setLoading] = useState(false); // Loading
+  const [modalOpen, setModalOpen] = useState(false); // Modal open
+  const [showFilters, setShowFilters] = useState(false); // Show filter dropdowns
+  const [searchQuery, setSearchQuery] = useState(''); // Search query string
 
-  // List options are for the modal selections. Options are for the filter dropdowns
-  // TODO: Cleanup
-  const [schoolListOptions, setSchoolListOptions] = useState([]);
-  const [schoolOptions, setSchoolOptions] = useState({});
-  const [academicLevelOptions, setAcademicLevelOptions] = useState({});
-  const [performanceLevelListOptions, setPerformanceLevelListOptions] = useState([]);
-  const [performanceLevelOptions, setPerformanceLevelOptions] = useState({});
-  const [danceStyleListOptions, setDanceStyleListOptions] = useState([]);
-  const [danceStyleOptions, setDanceStyleOptions] = useState({});
-  const [danceSizeListOptions, setDanceSizeListOptions] = useState([]);
-  const [danceSizeOptions, setDanceSizeOptions] = useState({});
-  const [filters, setFilters] = useState([]);
+  // Filter dropdown options
+  const [schoolFilters, setSchoolFilters] = useState({});
+  const [academicLevelFilters, setAcademicLevelFilters] = useState({});
+  const [performanceLevelFilters, setPerformanceLevelFilters] = useState({});
+  const [danceStyleFilters, setDanceStyleFilters] = useState({});
+  const [danceSizeFilters, setDanceSizeFilters] = useState({});
+
+  // Modal dropdown options
+  const [schoolDropdownOptions, setSchoolDropdownOptions] = useState([]);
+  const [performanceLevelDropdownOptions, setPerformanceLevelDropdownOptions] = useState([]);
+  const [danceStyleDropdownOptions, setDanceStyleDropdownOptions] = useState([]);
+  const [danceSizeDropdownOptions, setDanceSizeDropdownOptions] = useState([]);
+
+  // Table props
+  const [tableFilters, setTableFilters] = useState([]);
   const [pageNumber, setPageNumber] = useState(0);
   const [pageCount, setPageCount] = useState(0);
 
+  // Table data
   const [performances, setPerformances] = useState([]);
   const [performanceToEdit, setPerformanceToEdit] = useState(null);
 
   const getFilters = async () => {
     setLoading(true);
 
-    try {
-      const schoolOptionsResponse = await axios({
-        method: 'GET',
-        url: '/api/schools/collect',
-      });
-      const schools = schoolOptionsResponse.data;
-      const initialSchoolListOptions = [];
-      const initialSchoolOptions = {};
-      for (const { id, school_name: schoolName } of schools) {
-        initialSchoolListOptions.push({
-          label: schoolName,
-          value: id,
+    const getSchools = async () => {
+      try {
+        const response = await axios({
+          method: 'GET',
+          url: '/api/schools/collect',
         });
-        initialSchoolOptions[id] = {
-          label: schoolName,
-          selected: false,
-        };
-      }
+        const schools = formatSchools(response.data);
 
-      setSchoolListOptions(initialSchoolListOptions);
-      setSchoolOptions(initialSchoolOptions);
-    } catch {
-      // Empty catch block
-    }
-    try {
-      const settingOptionsResponse = await axios({
+        // Modal dropdown options
+        setSchoolDropdownOptions(
+          formatDropdownOptions(schools, {
+            value: 'id',
+            label: 'schoolName',
+          })
+        );
+
+        // Filters
+        const initialSchoolFilters = formatFilterDropdownOptions(schools, {
+          value: 'id',
+          label: 'schoolName',
+        });
+        setSchoolFilters(initialSchoolFilters);
+      } catch {
+        // Empty catch block
+      }
+    };
+
+    const getSettings = async () => {
+      const response = await axios({
         method: 'GET',
         url: '/api/settings/collect',
       });
-      const settings = settingOptionsResponse.data;
-      const academicLevelSettings = {};
-      const initialPerformanceLevelListOptions = [];
-      const performanceLevelSettings = {};
-      const initialDanceStyleListOptions = [];
-      const danceStyleSettings = {};
-      const initialDanceSizeListOptions = [];
-      const danceSizeSettings = {};
-      for (const setting of settings) {
-        switch (setting.type) {
-          case 'COMPETITION_LEVEL':
-            initialPerformanceLevelListOptions.push({ label: setting.value, value: setting.value });
-            performanceLevelSettings[setting.value] = {
-              label: setting.value,
-              selected: false,
-            };
-            break;
-          case 'STYLE':
-            initialDanceStyleListOptions.push({ label: setting.value, value: setting.value });
-            danceStyleSettings[setting.value] = {
-              label: setting.value,
-              selected: false,
-            };
-            break;
-          case 'DANCE_SIZE':
-            initialDanceSizeListOptions.push({ label: setting.value, value: setting.value });
-            danceSizeSettings[setting.value] = {
-              label: setting.value,
-              selected: false,
-            };
-            break;
-          default:
-            throw new Error('Invalid setting type');
-        }
-      }
+      const settings = response.data;
 
-      setAcademicLevelOptions(academicLevelSettings);
-      setPerformanceLevelListOptions(initialPerformanceLevelListOptions);
-      setPerformanceLevelOptions(performanceLevelSettings);
-      setDanceStyleListOptions(initialDanceStyleListOptions);
-      setDanceStyleOptions(danceStyleSettings);
-      setDanceSizeListOptions(initialDanceSizeListOptions);
-      setDanceSizeOptions(danceSizeSettings);
-    } catch {
-      // Empty catch block
-    }
+      const performanceLevelSettings = settings.filter(
+        setting => setting.type === 'COMPETITION_LEVEL'
+      );
+      const danceStyleSettings = settings.filter(setting => setting.type === 'STYLE');
+      const danceSizeSettings = settings.filter(setting => setting.type === 'DANCE_SIZE');
+
+      const formatOptionsFields = {
+        value: 'value',
+        label: 'value',
+      };
+
+      // Modal dropdown options
+      setPerformanceLevelDropdownOptions(
+        formatDropdownOptions(performanceLevelSettings, formatOptionsFields)
+      );
+      setDanceStyleDropdownOptions(formatDropdownOptions(danceStyleSettings, formatOptionsFields));
+      setDanceSizeDropdownOptions(formatDropdownOptions(danceSizeSettings, formatOptionsFields));
+
+      // Filters
+      const initialPerformanceLevelFilters = formatFilterDropdownOptions(
+        performanceLevelSettings,
+        formatOptionsFields
+      );
+      const initialDanceStyleFilters = formatFilterDropdownOptions(
+        danceStyleSettings,
+        formatOptionsFields
+      );
+      const initialDanceSizeFilters = formatFilterDropdownOptions(
+        danceSizeSettings,
+        formatOptionsFields
+      );
+
+      setPerformanceLevelFilters(initialPerformanceLevelFilters);
+      setDanceStyleFilters(initialDanceStyleFilters);
+      setDanceSizeFilters(initialDanceSizeFilters);
+    };
+
+    await getSchools();
+    await getSettings();
 
     setLoading(false);
   };
@@ -151,9 +171,7 @@ export default function Performances() {
         method: 'GET',
         url: `/api/performances/collect?eventID=${EVENT_ID}`,
       });
-      const performancesData = response.data;
-
-      setPerformances(performancesData);
+      setPerformances(formatPerformances(response.data));
     } catch {
       // Empty catch block
     }
@@ -207,133 +225,118 @@ export default function Performances() {
 
   // Update table filters
   useEffect(() => {
-    const newFilters = [];
-    const schoolFilters = getActiveFilters(schoolOptions);
-    const academicLevelFilters = getActiveFilters(academicLevelOptions);
-    const performanceLevelFilters = getActiveFilters(performanceLevelOptions);
-    const danceStyleFilters = getActiveFilters(danceStyleOptions);
-    const danceSizeFilters = getActiveFilters(danceSizeOptions);
-    if (query) {
-      newFilters.push({
+    const updatedTableFilters = [];
+    const activeSchoolFilters = getActiveFilters(schoolFilters);
+    const activeAcademicLevelFilters = getActiveFilters(academicLevelFilters);
+    const activePerformanceLevelFilters = getActiveFilters(performanceLevelFilters);
+    const activeDanceStyleFilters = getActiveFilters(danceStyleFilters);
+    const activeDanceSizeFilters = getActiveFilters(danceSizeFilters);
+    if (searchQuery) {
+      updatedTableFilters.push({
         id: 'title',
-        value: query,
+        value: searchQuery,
       });
     }
-    if (schoolFilters.length > 0) {
-      newFilters.push({
-        id: 'school',
-        value: schoolFilters,
+    if (activeSchoolFilters.length > 0) {
+      updatedTableFilters.push({
+        id: 'schoolName',
+        value: activeSchoolFilters.map(filter => filter.label), // For schools, need to filter by label, not schoolId due to Table accessor being `schoolName`
       });
     }
-    if (academicLevelFilters.length > 0) {
-      newFilters.push({
-        id: 'academic_level',
-        value: academicLevelFilters,
+    if (activeAcademicLevelFilters.length > 0) {
+      updatedTableFilters.push({
+        id: 'academicLevel',
+        value: activeAcademicLevelFilters.map(filter => filter.value),
       });
     }
-    if (performanceLevelFilters.length > 0) {
-      newFilters.push({
-        id: 'competition_level',
-        value: performanceLevelFilters,
+    if (activePerformanceLevelFilters.length > 0) {
+      updatedTableFilters.push({
+        id: 'performanceLevel',
+        value: activePerformanceLevelFilters.map(filter => filter.value),
       });
     }
-    if (danceStyleFilters.length > 0) {
-      newFilters.push({
-        id: 'dance_style',
-        value: danceStyleFilters,
+    if (activeDanceStyleFilters.length > 0) {
+      updatedTableFilters.push({
+        id: 'danceStyle',
+        value: activeDanceStyleFilters.map(filter => filter.value),
       });
     }
-    if (danceSizeFilters.length > 0) {
-      newFilters.push({
-        id: 'dance_size',
-        value: danceSizeFilters,
+    if (activeDanceSizeFilters.length > 0) {
+      updatedTableFilters.push({
+        id: 'danceSize',
+        value: activeDanceSizeFilters.map(filter => filter.value),
       });
     }
 
-    setFilters(newFilters);
+    setTableFilters(updatedTableFilters);
     setPageNumber(0);
   }, [
-    query,
-    schoolOptions,
-    academicLevelOptions,
-    performanceLevelOptions,
-    danceStyleOptions,
-    danceSizeOptions,
+    searchQuery,
+    schoolFilters,
+    academicLevelFilters,
+    performanceLevelFilters,
+    danceStyleFilters,
+    danceSizeFilters,
   ]);
 
-  // Render filter pills
+  // Render active filter pills
   const renderActiveFilters = () => {
-    let elements = [];
-    for (const { id, value: activeFilters } of filters) {
-      switch (id) {
-        case 'school':
-          elements = [
-            ...elements,
-            ...activeFilters.map((f, i) => (
-              <Pill
-                key={i}
-                value={f}
-                onDelete={() => setSchoolOptions(removeKeyFromObject(schoolOptions, f))}
-              />
-            )),
-          ];
-          break;
-        case 'academic_level':
-          elements = [
-            ...elements,
-            ...activeFilters.map((f, i) => (
-              <Pill
-                key={i}
-                value={f}
-                onDelete={() =>
-                  setAcademicLevelOptions(removeKeyFromObject(academicLevelOptions, f))
-                }
-              />
-            )),
-          ];
-          break;
-        case 'competition_level':
-          elements = [
-            ...elements,
-            ...activeFilters.map((f, i) => (
-              <Pill
-                key={i}
-                value={f}
-                onDelete={() =>
-                  setPerformanceLevelOptions(removeKeyFromObject(performanceLevelOptions, f))
-                }
-              />
-            )),
-          ];
-          break;
-        case 'dance_style':
-          elements = [
-            ...elements,
-            ...activeFilters.map((f, i) => (
-              <Pill
-                key={i}
-                value={f}
-                onDelete={() => setDanceStyleOptions(removeKeyFromObject(danceStyleOptions, f))}
-              />
-            )),
-          ];
-          break;
-        case 'dance_size':
-          elements = [
-            ...elements,
-            ...activeFilters.map((f, i) => (
-              <Pill
-                key={i}
-                value={f}
-                onDelete={() => setDanceSizeOptions(removeKeyFromObject(danceSizeOptions, f))}
-              />
-            )),
-          ];
-          break;
-      }
-    }
+    const activeFilterPills = [];
+    const activeSchoolFilters = getActiveFilters(schoolFilters);
+    const activeAcademicLevelFilters = getActiveFilters(academicLevelFilters);
+    const activePerformanceLevelFilters = getActiveFilters(performanceLevelFilters);
+    const activeDanceStyleFilters = getActiveFilters(danceStyleFilters);
+    const activeDanceSizeFilters = getActiveFilters(danceSizeFilters);
 
-    return elements;
+    activeSchoolFilters.forEach(({ label, value }, i) => {
+      activeFilterPills.push(
+        <Pill
+          key={i}
+          label={label}
+          onDelete={() => setSchoolFilters(removeKeyFromObject(schoolFilters, value))}
+        />
+      );
+    });
+    activeAcademicLevelFilters.forEach(({ label, value }, i) => {
+      activeFilterPills.push(
+        <Pill
+          key={i}
+          label={label}
+          onDelete={() => setAcademicLevelFilters(removeKeyFromObject(academicLevelFilters, value))}
+        />
+      );
+    });
+    activePerformanceLevelFilters.forEach(({ label, value }, i) => {
+      activeFilterPills.push(
+        <Pill
+          key={i}
+          label={label}
+          onDelete={() =>
+            setPerformanceLevelFilters(removeKeyFromObject(performanceLevelFilters, value))
+          }
+        />
+      );
+    });
+    activeDanceStyleFilters.forEach(({ label, value }, i) => {
+      activeFilterPills.push(
+        <Pill
+          key={i}
+          label={label}
+          onDelete={() => setDanceStyleFilters(removeKeyFromObject(danceStyleFilters, value))}
+        />
+      );
+    });
+    activeDanceSizeFilters.forEach(({ label, value }, i) => {
+      activeFilterPills.push(
+        <Pill
+          key={i}
+          label={label}
+          onDelete={() => setDanceSizeFilters(removeKeyFromObject(danceSizeFilters, value))}
+        />
+      );
+    });
+
+    return activeFilterPills;
   };
 
   return (
@@ -358,8 +361,8 @@ export default function Performances() {
               className={styles.performances__header__search}
               placeholder="Search"
               icon={() => <img src={Search} />}
-              value={query}
-              onChange={event => setQuery(event.target.value)}
+              value={searchQuery}
+              onChange={event => setSearchQuery(event.target.value)}
             />
             <Button
               className={`${styles.performances__header__filtersButton} ${
@@ -390,28 +393,28 @@ export default function Performances() {
             <div className={styles.performances__filters__buttons}>
               <FilterDropdown
                 buttonText="School"
-                options={schoolOptions}
-                setOptions={setSchoolOptions}
+                options={schoolFilters}
+                setOptions={setSchoolFilters}
               />
               <FilterDropdown
                 buttonText="Academic Level"
-                options={academicLevelOptions}
-                setOptions={setAcademicLevelOptions}
+                options={academicLevelFilters}
+                setOptions={setAcademicLevelFilters}
               />
               <FilterDropdown
                 buttonText="Competition Level"
-                options={performanceLevelOptions}
-                setOptions={setPerformanceLevelOptions}
+                options={performanceLevelFilters}
+                setOptions={setPerformanceLevelFilters}
               />
               <FilterDropdown
                 buttonText="Style"
-                options={danceStyleOptions}
-                setOptions={setDanceStyleOptions}
+                options={danceStyleFilters}
+                setOptions={setDanceStyleFilters}
               />
               <FilterDropdown
                 buttonText="Size"
-                options={danceSizeOptions}
-                setOptions={setDanceSizeOptions}
+                options={danceSizeFilters}
+                setOptions={setDanceSizeFilters}
               />
             </div>
             <div className={styles.performances__filters__appliedFilters}>
@@ -431,7 +434,7 @@ export default function Performances() {
               ) : (
                 <EntryTable
                   performances={performances}
-                  filters={filters}
+                  filters={tableFilters}
                   pageNumber={pageNumber}
                   setPageCount={setPageCount}
                   setPerformanceToEdit={setPerformanceToEdit}
@@ -455,10 +458,10 @@ export default function Performances() {
         setLoading={setLoading}
         getPerformances={getPerformances}
         addPerformance={addPerformance}
-        schoolOptions={schoolListOptions}
-        performanceLevelOptions={performanceLevelListOptions}
-        danceStyleOptions={danceStyleListOptions}
-        danceSizeOptions={danceSizeListOptions}
+        schoolOptions={schoolDropdownOptions}
+        performanceLevelOptions={performanceLevelDropdownOptions}
+        danceStyleOptions={danceStyleDropdownOptions}
+        danceSizeOptions={danceSizeDropdownOptions}
         performanceToEdit={performanceToEdit}
         setPerformanceToEdit={setPerformanceToEdit}
       />
