@@ -28,7 +28,7 @@ async function dataSeed() {
     { name: 'Chidi', email: 'chidi@uwblueprint.org' },
   ];
 
-  for (let admin of admins) {
+  for (const admin of admins) {
     const adminUpsert = await prisma.user.upsert({
       where: { email: admin['email'] },
       update: {
@@ -45,7 +45,7 @@ async function dataSeed() {
   }
 
   const userUpserts = [];
-  for (let user of users) {
+  for (const user of users) {
     const userUpsert = await prisma.user.upsert({
       where: { email: user['email'] },
       update: {
@@ -77,7 +77,7 @@ async function dataSeed() {
     'Live Vocals',
   ];
   const levelSettings = ['Easy', 'Intermediate', 'Advanced'];
-  for (let size of sizeSettings) {
+  for (const size of sizeSettings) {
     const setting = await prisma.setting.upsert({
       where: {
         settings_unique: {
@@ -94,7 +94,7 @@ async function dataSeed() {
     console.log(setting);
   }
 
-  for (let style of styleSettings) {
+  for (const style of styleSettings) {
     const setting = await prisma.setting.upsert({
       where: {
         settings_unique: {
@@ -111,7 +111,7 @@ async function dataSeed() {
     console.log(setting);
   }
 
-  for (let level of levelSettings) {
+  for (const level of levelSettings) {
     const setting = await prisma.setting.upsert({
       where: {
         settings_unique: {
