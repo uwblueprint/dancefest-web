@@ -37,7 +37,7 @@ export const getAward = async filter => {
   const award = await prisma.award.findFirst({
     where: filter,
     include: {
-      performances: {
+      awards_performances: {
         include: {
           performances: true,
         },

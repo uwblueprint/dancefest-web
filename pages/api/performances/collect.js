@@ -35,7 +35,7 @@ export const getPerformances = async filter => {
   const performances = await prisma.performance.findMany({
     where: filter,
     include: {
-      awards: {
+      awards_performances: {
         include: {
           awards: true,
         },

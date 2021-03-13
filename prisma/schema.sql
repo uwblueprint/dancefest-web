@@ -103,10 +103,21 @@ CREATE TABLE awards (
   id SERIAL PRIMARY KEY NOT NULL,
   title VARCHAR(255) NOT NULL,
   is_finalized BOOLEAN NOT NULL DEFAULT FALSE,
+  is_category BOOLEAN NOT NULL DEFAULT FALSE,
   user_id INTEGER NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY(user_id) REFERENCES users(id)
+);
+
+-- Create award categories table
+CREATE TABLE awards_categories (
+  id SERIAL PRIMARY KEY NOT NULL,
+  award_id INTEGER,
+  category_id INTEGER,
+  FOREIGN KEY(award_id) REFERENCES awards(id),
+  FOREIGN KEY(category_id) REFERENCES settings(id),
+  CONSTRAINT "awards_categories_unique" UNIQUE (award_id, category_id)
 );
 
 -- Create awards_performances table

@@ -21,7 +21,7 @@ export const getAwards = async () => {
   // Collect awards with performanceID
   const awards = await prisma.award.findMany({
     include: {
-      performances: {
+      awards_performances: {
         include: {
           performances: true,
         },
