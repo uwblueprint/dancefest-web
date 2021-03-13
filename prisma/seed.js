@@ -4,12 +4,65 @@ const prisma = new PrismaClient();
 
 async function main() {
   // TODO: perform data seeding dependent on environment
-  await userSeed();
   await dataSeed();
 }
 
 async function dataSeed() {
-  // seed some sample data
+  // USER SEEDING
+  const admins = [
+    { name: 'Eric L', email: 'ericli+admin@uwblueprint.org' },
+    { name: 'Julia', email: 'juliasim+admin@uwblueprint.org' },
+    { name: 'Mayank', email: 'mayankkanoria+admin@uwblueprint.org' },
+    { name: 'Oustan', email: 'oustanding+admin@uwblueprint.org' },
+    { name: 'Eric F', email: 'ericfeng+admin@uwblueprint.org' },
+    { name: 'Anish', email: 'anishagnihotri+admin@uwblueprint.org' },
+    { name: 'Chidi', email: 'chidi+admin@uwblueprint.org' },
+  ];
+  const users = [
+    { name: 'Eric L', email: 'ericli@uwblueprint.org' },
+    { name: 'Julia', email: 'juliasim@uwblueprint.org' },
+    { name: 'Mayank', email: 'mayankkanoria@uwblueprint.org' },
+    { name: 'Oustan', email: 'oustanding@uwblueprint.org' },
+    { name: 'Eric F', email: 'ericfeng@uwblueprint.org' },
+    { name: 'Anish', email: 'anishagnihotri@uwblueprint.org' },
+    { name: 'Chidi', email: 'chidi@uwblueprint.org' },
+  ];
+
+  for (let admin of admins) {
+    const adminUpsert = await prisma.user.upsert({
+      where: { email: admin['email'] },
+      update: {
+        role: 'ADMIN',
+        name: admin['name'],
+      },
+      create: {
+        role: 'ADMIN',
+        email: admin['email'],
+        name: admin['name'],
+      },
+    });
+    console.log({ adminUpsert });
+  }
+
+  const userUpserts = [];
+  for (let user of users) {
+    const userUpsert = await prisma.user.upsert({
+      where: { email: user['email'] },
+      update: {
+        role: 'ADMIN',
+        name: user['name'],
+      },
+      create: {
+        role: 'ADMIN',
+        email: user['email'],
+        name: user['name'],
+      },
+    });
+    userUpserts.push(userUpsert);
+    console.log({ userUpsert });
+  }
+
+  // SETTING SEEDING
   const sizeSettings = ['Small Group', 'Medium Group', 'Large Group', 'Creative Collaboration'];
   const styleSettings = [
     'Jazz',
@@ -74,58 +127,160 @@ async function dataSeed() {
     });
     console.log(setting);
   }
-}
 
-async function userSeed() {
-  const admins = [
-    { name: 'Eric L', email: 'ericli+admin@uwblueprint.org' },
-    { name: 'Julia', email: 'juliasim+admin@uwblueprint.org' },
-    { name: 'Mayank', email: 'mayankkanoria+admin@uwblueprint.org' },
-    { name: 'Oustan', email: 'oustanding+admin@uwblueprint.org' },
-    { name: 'Eric F', email: 'ericfeng+admin@uwblueprint.org' },
-    { name: 'Anish', email: 'anishagnihotri+admin@uwblueprint.org' },
-    { name: 'Chidi', email: 'chidi+admin@uwblueprint.org' },
-  ];
-  const users = [
-    { name: 'Eric L', email: 'ericli@uwblueprint.org' },
-    { name: 'Julia', email: 'juliasim@uwblueprint.org' },
-    { name: 'Mayank', email: 'mayankkanoria@uwblueprint.org' },
-    { name: 'Oustan', email: 'oustanding@uwblueprint.org' },
-    { name: 'Eric F', email: 'ericfeng@uwblueprint.org' },
-    { name: 'Anish', email: 'anishagnihotri@uwblueprint.org' },
-    { name: 'Chidi', email: 'chidi@uwblueprint.org' },
+  const event = { id: 1, name: 'W21 Test Event' };
+
+  // EVENT SEEDING
+  const eventUpsert = await prisma.event.upsert({
+    where: {
+      id: event['id'],
+    },
+    update: {
+      name: event['name'],
+    },
+    create: {
+      id: event['id'],
+      name: event['name'],
+    },
+  });
+
+  console.log(eventUpsert);
+
+  // SCHOOL SEEDING
+  const schools = [
+    { id: 1, school_name: 'BCI', email: 'BCI@email.com' },
+    { id: 2, school_name: 'CAS', email: 'CAS@email.com' },
+    { id: 3, school_name: 'CCC', email: 'CCC@email.com' },
+    { id: 4, school_name: 'CCCE', email: 'CCCE@email.com' },
+    { id: 5, school_name: 'CCH', email: 'CCH@email.com' },
+    { id: 6, school_name: 'CHC', email: 'CHC@email.com' },
   ];
 
-  for (let admin of admins) {
-    const adminUpsert = await prisma.user.upsert({
-      where: { email: admin['email'] },
+  const schoolUpserts = [];
+  for (const school of schools) {
+    const schoolUpsert = await prisma.school.upsert({
+      where: { id: school['id'] },
       update: {
-        role: 'ADMIN',
-        name: admin['name'],
+        school_name: school['school_name'],
       },
       create: {
-        role: 'ADMIN',
-        email: admin['email'],
-        name: admin['name'],
+        id: school['id'],
+        school_name: school['school_name'],
+        email: school['email'],
       },
     });
-    console.log({ adminUpsert });
+    schoolUpserts.push(schoolUpsert);
+    console.log(schoolUpsert);
   }
 
-  for (let user of users) {
-    const userUpsert = await prisma.user.upsert({
-      where: { email: user['email'] },
+  // PERFORMANCE SEEDING
+  const performances = [
+    {
+      id: 1,
+      name: 'Performance 1',
+      performers: ['Performer 1', 'Performer 2'],
+      cheoreographers: ['Choreo 1'],
+      dance_entry: 1,
+      event_id: eventUpsert.id,
+      school_id: schoolUpserts[0].id,
+    },
+    {
+      id: 2,
+      name: 'Performance 2',
+      performers: ['Performer 3'],
+      cheoreographers: ['Choreo 2', 'Choreo 3'],
+      dance_entry: 2,
+      event_id: eventUpsert.id,
+      school_id: schoolUpserts[0].id,
+    },
+    {
+      id: 3,
+      name: 'Performance 3',
+      performers: ['Performer 4', 'Performer 5', 'Performer 6'],
+      cheoreographers: ['Choreo 4', 'Choreo 5'],
+      dance_entry: 3,
+      event_id: eventUpsert.id,
+      school_id: schoolUpserts[0].id,
+    },
+  ];
+
+  const performanceUpserts = [];
+  for (const performance of performances) {
+    const performanceUpsert = await prisma.performance.upsert({
+      where: {
+        id: performance['id'],
+      },
       update: {
-        role: 'ADMIN',
-        name: user['name'],
+        name: performance['name'],
+        performers: performance['performers'],
+        choreographers: performance['cheoreographers'],
+        event_id: performance['event_id'],
+        school_id: performance['school_id'],
       },
       create: {
-        role: 'ADMIN',
-        email: user['email'],
-        name: user['name'],
+        id: performance['id'],
+        name: performance['name'],
+        performers: performance['performers'],
+        choreographers: performance['cheoreographers'],
+        dance_entry: performance['dance_entry'],
+        event_id: performance['event_id'],
+        school_id: performance['school_id'],
       },
     });
-    console.log({ userUpsert });
+    performanceUpserts.push(performanceUpsert);
+    console.log(performanceUpsert);
+  }
+
+  // ADJUDICATION SEEDING
+  const ajudications = [
+    {
+      id: 1,
+      artistic_mark: 100,
+      technical_mark: 100,
+      cumulative_mark: 100,
+      performance_id: performanceUpserts[0].id,
+      user_id: userUpserts[0].id,
+    },
+    {
+      id: 2,
+      artistic_mark: 100,
+      technical_mark: 80,
+      cumulative_mark: 90,
+      performance_id: performanceUpserts[0].id,
+      user_id: userUpserts[1].id,
+    },
+    {
+      id: 3,
+      artistic_mark: 50,
+      technical_mark: 50,
+      cumulative_mark: 50,
+      performance_id: performanceUpserts[0].id,
+      user_id: userUpserts[2].id,
+    },
+  ];
+
+  const adjudicationUpserts = [];
+  for (const adjudication of ajudications) {
+    const adjudicationUpsert = await prisma.adjudication.upsert({
+      where: {
+        id: adjudication['id'],
+      },
+      update: {
+        artistic_mark: adjudication['artistic_mark'],
+        technical_mark: adjudication['technical_mark'],
+        cumulative_mark: adjudication['cumulative_mark'],
+      },
+      create: {
+        id: adjudication['id'],
+        artistic_mark: adjudication['artistic_mark'],
+        technical_mark: adjudication['technical_mark'],
+        cumulative_mark: adjudication['cumulative_mark'],
+        performance_id: adjudication['performance_id'],
+        user_id: adjudication['user_id'],
+      },
+    });
+    adjudicationUpserts.push(adjudicationUpsert);
+    console.log(adjudicationUpsert);
   }
 }
 

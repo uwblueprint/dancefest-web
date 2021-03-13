@@ -40,11 +40,7 @@ export const getPerformances = async filter => {
           awards: true,
         },
       },
-      school: {
-        select: {
-          name: true,
-        },
-      },
+      school: true,
     },
   });
 
