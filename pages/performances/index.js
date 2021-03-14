@@ -3,8 +3,7 @@ import axios from 'axios'; // axios
 import Link from 'next/link'; // Next link
 import Layout from '@components/Layout'; // Layout wrapper
 
-import EntryTable from '@components/performances/EntryTable'; // Entry view table
-import JudgingTable from '@components/performances/JudgingTable'; // Judging view table
+import PerformancesTable from '@components/performances/PerformancesTable'; // Performances table
 import PerformanceModal from '@components/performances/PerformanceModal'; // Performance modal
 
 import Loader from 'react-loader-spinner'; // Loading spinner
@@ -27,6 +26,20 @@ import { formatPerformances } from '@utils/performances'; // Format performances
 
 const DANCE_ENTRY = 1; // TEMPORARY. TODO: Figure out what this is for
 const EVENT_ID = 1; // TEMPORARY. TODO: REPLACE WITH STATE/STORE
+const ENTRY_VIEW_HIDDEN_COLUMNS = [
+  'technicalScore',
+  'artisticScore',
+  'cumulativeScore',
+  'awards',
+  'status',
+];
+const JUDGING_VIEW_HIDDEN_COLUMNS = [
+  'schoolName',
+  'performanceLevel',
+  'danceStyle',
+  'danceSize',
+  'score',
+];
 
 /**
  * Get the active filters from an object of filter dropdown values
@@ -171,6 +184,7 @@ export default function Performances() {
         method: 'GET',
         url: `/api/performances/collect?eventID=${EVENT_ID}`,
       });
+
       setPerformances(formatPerformances(response.data));
     } catch {
       // Empty catch block
@@ -217,10 +231,28 @@ export default function Performances() {
     setLoading(false);
   };
 
+  // const getAdjudications = async () => {
+  //   setLoading(true);
+
+  //   try {
+  //     const response = await axios({
+  //       method: 'GET',
+  //       url: `/api/performances/getJudgingData?eventId=${EVENT_ID}`,
+  //     });
+  //     const adjudicationsData = response.data;
+  //     setAdjudications(formatPerformancesForJudgingTable(adjudicationsData));
+  //   } catch {
+  //     // Empty catch block
+  //   }
+
+  //   setLoading(false);
+  // };
+
   // Get initial filter options and performances
   useEffect(() => {
     getFilters();
     getPerformances();
+    // getAdjudications();
   }, []);
 
   // Update table filters
@@ -432,21 +464,32 @@ export default function Performances() {
                   <Loader type="Oval" color="#c90c0f" height={32} width={32} />
                 </div>
               ) : (
-                <EntryTable
+                <PerformancesTable
                   performances={performances}
                   filters={tableFilters}
                   pageNumber={pageNumber}
                   setPageCount={setPageCount}
                   setPerformanceToEdit={setPerformanceToEdit}
                   setModalOpen={setModalOpen}
+                  hiddenColumns={ENTRY_VIEW_HIDDEN_COLUMNS}
                 />
               )
             }
             secondTabContent={
               loading ? (
-                <Loader type="Oval" color="#c90c0f" height={32} width={32} />
+                <div className={styles.performances__loadingSpinner}>
+                  <Loader type="Oval" color="#c90c0f" height={32} width={32} />
+                </div>
               ) : (
-                <JudgingTable />
+                <PerformancesTable
+                  performances={performances}
+                  filters={tableFilters}
+                  pageNumber={pageNumber}
+                  setPageCount={setPageCount}
+                  setPerformanceToEdit={setPerformanceToEdit}
+                  setModalOpen={setModalOpen}
+                  hiddenColumns={JUDGING_VIEW_HIDDEN_COLUMNS}
+                />
               )
             }
           />

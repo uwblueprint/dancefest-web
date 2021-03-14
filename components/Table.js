@@ -15,6 +15,7 @@ export default function Table({
   paginate = true,
   initialSort = [],
   emptyComponent,
+  hiddenColumns = [],
   // onRowClick = () => {},
 }) {
   const {
@@ -42,6 +43,7 @@ export default function Table({
       },
       initialState: {
         sortBy: initialSort,
+        hiddenColumns,
       },
     },
     useFilters,

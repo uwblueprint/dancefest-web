@@ -8,6 +8,7 @@ export default function Tabs({
   secondTabName = 'Tab two',
   firstTabContent = null,
   secondTabContent = null,
+  onSwitchTab = () => {},
 }) {
   const [selectedTab, setSelectedTab] = useState(0);
 
@@ -18,7 +19,10 @@ export default function Tabs({
           className={`${styles.tabs__tab} ${styles.tabs__tabLeft} ${
             selectedTab === 0 && styles.tabs__tabSelectedLeft
           }`}
-          onClick={() => setSelectedTab(0)}
+          onClick={() => {
+            onSwitchTab(0);
+            setSelectedTab(0);
+          }}
         >
           {firstTabName}
         </button>
@@ -26,7 +30,10 @@ export default function Tabs({
           className={`${styles.tabs__tab} ${styles.tabs__tabRight} ${
             selectedTab === 1 && styles.tabs__tabSelectedRight
           }`}
-          onClick={() => setSelectedTab(1)}
+          onClick={() => {
+            onSwitchTab(1);
+            setSelectedTab(1);
+          }}
         >
           {secondTabName}
         </button>

@@ -26,7 +26,7 @@ export default async (req, res) => {
   // If schoolIDs exist, we convert it into an array of integers to add to the filter
   if (schoolIDs) filter.school_id = { in: schoolIDs.split(',').map(i => +i) };
 
-  const performances = await getPerformances(filter);
+  const performances = await getPerformancesWithJudgingData(filter);
   return res.status(200).json(performances);
 };
 
@@ -57,6 +57,77 @@ export const getPerformances = async filter => {
       //     status: award.status,
       //   };
       // }),
+    };
+  });
+};
+
+export const getPerformancesWithJudgingData = async filter => {
+  const performances = await prisma.performance.findMany({
+    where: filter,
+    include: {
+      event: {
+        select: { judges: true },
+      },
+      school: {
+        select: {
+          school_name: true,
+        },
+      },
+    },
+  });
+
+  const adjudications = await prisma.adjudication.findMany();
+
+  const calculateNewAverage = (oldAverage, oldWeight, newValue) => {
+    return (oldAverage * oldWeight + newValue) / (oldWeight + 1);
+  };
+
+  const performanceToAdjudication = {}; // Map of performance Id to adjudication data
+  adjudications.forEach(
+    ({ performance_id: performanceIdString, artistic_mark, technical_mark, cumulative_mark }) => {
+      const performanceId = parseInt(performanceIdString);
+      if (performanceId in performanceToAdjudication) {
+        const {
+          completedAdjudications,
+          artisticMark,
+          technicalMark,
+          cumulativeMark,
+        } = performanceToAdjudication[performanceId];
+        performanceToAdjudication[performanceId] = {
+          completedAdjudications: completedAdjudications + 1,
+          artisticMark: calculateNewAverage(artisticMark, completedAdjudications, artistic_mark),
+          technicalMark: calculateNewAverage(technicalMark, completedAdjudications, technical_mark),
+          cumulativeMark: calculateNewAverage(
+            cumulativeMark,
+            completedAdjudications,
+            cumulative_mark
+          ),
+        };
+      } else {
+        performanceToAdjudication[performanceId] = {
+          completedAdjudications: 1,
+          artisticMark: artistic_mark,
+          technicalMark: technical_mark,
+          cumulativeMark: cumulative_mark,
+        };
+      }
+    }
+  );
+
+  return performances.map(({ id, dance_title, event: { judges: judgesString }, ...rest }) => {
+    const judges = JSON.parse(judgesString);
+    const { completedAdjudications, artisticMark, technicalMark, cumulativeMark } =
+      performanceToAdjudication[id] || {};
+    return {
+      id,
+      dance_title,
+      score: cumulativeMark,
+      artisticMark,
+      technicalMark,
+      cumulativeMark,
+      completedAdjudications,
+      totalAdjudications: judges.filter(judge => judge !== '').length,
+      ...rest,
     };
   });
 };

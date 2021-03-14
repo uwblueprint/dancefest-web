@@ -2,13 +2,19 @@ import React from 'react'; // React
 import PropTypes from 'prop-types'; // PropTypes
 // import { useRouter } from 'next/router'; // Routing
 
+import JudgingStatusPill from '@components/performances/JudgingStatusPill'; // Judging status pill
 import EmptyTableComponent from '@components/performances/EmptyTableComponent'; // Empty table component
 import Table from '@components/Table'; // Table
 import Button from '@components/Button'; // Button
 
 const PAGE_SIZE = 3; // Rows per page
 
-export default function EntryTable({ performances, setPerformanceToEdit, setModalOpen, ...props }) {
+export default function PerformancesTable({
+  performances,
+  setPerformanceToEdit,
+  setModalOpen,
+  ...props
+}) {
   // const router = useRouter(); // Collect router
 
   const columns = [
@@ -34,6 +40,7 @@ export default function EntryTable({ performances, setPerformanceToEdit, setModa
       Header: 'Title',
       accessor: 'danceTitle',
     },
+    // Entry View columns
     {
       Header: 'School',
       accessor: 'schoolName',
@@ -58,6 +65,38 @@ export default function EntryTable({ performances, setPerformanceToEdit, setModa
       Header: 'Score',
       accessor: 'score',
     },
+    // Judging view columns
+    {
+      Header: 'Tech. Score',
+      accessor: 'technicalScore',
+    },
+    {
+      Header: 'Art. Score',
+      accessor: 'artisticScore',
+    },
+    {
+      Header: 'Cumul. Score',
+      accessor: 'cumulativeScore',
+    },
+    {
+      Header: 'Awards',
+      accessor: 'awards',
+    },
+    {
+      Header: 'Status',
+      accessor: 'status',
+      // eslint-disable-next-line react/display-name
+      Cell: ({
+        row: {
+          original: { completedAdjudications, totalAdjudications },
+        },
+      }) => (
+        <JudgingStatusPill
+          completedAdjudications={completedAdjudications}
+          totalAdjudications={totalAdjudications}
+        />
+      ),
+    },
   ];
 
   // const goToPerformanceDetails = row => {
@@ -78,7 +117,7 @@ export default function EntryTable({ performances, setPerformanceToEdit, setModa
   );
 }
 
-EntryTable.propTypes = {
+PerformancesTable.propTypes = {
   performances: PropTypes.any,
   setModalOpen: PropTypes.func,
   setPerformanceToEdit: PropTypes.func,
