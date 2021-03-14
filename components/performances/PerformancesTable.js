@@ -69,18 +69,22 @@ export default function PerformancesTable({
     {
       Header: 'Tech. Score',
       accessor: 'technicalScore',
+      Cell: ({ value }) => (value !== null ? String(value) : 'N/A'),
     },
     {
       Header: 'Art. Score',
       accessor: 'artisticScore',
+      Cell: ({ value }) => (value !== null ? String(value) : 'N/A'),
     },
     {
       Header: 'Cumul. Score',
       accessor: 'cumulativeScore',
+      Cell: ({ value }) => (value !== null ? String(value) : 'N/A'),
     },
     {
       Header: 'Awards',
-      accessor: 'awards',
+      accessor: 'awardsString',
+      Cell: ({ value }) => (value !== null ? String(value) : 'N/A'),
     },
     {
       Header: 'Status',

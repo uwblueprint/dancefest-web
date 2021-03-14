@@ -30,7 +30,7 @@ const ENTRY_VIEW_HIDDEN_COLUMNS = [
   'technicalScore',
   'artisticScore',
   'cumulativeScore',
-  'awards',
+  'awardsString',
   'status',
 ];
 const JUDGING_VIEW_HIDDEN_COLUMNS = [

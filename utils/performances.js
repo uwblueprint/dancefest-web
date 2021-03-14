@@ -16,9 +16,8 @@ export const formatPerformances = performances => {
       event_id: eventId,
       school: { school_name: schoolName },
       school_id: schoolId,
-      artisticMark: artisticScore,
-      technicalMark: technicalScore,
-      cumulativeMark: cumulativeScore,
+      cumulativeScore,
+      awards,
       ...rest
     }) => ({
       academicLevel,
@@ -28,13 +27,30 @@ export const formatPerformances = performances => {
       danceStyle,
       danceTitle,
       eventId,
-      name,
       schoolName,
       schoolId,
-      artisticScore,
-      technicalScore,
+      score: cumulativeScore,
       cumulativeScore,
+      awardsString: awards.map(({ title }) => title).join(', '),
       ...rest,
     })
   );
+};
+
+/**
+ * Calculates the average of an array of scores
+ * @param {number[]} scores - Array of scores
+ * @returns {number | null} - The average score, to 1 decimal point
+ */
+export const calculateAverageScore = scores => {
+  if (!Array.isArray(scores)) {
+    throw new Error('`scores` parameter must be an array');
+  }
+
+  if (scores.length === 0) {
+    return null;
+  }
+
+  const average = scores.reduce((a, v) => a + v, 0) / scores.length;
+  return Math.round(average * 10) / 10;
 };
