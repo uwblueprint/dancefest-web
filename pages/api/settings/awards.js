@@ -12,7 +12,6 @@ export default async (req, res) => {
   if (session) {
     // get awards
     const awards = await getAwards(settingIDs);
-    console.log(awards);
     // filtering in the API, TODO move to filtering via query
     res.send(awards);
   }
@@ -23,7 +22,6 @@ export default async (req, res) => {
 
 export const getAwards = async settingIDs => {
   // Collect all awards from database
-  console.log(settingIDs);
   const awards = await prisma.award.findMany({
     include: {
       awards_categories: {
@@ -33,6 +31,7 @@ export const getAwards = async settingIDs => {
       },
     },
   });
+  // return those awards with award categories that are subset of settingIDs
   return awards
     .map(award => {
       return {
@@ -45,6 +44,6 @@ export const getAwards = async settingIDs => {
     .filter(
       award =>
         award.is_category === false ||
-        award.categories.sort().join(',') === settingIDs.sort().join(',')
+        award.categories.every(category => settingIDs.includes(category))
     );
 };

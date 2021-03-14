@@ -36,7 +36,7 @@ export default async (req, res) => {
 
     // create award category references
     if (isCategory) {
-      const awardCategories = await prisma.$transaction(
+      await prisma.$transaction(
         settingIDs.map(settingID =>
           prisma.awardCategory.upsert({
             where: {
@@ -53,7 +53,6 @@ export default async (req, res) => {
           })
         )
       );
-      console.log(awardCategories);
     }
 
     // If award creation is successful, return award
