@@ -64,6 +64,7 @@ export default function PerformancesTable({
     {
       Header: 'Score',
       accessor: 'score',
+      Cell: ({ value }) => (value !== null ? String(value) : 'N/A'),
     },
     // Judging view columns
     {
@@ -84,7 +85,7 @@ export default function PerformancesTable({
     {
       Header: 'Awards',
       accessor: 'awardsString',
-      Cell: ({ value }) => (value !== null ? String(value) : 'N/A'),
+      Cell: ({ value }) => String(value) || 'N/A',
     },
     {
       Header: 'Status',
