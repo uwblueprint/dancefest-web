@@ -36,12 +36,12 @@ export default function Setting() {
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteValueError, setDeleteValueError] = useState(false);
 
-  // Add Schools state
+  // Schools state
   const [schoolModalOpen, setSchoolModalOpen] = useState(false);
   const [schools, setSchools] = useState([]);
   const [schoolToEdit, setSchoolToEdit] = useState(null);
 
-  // Add Admins state
+  // Admins state
   const [adminModalOpen, setAdminModalOpen] = useState(false);
   const [admins, setAdmins] = useState([]);
   const [adminToEdit, setAdminToEdit] = useState(null);
@@ -105,6 +105,10 @@ export default function Setting() {
     {
       Header: 'Admin Email',
       accessor: 'email',
+    },
+    {
+      Header: 'Role',
+      accessor: 'role',
     },
   ];
 
@@ -325,23 +329,23 @@ export default function Setting() {
               </Button>
             </div>
             <div className={styles.settings__editSchools__tableWrapper}>
-              <Table columns={SCHOOLS_COLUMNS} data={schools} filters={[]} />
+              <Table columns={SCHOOLS_COLUMNS} data={schools} filters={[]} paginate={false} />
             </div>
           </div>
           <div className={styles.settings__editAdmins}>
             <div className={styles.settings__editAdmins__header}>
-              <h2>Edit Admins</h2>
+              <h2>Edit Users</h2>
               <Button
                 className={styles.settings__editAdmins__button}
                 variant="contained"
                 disabled={loading}
                 onClick={() => setAdminModalOpen(true)}
               >
-                Add Admin
+                Add User
               </Button>
             </div>
             <div className={styles.settings__editAdmins__tableWrapper}>
-              <Table columns={ADMINS_COLUMNS} data={admins} filters={[]} />
+              <Table columns={ADMINS_COLUMNS} data={admins} filters={[]} paginate={false} />
             </div>
           </div>
         </div>

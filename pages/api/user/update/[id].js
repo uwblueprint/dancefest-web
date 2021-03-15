@@ -9,7 +9,7 @@ export default async (req, res) => {
   if (session && session.role === 'ADMIN') {
     // Collect name, email and role
     const { id } = req.query;
-    const { name, email } = req.body;
+    const { name, email, role } = req.body;
 
     // If email exists
     if (id && name && email) {
@@ -19,8 +19,9 @@ export default async (req, res) => {
           id: parseInt(id),
         },
         data: {
-          name: name,
-          email: email,
+          name,
+          email,
+          role,
         },
       });
 
