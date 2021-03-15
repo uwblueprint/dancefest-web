@@ -99,11 +99,11 @@ export default function Setting() {
       ),
     },
     {
-      Header: 'Admin Name',
+      Header: 'Name',
       accessor: 'name',
     },
     {
-      Header: 'Admin Email',
+      Header: 'Email',
       accessor: 'email',
     },
     {
