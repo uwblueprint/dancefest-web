@@ -1,5 +1,6 @@
 import prisma from '@prisma/index'; // Prisma client
 import { getSession } from 'next-auth/client'; // Session handling
+import { calculateAverageScore } from '@utils/performances'; // Utils
 
 // get performances by specifying the corresponding eventID
 export default async (req, res) => {
@@ -35,6 +36,11 @@ export const getPerformances = async filter => {
   const performances = await prisma.performance.findMany({
     where: filter,
     include: {
+      event: {
+        select: {
+          judges: true,
+        },
+      },
       awards: {
         include: {
           awards: true,
@@ -52,16 +58,21 @@ export const getPerformances = async filter => {
   if (!performances) return;
 
   // Remove the relation table data
-  return performances.map(performance => {
+  return performances.map(({ awards, event: { judges: judgesString }, adjudications, ...rest }) => {
     return {
-      ...performance,
-      awards: performance.awards.map(award => {
+      ...rest,
+      awards: awards.map(({ awards, nominee_count, status }) => {
         return {
-          ...award.awards,
-          nominee_count: award.nominee_count,
-          status: award.status,
+          ...awards,
+          nominee_count,
+          status,
         };
       }),
+      totalAdjudications: JSON.parse(judgesString).filter(judge => judge !== '').length,
+      completedAdjudications: adjudications.length,
+      artisticScore: calculateAverageScore(adjudications.map(a => a.artistic_mark)),
+      technicalScore: calculateAverageScore(adjudications.map(a => a.technical_mark)),
+      cumulativeScore: calculateAverageScore(adjudications.map(a => a.cumulative_mark)),
     };
   });
 };

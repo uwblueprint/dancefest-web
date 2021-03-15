@@ -112,3 +112,21 @@ FilterDropdown.propTypes = {
   ).isRequired,
   setOptions: PropTypes.func.isRequired,
 };
+
+/**
+ * Formats an iterable of objects into the required format for the `options` parameter for the FilterDropdown component
+ * @param  {Object[]} iterable - An iterable of objects to format
+ * @param  {string} {value - The object field to set as the value of each FilterDropdown option
+ * @param  {string} label} - The object field to set as the label of each FilterDropdown option
+ * @returns {Object} An object of options that can be passed to the FilterDropdown component as `options`
+ */
+export const formatFilterDropdownOptions = (iterable, { value: valueField, label: labelField }) => {
+  const dropdownOptions = {};
+  iterable.forEach(({ [valueField]: value, [labelField]: label }) => {
+    dropdownOptions[value] = {
+      label,
+      selected: false,
+    };
+  });
+  return dropdownOptions;
+};
