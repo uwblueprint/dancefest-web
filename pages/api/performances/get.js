@@ -55,7 +55,7 @@ export const getPerformance = async filter => {
   // Remove the relation table data
   return {
     ...performance,
-    awards: performance.awards_performances.map(award => {
+    awards_performances: performance.awards_performances.map(award => {
       return {
         ...award.awards,
         nominee_count: award.nominee_count,

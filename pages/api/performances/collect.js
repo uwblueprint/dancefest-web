@@ -54,7 +54,7 @@ export const getPerformances = async filter => {
   return performances.map(performance => {
     return {
       ...performance,
-      awards: performance.awards.map(award => {
+      awards_performances: performance.awards_performances.map(award => {
         return {
           ...award.awards,
           nominee_count: award.nominee_count,

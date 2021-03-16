@@ -53,7 +53,7 @@ export default async (req, res) => {
     },
     data: {
       is_finalized: true,
-      performances: {
+      awards_performances: {
         update: {
           where: {
             awards_performances_unique: {
@@ -68,7 +68,7 @@ export default async (req, res) => {
       },
     },
     include: {
-      performances: true,
+      awards_performances: true,
     },
   });
 
