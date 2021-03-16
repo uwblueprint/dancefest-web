@@ -244,8 +244,7 @@ export async function getServerSideProps(context) {
 
   // Collect eventID from URL params
   const { id: eventID } = context.params;
-  console.log(eventID);
-  // Else, return
+
   return {
     props: {
       award: {

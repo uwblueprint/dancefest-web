@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'; // React
-import axios from 'axios'; // axios
 import { useRouter } from 'next/router'; // Routing (with buttons)
 import Link from 'next/link'; // Next link
 import Layout from '@components/Layout'; // Layout wrapper
@@ -52,87 +51,10 @@ export default function Performances() {
   const [pageCount, setPageCount] = useState(0);
 
   // Award Creation details
-  const [awardTitle, setAwardTitle] = useState('');
+  const [, setAwardTitle] = useState('');
 
   // Award types, hardcoded for now
-  const [awardTypeOptions, setAwardTypeOptions] = useState({
-    'Special Award': {
-      label: 'Special Award',
-      selected: false,
-    },
-    'Dance Artistry': {
-      label: 'Dance Artistry',
-      selected: false,
-    },
-    'Score Based': {
-      label: 'Score Based',
-      selected: false,
-    },
-  });
-
-  // Get initial table data
-
-  // TODO: Get filter options from Awards API
-  /*
-  // Get initial filter options
-  useEffect(() => {
-    const getSettings = async () => {
-      // Get settings values
-      const settingsResponse = await axios({
-        method: 'GET',
-        url: '/api/settings/collect',
-      });
-      const settings = settingsResponse.data;
-      const awardTypeSettings = {};
-      const danceTypeSettings = {};
-      for (const setting of settings) {
-        switch (setting.type) {
-          case 'COMPETITION_LEVEL': // TODO: AWARD TYPES
-            performanceLevelSettings[setting.value] = {
-              label: setting.value,
-              selected: false,
-            };
-            break;
-          case 'STYLE': // TODO: DANCE TYPE
-            danceStyleSettings[setting.value] = {
-              label: setting.value,
-              selected: false,
-            };
-            break;
-          default:
-            throw new Error('Invalid setting type');
-        }
-      }
-
-      setAcademicLevelOptions(academicLevelSettings);
-    };
-
-    getSettings();
-  }, []);
-
-  */
-
-  const addAward = async () => {
-    console.log('In addAward, ', awardTitle);
-    try {
-      await axios({
-        url: '/api/awards/create',
-        method: 'POST',
-        data: {
-          title: awardTitle,
-        },
-      });
-    } catch (err) {
-      // Empty catch block
-      console.log('Error occured', err);
-    }
-  };
-
-  const handleAddValue = async () => {
-    console.log('Updating DB');
-    setModalOpen(false);
-    await addAward();
-  };
+  const [awardTypeOptions, setAwardTypeOptions] = useState({});
 
   // Update table filters
   useEffect(() => {
@@ -223,7 +145,6 @@ export default function Performances() {
             <Button variant="contained" onClick={() => setModalOpen(true)}>
               Add Award
             </Button>
-            {/* <button onClick={handleAddValue}>Hello</button> */}
           </div>
           <div>
             <Pagination
@@ -272,7 +193,7 @@ export default function Performances() {
         open={modalOpen}
         setOpen={setModalOpen}
         setAwardTitle={setAwardTitle}
-        submitAward={handleAddValue}
+        submitAward={() => {}}
       />
     </Layout>
   );

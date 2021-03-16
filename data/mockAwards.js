@@ -52,7 +52,7 @@ const awards = [
     ID: 8,
     title: 'Sharp Movements',
     competition_level: 'Advanced',
-    type: 'Special ',
+    type: 'Special Award',
     nominations: '2',
   },
   {
