@@ -69,6 +69,13 @@ const awards = [
     type: 'Special Award',
     nominations: '2',
   },
+  {
+    ID: 11,
+    title: 'Sharp Movements 4',
+    competition_level: 'Advanced',
+    type: 'Score Based',
+    nominations: '2',
+  },
 ];
 
 export const columns = [

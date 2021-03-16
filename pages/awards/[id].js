@@ -1,6 +1,7 @@
 import React, { useState } from 'react'; // React
 import Layout from '@components/Layout'; // Layout wrapper
 import Button from '@components/Button'; // Button Component
+import ScoreBasedAwards from '@components/awards/ScoreBasedAwards'; // Score Based Awards View
 import { getSession } from 'next-auth/client'; // Session handling
 
 import Title from '@components/Title'; // Title
@@ -8,8 +9,18 @@ import DancerRedJump from '@assets/dancer-red-jump.svg'; // Jumping Dancer SVG
 import PlayIcon from '@assets/play.svg';
 import styles from '@styles/pages/AwardDetails.module.scss';
 
+export default function DetailsRoute({ award }) {
+  return award.type === 'Special Award' ? (
+    <AwardDetails />
+  ) : award.type === 'Dance Artistry' ? (
+    <AwardDetails />
+  ) : (
+    <ScoreBasedAwards />
+  );
+}
+
 // Page: Award Details
-export default function AwardDetails() {
+function AwardDetails() {
   const [selectedTab, setSelectedTab] = useState(-1);
   const [showAwardSummary, setShowAwardSummary] = useState(true);
   const [feedbackAvailable, setFeedbackAvailable] = useState(true);
@@ -229,8 +240,17 @@ export async function getServerSideProps(context) {
     };
   }
 
+  // TODO: Get award details from award ID, parse and pass back details as prop
+
+  // Collect eventID from URL params
+  const { id: eventID } = context.params;
+  console.log(eventID);
   // Else, return
   return {
-    props: {},
+    props: {
+      award: {
+        type: eventID,
+      },
+    },
   };
 }

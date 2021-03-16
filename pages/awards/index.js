@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'; // React
+import axios from 'axios'; // axios
 import { useRouter } from 'next/router'; // Routing (with buttons)
 import Link from 'next/link'; // Next link
 import Layout from '@components/Layout'; // Layout wrapper
@@ -43,14 +44,33 @@ export default function Performances() {
   const [modalOpen, setModalOpen] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [query, setQuery] = useState('');
-  // Filter Options
-  const [awardTypeOptions, setAwardTypeOptions] = useState({});
   const [danceTypeOptions, setDanceTypeOptions] = useState({});
   // All Filter
   const [filters, setFilters] = useState([]);
   // Pagination
   const [pageNumber, setPageNumber] = useState(0);
   const [pageCount, setPageCount] = useState(0);
+
+  // Award Creation details
+  const [awardTitle, setAwardTitle] = useState('');
+
+  // Award types, hardcoded for now
+  const [awardTypeOptions, setAwardTypeOptions] = useState({
+    'Special Award': {
+      label: 'Special Award',
+      selected: false,
+    },
+    'Dance Artistry': {
+      label: 'Dance Artistry',
+      selected: false,
+    },
+    'Score Based': {
+      label: 'Score Based',
+      selected: false,
+    },
+  });
+
+  // Get initial table data
 
   // TODO: Get filter options from Awards API
   /*
@@ -90,7 +110,29 @@ export default function Performances() {
     getSettings();
   }, []);
 
-   */
+  */
+
+  const addAward = async () => {
+    console.log('In addAward, ', awardTitle);
+    try {
+      await axios({
+        url: '/api/awards/create',
+        method: 'POST',
+        data: {
+          title: awardTitle,
+        },
+      });
+    } catch (err) {
+      // Empty catch block
+      console.log('Error occured', err);
+    }
+  };
+
+  const handleAddValue = async () => {
+    console.log('Updating DB');
+    setModalOpen(false);
+    await addAward();
+  };
 
   // Update table filters
   useEffect(() => {
@@ -105,13 +147,13 @@ export default function Performances() {
     }
     if (awardTypeFilters.length > 0) {
       newFilters.push({
-        id: 'school',
+        id: 'award_type',
         value: awardTypeFilters,
       });
     }
     if (danceTypeFilters.length > 0) {
       newFilters.push({
-        id: 'academic_level',
+        id: 'dance_type',
         value: danceTypeFilters,
       });
     }
@@ -181,6 +223,7 @@ export default function Performances() {
             <Button variant="contained" onClick={() => setModalOpen(true)}>
               Add Award
             </Button>
+            {/* <button onClick={handleAddValue}>Hello</button> */}
           </div>
           <div>
             <Pagination
@@ -224,7 +267,13 @@ export default function Performances() {
           />
         </div>
       </div>
-      <PerformanceModal mode="new" open={modalOpen} setOpen={setModalOpen} />
+      <PerformanceModal
+        mode="new"
+        open={modalOpen}
+        setOpen={setModalOpen}
+        setAwardTitle={setAwardTitle}
+        submitAward={handleAddValue}
+      />
     </Layout>
   );
 }
@@ -262,7 +311,8 @@ const NominationTable = props => {
 
   const goToPerformanceDetails = row => {
     // Go to /performances/[id] page
-    router.push(`/awards/${row.id}`); // Route to "/performance/:id" page
+    console.log(row);
+    router.push(`/awards/${row.original.type}`); // Route to "/performance/:id" page
   };
 
   return (
@@ -284,8 +334,12 @@ const FinalizedTable = () => {
   );
 };
 
-// New Performance Modal
-const PerformanceModal = ({ mode, open, setOpen }) => {
+// Create/Edit Performance Modal
+const PerformanceModal = ({ mode, open, setOpen, setAwardTitle, submitAward }) => {
+  const handleOnChange = e => {
+    setAwardTitle(e.target.value);
+  };
+
   return (
     <Modal
       containerClassName={styles.modal__container}
@@ -295,11 +349,12 @@ const PerformanceModal = ({ mode, open, setOpen }) => {
       cancelText="Discard"
       submitText="Add Award"
       onCancel={() => setOpen(false)}
+      onSubmit={submitAward}
     >
       <div className={styles.modal}>
         <div>
           <h2>Award Title*</h2>
-          <Input className={styles.modal__entryId} placeholder="Title" />
+          <Input className={styles.modal__entryId} placeholder="Title" onChange={handleOnChange} />
         </div>
         <div>
           <h2>Nominated Dance</h2>
