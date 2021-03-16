@@ -4,8 +4,23 @@ import axios from 'axios'; // axios
 
 import Modal from '@components/Modal'; // Modal
 import Input from '@components/Input'; // Input
+import Dropdown from '@components/Dropdown'; // Dropdown
 import styles from '@styles/components/settings/AdminModal.module.scss'; // Component styles
 
+const ADMIN_ROLE_OPTIONS = [
+  {
+    label: 'ADMIN',
+    value: 'ADMIN',
+  },
+  {
+    label: 'JUDGE',
+    value: 'JUDGE',
+  },
+  {
+    label: 'USER',
+    value: 'USER',
+  },
+];
 export default function AdminModal({
   setLoading,
   open,
@@ -16,6 +31,7 @@ export default function AdminModal({
 }) {
   const [adminName, setAdminName] = useState('');
   const [adminEmail, setAdminEmail] = useState('');
+  const [adminRole, setAdminRole] = useState(null);
 
   const clearFields = () => {
     setAdminName('');
@@ -32,6 +48,7 @@ export default function AdminModal({
         data: {
           name: adminName,
           email: adminEmail,
+          role: adminRole.value,
         },
       });
 
@@ -55,7 +72,7 @@ export default function AdminModal({
         data: {
           name: adminName,
           email: adminEmail,
-          role: 'ADMIN',
+          role: adminRole.value,
         },
       });
 
@@ -71,9 +88,10 @@ export default function AdminModal({
 
   useEffect(() => {
     if (adminToEdit) {
-      const { name, email } = adminToEdit;
+      const { name, email, role } = adminToEdit;
       setAdminName(name);
       setAdminEmail(email);
+      setAdminRole({ label: role, value: role });
     } else {
       clearFields();
     }
@@ -82,10 +100,10 @@ export default function AdminModal({
   return (
     <Modal
       containerClassName={styles.adminModal__container}
-      title={adminToEdit ? 'Edit Admin' : 'Add Admin'}
+      title={adminToEdit ? 'Edit User' : 'Add User'}
       open={open}
       cancelText="Discard"
-      submitText={adminToEdit ? 'Edit Admin' : 'Add Admin'}
+      submitText={adminToEdit ? 'Edit User' : 'Add User'}
       setModalOpen={setOpen}
       onCancel={() => {
         setOpen(false);
@@ -97,7 +115,7 @@ export default function AdminModal({
     >
       <div className={styles.adminModal}>
         <div>
-          <h2>Admin Name</h2>
+          <h2>Name</h2>
           <Input
             placeholder="Admin Name"
             value={adminName}
@@ -105,11 +123,21 @@ export default function AdminModal({
           />
         </div>
         <div>
-          <h2>Admin Email</h2>
+          <h2>Email</h2>
           <Input
             placeholder="Admin Email"
             value={adminEmail}
             onChange={event => setAdminEmail(event.target.value)}
+          />
+        </div>
+        <div>
+          <h2>Role</h2>
+          <Dropdown
+            className={styles.adminModal__dropdown}
+            placeholder="Role"
+            selected={adminRole}
+            options={ADMIN_ROLE_OPTIONS}
+            onChange={role => setAdminRole(role)}
           />
         </div>
       </div>
