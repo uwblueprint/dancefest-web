@@ -7,6 +7,10 @@ const events = [
     dance_style: 'Jazz',
     dance_size: 'Medium Group',
     score: '95',
+    tech_score: '95.5',
+    art_score: '95.5',
+    cumul_score: '95.5',
+    awards: 'Performance',
   },
   {
     ID: 2,
@@ -16,6 +20,10 @@ const events = [
     dance_style: 'Ballet',
     dance_size: 'Medium Group',
     score: '95',
+    tech_score: '90.2',
+    art_score: '90.2',
+    cumul_score: '90.2',
+    awards: 'Choreography',
   },
   {
     ID: 3,
@@ -25,6 +33,10 @@ const events = [
     dance_style: 'Jazz',
     dance_size: 'Medium Group',
     score: '95',
+    tech_score: '99',
+    art_score: '99',
+    cumul_score: '99',
+    awards: 'Special',
   },
   {
     ID: 4,
@@ -34,6 +46,10 @@ const events = [
     dance_style: 'Jazz',
     dance_size: 'Medium Group',
     score: '95',
+    tech_score: '93.0',
+    art_score: '93.0',
+    cumul_score: '93.0',
+    awards: 'Dance Artistry',
   },
   {
     ID: 5,
@@ -43,6 +59,10 @@ const events = [
     dance_style: 'Hip Hop',
     dance_size: 'Medium Group',
     score: '95',
+    tech_score: '90',
+    art_score: '90',
+    cumul_score: '90',
+    awards: 'N/A',
   },
   {
     ID: 6,
@@ -52,6 +72,10 @@ const events = [
     dance_style: 'Jazz',
     dance_size: 'Medium Group',
     score: '95',
+    tech_score: '90',
+    art_score: '90',
+    cumul_score: '90',
+    awards: 'N/A',
   },
   {
     ID: 7,
@@ -61,6 +85,10 @@ const events = [
     dance_style: 'Tap',
     dance_size: 'Creative Collaboration',
     score: '95',
+    tech_score: '93.0',
+    art_score: '93.0',
+    cumul_score: '93.0',
+    awards: 'Dance Artistry',
   },
   {
     ID: 8,
@@ -70,6 +98,10 @@ const events = [
     dance_style: 'Jazz',
     dance_size: 'Medium Group',
     score: '95',
+    tech_score: '95.5',
+    art_score: '95.5',
+    cumul_score: '95.5',
+    awards: 'Performance',
   },
   {
     ID: 9,
@@ -79,6 +111,10 @@ const events = [
     dance_style: 'Tap',
     dance_size: 'Medium Group',
     score: '95',
+    tech_score: '95.5',
+    art_score: '95.5',
+    cumul_score: '95.5',
+    awards: 'N/A',
   },
 ];
 

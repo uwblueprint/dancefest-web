@@ -14,8 +14,8 @@ export default async (req, res) => {
   const userID = session.id;
 
   // Collect award information from request body
+  console.log(req.body);
   const { title } = req.body;
-
   // If required fields do not exist
   if (!title || !userID) {
     return res.status(400).json({
