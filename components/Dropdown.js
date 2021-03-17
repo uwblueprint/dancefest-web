@@ -63,3 +63,17 @@ Dropdown.propTypes = {
   setSelected: PropTypes.func.required,
   wrapperClassName: PropTypes.string,
 };
+
+/**
+ * Formats an iterable of objects into the required format for the `options` parameter for the Dropdown component
+ * @param  {Object[]} iterable - An iterable of objects to format
+ * @param  {string} {value - The object field to set as the value of each Dropdown option
+ * @param  {string} label} - The object field to set as the label of each Dropdown option
+ * @returns {Object[]} A list of options that can be passed to the Dropdown component as `options`
+ */
+export const formatDropdownOptions = (iterable, { value, label }) => {
+  return iterable.map(x => ({
+    value: x[value],
+    label: x[label],
+  }));
+};

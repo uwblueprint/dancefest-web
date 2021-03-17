@@ -1,38 +1,66 @@
 import React, { useState, useEffect } from 'react'; // React
-import { useRouter } from 'next/router'; // Routing (with buttons)
 import axios from 'axios'; // axios
 import Link from 'next/link'; // Next link
 import Layout from '@components/Layout'; // Layout wrapper
 
+import PerformancesTable from '@components/performances/PerformancesTable'; // Performances table
+import PerformanceModal from '@components/performances/PerformanceModal'; // Performance modal
+
+import Loader from 'react-loader-spinner'; // Loading spinner
 import Button from '@components/Button'; // Button
 import Title from '@components/Title'; // Title
 import Input from '@components/Input'; // Input
 import Tabs from '@components/Tabs'; // Tabs
-import Modal from '@components/Modal'; // Modal
-import Dropdown from '@components/Dropdown'; // Dropdown
-import FilterDropdown from '@components/FilterDropdown'; // Filter Dropdown
-import Table from '@components/Table'; // Table
+import { formatDropdownOptions } from '@components/Dropdown'; // Format dropdown options util
+import FilterDropdown, { formatFilterDropdownOptions } from '@components/FilterDropdown'; // Filter Dropdown + Format filter dropdown options util
 import Pill from '@components/Pill'; // Pill
 import Pagination from '@components/Pagination'; // Pagination
 import BackArrow from '@assets/back-arrow.svg'; // Back arrow icon
 import Search from '@assets/search.svg'; // Search icon
 import ChevronDown from '@assets/chevron-down.svg'; // Chevron down icon
 import ChevronDownGrey from '@assets/chevron-down-grey.svg'; // Chevron down grey icon
-import DancerRedJump from '@assets/dancer-red-jump.svg'; // Jumping Dancer SVG
-import DancerYellowBlue from '@assets/dancer-yellow-blue.svg'; // Jumping Dancer SVG
 import styles from '@styles/pages/Performances.module.scss'; // Page styles
 
-// Temp constants
-import data, { columns } from '../../data/mockParticipants';
+import { formatSchools } from '@utils/schools'; // Format schools util
+import { formatPerformances } from '@utils/performances'; // Format performances util
 
-const PAGE_SIZE = 3; // Rows per page
+const DANCE_ENTRY = 1; // TEMPORARY. TODO: Figure out what this is for
+const EVENT_ID = 1; // TEMPORARY. TODO: REPLACE WITH STATE/STORE
+const ENTRY_VIEW_HIDDEN_COLUMNS = [
+  'technicalScore',
+  'artisticScore',
+  'cumulativeScore',
+  'awardsString',
+  'status',
+];
+const JUDGING_VIEW_HIDDEN_COLUMNS = [
+  'schoolName',
+  'performanceLevel',
+  'danceStyle',
+  'danceSize',
+  'score',
+];
 
-// Get the active filters (list of column accessors) from an object of filter dropdown values
+/**
+ * Get the active filters from an object of filter dropdown values
+ * @param {Object} options - Object of filters used in FilterDropdown component
+ * @returns {Object[]} - List of filters that have `selected: true`. Format: {label: <label>, value: <value>}
+ */
 const getActiveFilters = options => {
-  return Object.keys(options).filter(option => options[option].selected);
+  return Object.entries(options)
+    .filter(([key]) => options[key].selected)
+    .map(([value, { label }]) => ({
+      value,
+      label,
+    }));
 };
 
-// Remove key from object (returns new object)
+/**
+ * Remove key from object
+ * @param {Object} object - An object
+ * @param {*} key - A key in the object
+ * @returns {Object} A new object that is a copy of the `object` parameter with the `key` removed
+ */
 const removeKeyFromObject = (object, key) => {
   // eslint-disable-next-line no-unused-vars
   const { [key]: _, ...rest } = object;
@@ -41,196 +69,306 @@ const removeKeyFromObject = (object, key) => {
 
 // Page: Performances
 export default function Performances() {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [showFilters, setShowFilters] = useState(false);
-  const [query, setQuery] = useState('');
-  const [schoolOptions, setSchoolOptions] = useState({});
-  const [academicLevelOptions, setAcademicLevelOptions] = useState({});
-  const [performanceLevelOptions, setPerformanceLevelOptions] = useState({});
-  const [danceStyleOptions, setDanceStyleOptions] = useState({});
-  const [danceSizeOptions, setDanceSizeOptions] = useState({});
-  const [filters, setFilters] = useState([]);
+  const [loading, setLoading] = useState(false); // Loading
+  const [modalOpen, setModalOpen] = useState(false); // Modal open
+  const [showFilters, setShowFilters] = useState(false); // Show filter dropdowns
+  const [searchQuery, setSearchQuery] = useState(''); // Search query string
+
+  // Filter dropdown options
+  const [schoolFilters, setSchoolFilters] = useState({});
+  const [academicLevelFilters, setAcademicLevelFilters] = useState({});
+  const [performanceLevelFilters, setPerformanceLevelFilters] = useState({});
+  const [danceStyleFilters, setDanceStyleFilters] = useState({});
+  const [danceSizeFilters, setDanceSizeFilters] = useState({});
+
+  // Modal dropdown options
+  const [schoolDropdownOptions, setSchoolDropdownOptions] = useState([]);
+  const [performanceLevelDropdownOptions, setPerformanceLevelDropdownOptions] = useState([]);
+  const [danceStyleDropdownOptions, setDanceStyleDropdownOptions] = useState([]);
+  const [danceSizeDropdownOptions, setDanceSizeDropdownOptions] = useState([]);
+
+  // Table props
+  const [tableFilters, setTableFilters] = useState([]);
   const [pageNumber, setPageNumber] = useState(0);
   const [pageCount, setPageCount] = useState(0);
 
-  // Get initial filter options
-  useEffect(() => {
+  // Table data
+  const [performances, setPerformances] = useState([]);
+  const [performanceToEdit, setPerformanceToEdit] = useState(null);
+
+  const getFilters = async () => {
+    setLoading(true);
+
+    const getSchools = async () => {
+      try {
+        const response = await axios({
+          method: 'GET',
+          url: '/api/schools/collect',
+        });
+        const schools = formatSchools(response.data);
+
+        // Modal dropdown options
+        setSchoolDropdownOptions(
+          formatDropdownOptions(schools, {
+            value: 'id',
+            label: 'schoolName',
+          })
+        );
+
+        // Filters
+        const initialSchoolFilters = formatFilterDropdownOptions(schools, {
+          value: 'id',
+          label: 'schoolName',
+        });
+        setSchoolFilters(initialSchoolFilters);
+      } catch {
+        // Empty catch block
+      }
+    };
+
     const getSettings = async () => {
-      // Get settings values
-      const settingsResponse = await axios({
+      const response = await axios({
         method: 'GET',
         url: '/api/settings/collect',
       });
-      const settings = settingsResponse.data;
-      const academicLevelSettings = {};
-      const performanceLevelSettings = {};
-      const danceStyleSettings = {};
-      const danceSizeSettings = {};
-      for (const setting of settings) {
-        switch (setting.type) {
-          case 'COMPETITION_LEVEL':
-            performanceLevelSettings[setting.value] = {
-              label: setting.value,
-              selected: false,
-            };
-            break;
-          case 'STYLE':
-            danceStyleSettings[setting.value] = {
-              label: setting.value,
-              selected: false,
-            };
-            break;
-          case 'DANCE_SIZE':
-            danceSizeSettings[setting.value] = {
-              label: setting.value,
-              selected: false,
-            };
-            break;
-          default:
-            throw new Error('Invalid setting type');
-        }
-      }
+      const settings = response.data;
 
-      // TODO: Get schools
+      const performanceLevelSettings = settings.filter(
+        setting => setting.type === 'COMPETITION_LEVEL'
+      );
+      const danceStyleSettings = settings.filter(setting => setting.type === 'STYLE');
+      const danceSizeSettings = settings.filter(setting => setting.type === 'DANCE_SIZE');
 
-      setAcademicLevelOptions(academicLevelSettings);
-      setPerformanceLevelOptions(performanceLevelSettings);
-      setDanceStyleOptions(danceStyleSettings);
-      setDanceSizeOptions(danceSizeSettings);
+      const formatOptionsFields = {
+        value: 'value',
+        label: 'value',
+      };
+
+      // Modal dropdown options
+      setPerformanceLevelDropdownOptions(
+        formatDropdownOptions(performanceLevelSettings, formatOptionsFields)
+      );
+      setDanceStyleDropdownOptions(formatDropdownOptions(danceStyleSettings, formatOptionsFields));
+      setDanceSizeDropdownOptions(formatDropdownOptions(danceSizeSettings, formatOptionsFields));
+
+      // Filters
+      const initialPerformanceLevelFilters = formatFilterDropdownOptions(
+        performanceLevelSettings,
+        formatOptionsFields
+      );
+      const initialDanceStyleFilters = formatFilterDropdownOptions(
+        danceStyleSettings,
+        formatOptionsFields
+      );
+      const initialDanceSizeFilters = formatFilterDropdownOptions(
+        danceSizeSettings,
+        formatOptionsFields
+      );
+
+      setPerformanceLevelFilters(initialPerformanceLevelFilters);
+      setDanceStyleFilters(initialDanceStyleFilters);
+      setDanceSizeFilters(initialDanceSizeFilters);
     };
 
-    getSettings();
+    await getSchools();
+    await getSettings();
+
+    setLoading(false);
+  };
+
+  const getPerformances = async () => {
+    setLoading(true);
+
+    try {
+      const response = await axios({
+        method: 'GET',
+        url: `/api/performances/collect?eventID=${EVENT_ID}`,
+      });
+
+      setPerformances(formatPerformances(response.data));
+    } catch {
+      // Empty catch block
+    }
+
+    setLoading(false);
+  };
+
+  const addPerformance = async ({
+    danceTitle,
+    dancersString,
+    choreographersString,
+    school,
+    competitionLevel,
+    danceStyle,
+    danceSize,
+  }) => {
+    setLoading(true);
+
+    try {
+      await axios({
+        method: 'POST',
+        url: '/api/performances/create',
+        data: {
+          danceTitle,
+          performers: dancersString.split(',').map(dancer => dancer.trim()),
+          choreographers: choreographersString
+            .split(',')
+            .map(choreographer => choreographer.trim()),
+          schoolID: school,
+          competitionLevel,
+          danceStyle,
+          danceSize,
+          eventID: EVENT_ID,
+          danceEntry: DANCE_ENTRY,
+        },
+      });
+
+      getPerformances();
+    } catch {
+      // Empty catch block
+    }
+
+    setLoading(false);
+  };
+
+  // const getAdjudications = async () => {
+  //   setLoading(true);
+
+  //   try {
+  //     const response = await axios({
+  //       method: 'GET',
+  //       url: `/api/performances/getJudgingData?eventId=${EVENT_ID}`,
+  //     });
+  //     const adjudicationsData = response.data;
+  //     setAdjudications(formatPerformancesForJudgingTable(adjudicationsData));
+  //   } catch {
+  //     // Empty catch block
+  //   }
+
+  //   setLoading(false);
+  // };
+
+  // Get initial filter options and performances
+  useEffect(() => {
+    getFilters();
+    getPerformances();
+    // getAdjudications();
   }, []);
 
   // Update table filters
   useEffect(() => {
-    const newFilters = [];
-    const schoolFilters = getActiveFilters(schoolOptions);
-    const academicLevelFilters = getActiveFilters(academicLevelOptions);
-    const performanceLevelFilters = getActiveFilters(performanceLevelOptions);
-    const danceStyleFilters = getActiveFilters(danceStyleOptions);
-    const danceSizeFilters = getActiveFilters(danceSizeOptions);
-    if (query) {
-      newFilters.push({
-        id: 'title',
-        value: query,
+    const updatedTableFilters = [];
+    const activeSchoolFilters = getActiveFilters(schoolFilters);
+    const activeAcademicLevelFilters = getActiveFilters(academicLevelFilters);
+    const activePerformanceLevelFilters = getActiveFilters(performanceLevelFilters);
+    const activeDanceStyleFilters = getActiveFilters(danceStyleFilters);
+    const activeDanceSizeFilters = getActiveFilters(danceSizeFilters);
+    if (searchQuery) {
+      updatedTableFilters.push({
+        id: 'danceTitle',
+        value: searchQuery,
       });
     }
-    if (schoolFilters.length > 0) {
-      newFilters.push({
-        id: 'school',
-        value: schoolFilters,
+    if (activeSchoolFilters.length > 0) {
+      updatedTableFilters.push({
+        id: 'schoolName',
+        value: activeSchoolFilters.map(filter => filter.label), // For schools, need to filter by label, not schoolId due to Table accessor being `schoolName`
       });
     }
-    if (academicLevelFilters.length > 0) {
-      newFilters.push({
-        id: 'academic_level',
-        value: academicLevelFilters,
+    if (activeAcademicLevelFilters.length > 0) {
+      updatedTableFilters.push({
+        id: 'academicLevel',
+        value: activeAcademicLevelFilters.map(filter => filter.value),
       });
     }
-    if (performanceLevelFilters.length > 0) {
-      newFilters.push({
-        id: 'competition_level',
-        value: performanceLevelFilters,
+    if (activePerformanceLevelFilters.length > 0) {
+      updatedTableFilters.push({
+        id: 'performanceLevel',
+        value: activePerformanceLevelFilters.map(filter => filter.value),
       });
     }
-    if (danceStyleFilters.length > 0) {
-      newFilters.push({
-        id: 'dance_style',
-        value: danceStyleFilters,
+    if (activeDanceStyleFilters.length > 0) {
+      updatedTableFilters.push({
+        id: 'danceStyle',
+        value: activeDanceStyleFilters.map(filter => filter.value),
       });
     }
-    if (danceSizeFilters.length > 0) {
-      newFilters.push({
-        id: 'dance_size',
-        value: danceSizeFilters,
+    if (activeDanceSizeFilters.length > 0) {
+      updatedTableFilters.push({
+        id: 'danceSize',
+        value: activeDanceSizeFilters.map(filter => filter.value),
       });
     }
 
-    setFilters(newFilters);
+    setTableFilters(updatedTableFilters);
     setPageNumber(0);
   }, [
-    query,
-    schoolOptions,
-    academicLevelOptions,
-    performanceLevelOptions,
-    danceStyleOptions,
-    danceSizeOptions,
+    searchQuery,
+    schoolFilters,
+    academicLevelFilters,
+    performanceLevelFilters,
+    danceStyleFilters,
+    danceSizeFilters,
   ]);
 
-  // Render filter pills
+  // Render active filter pills
   const renderActiveFilters = () => {
-    let elements = [];
-    for (const { id, value: activeFilters } of filters) {
-      switch (id) {
-        case 'school':
-          elements = [
-            ...elements,
-            ...activeFilters.map((f, i) => (
-              <Pill
-                key={i}
-                value={f}
-                onDelete={() => setSchoolOptions(removeKeyFromObject(schoolOptions, f))}
-              />
-            )),
-          ];
-          break;
-        case 'academic_level':
-          elements = [
-            ...elements,
-            ...activeFilters.map((f, i) => (
-              <Pill
-                key={i}
-                value={f}
-                onDelete={() =>
-                  setAcademicLevelOptions(removeKeyFromObject(academicLevelOptions, f))
-                }
-              />
-            )),
-          ];
-          break;
-        case 'competition_level':
-          elements = [
-            ...elements,
-            ...activeFilters.map((f, i) => (
-              <Pill
-                key={i}
-                value={f}
-                onDelete={() =>
-                  setPerformanceLevelOptions(removeKeyFromObject(performanceLevelOptions, f))
-                }
-              />
-            )),
-          ];
-          break;
-        case 'dance_style':
-          elements = [
-            ...elements,
-            ...activeFilters.map((f, i) => (
-              <Pill
-                key={i}
-                value={f}
-                onDelete={() => setDanceStyleOptions(removeKeyFromObject(danceStyleOptions, f))}
-              />
-            )),
-          ];
-          break;
-        case 'dance_size':
-          elements = [
-            ...elements,
-            ...activeFilters.map((f, i) => (
-              <Pill
-                key={i}
-                value={f}
-                onDelete={() => setDanceSizeOptions(removeKeyFromObject(danceSizeOptions, f))}
-              />
-            )),
-          ];
-          break;
-      }
-    }
+    const activeFilterPills = [];
+    const activeSchoolFilters = getActiveFilters(schoolFilters);
+    const activeAcademicLevelFilters = getActiveFilters(academicLevelFilters);
+    const activePerformanceLevelFilters = getActiveFilters(performanceLevelFilters);
+    const activeDanceStyleFilters = getActiveFilters(danceStyleFilters);
+    const activeDanceSizeFilters = getActiveFilters(danceSizeFilters);
 
-    return elements;
+    activeSchoolFilters.forEach(({ label, value }, i) => {
+      activeFilterPills.push(
+        <Pill
+          key={i}
+          label={label}
+          onDelete={() => setSchoolFilters(removeKeyFromObject(schoolFilters, value))}
+        />
+      );
+    });
+    activeAcademicLevelFilters.forEach(({ label, value }, i) => {
+      activeFilterPills.push(
+        <Pill
+          key={i}
+          label={label}
+          onDelete={() => setAcademicLevelFilters(removeKeyFromObject(academicLevelFilters, value))}
+        />
+      );
+    });
+    activePerformanceLevelFilters.forEach(({ label, value }, i) => {
+      activeFilterPills.push(
+        <Pill
+          key={i}
+          label={label}
+          onDelete={() =>
+            setPerformanceLevelFilters(removeKeyFromObject(performanceLevelFilters, value))
+          }
+        />
+      );
+    });
+    activeDanceStyleFilters.forEach(({ label, value }, i) => {
+      activeFilterPills.push(
+        <Pill
+          key={i}
+          label={label}
+          onDelete={() => setDanceStyleFilters(removeKeyFromObject(danceStyleFilters, value))}
+        />
+      );
+    });
+    activeDanceSizeFilters.forEach(({ label, value }, i) => {
+      activeFilterPills.push(
+        <Pill
+          key={i}
+          label={label}
+          onDelete={() => setDanceSizeFilters(removeKeyFromObject(danceSizeFilters, value))}
+        />
+      );
+    });
+
+    return activeFilterPills;
   };
 
   return (
@@ -255,8 +393,8 @@ export default function Performances() {
               className={styles.performances__header__search}
               placeholder="Search"
               icon={() => <img src={Search} />}
-              value={query}
-              onChange={event => setQuery(event.target.value)}
+              value={searchQuery}
+              onChange={event => setSearchQuery(event.target.value)}
             />
             <Button
               className={`${styles.performances__header__filtersButton} ${
@@ -273,11 +411,13 @@ export default function Performances() {
             </Button>
           </div>
           <div>
-            <Pagination
-              pageCount={pageCount}
-              pageNumber={pageNumber}
-              onPageChange={({ selected }) => setPageNumber(selected)}
-            />
+            {performances.length > 0 && (
+              <Pagination
+                pageCount={pageCount}
+                pageNumber={pageNumber}
+                onPageChange={({ selected }) => setPageNumber(selected)}
+              />
+            )}
           </div>
         </div>
         {showFilters && (
@@ -285,28 +425,28 @@ export default function Performances() {
             <div className={styles.performances__filters__buttons}>
               <FilterDropdown
                 buttonText="School"
-                options={schoolOptions}
-                setOptions={setSchoolOptions}
+                options={schoolFilters}
+                setOptions={setSchoolFilters}
               />
               <FilterDropdown
                 buttonText="Academic Level"
-                options={academicLevelOptions}
-                setOptions={setAcademicLevelOptions}
+                options={academicLevelFilters}
+                setOptions={setAcademicLevelFilters}
               />
               <FilterDropdown
                 buttonText="Competition Level"
-                options={performanceLevelOptions}
-                setOptions={setPerformanceLevelOptions}
+                options={performanceLevelFilters}
+                setOptions={setPerformanceLevelFilters}
               />
               <FilterDropdown
                 buttonText="Style"
-                options={danceStyleOptions}
-                setOptions={setDanceStyleOptions}
+                options={danceStyleFilters}
+                setOptions={setDanceStyleFilters}
               />
               <FilterDropdown
                 buttonText="Size"
-                options={danceSizeOptions}
-                setOptions={setDanceSizeOptions}
+                options={danceSizeFilters}
+                setOptions={setDanceSizeFilters}
               />
             </div>
             <div className={styles.performances__filters__appliedFilters}>
@@ -319,152 +459,55 @@ export default function Performances() {
             firstTabName="Entry View"
             secondTabName="Judging View"
             firstTabContent={
-              <EntryTable filters={filters} pageNumber={pageNumber} setPageCount={setPageCount} />
+              loading ? (
+                <div className={styles.performances__loadingSpinner}>
+                  <Loader type="Oval" color="#c90c0f" height={32} width={32} />
+                </div>
+              ) : (
+                <PerformancesTable
+                  performances={performances}
+                  filters={tableFilters}
+                  pageNumber={pageNumber}
+                  setPageCount={setPageCount}
+                  setPerformanceToEdit={setPerformanceToEdit}
+                  setModalOpen={setModalOpen}
+                  hiddenColumns={ENTRY_VIEW_HIDDEN_COLUMNS}
+                />
+              )
             }
-            secondTabContent={<JudgingTable />}
+            secondTabContent={
+              loading ? (
+                <div className={styles.performances__loadingSpinner}>
+                  <Loader type="Oval" color="#c90c0f" height={32} width={32} />
+                </div>
+              ) : (
+                <PerformancesTable
+                  performances={performances}
+                  filters={tableFilters}
+                  pageNumber={pageNumber}
+                  setPageCount={setPageCount}
+                  setPerformanceToEdit={setPerformanceToEdit}
+                  setModalOpen={setModalOpen}
+                  hiddenColumns={JUDGING_VIEW_HIDDEN_COLUMNS}
+                />
+              )
+            }
           />
         </div>
       </div>
-      <PerformanceModal mode="new" open={modalOpen} setOpen={setModalOpen} />
+      <PerformanceModal
+        open={modalOpen}
+        setOpen={setModalOpen}
+        setLoading={setLoading}
+        getPerformances={getPerformances}
+        addPerformance={addPerformance}
+        schoolOptions={schoolDropdownOptions}
+        performanceLevelOptions={performanceLevelDropdownOptions}
+        danceStyleOptions={danceStyleDropdownOptions}
+        danceSizeOptions={danceSizeDropdownOptions}
+        performanceToEdit={performanceToEdit}
+        setPerformanceToEdit={setPerformanceToEdit}
+      />
     </Layout>
   );
 }
-
-// Entries Table
-const EntryTable = props => {
-  const router = useRouter(); // Collect router
-
-  const columns = [
-    {
-      Header: 'Edit',
-      accessor: 'edit',
-      // eslint-disable-next-line react/display-name
-      Cell: () => (
-        <div className={styles.entryTable__editCell}>
-          <Button variant="edit" />
-        </div>
-      ),
-    },
-    {
-      Header: 'ID',
-      accessor: 'ID',
-    },
-    {
-      Header: 'Title',
-      accessor: 'title',
-    },
-    {
-      Header: 'School',
-      accessor: 'school',
-      filter: 'matchEnum',
-    },
-    {
-      Header: 'Level',
-      accessor: 'competition_level',
-      filter: 'matchEnum',
-    },
-    {
-      Header: 'Style',
-      accessor: 'dance_style',
-      filter: 'matchEnum',
-    },
-    {
-      Header: 'Size',
-      accessor: 'dance_size',
-      filter: 'matchEnum',
-    },
-    {
-      Header: 'Score',
-      accessor: 'score',
-      filter: 'matchEnum',
-    },
-  ];
-
-  const goToPerformanceDetails = row => {
-    // Go to /performances/[id] page
-    router.push(`/performances/${row.id}`); // Route to "/performance/:id" page
-  };
-
-  return (
-    <Table
-      columns={columns}
-      data={data}
-      pageSize={PAGE_SIZE}
-      emptyComponent={<EmptyTableComponent />}
-      onRowClick={goToPerformanceDetails}
-      {...props}
-    />
-  );
-};
-
-// Judging Table
-const JudgingTable = () => {
-  return (
-    <Table columns={columns} data={[]} filters={[]} emptyComponent={<EmptyTableComponent />} />
-  );
-};
-
-// New Performance Modal
-const PerformanceModal = ({ mode, open, setOpen }) => {
-  return (
-    <Modal
-      containerClassName={styles.modal__container}
-      title={mode === 'edit' ? 'Edit Performance' : 'New Performance'}
-      open={open}
-      setModalOpen={setOpen}
-      cancelText="Discard"
-      submitText="Add Performance"
-      onCancel={() => setOpen(false)}
-    >
-      <div className={styles.modal}>
-        <div>
-          <h2>Entry ID</h2>
-          <Input className={styles.modal__entryId} placeholder="##" />
-        </div>
-        <div>
-          <h2>Dance Title</h2>
-          <Input placeholder="Title" />
-        </div>
-        <div>
-          <h2>Dancer(s)</h2>
-          <Input placeholder="names, names, names" />
-          <h3>Separated by comma (ie: John Smith, Jane Doe...)</h3>
-        </div>
-        <div>
-          <h2>Choreographer(s)</h2>
-          <Input placeholder="names, names" />
-          <h3>Separated by comma (ie: John Smith, Jane Doe...)</h3>
-        </div>
-        <div>
-          <h2>School</h2>
-          <Dropdown className={styles.modal__dropdown} placeholder="School" />
-        </div>
-        <div>
-          <h2>Competition Level</h2>
-          <Dropdown className={styles.modal__dropdown} placeholder="Level" />
-        </div>
-        <div>
-          <h2>Style</h2>
-          <Dropdown className={styles.modal__dropdown} placeholder="Style" />
-        </div>
-        <div>
-          <h2>Size</h2>
-          <Dropdown className={styles.modal__dropdown} placeholder="Size" />
-        </div>
-      </div>
-    </Modal>
-  );
-};
-
-const EmptyTableComponent = () => {
-  return (
-    <div className={styles.page__performances_list_empty}>
-      <img src={DancerYellowBlue} />
-      <div>
-        <h2>No Performances Listed</h2>
-        <h3>Create your first performance</h3>
-      </div>
-      <img src={DancerRedJump} />
-    </div>
-  );
-};
