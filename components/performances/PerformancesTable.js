@@ -7,7 +7,7 @@ import EmptyTableComponent from '@components/performances/EmptyTableComponent'; 
 import Table from '@components/Table'; // Table
 import Button from '@components/Button'; // Button
 
-const PAGE_SIZE = 3; // Rows per page
+const PAGE_SIZE = 20; // Rows per page
 
 export default function PerformancesTable({
   performances,
