@@ -61,35 +61,36 @@ model School {
 }
 
 model Setting {
-  id         Int         @id @default(autoincrement())
-  type       settingtype
-  value      String?     @db.VarChar(255)
-  created_at DateTime    @default(now()) @db.Timestamp(6)
-  updated_at DateTime    @default(now()) @db.Timestamp(6)
+  id                Int             @id @default(autoincrement())
+  type              settingtype
+  value             String?         @db.VarChar(255)
+  created_at        DateTime        @default(now()) @db.Timestamp(6)
+  updated_at        DateTime        @default(now()) @db.Timestamp(6)
+  awards_categories AwardCategory[] @relation("awards_categoriesTosettings")
 
   @@unique([type, value], name: "settings_unique")
   @@map("settings")
 }
 
 model Performance {
-  id                Int                @id @default(autoincrement())
-  name              String?            @db.VarChar(255)
-  academic_level    String?            @db.VarChar(255)
-  performers        String[]           @db.VarChar(255)
-  choreographers    String[]           @db.VarChar(255)
-  competition_level String?            @db.VarChar(255)
-  dance_size        String?            @db.VarChar(255)
-  dance_entry       Int
-  dance_style       String?            @db.VarChar(255)
-  dance_title       String?            @db.VarChar(255)
-  event_id          Int
-  school_id         Int
-  created_at        DateTime           @default(now()) @db.Timestamp(6)
-  updated_at        DateTime           @default(now()) @db.Timestamp(6)
-  event             Event              @relation(fields: [event_id], references: [id])
-  school            School             @relation(fields: [school_id], references: [id])
-  adjudications     Adjudication[]
-  awards            AwardPerformance[] @relation("awards_performancesToperformances")
+  id                  Int                @id @default(autoincrement())
+  name                String?            @db.VarChar(255)
+  academic_level      String?            @db.VarChar(255)
+  performers          String[]           @db.VarChar(255)
+  choreographers      String[]           @db.VarChar(255)
+  competition_level   String?            @db.VarChar(255)
+  dance_size          String?            @db.VarChar(255)
+  dance_entry         Int
+  dance_style         String?            @db.VarChar(255)
+  dance_title         String?            @db.VarChar(255)
+  event_id            Int
+  school_id           Int
+  created_at          DateTime           @default(now()) @db.Timestamp(6)
+  updated_at          DateTime           @default(now()) @db.Timestamp(6)
+  event               Event              @relation(fields: [event_id], references: [id])
+  school              School             @relation(fields: [school_id], references: [id])
+  adjudications       Adjudication[]
+  awards_performances AwardPerformance[] @relation("awards_performancesToperformances")
 
   @@map("performances")
 }
@@ -112,14 +113,16 @@ model Adjudication {
 }
 
 model Award {
-  id           Int                @id @default(autoincrement())
-  title        String             @db.VarChar(255)
-  is_finalized Boolean            @default(false)
-  user_id      Int
-  created_at   DateTime           @default(now()) @db.Timestamp(6)
-  updated_at   DateTime           @default(now()) @db.Timestamp(6)
-  user         User               @relation("awardsTousers", fields: [user_id], references: [id])
-  performances AwardPerformance[]
+  id                  Int                @id @default(autoincrement())
+  title               String             @db.VarChar(255)
+  is_finalized        Boolean            @default(false)
+  is_category         Boolean            @default(false)
+  user_id             Int
+  created_at          DateTime           @default(now()) @db.Timestamp(6)
+  updated_at          DateTime           @default(now()) @db.Timestamp(6)
+  user                User               @relation("awardsTousers", fields: [user_id], references: [id])
+  awards_categories   AwardCategory[]    @relation("awardsToawards_categories")
+  awards_performances AwardPerformance[] @relation("awardsToawards_performances")
 
   @@map("awards")
 }
@@ -130,11 +133,22 @@ model AwardPerformance {
   performance_id Int?
   nominee_count  Int?                   @default(0)
   status         awardperformancestatus @default(NOMINEE)
-  awards         Award?                 @relation(fields: [award_id], references: [id])
+  awards         Award?                 @relation("awardsToawards_performances", fields: [award_id], references: [id])
   performances   Performance?           @relation("awards_performancesToperformances", fields: [performance_id], references: [id])
 
   @@unique([award_id, performance_id], name: "awards_performances_unique")
   @@map("awards_performances")
+}
+
+model AwardCategory {
+  id          Int      @id @default(autoincrement())
+  award_id    Int?
+  category_id Int?
+  awards      Award?   @relation("awardsToawards_categories", fields: [award_id], references: [id])
+  settings    Setting? @relation("awards_categoriesTosettings", fields: [category_id], references: [id])
+
+  @@unique([award_id, category_id], name: "awards_categories_unique")
+  @@map("awards_categories")
 }
 
 enum role {

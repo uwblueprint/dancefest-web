@@ -37,7 +37,7 @@ export const getAward = async filter => {
   const award = await prisma.award.findFirst({
     where: filter,
     include: {
-      performances: {
+      awards_performances: {
         include: {
           performances: true,
         },
@@ -50,7 +50,7 @@ export const getAward = async filter => {
   // Remove the relation table data
   return {
     ...award,
-    performances: award.performances.map(performance => {
+    awards_performances: award.awards_performances.map(performance => {
       return {
         ...performance.performances,
         nominee_count: performance.nominee_count,

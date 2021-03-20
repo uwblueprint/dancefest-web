@@ -41,7 +41,7 @@ export const getPerformances = async filter => {
           judges: true,
         },
       },
-      awards: {
+      awards_performances: {
         include: {
           awards: true,
         },
@@ -58,21 +58,23 @@ export const getPerformances = async filter => {
   if (!performances) return;
 
   // Remove the relation table data
-  return performances.map(({ awards, event: { judges: judgesString }, adjudications, ...rest }) => {
-    return {
-      ...rest,
-      awards: awards.map(({ awards, nominee_count, status }) => {
-        return {
-          ...awards,
-          nominee_count,
-          status,
-        };
-      }),
-      totalAdjudications: (JSON.parse(judgesString) || []).filter(judge => judge !== '').length,
-      completedAdjudications: adjudications.length,
-      artisticScore: calculateAverageScore(adjudications.map(a => a.artistic_mark)),
-      technicalScore: calculateAverageScore(adjudications.map(a => a.technical_mark)),
-      cumulativeScore: calculateAverageScore(adjudications.map(a => a.cumulative_mark)),
-    };
-  });
+  return performances.map(
+    ({ awards_performances, event: { judges: judgesString }, adjudications, ...rest }) => {
+      return {
+        ...rest,
+        awards: awards_performances.map(({ awards, nominee_count, status }) => {
+          return {
+            ...awards,
+            nominee_count,
+            status,
+          };
+        }),
+        totalAdjudications: (JSON.parse(judgesString) || []).filter(judge => judge !== '').length,
+        completedAdjudications: adjudications.length,
+        artisticScore: calculateAverageScore(adjudications.map(a => a.artistic_mark)),
+        technicalScore: calculateAverageScore(adjudications.map(a => a.technical_mark)),
+        cumulativeScore: calculateAverageScore(adjudications.map(a => a.cumulative_mark)),
+      };
+    }
+  );
 };

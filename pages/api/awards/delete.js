@@ -26,6 +26,12 @@ export default async (req, res) => {
     },
   });
 
+  const deletedAwardCategory = prisma.awardCategory.deleteMany({
+    where: {
+      award_id: id,
+    },
+  });
+
   const deletedAward = prisma.award.delete({
     where: {
       id: id,
@@ -33,7 +39,7 @@ export default async (req, res) => {
   });
 
   try {
-    await prisma.$transaction([deletedAwardPerformance, deletedAward]);
+    await prisma.$transaction([deletedAwardPerformance, deletedAwardCategory, deletedAward]);
   } catch {
     return res.status(400).json({
       error: 'Error deleting award',

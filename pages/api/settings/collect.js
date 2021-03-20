@@ -13,7 +13,7 @@ export default async (req, res) => {
     const query = type ? { where: { type } } : {};
 
     // Collect all events from database
-    let settings = await prisma.setting.findMany(query);
+    const settings = await prisma.setting.findMany(query);
     res.send(settings);
   }
 
