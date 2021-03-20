@@ -14,7 +14,7 @@ export default async (req, res) => {
     events = events.map(event => ({
       ...event,
       // And parse the JSON field for judges (filtering for empty strings)
-      judges: JSON.parse(event.judges).filter(judge => judge !== ''),
+      judges: (JSON.parse(event.judges) || []).filter(judge => judge !== ''),
     }));
 
     // If the authenticated user is an admin

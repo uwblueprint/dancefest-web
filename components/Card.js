@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'; // Date parsing
 import { useRouter } from 'next/router'; // Routing (with buttons)
+import Navigation from '@containers/Navigation'; // Navigation state
 import styles from '@styles/components/Card.module.scss'; // Component styles
 
 /**
@@ -11,6 +12,7 @@ import styles from '@styles/components/Card.module.scss'; // Component styles
  */
 function EventCard({ event, isAdmin, openEditModal }) {
   const router = useRouter(); // Collect router
+  const { setEvent } = Navigation.useContainer();
 
   /**
    * Handles event card click
@@ -18,7 +20,8 @@ function EventCard({ event, isAdmin, openEditModal }) {
    */
   const handleClick = e => {
     e.preventDefault(); // Prevent default synthetic vent
-    router.push(`/event/${event.id}`); // Route to "/event/:id" page
+    setEvent(event.id);
+    router.push(`/performances`); // Route to "/performances" page
   };
 
   return (

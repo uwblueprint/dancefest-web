@@ -51,7 +51,7 @@ export async function getServerSideProps(context) {
   }
 
   // Parse and filter event judges
-  event.judges = JSON.parse(event.judges).filter(judge => judge !== '');
+  event.judges = (JSON.parse(event.judges) || []).filter(judge => judge !== '');
 
   // Check if user has access to event
   if (!session.role === 'ADMIN' && !event.judges.includes(session.user.email)) {
