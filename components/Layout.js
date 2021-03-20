@@ -91,12 +91,12 @@ function Header() {
               </li>
               {event !== null && (
                 <>
-                  <li className={pathname === '/performances' && styles.selected}>
+                  <li className={pathname.includes('/performances') && styles.selected}>
                     <Link href="/performances">
                       <a>Performances</a>
                     </Link>
                   </li>
-                  <li className={pathname === '/awards' && styles.selected}>
+                  <li className={pathname.includes('/awards') && styles.selected}>
                     <Link href="/awards">
                       <a>Awards</a>
                     </Link>
