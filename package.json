@@ -34,6 +34,7 @@
     "react-select": "^4.1.0",
     "react-table": "^7.6.3",
     "sass": "^1.32.7",
+    "unstated-next": "^1.1.0",
     "yocto-queue": "^0.1.0"
   },
   "devDependencies": {

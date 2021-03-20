@@ -16,7 +16,7 @@ export default async (req, res) => {
         // Collect event with eventID
         let event = await getEventByID(eventID);
         // Parse and filter event judges
-        event.judges = JSON.parse(event.judges).filter(judge => judge !== '');
+        event.judges = (JSON.parse(event.judges) || []).filter(judge => judge !== '');
 
         // If admin
         if (session.role === 'ADMIN') {

@@ -1,6 +1,8 @@
 import Link from 'next/link'; // Dynamic routing
 import Head from 'next/head'; // HTML head handling
+import { useRouter } from 'next/router'; // Routing
 import { signOut, useSession } from 'next-auth/client'; // Authentication
+import Navigation from '@containers/Navigation'; // Navigation state
 import styles from '@styles/components/Layout.module.scss'; // Component styles
 
 export default function Layout({ children }) {
@@ -61,7 +63,9 @@ function Meta() {
 // Header
 function Header() {
   // Collect auth status
+  const { pathname } = useRouter();
   const [session] = useSession();
+  const { event } = Navigation.useContainer();
 
   return (
     <div className={styles.layout__header}>
@@ -80,18 +84,39 @@ function Header() {
           {session ? (
             // If user is authenticated, display links
             <>
-              <li>
+              <li className={pathname === '/' && styles.selected}>
                 <Link href="/">
                   <a>Events</a>
                 </Link>
               </li>
-              <li>
+              {event !== null && (
+                <>
+                  <li className={pathname === '/performances' && styles.selected}>
+                    <Link href="/performances">
+                      <a>Performances</a>
+                    </Link>
+                  </li>
+                  <li className={pathname === '/awards' && styles.selected}>
+                    <Link href="/awards">
+                      <a>Awards</a>
+                    </Link>
+                  </li>
+                </>
+              )}
+              <li className={pathname === '/settings' && styles.selected}>
                 <Link href="/settings">
                   <a>Settings</a>
                 </Link>
               </li>
               <li>
-                <button onClick={() => signOut()}>Log Out</button>
+                <button
+                  onClick={() => {
+                    sessionStorage.clear();
+                    signOut();
+                  }}
+                >
+                  Log Out
+                </button>
               </li>
             </>
           ) : (
