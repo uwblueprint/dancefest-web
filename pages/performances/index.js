@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'; // React
 import axios from 'axios'; // axios
 import Link from 'next/link'; // Next link
 import Layout from '@components/Layout'; // Layout wrapper
+import Navigation from '@containers/Navigation'; // Navigation state
+import { getSession } from 'next-auth/client'; // Session handling
 
 import PerformancesTable from '@components/performances/PerformancesTable'; // Performances table
 import PerformanceModal from '@components/performances/PerformanceModal'; // Performance modal
@@ -25,7 +27,6 @@ import { formatSchools } from '@utils/schools'; // Format schools util
 import { formatPerformances } from '@utils/performances'; // Format performances util
 
 const DANCE_ENTRY = 1; // TEMPORARY. TODO: Figure out what this is for
-const EVENT_ID = 1; // TEMPORARY. TODO: REPLACE WITH STATE/STORE
 const ENTRY_VIEW_HIDDEN_COLUMNS = [
   'technicalScore',
   'artisticScore',
@@ -69,6 +70,9 @@ const removeKeyFromObject = (object, key) => {
 
 // Page: Performances
 export default function Performances() {
+  const { event } = Navigation.useContainer();
+
+  const [eventName, setEventName] = useState(''); // Event name
   const [loading, setLoading] = useState(false); // Loading
   const [modalOpen, setModalOpen] = useState(false); // Modal open
   const [showFilters, setShowFilters] = useState(false); // Show filter dropdowns
@@ -95,6 +99,22 @@ export default function Performances() {
   // Table data
   const [performances, setPerformances] = useState([]);
   const [performanceToEdit, setPerformanceToEdit] = useState(null);
+
+  const getEvent = async () => {
+    setLoading(true);
+
+    try {
+      const response = await axios({
+        method: 'GET',
+        url: `/api/events/get?eventID=${event}`,
+      });
+      const { name } = response.data;
+
+      setEventName(name);
+    } catch {
+      // Empty catch block
+    }
+  };
 
   const getFilters = async () => {
     setLoading(true);
@@ -182,7 +202,7 @@ export default function Performances() {
     try {
       const response = await axios({
         method: 'GET',
-        url: `/api/performances/collect?eventID=${EVENT_ID}`,
+        url: `/api/performances/collect?eventID=${event}`,
       });
 
       setPerformances(formatPerformances(response.data));
@@ -218,7 +238,7 @@ export default function Performances() {
           competitionLevel,
           danceStyle,
           danceSize,
-          eventID: EVENT_ID,
+          eventID: event,
           danceEntry: DANCE_ENTRY,
         },
       });
@@ -237,7 +257,7 @@ export default function Performances() {
   //   try {
   //     const response = await axios({
   //       method: 'GET',
-  //       url: `/api/performances/getJudgingData?eventId=${EVENT_ID}`,
+  //       url: `/api/performances/getJudgingData?eventId=${event}`,
   //     });
   //     const adjudicationsData = response.data;
   //     setAdjudications(formatPerformancesForJudgingTable(adjudicationsData));
@@ -250,10 +270,13 @@ export default function Performances() {
 
   // Get initial filter options and performances
   useEffect(() => {
-    getFilters();
-    getPerformances();
-    // getAdjudications();
-  }, []);
+    if (event) {
+      getEvent();
+      getFilters();
+      getPerformances();
+      // getAdjudications();
+    }
+  }, [event]);
 
   // Update table filters
   useEffect(() => {
@@ -382,9 +405,7 @@ export default function Performances() {
             </Button>
           </Link>
 
-          <h2 className={styles.performances__navigation__eventName}>
-            {`OSSDF2021- Let's Dis-dance`}
-          </h2>
+          <h2 className={styles.performances__navigation__eventName}>{eventName}</h2>
         </div>
         <div className={styles.performances__header}>
           <div>
@@ -510,4 +531,26 @@ export default function Performances() {
       />
     </Layout>
   );
+}
+
+// Run: server side
+export async function getServerSideProps(context) {
+  // Collect session
+  const session = await getSession(context);
+
+  // If session does not exist
+  if (!session) {
+    return {
+      redirect: {
+        // Redirect user to login page
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+
+  // Else, return
+  return {
+    props: {},
+  };
 }

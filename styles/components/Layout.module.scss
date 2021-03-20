@@ -62,6 +62,11 @@ Layout: Header
       :hover {
         opacity: 0.8;
       }
+
+      &.selected {
+        font-weight: bold;
+        border-bottom: 2px solid #ffffff;
+      }
     }
 
     li:last-of-type {

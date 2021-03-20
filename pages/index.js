@@ -2,6 +2,7 @@ import axios from 'axios'; // Axios requests
 import Layout from '@components/Layout'; // Layout wrapper
 import Loader from 'react-loader-spinner'; // Spinning loader
 import { useState, useEffect } from 'react'; // State management
+
 import DancefestModal from '@components/Modal'; // Modal component
 import { getSession } from 'next-auth/client'; // Session handling
 import { EventCard } from '@components/Card'; // Event card component
@@ -213,7 +214,7 @@ function NewEvent({ judgeOptions, setModalOpen, reloadEvents }) {
       // With required data
       title,
       date,
-      judges: [...new Set(judges.map(judge => judge.value).filter(judge => !!judge))],
+      judges: [...new Set(judges.filter(judge => !!judge).map(judge => judge.value))],
     });
 
     reloadEvents(); // Begin reloading all events in background
