@@ -4,6 +4,7 @@ import Link from 'next/link'; // Next link
 import Layout from '@components/Layout'; // Layout wrapper
 import Navigation from '@containers/Navigation'; // Navigation state
 import { getSession } from 'next-auth/client'; // Session handling
+import { useRouter } from 'next/router'; // Routing
 
 import PerformancesTable from '@components/performances/PerformancesTable'; // Performances table
 import PerformanceModal from '@components/performances/PerformanceModal'; // Performance modal
@@ -70,10 +71,11 @@ const removeKeyFromObject = (object, key) => {
 
 // Page: Performances
 export default function Performances() {
+  const router = useRouter();
   const { event } = Navigation.useContainer();
 
   const [eventName, setEventName] = useState(''); // Event name
-  const [loading, setLoading] = useState(false); // Loading
+  const [loading, setLoading] = useState(true); // Loading
   const [modalOpen, setModalOpen] = useState(false); // Modal open
   const [showFilters, setShowFilters] = useState(false); // Show filter dropdowns
   const [searchQuery, setSearchQuery] = useState(''); // Search query string
@@ -270,7 +272,9 @@ export default function Performances() {
 
   // Get initial filter options and performances
   useEffect(() => {
-    if (event) {
+    if (event === null) {
+      router.push('/');
+    } else if (event) {
       getEvent();
       getFilters();
       getPerformances();
