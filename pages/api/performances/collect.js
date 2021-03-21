@@ -62,11 +62,12 @@ export const getPerformances = async filter => {
     ({ awards_performances, event: { judges: judgesString }, adjudications, ...rest }) => {
       return {
         ...rest,
-        awards: awards_performances.map(({ awards, nominee_count, status }) => {
+        awards: awards_performances.map(({ awards, nominee_count, status, user_id }) => {
           return {
             ...awards,
             nominee_count,
             status,
+            user_id,
           };
         }),
         totalAdjudications: (JSON.parse(judgesString) || []).filter(judge => judge !== '').length,
