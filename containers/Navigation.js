@@ -17,10 +17,6 @@ const useNavigation = () => {
     sessionStorage.setItem('event', JSON.stringify(event));
   }, [event]);
 
-  // const event = JSON.parse(sessionStorage.getItem('event'));
-
-  // const setEvent = event => sessionStorage.setItem('event', event);
-
   return {
     event,
     setEvent,
