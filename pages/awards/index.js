@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'; // React
 import { useRouter } from 'next/router'; // Routing (with buttons)
 import Link from 'next/link'; // Next link
 import Layout from '@components/Layout'; // Layout wrapper
+import Navigation from '@containers/Navigation'; // Navigation state
 
 import Button from '@components/Button'; // Button
 import Title from '@components/Title'; // Title
@@ -40,6 +41,9 @@ const removeKeyFromObject = (object, key) => {
 
 // Page: Performances
 export default function Performances() {
+  const router = useRouter();
+  const { event } = Navigation.useContainer();
+
   const [modalOpen, setModalOpen] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [query, setQuery] = useState('');
@@ -55,6 +59,12 @@ export default function Performances() {
 
   // Award types, hardcoded for now
   const [awardTypeOptions, setAwardTypeOptions] = useState({});
+
+  useEffect(() => {
+    if (event === null) {
+      router.push('/');
+    }
+  }, [event]);
 
   // Update table filters
   useEffect(() => {
