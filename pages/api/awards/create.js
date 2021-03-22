@@ -11,13 +11,11 @@ export default async (req, res) => {
     return res.status(401).end();
   }
 
-  const userID = session.id;
-
   // Collect award information from request body
   const { title, settingIDs } = req.body;
 
   // If required fields do not exist
-  if (!title || !userID) {
+  if (!title) {
     return res.status(400).json({
       error: 'Required fields not provided',
     });
@@ -29,7 +27,6 @@ export default async (req, res) => {
     const award = await prisma.award.create({
       data: {
         title: title,
-        user_id: userID,
         is_category: isCategory,
       },
     });

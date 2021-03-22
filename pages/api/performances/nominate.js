@@ -14,6 +14,8 @@ export default async (req, res) => {
     });
   }
 
+  const userID = session.id;
+
   // Collect performance id and award ids from request body
   const { performanceID, awardIDs } = req.body;
 
@@ -49,6 +51,7 @@ export default async (req, res) => {
           create: {
             award_id: awardID,
             performance_id: performanceID,
+            user_id: userID,
             nominee_count: 1,
           },
           update: {

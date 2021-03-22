@@ -32,14 +32,15 @@ export const getAwards = async () => {
   if (!awards) return;
 
   // Remove the relation table data
-  return awards.map(award => {
+  return awards.map(({ awards_performances, ...rest }) => {
     return {
-      ...award,
-      awards_performances: award.awards_performances.map(performance => {
+      ...rest,
+      performances: awards_performances.map(({ performances, nominee_count, status, user_id }) => {
         return {
-          ...performance.performances,
-          nominee_count: performance.nominee_count,
-          status: performance.status,
+          ...performances,
+          nominee_count,
+          status,
+          user_id,
         };
       }),
     };
