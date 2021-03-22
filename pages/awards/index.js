@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'; // React
+import axios from 'axios';
 import { useRouter } from 'next/router'; // Routing (with buttons)
 import Link from 'next/link'; // Next link
 import Layout from '@components/Layout'; // Layout wrapper
@@ -20,7 +21,7 @@ import ChevronDown from '@assets/chevron-down.svg'; // Chevron down icon
 import ChevronDownGrey from '@assets/chevron-down-grey.svg'; // Chevron down grey icon
 import DancerRedJump from '@assets/dancer-red-jump.svg'; // Jumping Dancer SVG
 import DancerYellowBlue from '@assets/dancer-yellow-blue.svg'; // Jumping Dancer SVG
-import styles from '@styles/pages/Performances.module.scss'; // Page styles
+import styles from '@styles/pages/Awards.module.scss'; // Page styles
 
 // Temp constants
 import data, { columns } from '../../data/mockAwards';
@@ -116,6 +117,46 @@ export default function Performances() {
 
     return elements;
   };
+
+  useEffect(() => {
+    console.log('Print something');
+
+    async function nominate() {
+      try {
+        const resp = await axios({
+          method: 'POST',
+          url: '/api/performances/nominate',
+          data: {
+            performanceID: 4,
+            awardIDs: [1],
+          },
+        });
+        console.log('resp ' + resp);
+      } catch (err) {
+        // Empty catch block
+        console.log('Something went wrong ' + err);
+      }
+    }
+
+    async function finalize() {
+      try {
+        const resp = await axios({
+          method: 'PUT',
+          url: '/api/awards/finalize',
+          data: {
+            awardID: 1,
+            performanceID: 4,
+          },
+        });
+        console.log('resp ' + resp);
+      } catch (err) {
+        // Empty catch block
+        console.log('Something went wrong ' + err);
+      }
+    }
+    nominate();
+    finalize();
+  }, []);
 
   return (
     <Layout>
@@ -215,16 +256,6 @@ const NominationTable = props => {
 
   const columns = [
     {
-      Header: 'Edit',
-      accessor: 'edit',
-      // eslint-disable-next-line react/display-name
-      Cell: () => (
-        <div className={styles.entryTable__editCell}>
-          <Button variant="edit" />
-        </div>
-      ),
-    },
-    {
       Header: 'Award Title',
       accessor: 'title',
     },
@@ -311,8 +342,8 @@ const EmptyTableComponent = () => {
     <div className={styles.page__performances_list_empty}>
       <img src={DancerYellowBlue} />
       <div>
-        <h2>No Performances Listed</h2>
-        <h3>Create your first performance</h3>
+        <h2>No Awards Listed</h2>
+        <h3>Create an award!</h3>
       </div>
       <img src={DancerRedJump} />
     </div>
