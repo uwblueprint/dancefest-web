@@ -94,6 +94,7 @@ async function dataSeed() {
     console.log(setting);
   }
 
+  const styleSettingUpserts = [];
   for (const style of styleSettings) {
     const setting = await prisma.setting.upsert({
       where: {
@@ -109,6 +110,7 @@ async function dataSeed() {
       },
     });
     console.log(setting);
+    styleSettingUpserts.push(setting);
   }
 
   for (const level of levelSettings) {
@@ -281,6 +283,69 @@ async function dataSeed() {
     });
     adjudicationUpserts.push(adjudicationUpsert);
     console.log(adjudicationUpsert);
+  }
+
+  const awards = [
+    {
+      id: 1,
+      title: 'Award 1',
+      is_category: false,
+    },
+    {
+      id: 2,
+      title: 'Award 2',
+      is_category: false,
+    },
+    {
+      id: 3,
+      title: 'Award 3',
+      is_category: true,
+    },
+    {
+      id: 4,
+      title: 'Award 4',
+      is_category: true,
+    },
+  ];
+
+  const awardUpserts = [];
+  for (const award of awards) {
+    const awardUpsert = await prisma.award.upsert({
+      where: {
+        id: award['id'],
+      },
+      update: {
+        title: award['title'],
+        is_category: award['is_category'],
+      },
+      create: {
+        id: award['id'],
+        title: award['title'],
+        is_category: award['is_category'],
+      },
+    });
+    awardUpserts.push(awardUpsert);
+    console.log(awardUpsert);
+
+    if (award['is_category']) {
+      const awardCategoryUpsert = await prisma.awardCategory.upsert({
+        where: {
+          awards_categories_unique: {
+            award_id: award['id'],
+            category_id: styleSettingUpserts[0].id,
+          },
+        },
+        update: {
+          award_id: award['id'],
+          category_id: styleSettingUpserts[0].id,
+        },
+        create: {
+          award_id: award['id'],
+          category_id: styleSettingUpserts[0].id,
+        },
+      });
+      console.log(awardCategoryUpsert);
+    }
   }
 }
 
