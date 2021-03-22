@@ -7,7 +7,7 @@ export default async (req, res) => {
   const session = await getSession({ req });
 
   // If not authenticated
-  if (!session || session.role !== 'ADMIN') {
+  if (!session) {
     return res.status(401).end();
   }
 
@@ -20,12 +20,10 @@ export default async (req, res) => {
     });
   }
 
-  const awardPerformance = await prisma.awardPerformance.findUnique({
+  const awardPerformance = await prisma.awardPerformance.findFirst({
     where: {
-      awards_performances_unique: {
-        award_id: awardID,
-        performance_id: performanceID,
-      },
+      award_id: awardID,
+      performance_id: performanceID,
     },
     include: {
       awards: true,
@@ -46,31 +44,42 @@ export default async (req, res) => {
     });
   }
 
+  const finalizedNominations = prisma.awardPerformance.updateMany({
+    where: {
+      award_id: awardID,
+      performance_id: performanceID,
+    },
+    data: {
+      status: 'FINALIST',
+    },
+  });
+
   // Update the award to be finalized by setting the bit to 1
-  const finalizedAward = await prisma.award.update({
+  const finalizedAward = prisma.award.update({
     where: {
       id: awardID,
     },
     data: {
       is_finalized: true,
-      awards_performances: {
-        update: {
-          where: {
-            awards_performances_unique: {
-              award_id: awardID,
-              performance_id: performanceID,
-            },
-          },
-          data: {
-            status: 'FINALIST',
-          },
-        },
-      },
+      // awards_performances: {
+      //   update: {
+      //     where: {
+      //       award_id: awardID,
+      //       performance_id: performanceID,
+      //     },
+      //     data: {
+      //       status: 'FINALIST',
+      //     },
+      //   },
+      // },
     },
     include: {
       awards_performances: true,
     },
   });
 
-  res.status(200).json(finalizedAward);
+  const awardTransaction = await prisma.$transaction([finalizedNominations, finalizedAward]);
+  const awardResult = awardTransaction[awardTransaction.length - 1];
+
+  res.status(200).json(awardResult);
 };
