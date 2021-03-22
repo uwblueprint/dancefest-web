@@ -7,7 +7,7 @@ export default async (req, res) => {
   const session = await getSession({ req });
 
   // If not authenticated
-  if (!session) {
+  if (!session || session.role !== 'ADMIN') {
     return res.status(401).end();
   }
 
@@ -20,6 +20,8 @@ export default async (req, res) => {
     });
   }
 
+  // It doesn't matter which user made the nomination we find as we just want to find the first record that exists
+  // as it allows us to know that the particular performance is nominated for the award
   const awardPerformance = await prisma.awardPerformance.findFirst({
     where: {
       award_id: awardID,
@@ -44,6 +46,7 @@ export default async (req, res) => {
     });
   }
 
+  // update the awardPerformance record status to be 'FINALIST'
   const finalizedNominations = prisma.awardPerformance.updateMany({
     where: {
       award_id: awardID,
@@ -54,24 +57,13 @@ export default async (req, res) => {
     },
   });
 
-  // Update the award to be finalized by setting the bit to 1
+  // Update the award to be finalized
   const finalizedAward = prisma.award.update({
     where: {
       id: awardID,
     },
     data: {
       is_finalized: true,
-      // awards_performances: {
-      //   update: {
-      //     where: {
-      //       award_id: awardID,
-      //       performance_id: performanceID,
-      //     },
-      //     data: {
-      //       status: 'FINALIST',
-      //     },
-      //   },
-      // },
     },
     include: {
       awards_performances: true,
