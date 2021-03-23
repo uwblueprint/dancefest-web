@@ -61,6 +61,8 @@ export default function Performances() {
   // Award types, hardcoded for now
   const [awardTypeOptions, setAwardTypeOptions] = useState({});
 
+  const [awardData, setAwardData] = useState();
+
   useEffect(() => {
     if (event === null) {
       router.push('/');
@@ -118,9 +120,29 @@ export default function Performances() {
     return elements;
   };
 
-  useEffect(() => {
-    console.log('Print something');
+  async function getAwards() {
+    try {
+      const resp = await axios({
+        method: 'GET',
+        url: '/api/awards/collect',
+      });
+      console.log('resp ' + resp);
+      setAwardData(resp.data);
+    } catch (err) {
+      // Empty catch block
+      console.log(err);
+    }
+  }
 
+  useEffect(() => {
+    getAwards();
+  }, []);
+
+  useEffect(() => {
+    console.log(awardData);
+  }, [awardData]);
+
+  useEffect(() => {
     async function nominate() {
       try {
         const resp = await axios({
