@@ -130,13 +130,12 @@ model AwardPerformance {
   award_id       Int?
   performance_id Int?
   user_id        Int
-  nominee_count  Int?                   @default(0)
   status         awardperformancestatus @default(NOMINEE)
   awards         Award?                 @relation("awardsToawards_performances", fields: [award_id], references: [id])
   performances   Performance?           @relation("awards_performancesToperformances", fields: [performance_id], references: [id])
   users          User                   @relation("awards_performancesTousers", fields: [user_id], references: [id])
 
-  @@unique([award_id, performance_id], name: "awards_performances_unique")
+  @@unique([award_id, performance_id, user_id], name: "unique_nomination")
   @@map("awards_performances")
 }
 

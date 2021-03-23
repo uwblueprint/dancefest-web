@@ -35,10 +35,9 @@ export const getAwards = async () => {
   return awards.map(({ awards_performances, ...rest }) => {
     return {
       ...rest,
-      performances: awards_performances.map(({ performances, nominee_count, status, user_id }) => {
+      performances: awards_performances.map(({ performances, status, user_id }) => {
         return {
           ...performances,
-          nominee_count,
           status,
           user_id,
         };

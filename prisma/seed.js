@@ -30,15 +30,15 @@ async function dataSeed() {
 
   for (const admin of admins) {
     const adminUpsert = await prisma.user.upsert({
-      where: { email: admin['email'] },
+      where: { email: admin.email },
       update: {
         role: 'ADMIN',
-        name: admin['name'],
+        name: admin.name,
       },
       create: {
         role: 'ADMIN',
-        email: admin['email'],
-        name: admin['name'],
+        email: admin.email,
+        name: admin.name,
       },
     });
     console.log({ adminUpsert });
@@ -47,15 +47,15 @@ async function dataSeed() {
   const userUpserts = [];
   for (const user of users) {
     const userUpsert = await prisma.user.upsert({
-      where: { email: user['email'] },
+      where: { email: user.email },
       update: {
         role: 'ADMIN',
-        name: user['name'],
+        name: user.name,
       },
       create: {
         role: 'ADMIN',
-        email: user['email'],
-        name: user['name'],
+        email: user.email,
+        name: user.name,
       },
     });
     userUpserts.push(userUpsert);
@@ -94,6 +94,7 @@ async function dataSeed() {
     console.log(setting);
   }
 
+  const styleSettingUpserts = [];
   for (const style of styleSettings) {
     const setting = await prisma.setting.upsert({
       where: {
@@ -109,6 +110,7 @@ async function dataSeed() {
       },
     });
     console.log(setting);
+    styleSettingUpserts.push(setting);
   }
 
   for (const level of levelSettings) {
@@ -133,14 +135,14 @@ async function dataSeed() {
   // EVENT SEEDING
   const eventUpsert = await prisma.event.upsert({
     where: {
-      id: event['id'],
+      id: event.id,
     },
     update: {
-      name: event['name'],
+      name: event.name,
     },
     create: {
-      id: event['id'],
-      name: event['name'],
+      id: event.id,
+      name: event.name,
     },
   });
 
@@ -159,14 +161,14 @@ async function dataSeed() {
   const schoolUpserts = [];
   for (const school of schools) {
     const schoolUpsert = await prisma.school.upsert({
-      where: { id: school['id'] },
+      where: { id: school.id },
       update: {
-        school_name: school['school_name'],
+        school_name: school.school_name,
       },
       create: {
-        id: school['id'],
-        school_name: school['school_name'],
-        email: school['email'],
+        id: school.id,
+        school_name: school.school_name,
+        email: school.email,
       },
     });
     schoolUpserts.push(schoolUpsert);
@@ -208,23 +210,23 @@ async function dataSeed() {
   for (const performance of performances) {
     const performanceUpsert = await prisma.performance.upsert({
       where: {
-        id: performance['id'],
+        id: performance.id,
       },
       update: {
-        name: performance['name'],
-        performers: performance['performers'],
-        choreographers: performance['cheoreographers'],
-        event_id: performance['event_id'],
-        school_id: performance['school_id'],
+        name: performance.name,
+        performers: performance.performers,
+        choreographers: performance.cheoreographers,
+        event_id: performance.event_id,
+        school_id: performance.school_id,
       },
       create: {
-        id: performance['id'],
-        name: performance['name'],
-        performers: performance['performers'],
-        choreographers: performance['cheoreographers'],
-        dance_entry: performance['dance_entry'],
-        event_id: performance['event_id'],
-        school_id: performance['school_id'],
+        id: performance.id,
+        name: performance.name,
+        performers: performance.performers,
+        choreographers: performance.cheoreographers,
+        dance_entry: performance.dance_entry,
+        event_id: performance.event_id,
+        school_id: performance.school_id,
       },
     });
     performanceUpserts.push(performanceUpsert);
@@ -263,24 +265,87 @@ async function dataSeed() {
   for (const adjudication of ajudications) {
     const adjudicationUpsert = await prisma.adjudication.upsert({
       where: {
-        id: adjudication['id'],
+        id: adjudication.id,
       },
       update: {
-        artistic_mark: adjudication['artistic_mark'],
-        technical_mark: adjudication['technical_mark'],
-        cumulative_mark: adjudication['cumulative_mark'],
+        artistic_mark: adjudication.artistic_mark,
+        technical_mark: adjudication.technical_mark,
+        cumulative_mark: adjudication.cumulative_mark,
       },
       create: {
-        id: adjudication['id'],
-        artistic_mark: adjudication['artistic_mark'],
-        technical_mark: adjudication['technical_mark'],
-        cumulative_mark: adjudication['cumulative_mark'],
-        performance_id: adjudication['performance_id'],
-        user_id: adjudication['user_id'],
+        id: adjudication.id,
+        artistic_mark: adjudication.artistic_mark,
+        technical_mark: adjudication.technical_mark,
+        cumulative_mark: adjudication.cumulative_mark,
+        performance_id: adjudication.performance_id,
+        user_id: adjudication.user_id,
       },
     });
     adjudicationUpserts.push(adjudicationUpsert);
     console.log(adjudicationUpsert);
+  }
+
+  const awards = [
+    {
+      id: 1,
+      title: 'Award 1',
+      is_category: false,
+    },
+    {
+      id: 2,
+      title: 'Award 2',
+      is_category: false,
+    },
+    {
+      id: 3,
+      title: 'Award 3',
+      is_category: true,
+    },
+    {
+      id: 4,
+      title: 'Award 4',
+      is_category: true,
+    },
+  ];
+
+  const awardUpserts = [];
+  for (const award of awards) {
+    const awardUpsert = await prisma.award.upsert({
+      where: {
+        id: award.id,
+      },
+      update: {
+        title: award.title,
+        is_category: award.is_category,
+      },
+      create: {
+        id: award.id,
+        title: award.title,
+        is_category: award.is_category,
+      },
+    });
+    awardUpserts.push(awardUpsert);
+    console.log(awardUpsert);
+
+    if (award['is_category']) {
+      const awardCategoryUpsert = await prisma.awardCategory.upsert({
+        where: {
+          awards_categories_unique: {
+            award_id: award.id,
+            category_id: styleSettingUpserts[0].id,
+          },
+        },
+        update: {
+          award_id: award.id,
+          category_id: styleSettingUpserts[0].id,
+        },
+        create: {
+          award_id: award.id,
+          category_id: styleSettingUpserts[0].id,
+        },
+      });
+      console.log(awardCategoryUpsert);
+    }
   }
 }
 

@@ -1,9 +1,9 @@
 import prisma from '@prisma/index'; // Prisma client
 import { getSession } from 'next-auth/client'; // Session handling
 
-// Finalizes the award
-// Sets all the award performances with the provided performance id and award id to FINALIST
-// Sets is_finalized of award to true
+// Unfinalizes the award
+// Sets all the award performances with the provided performance id and award id to NOMINEE
+// Sets is_finalized of award to false
 export default async (req, res) => {
   // Collect session from request
   const session = await getSession({ req });
@@ -41,31 +41,32 @@ export default async (req, res) => {
     });
   }
 
-  const isFinalized = awardPerformance.awards ? awardPerformance.awards.is_finalized : false;
-  if (isFinalized) {
+  // If the award is not finalized
+  const isFinalized = awardPerformance.awards ? awardPerformance.awards.is_finalized : true;
+  if (!isFinalized) {
     return res.status(400).json({
-      error: 'Award is already finalized',
+      error: 'Award is not finalized',
     });
   }
 
-  // update the awardPerformance record status to be 'FINALIST'
+  // revert all awardPerformance record status to be 'NOMINEE'
   const finalizedNominations = prisma.awardPerformance.updateMany({
     where: {
       award_id: awardID,
       performance_id: performanceID,
     },
     data: {
-      status: 'FINALIST',
+      status: 'NOMINEE',
     },
   });
 
-  // Update the award to be finalized
+  // Revert the award is_finalized to be false
   const finalizedAward = prisma.award.update({
     where: {
       id: awardID,
     },
     data: {
-      is_finalized: true,
+      is_finalized: false,
     },
     include: {
       awards_performances: true,
