@@ -6,7 +6,7 @@ import TextInput from '@components/Input'; // Input
 import PlayIcon from '@assets/play.svg'; // Play icon
 import styles from '@styles/components/performance-details/JudgeFeedback.module.scss'; // Component styles
 
-export default function JudgeFeedback({ adjudication }) {
+export default function JudgeFeedback({ adjudication, nominations = [] }) {
   const { notes: initialNotes, technicalScore, artisticScore, cumulativeScore } = adjudication;
 
   const [editMode, setEditMode] = useState(false);
@@ -94,7 +94,7 @@ export default function JudgeFeedback({ adjudication }) {
             wrapperClassName={styles.judge__feedback_dropdown_wrapper}
           />
         ) : (
-          <p>{`Most Inspiring Medium Group Performance`}</p>
+          nominations.map(({ title }, i) => <p key={i}>{title}</p>)
         )}
       </div>
       <div>

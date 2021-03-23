@@ -21,6 +21,15 @@ export const formatPerformance = ({
   adjudications,
   ...rest
 }) => {
+  const nominations = {};
+  awards.forEach(award => {
+    if (award.user_id in nominations) {
+      nominations[award.user_id].push(award);
+    } else {
+      nominations[award.user_id] = [award];
+    }
+  });
+
   return {
     academicLevel,
     performanceLevel,
@@ -36,6 +45,7 @@ export const formatPerformance = ({
     awards,
     awardsString: awards.map(({ title }) => title).join(', '),
     adjudications: adjudications.map(formatAdjudication),
+    nominations,
     ...rest,
   };
 };

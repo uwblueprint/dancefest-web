@@ -39,7 +39,7 @@ export const getPerformance = async filter => {
     where: filter,
     include: {
       event: true,
-      awards: {
+      awards_performances: {
         include: {
           awards: true,
         },
@@ -60,7 +60,7 @@ export const getPerformance = async filter => {
   if (!performance) return;
 
   const {
-    awards_performances,
+    awards_performances: awards,
     event,
     event: { judges: judgesString },
     adjudications,
@@ -69,7 +69,7 @@ export const getPerformance = async filter => {
 
   return {
     ...rest,
-    awards: awards_performances.map(({ awards, status, user_id }) => {
+    awards: awards.map(({ awards, status, user_id }) => {
       return {
         ...awards,
         status,

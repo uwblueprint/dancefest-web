@@ -242,7 +242,6 @@ const NominationTable = props => {
 
   const goToPerformanceDetails = row => {
     // Go to /performances/[id] page
-    console.log(row);
     router.push(`/awards/${row.original.type}`); // Route to "/performance/:id" page
   };
 

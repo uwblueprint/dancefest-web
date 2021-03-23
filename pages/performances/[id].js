@@ -20,7 +20,7 @@ import { formatPerformance } from '@utils/performances'; // Format performance u
 export default function PerformanceDetails() {
   const router = useRouter();
   const { id } = router.query;
-  const { event } = Navigation.useContainer();
+  const { event: eventId } = Navigation.useContainer();
 
   const [loading, setLoading] = useState(false);
   const [performance, setPerformance] = useState(null);
@@ -28,6 +28,12 @@ export default function PerformanceDetails() {
 
   const showPerformanceDetails = selectedTab === -1;
   const showJudgeFeedback = selectedTab >= 0;
+  const { name, event, adjudications = [], nominations = [] } = performance || {};
+  const eventName = event && event.name;
+  const currentAdjudication = adjudications.length > 0 ? adjudications[selectedTab] : undefined;
+  const currentJudgeUserId = currentAdjudication && currentAdjudication.userId;
+  const currentNominations =
+    nominations && currentJudgeUserId ? nominations[currentJudgeUserId] : undefined;
 
   const getPerformance = async () => {
     setLoading(true);
@@ -48,12 +54,13 @@ export default function PerformanceDetails() {
   };
 
   useEffect(() => {
-    if (!event) {
-      return;
+    if (eventId === null) {
+      router.push('/performances');
+    } else if (eventId) {
+      getPerformance();
     }
     // TODO: Validate that the performance id is from the currently selected event id (from navigation state)
-    getPerformance();
-  }, [event]);
+  }, [eventId]);
 
   return (
     <Layout>
@@ -64,10 +71,10 @@ export default function PerformanceDetails() {
       ) : (
         <>
           <div>
-            <h2 className={styles.performances_details__eventName}>{performance.event.name}</h2>
+            <h2 className={styles.performances_details__eventName}>{eventName}</h2>
           </div>
           <div>
-            <Title className={styles.performances__header__pageTitle}>{performance.name}</Title>
+            <Title className={styles.performances__header__pageTitle}>{name}</Title>
           </div>
           <div className={styles.performance_details__content_container}>
             <div className={styles.performance_details__tabs_container}>
@@ -80,10 +87,11 @@ export default function PerformanceDetails() {
                   <h3>Performance Details</h3>
                 </button>
               </div>
-              {performance.adjudications.map((adjudication, i) => (
+              {adjudications.map((adjudication, i) => (
                 <Tab
                   key={i}
                   adjudication={adjudication}
+                  nominations={nominations[adjudication.userId]}
                   selected={selectedTab === i}
                   handleClick={() => setSelectedTab(i)}
                 >
@@ -99,7 +107,10 @@ export default function PerformanceDetails() {
               {performance && showPerformanceDetails ? (
                 <PerformanceSummary performance={performance} />
               ) : performance && showJudgeFeedback ? (
-                <JudgeFeedback adjudication={performance.adjudications[selectedTab]} />
+                <JudgeFeedback
+                  adjudication={currentAdjudication}
+                  nominations={currentNominations}
+                />
               ) : (
                 <EmptyComponent />
               )}

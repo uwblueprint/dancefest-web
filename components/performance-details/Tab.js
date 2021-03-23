@@ -2,8 +2,7 @@ import React from 'react'; // React
 import PropTypes from 'prop-types'; // PropTypes
 import styles from '@styles/components/performance-details/Tab.module.scss'; // Component styles
 
-export default function Tab({ children, adjudication, selected, handleClick }) {
-  console.log(adjudication);
+export default function Tab({ children, adjudication, nominations = [], selected, handleClick }) {
   return (
     <div className={`${styles.judge__tab} ${selected && styles.judge__tab_selected}`}>
       <button onClick={handleClick}>
@@ -18,6 +17,11 @@ export default function Tab({ children, adjudication, selected, handleClick }) {
 
         <div className={styles.judge__tab_awards}>
           <h4>AWARD NOMINATIONS:</h4>
+          <ul>
+            {nominations.map(({ title }, i) => (
+              <li key={i}>{title}</li>
+            ))}
+          </ul>
         </div>
       </button>
     </div>
