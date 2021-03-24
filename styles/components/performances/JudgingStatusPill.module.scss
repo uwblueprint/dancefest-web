@@ -1,0 +1,34 @@
+/*
+****************************************
+Judging Status Pill
+****************************************
+*/
+.judgingStatusPill {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 0px 4px;
+
+  width: 98px;
+  height: 20px;
+
+  border-radius: 3px;
+
+  font-family: DM Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+
+  color: var(--brand-pop-blue);
+}
+
+.incomplete {
+  background-color: #ffc8b9;
+}
+
+.complete {
+  background-color: #c6f4d8;
+}

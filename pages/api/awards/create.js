@@ -11,30 +11,57 @@ export default async (req, res) => {
     return res.status(401).end();
   }
 
-  const userID = session.id;
-
   // Collect award information from request body
-  const { title } = req.body;
+  const { title, settingIDs } = req.body;
 
   // If required fields do not exist
-  if (!title || !userID) {
+  if (!title) {
     return res.status(400).json({
       error: 'Required fields not provided',
     });
   }
 
-  const award = await prisma.award.create({
-    data: {
-      title: title,
-      user_id: userID,
-    },
-  });
+  try {
+    const isCategory = settingIDs && settingIDs.length > 0;
+    // create award
+    const award = await prisma.award.create({
+      data: {
+        title: title,
+        is_category: isCategory,
+      },
+    });
 
-  // If award creation is successful, return award
-  // Else, return error
-  if (award) {
-    return res.status(200).json(award);
-  } else {
+    // create award category references
+    if (isCategory) {
+      await prisma.$transaction(
+        settingIDs.map(settingID =>
+          prisma.awardCategory.upsert({
+            where: {
+              awards_categories_unique: {
+                award_id: award.id,
+                category_id: settingID,
+              },
+            },
+            create: {
+              award_id: award.id,
+              category_id: settingID,
+            },
+            update: {},
+          })
+        )
+      );
+    }
+
+    // If award creation is successful, return award
+    // Else, return error
+    if (award) {
+      return res.status(200).json(award);
+    } else {
+      return res.status(400).json({
+        error: 'Error creating new award',
+      });
+    }
+  } catch {
     return res.status(400).json({
       error: 'Error creating new award',
     });

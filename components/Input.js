@@ -62,7 +62,7 @@ export default function TextInput({
 TextInput.propTypes = {
   className: PropTypes.string,
   fullWidth: PropTypes.any,
-  icon: PropTypes.object,
+  icon: PropTypes.element,
   inputRef: PropTypes.oneOfType([
     PropTypes.shape({
       current: PropTypes.elementType,

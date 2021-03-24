@@ -1,5 +1,6 @@
 import prisma from '@prisma/index'; // Prisma client
 import { getSession } from 'next-auth/client'; // Session handling
+import { calculateAverageScore } from '@utils/performances'; // Utils
 
 // get performances by specifying the corresponding eventID
 export default async (req, res) => {
@@ -35,32 +36,45 @@ export const getPerformances = async filter => {
   const performances = await prisma.performance.findMany({
     where: filter,
     include: {
-      awards: {
+      event: {
+        select: {
+          judges: true,
+        },
+      },
+      awards_performances: {
         include: {
           awards: true,
         },
       },
       school: {
         select: {
-          name: true,
+          school_name: true,
         },
       },
+      adjudications: true,
     },
   });
 
   if (!performances) return;
 
   // Remove the relation table data
-  return performances.map(performance => {
-    return {
-      ...performance,
-      awards: performance.awards.map(award => {
-        return {
-          ...award.awards,
-          nominee_count: award.nominee_count,
-          status: award.status,
-        };
-      }),
-    };
-  });
+  return performances.map(
+    ({ awards_performances, event: { judges: judgesString }, adjudications, ...rest }) => {
+      return {
+        ...rest,
+        awards: awards_performances.map(({ awards, status, user_id }) => {
+          return {
+            ...awards,
+            status,
+            user_id,
+          };
+        }),
+        totalAdjudications: (JSON.parse(judgesString) || []).filter(judge => judge !== '').length,
+        completedAdjudications: adjudications.length,
+        artisticScore: calculateAverageScore(adjudications.map(a => a.artistic_mark)),
+        technicalScore: calculateAverageScore(adjudications.map(a => a.technical_mark)),
+        cumulativeScore: calculateAverageScore(adjudications.map(a => a.cumulative_mark)),
+      };
+    }
+  );
 };

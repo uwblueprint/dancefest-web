@@ -4,7 +4,7 @@ Add/Edit Admin Modal
 ****************************************
 */
 .adminModal__container {
-  height: 412px;
+  height: 500px;
   width: 1028px;
   max-width: 1028px;
 
@@ -35,7 +35,8 @@ Add/Edit Admin Modal
     }
 
     // Input text fields
-    & input {
+    & input,
+    .adminModal__dropdown {
       width: 408px;
     }
   }

@@ -14,6 +14,8 @@ export default async (req, res) => {
     });
   }
 
+  const userID = session.id;
+
   // Collect performance id and award ids from request body
   const { performanceID, awardIDs } = req.body;
 
@@ -31,28 +33,25 @@ export default async (req, res) => {
     });
   }
 
-  // We update the nominee_count if the performance has been already been nominated for the award
-  // If it does not exist, we create an entry into the association table
+  // TODO for now we assume frontend will filter correctly and only
+  // eligible awards will show up for validation
   try {
     const awardPerformances = await prisma.$transaction(
       awardIDs.map(awardID =>
         prisma.awardPerformance.upsert({
           where: {
-            awards_performances_unique: {
+            unique_nomination: {
               award_id: awardID,
               performance_id: performanceID,
+              user_id: userID,
             },
           },
           create: {
             award_id: awardID,
             performance_id: performanceID,
-            nominee_count: 1,
+            user_id: userID,
           },
-          update: {
-            nominee_count: {
-              increment: 1,
-            },
-          },
+          update: {},
         })
       )
     );

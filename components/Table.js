@@ -13,8 +13,10 @@ export default function Table({
   setPageCount = null,
   pageSize = 10,
   paginate = true,
+  initialSort = [],
   emptyComponent,
-  onRowClick = () => {},
+  hiddenColumns = [],
+  // onRowClick = () => {},
 }) {
   const {
     getTableBodyProps,
@@ -38,6 +40,10 @@ export default function Table({
             return rowValue !== undefined ? filterValues.includes(String(rowValue)) : true;
           });
         },
+      },
+      initialState: {
+        sortBy: initialSort,
+        hiddenColumns,
       },
     },
     useFilters,
@@ -63,14 +69,14 @@ export default function Table({
     setAllFilters(filters);
   }, [filters]);
 
-  const handleRowClick = row => () => {
-    // Call the prop - onRowClick
-    onRowClick(row);
-  };
+  // const handleRowClick = row => () => {
+  //   // Call the prop - onRowClick
+  //   onRowClick(row);
+  // };
 
   return (
     <div className={styles.table__div}>
-      {!data.length ? (
+      {data && data.length === 0 ? (
         // If there's no data just show the table header along with an optional 'emptyComponent'
         <>
           <table {...getTableProps()}>
@@ -114,7 +120,7 @@ export default function Table({
             {(paginate ? page : rows).map((row, i) => {
               prepareRow(row);
               return (
-                <tr key={i} {...row.getRowProps()} onClick={handleRowClick(row)}>
+                <tr key={i} {...row.getRowProps()}>
                   {row.cells.map((cell, i) => {
                     return (
                       <td key={i} {...cell.getCellProps()}>
@@ -142,6 +148,10 @@ Table.propTypes = {
       value: PropTypes.any,
     })
   ),
+  initialSort: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    desc: PropTypes.bool,
+  }),
   onRowClick: PropTypes.func,
   pageNumber: PropTypes.number,
   pageSize: PropTypes.number,

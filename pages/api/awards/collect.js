@@ -21,7 +21,7 @@ export const getAwards = async () => {
   // Collect awards with performanceID
   const awards = await prisma.award.findMany({
     include: {
-      performances: {
+      awards_performances: {
         include: {
           performances: true,
         },
@@ -32,14 +32,14 @@ export const getAwards = async () => {
   if (!awards) return;
 
   // Remove the relation table data
-  return awards.map(award => {
+  return awards.map(({ awards_performances, ...rest }) => {
     return {
-      ...award,
-      performances: award.performances.map(performance => {
+      ...rest,
+      performances: awards_performances.map(({ performances, status, user_id }) => {
         return {
-          ...performance.performances,
-          nominee_count: performance.nominee_count,
-          status: performance.status,
+          ...performances,
+          status,
+          user_id,
         };
       }),
     };

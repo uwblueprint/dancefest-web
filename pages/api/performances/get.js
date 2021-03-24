@@ -37,16 +37,17 @@ export const getPerformance = async filter => {
   const performance = await prisma.performance.findUnique({
     where: filter,
     include: {
-      awards: {
+      awards_performances: {
         include: {
           awards: true,
         },
       },
       school: {
         select: {
-          name: true,
+          school_name: true,
         },
       },
+      adjudications: true,
     },
   });
 
@@ -55,11 +56,11 @@ export const getPerformance = async filter => {
   // Remove the relation table data
   return {
     ...performance,
-    awards: performance.awards.map(award => {
+    awards_performances: performance.awards_performances.map(({ awards, status, user_id }) => {
       return {
-        ...award.awards,
-        nominee_count: award.nominee_count,
-        status: award.status,
+        ...awards,
+        status,
+        user_id,
       };
     }),
   };

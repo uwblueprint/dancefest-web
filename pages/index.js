@@ -1,14 +1,17 @@
 import axios from 'axios'; // Axios requests
 import Layout from '@components/Layout'; // Layout wrapper
 import Loader from 'react-loader-spinner'; // Spinning loader
-import { useState, useEffect } from 'react'; // State management
+import { useState, useEffect } from 'react';
+import Navigation from '@containers/Navigation'; // State management
+
 import DancefestModal from '@components/Modal'; // Modal component
 import { getSession } from 'next-auth/client'; // Session handling
 import { EventCard } from '@components/Card'; // Event card component
 import TextInput from '@components/Input'; // Text input component
 import styles from '@styles/pages/Events.module.scss'; // Page styling
 import Button from '@components/Button'; // Button components
-import Title from '@components/Title';
+import Title from '@components/Title'; // Title
+import Dropdown from '@components/Dropdown'; // Dropdown
 import DancerRedJump from '@assets/dancer-red-jump.svg'; // Jumping Dancer SVG
 import DancerRedTall from '@assets/dancer-red-tall.svg'; // Jumping Dancer SVG
 import DatePicker from '@components/DatePicker';
@@ -21,12 +24,15 @@ const modalStates = Object.freeze({
 
 // Page: Events
 export default function Events({ session }) {
+  const { setEvent } = Navigation.useContainer();
+
   const [events, setEvents] = useState([]); // Available events
   const [loading, setLoading] = useState(true); // Loading state
   const [modalOpen, setModalOpen] = useState(false); // Modal state
   const [eventToEdit, setEventToEdit] = useState(null); // Event to edit index
   const [modalContent, setModalContent] = useState(null); // Model content state
   const [modalTitle, setModalTitle] = useState('');
+  const [judgeOptions, setJudgeOptions] = useState([]);
 
   /**
    * Renders model content based on modalContent
@@ -38,7 +44,11 @@ export default function Events({ session }) {
         // Return:
         return (
           // NewEvent component
-          <NewEvent setModalOpen={setModalOpen} reloadEvents={getAllEvents} />
+          <NewEvent
+            judgeOptions={judgeOptions}
+            setModalOpen={setModalOpen}
+            reloadEvents={getAllEvents}
+          />
         );
       // Else, if modal is opened to edit an event
       case modalStates.editEvent:
@@ -46,6 +56,7 @@ export default function Events({ session }) {
         return (
           // EditEvent component
           <EditEvent
+            judgeOptions={judgeOptions}
             event={events[eventToEdit]}
             setModalOpen={setModalOpen}
             reloadEvents={getAllEvents}
@@ -88,8 +99,32 @@ export default function Events({ session }) {
     setLoading(false); // Toggle loading
   };
 
+  const getJudges = async () => {
+    setLoading(true);
+
+    const response = await axios({
+      method: 'GET',
+      url: `/api/user/collect?role=JUDGE`,
+    });
+    const judgesData = response.data;
+    setJudgeOptions([
+      { label: 'None', value: null },
+      ...judgesData.map(({ email }) => ({
+        label: email,
+        value: email,
+      })),
+    ]);
+
+    setLoading(false);
+  };
+
   // On page load, get all events
-  useEffect(getAllEvents, []);
+  useEffect(() => {
+    setEvent(null);
+
+    getAllEvents();
+    getJudges();
+  }, []);
 
   return (
     <Layout>
@@ -151,8 +186,13 @@ export default function Events({ session }) {
       </div>
 
       {/* Events modal */}
-      <DancefestModal title={modalTitle} isOpen={modalOpen} setModalOpen={setModalOpen}>
-        {renderModalContent()}©
+      <DancefestModal
+        containerClassName={styles.modal__container}
+        title={modalTitle}
+        isOpen={modalOpen}
+        setModalOpen={setModalOpen}
+      >
+        {renderModalContent()}
       </DancefestModal>
     </Layout>
   );
@@ -160,14 +200,15 @@ export default function Events({ session }) {
 
 /**
  * New Event modal content
+ * @param {Object[]} judgeOptions - List of judge options to render in each judge dropdown
  * @param {Function} setModalOpen to toggle modal state
  * @param {Function} reloadEvents to reload all events
  * @returns {HTMLElement} of modal content
  */
-function NewEvent({ setModalOpen, reloadEvents }) {
+function NewEvent({ judgeOptions, setModalOpen, reloadEvents }) {
   const [title, setTitle] = useState(''); // Event title
   const [date, setDate] = useState(new Date()); // Event date
-  const [judges, setJudges] = useState(['', '', '']); // Event judges
+  const [judges, setJudges] = useState([null, null, null]); // Event judges
 
   /**
    * Submits new event creation
@@ -178,7 +219,7 @@ function NewEvent({ setModalOpen, reloadEvents }) {
       // With required data
       title,
       date,
-      judges,
+      judges: [...new Set(judges.filter(judge => !!judge).map(judge => judge.value))],
     });
 
     reloadEvents(); // Begin reloading all events in background
@@ -232,32 +273,20 @@ function NewEvent({ setModalOpen, reloadEvents }) {
             // Return text input to edit judge
             <div key={i}>
               <h4>Judge {i + 1}</h4>
-              <TextInput
-                type="text"
-                placeholder="email@example.com"
-                value={judge}
-                onChange={e => updateJudge(i, e.target.value)}
-                fullWidth
+              <Dropdown
                 key={i}
+                wrapperClassName={styles.modal__judgeDropdown}
+                placeholder={`Judge ${i + 1}`}
+                options={judgeOptions}
+                selected={judge}
+                onChange={judge => updateJudge(i, judge)}
               />
             </div>
           );
         })}
-        <div style={{ position: 'relative' }}>
-          <Button
-            variant="outlined"
-            style={{
-              maxWidth: '300px',
-              width: '100%',
-              height: '40px',
-              position: 'absolute',
-              bottom: 0,
-            }}
-            onClick={addJudge}
-          >
-            + Add Judge
-          </Button>
-        </div>
+        <Button variant="outlined" onClick={addJudge}>
+          + Add Judge
+        </Button>
       </div>
       <div className={styles.modal__footer}>
         {/* Add judge button (increment array) */}
@@ -277,13 +306,14 @@ function NewEvent({ setModalOpen, reloadEvents }) {
 /**
  * Edit Event modal content
  * @param {Object} event containing details about event being edited
+ * @param {Object[]} judgeOptions - List of judge options to render in each judge dropdown
  * @param {Function} setModalOpen to toggle modal state
  * @param {Function} reloadEvents to reload all events
  * @returns {HTMLElement} of modal content
  */
-function EditEvent({ event, setModalOpen, reloadEvents }) {
+function EditEvent({ event, judgeOptions, setModalOpen, reloadEvents }) {
   const [title, setTitle] = useState(event.name); // Event title
-  const [judges, setJudges] = useState(event.judges); // Event judges
+  const [judges, setJudges] = useState(event.judges.map(email => ({ label: email, value: email }))); // Event judges
   const [date, setDate] = useState(new Date(event.event_date)); // Event date
 
   /**
@@ -297,7 +327,7 @@ function EditEvent({ event, setModalOpen, reloadEvents }) {
       // And data to patch
       title,
       date,
-      judges,
+      judges: [...new Set(judges.map(judge => judge.value).filter(judge => !!judge))],
     });
 
     reloadEvents(); // Begin reloading events in background
@@ -339,7 +369,7 @@ function EditEvent({ event, setModalOpen, reloadEvents }) {
   };
 
   return (
-    <div>
+    <div className={styles.modal__childrenWrapper}>
       <div className={styles.modal__children}>
         {/* Event title */}
         <div>
@@ -366,32 +396,20 @@ function EditEvent({ event, setModalOpen, reloadEvents }) {
             // Return text input to edit judge
             <div key={i}>
               <h4>Judge {i + 1}</h4>
-              <TextInput
-                type="text"
-                placeholder="email@example.com"
-                value={judge}
-                onChange={e => updateJudge(i, e.target.value)}
-                fullWidth
+              <Dropdown
                 key={i}
+                wrapperClassName={styles.modal__judgeDropdown}
+                placeholder={`Judge ${i + 1}`}
+                options={judgeOptions}
+                selected={judge}
+                onChange={judge => updateJudge(i, judge)}
               />
             </div>
           );
         })}
-        <div style={{ position: 'relative' }}>
-          <Button
-            variant="outlined"
-            style={{
-              maxWidth: '300px',
-              width: '100%',
-              height: '40px',
-              position: 'absolute',
-              bottom: 0,
-            }}
-            onClick={addJudge}
-          >
-            + Add Judge
-          </Button>
-        </div>
+        <Button variant="outlined" onClick={addJudge}>
+          + Add Judge
+        </Button>
       </div>
       <div className={styles.modal__footer}>
         {/* Add judge button (increment array) */}

@@ -1,6 +1,8 @@
 import prisma from '@prisma/index'; // Prisma client
 import { getSession } from 'next-auth/client'; // Session handling
 
+const UNIQUE_CONSTRAINT_ERROR_CODE = 'P2002';
+
 export default async (req, res) => {
   // Collect session from request
   const session = await getSession({ req });
@@ -23,7 +25,7 @@ export default async (req, res) => {
           },
         });
       } catch (err) {
-        if (err.code === 'P2002' && err.meta.target.includes('email')) {
+        if (err.code === UNIQUE_CONSTRAINT_ERROR_CODE && err.meta.target.includes('email')) {
           // Fails unique email check
           return res.status(400).json({
             error: `A user already exists with email ${email}`,
