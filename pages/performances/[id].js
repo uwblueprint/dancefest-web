@@ -25,10 +25,13 @@ export default function PerformanceDetails() {
   const [loading, setLoading] = useState(false);
   const [performance, setPerformance] = useState(null);
   const [selectedTab, setSelectedTab] = useState(-1);
+  const [awardsDict, setAwardsDict] = useState({}); // Object mapping award id to award data
 
   const showPerformanceDetails = selectedTab === -1;
   const showJudgeFeedback = selectedTab >= 0;
-  const { name, event, adjudications = [], nominations = [] } = performance || {};
+  const { name, event, adjudications: initialAdjudications = [], nominations = [] } =
+    performance || {};
+  const adjudications = initialAdjudications.sort((a, b) => (a.user.name > b.user.name ? 1 : -1));
   const eventName = event && event.name;
   const currentAdjudication = adjudications.length > 0 ? adjudications[selectedTab] : undefined;
   const currentJudgeUserId = currentAdjudication && currentAdjudication.userId;
@@ -53,11 +56,33 @@ export default function PerformanceDetails() {
     setLoading(false);
   };
 
+  const getAwards = async () => {
+    setLoading(true);
+
+    try {
+      const response = await axios({
+        method: 'get',
+        url: `/api/awards/collect`,
+      });
+
+      const newAwardsDict = {};
+      response.data.forEach(award => {
+        newAwardsDict[award.id] = award;
+      });
+      setAwardsDict(newAwardsDict);
+    } catch {
+      // Empty catch block
+    }
+
+    setLoading(false);
+  };
+
   useEffect(() => {
     if (eventId === null) {
       router.push('/performances');
     } else if (eventId) {
       getPerformance();
+      getAwards();
     }
     // TODO: Validate that the performance id is from the currently selected event id (from navigation state)
   }, [eventId]);
@@ -101,13 +126,16 @@ export default function PerformanceDetails() {
             </div>
             <div
               className={`${styles.performance_details__content} ${
-                !showJudgeFeedback && styles.performance_details__no_content_container
+                loading ? styles.performance_details__no_content_container : undefined
               }`}
             >
               {performance && showPerformanceDetails ? (
                 <PerformanceSummary performance={performance} />
               ) : performance && showJudgeFeedback ? (
                 <JudgeFeedback
+                  getPerformance={getPerformance}
+                  setLoading={setLoading}
+                  awardsDict={awardsDict}
                   adjudication={currentAdjudication}
                   nominations={currentNominations}
                 />

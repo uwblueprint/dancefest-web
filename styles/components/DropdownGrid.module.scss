@@ -1,0 +1,28 @@
+.dropdownGrid {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+
+  & > * {
+    height: 40px;
+    width: 45%;
+    margin-bottom: 16px;
+  }
+}
+
+// Add field button
+.button {
+  background: #f5f6f7;
+  border: none;
+  border-radius: 3px;
+  padding-left: 8px;
+  text-align: left;
+
+  font-family: DM Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 20px;
+
+  color: var(--system-neutral-grey);
+}

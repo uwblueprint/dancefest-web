@@ -14,10 +14,10 @@ export default async (req, res) => {
     });
   }
 
-  const userID = session.id;
+  const currentUserID = parseInt(session.id);
 
   // Collect performance id and award ids from request body
-  const { performanceID, awardIDs } = req.body;
+  const { performanceID, awardIDs, judgeID } = req.body;
 
   // If performance id is not provided
   if (!performanceID) {
@@ -36,6 +36,14 @@ export default async (req, res) => {
   // TODO for now we assume frontend will filter correctly and only
   // eligible awards will show up for validation
   try {
+    // First clear all the current nominations
+    await prisma.awardPerformance.deleteMany({
+      where: {
+        performance_id: parseInt(performanceID),
+        user_id: parseInt(judgeID) || currentUserID,
+      },
+    });
+
     const awardPerformanceUpserts = [];
 
     for (const awardID of awardIDs) {
@@ -66,14 +74,14 @@ export default async (req, res) => {
           where: {
             unique_nomination: {
               award_id: awardID,
-              performance_id: performanceID,
-              user_id: userID,
+              performance_id: parseInt(performanceID),
+              user_id: parseInt(judgeID) || currentUserID, // Look for nominations matching the judge. If no judge user ID provided, use the current user
             },
           },
           create: {
             award_id: awardID,
-            performance_id: performanceID,
-            user_id: userID,
+            performance_id: parseInt(performanceID),
+            user_id: parseInt(judgeID) || currentUserID,
           },
           update: {},
         })
@@ -83,7 +91,8 @@ export default async (req, res) => {
     const awardPerformances = await prisma.$transaction(awardPerformanceUpserts);
 
     return res.status(200).json(awardPerformances);
-  } catch {
+  } catch (err) {
+    console.log(err);
     return res.status(400).json({
       error: 'Error nominating performance for awards',
     });

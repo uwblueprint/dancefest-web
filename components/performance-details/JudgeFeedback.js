@@ -1,138 +1,246 @@
-import React, { useState } from 'react'; // React
+import React, { useState, useEffect } from 'react'; // React
+import axios from 'axios';
+import { useRouter } from 'next/router';
 
 import Button from '@components/Button'; // Button
-import Dropdown from '@components/Dropdown'; // Dropdown
-import TextInput from '@components/Input'; // Input
+import Dropdown, { formatDropdownOptions } from '@components/Dropdown'; // Dropdown
+import ScoreCard from '@components/ScoreCard'; // Score Card
+import DropdownGrid from '@components/DropdownGrid'; // Dropdown Grid
 import PlayIcon from '@assets/play.svg'; // Play icon
 import styles from '@styles/components/performance-details/JudgeFeedback.module.scss'; // Component styles
 
-export default function JudgeFeedback({ adjudication, nominations = [] }) {
-  const { notes: initialNotes, technicalScore, artisticScore, cumulativeScore } = adjudication;
+export default function JudgeFeedback({
+  getPerformance = () => {},
+  setLoading = () => {},
+  awardsDict,
+  adjudication,
+  nominations: initialNominations,
+}) {
+  const router = useRouter();
+  const { id: performanceId } = router.query;
+  const {
+    id,
+    userId: judgeID,
+    notes: initialNotes,
+    technicalScore: initialTechnicalScore,
+    artisticScore: initialArtisticScore,
+    cumulativeScore: initialCumulativeScore,
+  } = adjudication;
+  const initialNormalAwards = formatDropdownOptions(
+    (initialNominations || []).filter(({ isCategory }) => !!isCategory),
+    { value: 'id', label: 'title' }
+  );
+  const initialSpecialAward =
+    formatDropdownOptions(
+      (initialNominations || []).filter(({ isCategory }) => !isCategory),
+      {
+        value: 'id',
+        label: 'title',
+      }
+    )[0] || null;
+  const normalAwardsOptions = [
+    { value: null, label: 'None' },
+    ...formatDropdownOptions(
+      Object.values(awardsDict).filter(({ is_category }) => !!is_category),
+      {
+        value: 'id',
+        label: 'title',
+      }
+    ),
+  ];
+  const specialAwardOptions = [
+    { value: null, label: 'None' },
+    ...formatDropdownOptions(
+      Object.values(awardsDict).filter(({ is_category }) => !is_category),
+      {
+        value: 'id',
+        label: 'title',
+      }
+    ),
+  ];
 
   const [editMode, setEditMode] = useState(false);
   const [notes, setNotes] = useState(initialNotes);
+  const [technicalScore, setTechnicalScore] = useState(initialTechnicalScore);
+  const [artisticScore, setArtisticScore] = useState(initialArtisticScore);
+  const [cumulativeScore, setCumulativeScore] = useState(initialCumulativeScore);
+  const [normalAwards, setNormalAwards] = useState(initialNormalAwards);
+  const [specialAward, setSpecialAward] = useState(initialSpecialAward);
 
-  const options = [
-    {
-      value: 'Most Inspiring Medium Group Performance',
-      label: 'Most Inspiring Medium Group Performance',
-    },
-    {
-      value: 'Most Exciting Medium Group Performance',
-      label: 'Most Exciting Medium Group Performance',
-    },
-    {
-      value: 'Most Inspiring Large Group Performance',
-      label: 'Most Inspiring Large Group Performance',
-    },
-  ];
+  const normalAwardsData = normalAwards
+    .filter(award => !!award)
+    .map(award => awardsDict[award.value]);
+  const specialAwardData = specialAward && awardsDict[specialAward.value];
 
-  const [specialAward, setSpecialAward] = useState(`Sharp Movements`);
+  useEffect(() => {
+    if (adjudication) {
+      setNormalAwards(initialNormalAwards);
+      setSpecialAward(initialSpecialAward);
+      setNotes(adjudication.notes);
+      setTechnicalScore(adjudication.technicalScore);
+      setArtisticScore(adjudication.artisticScore);
+      setCumulativeScore(adjudication.cumulativeScore);
+    }
+  }, [adjudication, initialNominations]);
+
+  // Submit updated feedback
+  const updateFeedback = async () => {
+    setLoading(true);
+
+    try {
+      // Update adjudication
+      await axios({
+        method: 'put',
+        url: `/api/adjudications/edit`,
+        data: {
+          id,
+          artisticMark: artisticScore,
+          technicalMark: technicalScore,
+          cumulativeMark: cumulativeScore,
+          notes,
+        },
+      });
+
+      // Update nominations
+      await axios({
+        method: 'put',
+        url: `/api/performances/nominate`,
+        data: {
+          performanceID: performanceId,
+          awardIDs: [...normalAwards, specialAward]
+            .filter(award => award !== null)
+            .map(award => award.value)
+            .filter(awardId => awardId !== null),
+          judgeID,
+        },
+      });
+
+      await getPerformance();
+    } catch {
+      // Empty catch block
+    }
+
+    setLoading(false);
+  };
+
+  // Discard changes
+  const cancelUpdate = async () => {
+    setLoading(true);
+    getPerformance(); // Re-sync data with server
+    setLoading(false);
+  };
 
   return (
-    <div className={styles.judge__feedback_container}>
-      <div className={styles.judge__feedback_header}>
-        <h2>Notes</h2>
-        {editMode ? (
-          <span>
+    <>
+      <div className={styles.judge__feedback_container}>
+        <div className={styles.judge__feedback_header}>
+          <h2>Notes</h2>
+          {editMode ? (
+            <span>
+              <Button
+                variant="outlined"
+                onClick={() => {
+                  cancelUpdate();
+                  setEditMode(false);
+                }}
+                className={styles.judge__feedback_buttons_spacing}
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={() => {
+                  updateFeedback();
+                  setEditMode(false);
+                }}
+              >
+                Save
+              </Button>
+            </span>
+          ) : (
             <Button
               variant="outlined"
               onClick={() => {
-                setEditMode(false);
-              }}
-              className={styles.judge__feedback_buttons_spacing}
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={() => {
-                setEditMode(false);
+                setEditMode(true);
               }}
             >
-              Save
+              Edit Feedback
             </Button>
+          )}
+        </div>
+        <div className={styles.judge__feedback_notes_wrapper}>
+          {editMode ? (
+            <div className={styles.judge__feedback_notes_input}>
+              <textarea
+                onChange={e => {
+                  setNotes(e.target.value);
+                }}
+              >
+                {notes}
+              </textarea>
+            </div>
+          ) : (
+            <p>{notes || 'None'}</p>
+          )}
+        </div>
+        <div className={styles.judge__feedback_audio_player}>
+          <p>{`OSSDF2021_1.mp3`}</p>
+          <span>
+            <p>{`3:07`}</p>
+            <img src={PlayIcon} />
           </span>
-        ) : (
-          <Button
-            variant="outlined"
-            onClick={() => {
-              setEditMode(true);
-            }}
-          >
-            Edit Feedback
-          </Button>
-        )}
+        </div>
+        <div className={styles.judge__feedback_nominations}>
+          <h2>Nominated for:</h2>
+          {editMode ? (
+            <DropdownGrid
+              placeholder="Select Award"
+              options={normalAwardsOptions}
+              values={normalAwards}
+              setValues={setNormalAwards}
+            />
+          ) : normalAwardsData.length > 0 ? (
+            normalAwardsData.map(({ title }, i) => <p key={i}>{title}</p>)
+          ) : (
+            <p>None</p>
+          )}
+        </div>
+        <div className={styles.judge__feedback_awards}>
+          <h2>Special Award:</h2>
+          {editMode ? (
+            <Dropdown
+              placeholder="Select Award"
+              options={specialAwardOptions}
+              selected={specialAward}
+              setSelected={setSpecialAward}
+            />
+          ) : specialAwardData ? (
+            <p>{specialAwardData.title}</p>
+          ) : (
+            <p>None</p>
+          )}
+        </div>
       </div>
-      <div>
-        {editMode ? (
-          <div className={styles.judge__feedback_notes_input}>
-            <textarea
-              onChange={e => {
-                setNotes(e.target.value);
-              }}
-            >
-              {notes}
-            </textarea>
-          </div>
-        ) : (
-          <p>{notes}</p>
-        )}
-      </div>
-      <div className={styles.judge__feedback_audio_player}>
-        <p>{`OSSDF2021_1.mp3`}</p>
-        <span>
-          <p>{`3:07`}</p>
-          <img src={PlayIcon} />
-        </span>
-      </div>
-      <div>
-        <h2>Nominated for:</h2>
-        {editMode ? (
-          <Dropdown
-            selected={options[0]}
-            options={options}
-            wrapperClassName={styles.judge__feedback_dropdown_wrapper}
-          />
-        ) : (
-          nominations.map(({ title }, i) => <p key={i}>{title}</p>)
-        )}
-      </div>
-      <div>
-        <h2>Special Award:</h2>
-        {editMode ? (
-          <TextInput
-            fullWidth
-            onChange={setSpecialAward}
-            value={specialAward}
-            wrapperClassName={styles.judge__feedback_input_wrapper}
-          />
-        ) : (
-          <p>{specialAward}</p>
-        )}
-      </div>
-
       <div className={styles.performance_summary__score_content}>
-        <div className={styles.performance_details__score_card}>
-          <div style={{ textAlign: 'center' }}>
-            <h1>{technicalScore}</h1>
-            <h2>{`Technical`}</h2>
-          </div>
-        </div>
-        <div className={styles.performance_details__score_card}>
-          <div style={{ textAlign: 'center' }}>
-            <h1>{artisticScore}</h1>
-            <h2>{`ARTISTIC`}</h2>
-          </div>
-        </div>
-        <div
-          className={`${styles.performance_details__score_card} ${styles.performance_details__score_card_cumulative}`}
-        >
-          <div style={{ textAlign: 'center' }}>
-            <h1>{cumulativeScore}</h1>
-            <h2>{`CUMULATIVE`}</h2>
-          </div>
-        </div>
+        <ScoreCard
+          edit={editMode}
+          title="Technical"
+          score={technicalScore}
+          setScore={setTechnicalScore}
+        />
+        <ScoreCard
+          edit={editMode}
+          title="Artistic"
+          score={artisticScore}
+          setScore={setArtisticScore}
+        />
+        <ScoreCard
+          edit={editMode}
+          title="Cumulative"
+          score={cumulativeScore}
+          setScore={setCumulativeScore}
+          variant="grey"
+        />
       </div>
-    </div>
+    </>
   );
 }

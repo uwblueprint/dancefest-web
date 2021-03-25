@@ -33,6 +33,7 @@ Performance details: Loading spinner
   flex-direction: row;
   padding-top: 42px;
   padding-bottom: 20px;
+  max-height: 820px;
 }
 
 .performance_details__tabs_container {
@@ -44,6 +45,7 @@ Performance details: Loading spinner
   width: 100%;
   box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.1);
   background-color: white;
+  overflow-y: auto;
 }
 
 .performance_details__tabs {
@@ -74,10 +76,14 @@ Performance details: Loading spinner
 }
 
 .performance_details__content {
+  flex: 1 0 0;
   background-color: #fff;
-  max-width: 815px;
-  width: 100%;
   display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 40px 52px 68px;
+  overflow-y: auto;
+  box-sizing: border-box;
 
   h3 {
     color: var(--brand-pop-blue);
@@ -86,9 +92,9 @@ Performance details: Loading spinner
     margin: 0px;
     font-weight: 700;
   }
-}
 
-.performance_details__no_content_container {
-  justify-content: center;
-  align-items: center;
+  &.performance_details__no_content_container {
+    justify-content: center;
+    align-items: center;
+  }
 }

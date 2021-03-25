@@ -18,9 +18,11 @@ export default function Tab({ children, adjudication, nominations = [], selected
         <div className={styles.judge__tab_awards}>
           <h4>AWARD NOMINATIONS:</h4>
           <ul>
-            {nominations.map(({ title }, i) => (
-              <li key={i}>{title}</li>
-            ))}
+            {nominations.length > 0 ? (
+              nominations.map(({ title }, i) => <li key={i}>{title}</li>)
+            ) : (
+              <li>None</li>
+            )}
           </ul>
         </div>
       </button>

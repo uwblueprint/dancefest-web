@@ -10,21 +10,11 @@ export default async (req, res) => {
     return res.status(401).end();
   }
 
-  const userID = session.id;
-
   // Collect params from request body
-  const {
-    id,
-    artisticMark,
-    technicalMark,
-    cumulativeMark,
-    audioUrl,
-    notes,
-    performanceID,
-  } = req.body;
+  const { id, artisticMark, technicalMark, cumulativeMark, audioUrl, notes } = req.body;
 
   // If required fields do not exist
-  if (!id || !artisticMark || !technicalMark || !cumulativeMark || !performanceID || !userID) {
+  if (!id || !artisticMark || !technicalMark || !cumulativeMark) {
     return res.status(400).json({
       error: 'Required fields to update adjudication were not provided',
     });
@@ -43,8 +33,6 @@ export default async (req, res) => {
       cumulative_mark: parseInt(cumulativeMark),
       audio_url: audioUrl,
       notes: notes,
-      performance_id: parseInt(performanceID),
-      user_id: userID,
     },
   });
 

@@ -24,9 +24,9 @@ export const formatPerformance = ({
   const nominations = {};
   awards.forEach(award => {
     if (award.user_id in nominations) {
-      nominations[award.user_id].push(award);
+      nominations[award.user_id].push({ isCategory: award.is_category, ...award });
     } else {
-      nominations[award.user_id] = [award];
+      nominations[award.user_id] = [{ isCategory: award.is_category, ...award }];
     }
   });
 
