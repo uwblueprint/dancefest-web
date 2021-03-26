@@ -73,7 +73,6 @@ export default function PerformanceModal({
         data: {
           id,
           name: danceTitle,
-          academicLevel: '??',
           performers: dancersString.split(',').map(dancer => dancer.trim()),
           choreographers: choreographersString
             .split(',')
