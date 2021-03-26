@@ -80,7 +80,6 @@ export default function PerformanceModal({
             .map(choreographer => choreographer.trim()),
           competitionLevel: competitionLevel.value,
           danceSize: danceSize.value,
-          danceEntry: 1, // HARD-CODED, TODO: Make dynamic
           danceStyle: danceStyle.value,
           danceTitle,
           eventID: EVENT_ID,

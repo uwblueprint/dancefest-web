@@ -62,36 +62,45 @@ model School {
 }
 
 model Setting {
-  id                Int             @id @default(autoincrement())
-  type              settingtype
-  value             String?         @db.VarChar(255)
-  created_at        DateTime        @default(now()) @db.Timestamp(6)
-  updated_at        DateTime        @default(now()) @db.Timestamp(6)
-  awards_categories AwardCategory[] @relation("awards_categoriesTosettings")
+  id                                                       Int             @id @default(autoincrement())
+  type                                                     settingtype
+  value                                                    String?         @db.VarChar(255)
+  created_at                                               DateTime        @default(now()) @db.Timestamp(6)
+  updated_at                                               DateTime        @default(now()) @db.Timestamp(6)
+  awards_categories                                        AwardCategory[] @relation("awards_categoriesTosettings")
+  performances_performances_competition_level_idTosettings Performance[]   @relation("performances_competition_level_idTosettings")
+  performances_performances_dance_size_idTosettings        Performance[]   @relation("performances_dance_size_idTosettings")
+  performances_performances_dance_style_idTosettings       Performance[]   @relation("performances_dance_style_idTosettings")
 
   @@unique([type, value], name: "settings_unique")
   @@map("settings")
 }
 
 model Performance {
-  id                  Int                @id @default(autoincrement())
-  name                String?            @db.VarChar(255)
-  academic_level      String?            @db.VarChar(255)
-  performers          String[]           @db.VarChar(255)
-  choreographers      String[]           @db.VarChar(255)
-  competition_level   String?            @db.VarChar(255)
-  dance_size          String?            @db.VarChar(255)
-  dance_entry         Int
-  dance_style         String?            @db.VarChar(255)
-  dance_title         String?            @db.VarChar(255)
-  event_id            Int
-  school_id           Int
-  created_at          DateTime           @default(now()) @db.Timestamp(6)
-  updated_at          DateTime           @default(now()) @db.Timestamp(6)
-  event               Event              @relation(fields: [event_id], references: [id])
-  school              School             @relation(fields: [school_id], references: [id])
-  adjudications       Adjudication[]
-  awards_performances AwardPerformance[] @relation("awards_performancesToperformances")
+  id                                                   Int                @id @default(autoincrement())
+  name                                                 String?            @db.VarChar(255)
+  performance_link                                     String?            @db.VarChar(255)
+  audio_recording_link                                 String?            @db.VarChar(255)
+  performers                                           String[]           @db.VarChar(255)
+  choreographers                                       String[]           @db.VarChar(255)
+  competition_level                                    String?            @db.VarChar(255)
+  dance_size                                           String?            @db.VarChar(255)
+  dance_style                                          String?            @db.VarChar(255)
+  dance_title                                          String?            @db.VarChar(255)
+  dance_size_id                                        Int?
+  dance_style_id                                       Int?
+  competition_level_id                                 Int?
+  event_id                                             Int
+  school_id                                            Int
+  created_at                                           DateTime           @default(now()) @db.Timestamp(6)
+  updated_at                                           DateTime           @default(now()) @db.Timestamp(6)
+  settings_performances_competition_level_idTosettings Setting?           @relation("performances_competition_level_idTosettings", fields: [competition_level_id], references: [id])
+  settings_performances_dance_size_idTosettings        Setting?           @relation("performances_dance_size_idTosettings", fields: [dance_size_id], references: [id])
+  settings_performances_dance_style_idTosettings       Setting?           @relation("performances_dance_style_idTosettings", fields: [dance_style_id], references: [id])
+  event                                                Event              @relation(fields: [event_id], references: [id])
+  school                                               School             @relation(fields: [school_id], references: [id])
+  adjudications                                        Adjudication[]
+  awards_performances                                  AwardPerformance[] @relation("awards_performancesToperformances")
 
   @@map("performances")
 }

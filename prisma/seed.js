@@ -18,6 +18,15 @@ async function dataSeed() {
     { name: 'Anish', email: 'anishagnihotri+admin@uwblueprint.org' },
     { name: 'Chidi', email: 'chidi+admin@uwblueprint.org' },
   ];
+  const judges = [
+    { name: 'Eric L', email: 'ericli+judge@uwblueprint.org' },
+    { name: 'Julia', email: 'juliasim+judge@uwblueprint.org' },
+    { name: 'Mayank', email: 'mayankkanoria+judge@uwblueprint.org' },
+    { name: 'Oustan', email: 'oustanding+judge@uwblueprint.org' },
+    { name: 'Eric F', email: 'ericfeng+judge@uwblueprint.org' },
+    { name: 'Anish', email: 'anishagnihotri+judge@uwblueprint.org' },
+    { name: 'Chidi', email: 'chidijudgen@uwblueprint.org' },
+  ];
   const users = [
     { name: 'Eric L', email: 'ericli@uwblueprint.org' },
     { name: 'Julia', email: 'juliasim@uwblueprint.org' },
@@ -28,6 +37,7 @@ async function dataSeed() {
     { name: 'Chidi', email: 'chidi@uwblueprint.org' },
   ];
 
+  const adminUpserts = [];
   for (const admin of admins) {
     const adminUpsert = await prisma.user.upsert({
       where: { email: admin.email },
@@ -41,7 +51,26 @@ async function dataSeed() {
         name: admin.name,
       },
     });
+    adminUpserts.push(adminUpsert);
     console.log({ adminUpsert });
+  }
+
+  const judgeUpserts = [];
+  for (const judge of judges) {
+    const judgeUpsert = await prisma.user.upsert({
+      where: { email: judge.email },
+      update: {
+        role: 'JUDGE',
+        name: judge.name,
+      },
+      create: {
+        role: 'JUDGE',
+        email: judge.email,
+        name: judge.name,
+      },
+    });
+    judgeUpserts.push(judgeUpsert);
+    console.log({ judgeUpsert });
   }
 
   const userUpserts = [];
@@ -49,11 +78,11 @@ async function dataSeed() {
     const userUpsert = await prisma.user.upsert({
       where: { email: user.email },
       update: {
-        role: 'ADMIN',
+        role: 'USER',
         name: user.name,
       },
       create: {
-        role: 'ADMIN',
+        role: 'USER',
         email: user.email,
         name: user.name,
       },
@@ -182,7 +211,6 @@ async function dataSeed() {
       name: 'Performance 1',
       performers: ['Performer 1', 'Performer 2'],
       cheoreographers: ['Choreo 1'],
-      dance_entry: 1,
       event_id: eventUpsert.id,
       school_id: schoolUpserts[0].id,
     },
@@ -191,7 +219,6 @@ async function dataSeed() {
       name: 'Performance 2',
       performers: ['Performer 3'],
       cheoreographers: ['Choreo 2', 'Choreo 3'],
-      dance_entry: 2,
       event_id: eventUpsert.id,
       school_id: schoolUpserts[0].id,
     },
@@ -200,7 +227,6 @@ async function dataSeed() {
       name: 'Performance 3',
       performers: ['Performer 4', 'Performer 5', 'Performer 6'],
       cheoreographers: ['Choreo 4', 'Choreo 5'],
-      dance_entry: 3,
       event_id: eventUpsert.id,
       school_id: schoolUpserts[0].id,
     },
@@ -224,7 +250,6 @@ async function dataSeed() {
         name: performance.name,
         performers: performance.performers,
         choreographers: performance.cheoreographers,
-        dance_entry: performance.dance_entry,
         event_id: performance.event_id,
         school_id: performance.school_id,
       },

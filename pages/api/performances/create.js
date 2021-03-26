@@ -13,22 +13,25 @@ export default async (req, res) => {
   // Collect performance information from request body
   const {
     name,
-    academicLevel,
     performers,
     choreographers,
     competitionLevel,
     danceSize,
-    danceEntry,
     danceStyle,
     danceTitle,
+    performanceLink,
+    audioRecordingLink,
+    danceSizeID,
+    danceStyleID,
+    competitionLevelID,
     eventID,
     schoolID,
   } = req.body;
 
   // If required fields were not provided, return an error
-  if (!danceEntry || !eventID || !schoolID) {
+  if (!eventID || !schoolID) {
     return res.status(400).json({
-      error: 'Required fields danceEntry, eventId, or schoolID were not provided',
+      error: 'Required fields eventId, or schoolID were not provided',
     });
   }
 

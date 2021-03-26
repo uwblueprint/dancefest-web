@@ -9,7 +9,6 @@ export const formatPerformances = performances => {
     ({
       academic_level: academicLevel,
       competition_level: performanceLevel,
-      dance_entry: danceEntry,
       dance_size: danceSize,
       dance_style: danceStyle,
       dance_title: danceTitle,
@@ -22,7 +21,6 @@ export const formatPerformances = performances => {
     }) => ({
       academicLevel,
       performanceLevel,
-      danceEntry,
       danceSize,
       danceStyle,
       danceTitle,
