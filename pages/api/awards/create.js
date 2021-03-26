@@ -12,26 +12,41 @@ export default async (req, res) => {
   }
 
   // Collect award information from request body
-  const { title, settingIDs } = req.body;
+  const { title, eventID, settingIDs } = req.body;
 
   // If required fields do not exist
-  if (!title) {
+  if (!title || !eventID) {
     return res.status(400).json({
       error: 'Required fields not provided',
     });
   }
 
+  // Check that the event exists
+  const eventExists = await prisma.event.findUnique({
+    where: {
+      id: eventID,
+    },
+  });
+
+  // If the event does not exist
+  if (!eventExists) {
+    return res.status(400).json({
+      error: 'Event does not exist',
+    });
+  }
+
   try {
     const isCategory = settingIDs && settingIDs.length > 0;
-    // create award
+    // Create award
     const award = await prisma.award.create({
       data: {
         title: title,
         is_category: isCategory,
+        event_id: eventID,
       },
     });
 
-    // create award category references
+    // Create award category references
     if (isCategory) {
       await prisma.$transaction(
         settingIDs.map(settingID =>

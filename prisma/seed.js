@@ -316,11 +316,13 @@ async function dataSeed() {
       },
       update: {
         title: award.title,
+        event_id: eventUpsert.id,
         is_category: award.is_category,
       },
       create: {
         id: award.id,
         title: award.title,
+        event_id: eventUpsert.id,
         is_category: award.is_category,
       },
     });

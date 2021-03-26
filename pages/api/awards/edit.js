@@ -12,7 +12,7 @@ export default async (req, res) => {
   }
 
   // Collect award information from request body
-  const { id, title, settingIDs, isFinalized } = req.body;
+  const { id, title, eventID, settingIDs, isFinalized } = req.body;
 
   if (!id) {
     return res.status(400).json({
@@ -20,12 +20,26 @@ export default async (req, res) => {
     });
   }
 
-  // create new settingIDs, delete existing ones
-
   const editData = {};
   if (title) editData.title = title;
   if (isFinalized === false) editData.is_finalized = isFinalized;
+  if (eventID) {
+    // Check that the event exists
+    const eventExists = await prisma.event.findUnique({
+      where: {
+        id: eventID,
+      },
+    });
+    if (eventExists) {
+      editData.event_id = eventID;
+    } else {
+      return res.status(400).json({
+        error: 'Event does not exist',
+      });
+    }
+  }
 
+  // Create new settingIDs, delete existing ones
   const deletedAwardCategories = prisma.awardCategory.deleteMany({
     where: {
       award_id: id,

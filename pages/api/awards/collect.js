@@ -11,15 +11,25 @@ export default async (req, res) => {
     return res.status(401).end();
   }
 
-  // Collect all awards from database
-  const awards = await getAwards();
+  const { eventID } = req.body;
 
+  if (!eventID) {
+    return res.status(400).json({
+      error: 'eventID not provided',
+    });
+  }
+
+  const filter = { event_id: parseInt(eventID) };
+
+  // Collect all awards from database
+  const awards = await getAwards(filter);
   return res.json(awards);
 };
 
-export const getAwards = async () => {
-  // Collect awards with performanceID
+export const getAwards = async filter => {
+  // Collect awards
   const awards = await prisma.award.findMany({
+    where: filter,
     include: {
       awards_performances: {
         include: {
