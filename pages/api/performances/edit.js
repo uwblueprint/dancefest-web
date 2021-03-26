@@ -14,7 +14,6 @@ export default async (req, res) => {
   const {
     id,
     name,
-    academicLevel,
     performers,
     choreographers,
     competitionLevel,
@@ -22,14 +21,24 @@ export default async (req, res) => {
     danceEntry,
     danceStyle,
     danceTitle,
+    performanceLink,
+    audioRecordingLink,
+    danceSizeID,
+    danceStyleID,
+    competitionLevelID,
     eventID,
     schoolID,
   } = req.body;
 
+  // TODO: patch edit per data field?
+  /** Optional FIELDS
+    danceSizeID,
+    danceStyleID,
+    competitionLevelID,
+  **/
   if (
     !id ||
     !name ||
-    !academicLevel ||
     !performers ||
     !choreographers ||
     !competitionLevel ||
@@ -37,6 +46,8 @@ export default async (req, res) => {
     !danceEntry ||
     !danceStyle ||
     !danceTitle ||
+    !performanceLink ||
+    !audioRecordingLink ||
     !eventID ||
     !schoolID
   ) {
@@ -51,14 +62,17 @@ export default async (req, res) => {
     },
     data: {
       name: name,
-      academic_level: academicLevel,
       performers: performers,
       choreographers: choreographers,
       competition_level: competitionLevel,
       dance_size: danceSize,
-      dance_entry: danceEntry,
       dance_style: danceStyle,
       dance_title: danceTitle,
+      performance_link: performanceLink,
+      audio_recording_link: audioRecordingLink,
+      dance_size_id: danceSizeID,
+      dance_style_id: danceStyleID,
+      competition_level_id: competitionLevelID,
       event_id: eventID,
       school_id: schoolID,
     },
