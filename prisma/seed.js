@@ -25,7 +25,7 @@ async function dataSeed() {
     { name: 'Oustan', email: 'oustanding+judge@uwblueprint.org' },
     { name: 'Eric F', email: 'ericfeng+judge@uwblueprint.org' },
     { name: 'Anish', email: 'anishagnihotri+judge@uwblueprint.org' },
-    { name: 'Chidi', email: 'chidijudgen@uwblueprint.org' },
+    { name: 'Chidi', email: 'chidi+judge@uwblueprint.org' },
   ];
   const users = [
     { name: 'Eric L', email: 'ericli@uwblueprint.org' },
