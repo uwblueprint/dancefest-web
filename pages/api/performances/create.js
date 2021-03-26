@@ -72,7 +72,7 @@ export default async (req, res) => {
     }
   } catch {
     return res.status(400).json({
-      error: 'Error creating new award',
+      error: 'Error creating new performance',
     });
   }
 };

@@ -36,53 +36,53 @@ export default async (req, res) => {
     });
   }
 
-  // try {
-  // Create award
-  const award = await prisma.award.create({
-    data: {
-      title: title,
-      type: type,
-      event_id: eventID,
-    },
-  });
+  try {
+    // Create award
+    const award = await prisma.award.create({
+      data: {
+        title: title,
+        type: type,
+        event_id: eventID,
+      },
+    });
 
-  // Create award category references if it is a category award
-  if (
-    (award.type === 'DANCE_ARTISTRY' || award.type === 'SCORE_BASED') &&
-    settingIDs &&
-    settingIDs.length > 0
-  ) {
-    await prisma.$transaction(
-      settingIDs.map(settingID =>
-        prisma.awardCategory.upsert({
-          where: {
-            awards_categories_unique: {
+    // Create award category references if it is a category award
+    if (
+      (award.type === 'DANCE_ARTISTRY' || award.type === 'SCORE_BASED') &&
+      settingIDs &&
+      settingIDs.length > 0
+    ) {
+      await prisma.$transaction(
+        settingIDs.map(settingID =>
+          prisma.awardCategory.upsert({
+            where: {
+              awards_categories_unique: {
+                award_id: award.id,
+                category_id: settingID,
+              },
+            },
+            create: {
               award_id: award.id,
               category_id: settingID,
             },
-          },
-          create: {
-            award_id: award.id,
-            category_id: settingID,
-          },
-          update: {},
-        })
-      )
-    );
-  }
+            update: {},
+          })
+        )
+      );
+    }
 
-  // If award creation is successful, return award
-  // Else, return error
-  if (award) {
-    return res.status(200).json(award);
-  } else {
+    // If award creation is successful, return award
+    // Else, return error
+    if (award) {
+      return res.status(200).json(award);
+    } else {
+      return res.status(400).json({
+        error: 'Error creating new award',
+      });
+    }
+  } catch {
     return res.status(400).json({
       error: 'Error creating new award',
     });
   }
-  // } catch {
-  //   return res.status(400).json({
-  //     error: 'Error creating new award',
-  //   });
-  // }
 };
