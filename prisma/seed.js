@@ -289,22 +289,22 @@ async function dataSeed() {
     {
       id: 1,
       title: 'Award 1',
-      is_category: false,
+      type: 'SPECIAL',
     },
     {
       id: 2,
       title: 'Award 2',
-      is_category: false,
+      type: 'SPECIAL',
     },
     {
       id: 3,
       title: 'Award 3',
-      is_category: true,
+      type: 'SCORE_BASED',
     },
     {
       id: 4,
       title: 'Award 4',
-      is_category: true,
+      type: 'DANCE_ARTISTRY',
     },
   ];
 
@@ -317,19 +317,19 @@ async function dataSeed() {
       update: {
         title: award.title,
         event_id: eventUpsert.id,
-        is_category: award.is_category,
+        type: award.type,
       },
       create: {
         id: award.id,
         title: award.title,
         event_id: eventUpsert.id,
-        is_category: award.is_category,
+        type: award.type,
       },
     });
     awardUpserts.push(awardUpsert);
     console.log(awardUpsert);
 
-    if (award['is_category']) {
+    if (award.type === 'DANCE_ARTISTRY' || award.type === 'SCORE_BASED') {
       const awardCategoryUpsert = await prisma.awardCategory.upsert({
         where: {
           awards_categories_unique: {

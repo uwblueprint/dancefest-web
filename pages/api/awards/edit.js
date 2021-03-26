@@ -12,7 +12,8 @@ export default async (req, res) => {
   }
 
   // Collect award information from request body
-  const { id, title, eventID, settingIDs, isFinalized } = req.body;
+  // type must be string in all capitals matching corresponding enum AwardType
+  const { id, title, type, eventID, settingIDs, isFinalized } = req.body;
 
   if (!id) {
     return res.status(400).json({
@@ -22,6 +23,7 @@ export default async (req, res) => {
 
   const editData = {};
   if (title) editData.title = title;
+  if (type) editData.type = type;
   if (isFinalized === false) editData.is_finalized = isFinalized;
   if (eventID) {
     // Check that the event exists
@@ -39,6 +41,13 @@ export default async (req, res) => {
     }
   }
 
+  const updatedAward = await prisma.award.update({
+    where: {
+      id,
+    },
+    data: editData,
+  });
+
   // Create new settingIDs, delete existing ones
   const deletedAwardCategories = prisma.awardCategory.deleteMany({
     where: {
@@ -48,7 +57,11 @@ export default async (req, res) => {
 
   let awardCategories = [];
 
-  if (settingIDs && settingIDs.length > 0) {
+  if (
+    (updatedAward.type === 'DANCE_ARTISTRY' || updatedAward.type === 'SCORE_BASED') &&
+    settingIDs &&
+    settingIDs.length > 0
+  ) {
     awardCategories = settingIDs.map(settingID =>
       prisma.awardCategory.upsert({
         where: {
@@ -66,23 +79,11 @@ export default async (req, res) => {
     );
   }
 
-  const updatedAward = prisma.award.update({
-    where: {
-      id,
-    },
-    data: editData,
-  });
-
-  const awardTransaction = await prisma.$transaction([
-    deletedAwardCategories,
-    ...awardCategories,
-    updatedAward,
-  ]);
-  const awardResult = awardTransaction[awardTransaction.length - 1];
+  const awardTransaction = await prisma.$transaction([deletedAwardCategories, ...awardCategories]);
 
   // If updating award is successful, return updated event
   if (awardTransaction) {
-    res.status(200).json(awardResult);
+    res.status(200).json(updatedAward);
   } else {
     res.status(400).json({
       error: 'Error updating award with provided id',

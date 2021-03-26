@@ -12,10 +12,11 @@ export default async (req, res) => {
   }
 
   // Collect award information from request body
-  const { title, eventID, settingIDs } = req.body;
+  // type must be string in all capitals matching corresponding enum AwardType
+  const { title, type, eventID, settingIDs } = req.body;
 
   // If required fields do not exist
-  if (!title || !eventID) {
+  if (!title || !type || !eventID) {
     return res.status(400).json({
       error: 'Required fields not provided',
     });
@@ -35,50 +36,53 @@ export default async (req, res) => {
     });
   }
 
-  try {
-    const isCategory = settingIDs && settingIDs.length > 0;
-    // Create award
-    const award = await prisma.award.create({
-      data: {
-        title: title,
-        is_category: isCategory,
-        event_id: eventID,
-      },
-    });
+  // try {
+  // Create award
+  const award = await prisma.award.create({
+    data: {
+      title: title,
+      type: type,
+      event_id: eventID,
+    },
+  });
 
-    // Create award category references
-    if (isCategory) {
-      await prisma.$transaction(
-        settingIDs.map(settingID =>
-          prisma.awardCategory.upsert({
-            where: {
-              awards_categories_unique: {
-                award_id: award.id,
-                category_id: settingID,
-              },
-            },
-            create: {
+  // Create award category references if it is a category award
+  if (
+    (award.type === 'DANCE_ARTISTRY' || award.type === 'SCORE_BASED') &&
+    settingIDs &&
+    settingIDs.length > 0
+  ) {
+    await prisma.$transaction(
+      settingIDs.map(settingID =>
+        prisma.awardCategory.upsert({
+          where: {
+            awards_categories_unique: {
               award_id: award.id,
               category_id: settingID,
             },
-            update: {},
-          })
-        )
-      );
-    }
+          },
+          create: {
+            award_id: award.id,
+            category_id: settingID,
+          },
+          update: {},
+        })
+      )
+    );
+  }
 
-    // If award creation is successful, return award
-    // Else, return error
-    if (award) {
-      return res.status(200).json(award);
-    } else {
-      return res.status(400).json({
-        error: 'Error creating new award',
-      });
-    }
-  } catch {
+  // If award creation is successful, return award
+  // Else, return error
+  if (award) {
+    return res.status(200).json(award);
+  } else {
     return res.status(400).json({
       error: 'Error creating new award',
     });
   }
+  // } catch {
+  //   return res.status(400).json({
+  //     error: 'Error creating new award',
+  //   });
+  // }
 };

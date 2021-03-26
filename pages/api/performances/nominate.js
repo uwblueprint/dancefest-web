@@ -36,8 +36,32 @@ export default async (req, res) => {
   // TODO for now we assume frontend will filter correctly and only
   // eligible awards will show up for validation
   try {
-    const awardPerformances = await prisma.$transaction(
-      awardIDs.map(awardID =>
+    const awardPerformanceUpserts = [];
+
+    for (const awardID of awardIDs) {
+      const award = await prisma.award.findUnique({
+        where: {
+          id: awardID,
+        },
+      });
+
+      if (award.type === 'SPECIAL') {
+        // There should only be 1 nomination for a special award
+        // If there is already a nomination for a special award, we do not want to nominate the performance for the award
+        const nomination = await prisma.awardPerformance.findFirst({
+          where: {
+            performance_id: performanceID,
+            award_id: award.id,
+          },
+        });
+
+        if (nomination) continue;
+      } else if (award.type === 'SCORE_BASED') {
+        // We should not be able to nominate performances for score based awards
+        continue;
+      }
+
+      awardPerformanceUpserts.push(
         prisma.awardPerformance.upsert({
           where: {
             unique_nomination: {
@@ -53,8 +77,10 @@ export default async (req, res) => {
           },
           update: {},
         })
-      )
-    );
+      );
+    }
+
+    const awardPerformances = await prisma.$transaction(awardPerformanceUpserts);
 
     return res.status(200).json(awardPerformances);
   } catch {
