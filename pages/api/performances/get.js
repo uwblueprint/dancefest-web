@@ -1,7 +1,7 @@
 import prisma from '@prisma/index'; // Prisma client
 import { getSession } from 'next-auth/client'; // Session handling
 
-// get performances by specifying the corresponding event id
+// get performances by specifying the corresponding performance id
 export default async (req, res) => {
   // Collect session from request
   const session = await getSession({ req });

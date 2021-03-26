@@ -43,7 +43,7 @@ export const getAwards = async settingIDs => {
     })
     .filter(
       award =>
-        award.is_category === false ||
-        award.categories.every(category => settingIDs.includes(category))
+        award.type === 'SPECIAL' ||
+        award.awards_categories.every(category => settingIDs.includes(category.category_id))
     );
 };

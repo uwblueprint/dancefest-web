@@ -7,6 +7,9 @@ CREATE TYPE SettingType as ENUM('COMPETITION_LEVEL', 'DANCE_SIZE', 'STYLE');
 -- Create award status enum
 CREATE TYPE AwardPerformanceStatus as ENUM('NOMINEE', 'FINALIST');
 
+-- Create award type enum
+CREATE TYPE AwardType as ENUM('DANCE_ARTISTRY', 'SCORE_BASED', 'SPECIAL');
+
 -- Create users table
 CREATE TABLE users (
   id SERIAL PRIMARY KEY NOT NULL,
@@ -108,10 +111,12 @@ CREATE TABLE adjudications (
 CREATE TABLE awards (
   id SERIAL PRIMARY KEY NOT NULL,
   title VARCHAR(255) NOT NULL,
+  type AwardType NOT NULL,
   is_finalized BOOLEAN NOT NULL DEFAULT FALSE,
-  is_category BOOLEAN NOT NULL DEFAULT FALSE,
+  event_id INTEGER NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY(event_id) REFERENCES events(id)
 );
 
 -- Create award categories table

@@ -42,6 +42,7 @@ model Event {
   judges           Json?         @db.Json
   created_at       DateTime      @default(now()) @db.Timestamp(6)
   updated_at       DateTime      @default(now()) @db.Timestamp(6)
+  awards           Award[]       @relation("awardsToevents")
   Performance      Performance[]
 
   @@map("events")
@@ -124,10 +125,12 @@ model Adjudication {
 model Award {
   id                  Int                @id @default(autoincrement())
   title               String             @db.VarChar(255)
+  type                awardtype
   is_finalized        Boolean            @default(false)
-  is_category         Boolean            @default(false)
+  event_id            Int
   created_at          DateTime           @default(now()) @db.Timestamp(6)
   updated_at          DateTime           @default(now()) @db.Timestamp(6)
+  events              Event              @relation("awardsToevents", fields: [event_id], references: [id])
   awards_categories   AwardCategory[]    @relation("awardsToawards_categories")
   awards_performances AwardPerformance[] @relation("awardsToawards_performances")
 
@@ -174,4 +177,10 @@ enum settingtype {
 enum awardperformancestatus {
   NOMINEE
   FINALIST
+}
+
+enum awardtype {
+  DANCE_ARTISTRY
+  SCORE_BASED
+  SPECIAL
 }

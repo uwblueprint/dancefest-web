@@ -54,6 +54,20 @@ export default async (req, res) => {
     });
   }
 
+  // Check that the event exists
+  const eventExists = await prisma.event.findUnique({
+    where: {
+      id: eventID,
+    },
+  });
+
+  // If the event does not exist
+  if (!eventExists) {
+    return res.status(400).json({
+      error: 'Event does not exist',
+    });
+  }
+
   const updatedPerformance = await prisma.performance.update({
     where: {
       id,
