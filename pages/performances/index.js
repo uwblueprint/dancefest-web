@@ -27,7 +27,6 @@ import styles from '@styles/pages/Performances.module.scss'; // Page styles
 import { formatSchools } from '@utils/schools'; // Format schools util
 import { formatPerformances } from '@utils/performances'; // Format performances util
 
-const DANCE_ENTRY = 1; // TEMPORARY. TODO: Figure out what this is for
 const ENTRY_VIEW_HIDDEN_COLUMNS = [
   'technicalScore',
   'artisticScore',
@@ -241,7 +240,6 @@ export default function Performances() {
           danceStyle,
           danceSize,
           eventID: event,
-          danceEntry: DANCE_ENTRY,
         },
       });
 

@@ -31,7 +31,7 @@ export default async (req, res) => {
   // If required fields were not provided, return an error
   if (!eventID || !schoolID) {
     return res.status(400).json({
-      error: 'Required fields danceEntry, eventId, or schoolID were not provided',
+      error: 'Required fields eventId, or schoolID were not provided',
     });
   }
 

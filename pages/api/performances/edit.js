@@ -18,7 +18,6 @@ export default async (req, res) => {
     choreographers,
     competitionLevel,
     danceSize,
-    danceEntry,
     danceStyle,
     danceTitle,
     performanceLink,
@@ -43,7 +42,6 @@ export default async (req, res) => {
     !choreographers ||
     !competitionLevel ||
     !danceSize ||
-    !danceEntry ||
     !danceStyle ||
     !danceTitle ||
     !performanceLink ||
