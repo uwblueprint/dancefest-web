@@ -170,7 +170,6 @@ async function dataSeed() {
       name: event.name,
     },
     create: {
-      id: event.id,
       name: event.name,
     },
   });
@@ -195,7 +194,6 @@ async function dataSeed() {
         school_name: school.school_name,
       },
       create: {
-        id: school.id,
         school_name: school.school_name,
         email: school.email,
       },
@@ -246,7 +244,6 @@ async function dataSeed() {
         school_id: performance.school_id,
       },
       create: {
-        id: performance.id,
         name: performance.name,
         performers: performance.performers,
         choreographers: performance.cheoreographers,
@@ -298,7 +295,6 @@ async function dataSeed() {
         cumulative_mark: adjudication.cumulative_mark,
       },
       create: {
-        id: adjudication.id,
         artistic_mark: adjudication.artistic_mark,
         technical_mark: adjudication.technical_mark,
         cumulative_mark: adjudication.cumulative_mark,
@@ -345,7 +341,6 @@ async function dataSeed() {
         type: award.type,
       },
       create: {
-        id: award.id,
         title: award.title,
         event_id: eventUpsert.id,
         type: award.type,
