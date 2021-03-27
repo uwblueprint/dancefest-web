@@ -4,6 +4,7 @@ import styles from '@styles/components/performance-details/PerformanceSummary.mo
 
 export default function PerformanceSummary({ performance }) {
   const {
+    audioRecordingLink,
     danceEntry,
     performers,
     choreographers,
@@ -22,7 +23,9 @@ export default function PerformanceSummary({ performance }) {
     <>
       <div className={styles.performance__summary_container}>
         <div className={styles.performance__summary_performanceLink}>
-          <a>Watch Performance</a>
+          <a href={audioRecordingLink || undefined} target="_blank" rel="noreferrer noopener">
+            Watch Performance
+          </a>
         </div>
         <div className={styles.performance__summary_performanceInfo}>
           <div>

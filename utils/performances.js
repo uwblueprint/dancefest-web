@@ -7,6 +7,7 @@ import { formatAdjudication } from '@utils/adjudications'; // Format adjudicatio
  * @returns {Object} Formatted performance
  */
 export const formatPerformance = ({
+  audio_recording_link: audioRecordingLink,
   competition_level: performanceLevel,
   competition_level_id: performanceLevelID,
   dance_entry: danceEntry,
@@ -33,6 +34,7 @@ export const formatPerformance = ({
   });
 
   return {
+    audioRecordingLink,
     performanceLevel,
     performanceLevelID,
     danceEntry,
