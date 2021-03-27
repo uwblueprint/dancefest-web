@@ -81,7 +81,6 @@ export default function Performances() {
 
   // Filter dropdown options
   const [schoolFilters, setSchoolFilters] = useState({});
-  const [academicLevelFilters, setAcademicLevelFilters] = useState({});
   const [performanceLevelFilters, setPerformanceLevelFilters] = useState({});
   const [danceStyleFilters, setDanceStyleFilters] = useState({});
   const [danceSizeFilters, setDanceSizeFilters] = useState({});
@@ -284,7 +283,6 @@ export default function Performances() {
   useEffect(() => {
     const updatedTableFilters = [];
     const activeSchoolFilters = getActiveFilters(schoolFilters);
-    const activeAcademicLevelFilters = getActiveFilters(academicLevelFilters);
     const activePerformanceLevelFilters = getActiveFilters(performanceLevelFilters);
     const activeDanceStyleFilters = getActiveFilters(danceStyleFilters);
     const activeDanceSizeFilters = getActiveFilters(danceSizeFilters);
@@ -298,12 +296,6 @@ export default function Performances() {
       updatedTableFilters.push({
         id: 'schoolName',
         value: activeSchoolFilters.map(filter => filter.label), // For schools, need to filter by label, not schoolId due to Table accessor being `schoolName`
-      });
-    }
-    if (activeAcademicLevelFilters.length > 0) {
-      updatedTableFilters.push({
-        id: 'academicLevel',
-        value: activeAcademicLevelFilters.map(filter => filter.value),
       });
     }
     if (activePerformanceLevelFilters.length > 0) {
@@ -327,20 +319,12 @@ export default function Performances() {
 
     setTableFilters(updatedTableFilters);
     setPageNumber(0);
-  }, [
-    searchQuery,
-    schoolFilters,
-    academicLevelFilters,
-    performanceLevelFilters,
-    danceStyleFilters,
-    danceSizeFilters,
-  ]);
+  }, [searchQuery, schoolFilters, performanceLevelFilters, danceStyleFilters, danceSizeFilters]);
 
   // Render active filter pills
   const renderActiveFilters = () => {
     const activeFilterPills = [];
     const activeSchoolFilters = getActiveFilters(schoolFilters);
-    const activeAcademicLevelFilters = getActiveFilters(academicLevelFilters);
     const activePerformanceLevelFilters = getActiveFilters(performanceLevelFilters);
     const activeDanceStyleFilters = getActiveFilters(danceStyleFilters);
     const activeDanceSizeFilters = getActiveFilters(danceSizeFilters);
@@ -351,15 +335,6 @@ export default function Performances() {
           key={i}
           label={label}
           onDelete={() => setSchoolFilters(removeKeyFromObject(schoolFilters, value))}
-        />
-      );
-    });
-    activeAcademicLevelFilters.forEach(({ label, value }, i) => {
-      activeFilterPills.push(
-        <Pill
-          key={i}
-          label={label}
-          onDelete={() => setAcademicLevelFilters(removeKeyFromObject(academicLevelFilters, value))}
         />
       );
     });
@@ -450,11 +425,6 @@ export default function Performances() {
                 buttonText="School"
                 options={schoolFilters}
                 setOptions={setSchoolFilters}
-              />
-              <FilterDropdown
-                buttonText="Academic Level"
-                options={academicLevelFilters}
-                setOptions={setAcademicLevelFilters}
               />
               <FilterDropdown
                 buttonText="Competition Level"

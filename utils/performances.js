@@ -7,7 +7,6 @@
 export const formatPerformances = performances => {
   return performances.map(
     ({
-      academic_level: academicLevel,
       competition_level: performanceLevel,
       dance_size: danceSize,
       dance_style: danceStyle,
@@ -19,7 +18,6 @@ export const formatPerformances = performances => {
       awards,
       ...rest
     }) => ({
-      academicLevel,
       performanceLevel,
       danceSize,
       danceStyle,
