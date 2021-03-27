@@ -2,15 +2,15 @@ import React, { useState, useEffect } from 'react'; // React
 import axios from 'axios';
 import { useRouter } from 'next/router'; // Routing (with buttons)
 import Link from 'next/link'; // Next link
+import Loader from 'react-loader-spinner'; // Spinning loader
 import Layout from '@components/Layout'; // Layout wrapper
 import Navigation from '@containers/Navigation'; // Navigation state
 
+import AwardModal from '@components/awards/AwardModal';
 import Button from '@components/Button'; // Button
 import Title from '@components/Title'; // Title
 import Input from '@components/Input'; // Input
 import Tabs from '@components/Tabs'; // Tabs
-import Modal from '@components/Modal'; // Modal
-import Dropdown from '@components/Dropdown'; // Dropdown
 import FilterDropdown from '@components/FilterDropdown'; // Filter Dropdown
 import Table from '@components/Table'; // Table
 import Pill from '@components/Pill'; // Pill
@@ -41,7 +41,7 @@ const removeKeyFromObject = (object, key) => {
 };
 
 // Page: Performances
-export default function Performances() {
+export default function Awards() {
   const router = useRouter();
   const { event } = Navigation.useContainer();
 
@@ -60,8 +60,15 @@ export default function Performances() {
 
   // Award types, hardcoded for now
   const [awardTypeOptions, setAwardTypeOptions] = useState({});
-
+  // Store response
   const [awardData, setAwardData] = useState();
+
+  // Award Nominations, Finalized
+  const [nominatedAwards, setNominatedAwards] = useState([]);
+  const [finalizedAwards, setFinalizedAwards] = useState([]);
+
+  // Loading State
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (event === null) {
@@ -126,7 +133,6 @@ export default function Performances() {
         method: 'GET',
         url: '/api/awards/collect',
       });
-      console.log('resp ' + resp);
       setAwardData(resp.data);
     } catch (err) {
       // Empty catch block
@@ -139,8 +145,27 @@ export default function Performances() {
   }, []);
 
   useEffect(() => {
-    console.log(awardData);
+    if (awardData) {
+      awardData.forEach(award => {
+        if (award.is_finalized) {
+          award.performances.forEach(perf => {
+            if (perf.status === 'FINALIST') {
+              award.winner = perf;
+            }
+          });
+          setFinalizedAwards(prevFinalized => [...prevFinalized, award]);
+        } else {
+          award.nominations = award.performances.length;
+          setNominatedAwards(prevNominated => [...prevNominated, award]);
+        }
+      });
+      setLoading(false);
+    }
   }, [awardData]);
+
+  useEffect(() => {
+    console.log(finalizedAwards);
+  }, [finalizedAwards]);
 
   useEffect(() => {
     async function nominate() {
@@ -149,7 +174,7 @@ export default function Performances() {
           method: 'POST',
           url: '/api/performances/nominate',
           data: {
-            performanceID: 4,
+            performanceID: 5,
             awardIDs: [1],
           },
         });
@@ -176,8 +201,21 @@ export default function Performances() {
         console.log('Something went wrong ' + err);
       }
     }
-    nominate();
-    finalize();
+
+    async function createAward(title) {
+      try {
+        await axios({
+          url: '/api/awards/create',
+          method: 'POST',
+          data: {
+            title: title,
+          },
+        });
+      } catch (err) {
+        // Empty catch block
+        console.log('Error occured', err);
+      }
+    }
   }, []);
 
   return (
@@ -246,22 +284,31 @@ export default function Performances() {
             </div>
           </div>
         )}
-        <div className={styles.performances__content}>
-          <Tabs
-            firstTabName="Nominations"
-            secondTabName="Finalized"
-            firstTabContent={
-              <NominationTable
-                filters={filters}
-                pageNumber={pageNumber}
-                setPageCount={setPageCount}
-              />
-            }
-            secondTabContent={<FinalizedTable />}
-          />
-        </div>
+        {!loading ? (
+          <div className={styles.performances__content}>
+            <Tabs
+              firstTabName="Nominations"
+              secondTabName="Finalized"
+              firstTabContent={
+                <NominationTable
+                  nominatedAwards={nominatedAwards}
+                  filters={filters}
+                  pageNumber={pageNumber}
+                  setPageCount={setPageCount}
+                />
+              }
+              secondTabContent={<FinalizedTable finalizedAwards={finalizedAwards} />}
+            />
+          </div>
+        ) : (
+          // All else, if still loading, display loader
+          <div className={styles.awards__loader}>
+            <Loader type="Oval" color="#c90c0f" height={80} width={80} />
+          </div>
+        )}
       </div>
-      <PerformanceModal
+
+      <AwardModal
         mode="new"
         open={modalOpen}
         setOpen={setModalOpen}
@@ -273,7 +320,7 @@ export default function Performances() {
 }
 
 // Entries Table
-const NominationTable = props => {
+const NominationTable = ({ nominatedAwards, ...props }) => {
   const router = useRouter(); // Collect router
 
   const columns = [
@@ -301,7 +348,7 @@ const NominationTable = props => {
   return (
     <Table
       columns={columns}
-      data={data}
+      data={nominatedAwards}
       pageSize={PAGE_SIZE}
       emptyComponent={<EmptyTableComponent />}
       onRowClick={goToPerformanceDetails}
@@ -311,51 +358,36 @@ const NominationTable = props => {
 };
 
 // Judging Table
-const FinalizedTable = () => {
-  return (
-    <Table columns={columns} data={[]} filters={[]} emptyComponent={<EmptyTableComponent />} />
-  );
-};
+const FinalizedTable = ({ finalizedAwards, ...props }) => {
+  const columns = [
+    {
+      Header: 'Award Title',
+      accessor: 'title',
+    },
+    {
+      Header: 'Type',
+      accessor: 'type',
+    },
+    {
+      Header: 'Winner',
+      accessor: 'winner.dance_title',
+    },
+  ];
 
-// Create/Edit Performance Modal
-const PerformanceModal = ({ mode, open, setOpen, setAwardTitle, submitAward }) => {
-  const handleOnChange = e => {
-    setAwardTitle(e.target.value);
+  const goToPerformanceDetails = row => {
+    // Go to /performances/[id] page
+    console.log(row);
   };
 
   return (
-    <Modal
-      containerClassName={styles.modal__container}
-      title={mode === 'edit' ? 'Edit Award' : 'New Award'}
-      open={open}
-      setModalOpen={setOpen}
-      cancelText="Discard"
-      submitText="Add Award"
-      onCancel={() => setOpen(false)}
-      onSubmit={submitAward}
-    >
-      <div className={styles.modal}>
-        <div>
-          <h2>Award Title*</h2>
-          <Input className={styles.modal__entryId} placeholder="Title" onChange={handleOnChange} />
-        </div>
-        <div>
-          <h2>Nominated Dance</h2>
-          <h3>If the award is to be given to a performance enter their entry ID here:</h3>
-          <Input className={styles.modal__entryId} placeholder="Entry ID" />
-        </div>
-        <div>
-          <h2>Award Type*</h2>
-          <Dropdown className={styles.modal__dropdown} placeholder="Award Type" />
-        </div>
-        <div>
-          <h2>Nominated Dancer(s)</h2>
-          <h3>If the award is to be given to a specific student enter their name here:</h3>
-          <Input placeholder="names, names, names" />
-          <h3>Separated by comma (ie: John Smith, Jane Doe...)</h3>
-        </div>
-      </div>
-    </Modal>
+    <Table
+      columns={columns}
+      data={finalizedAwards}
+      filters={[]}
+      emptyComponent={<EmptyTableComponent />}
+      onRowClick={goToPerformanceDetails}
+      {...props}
+    />
   );
 };
 
