@@ -117,7 +117,7 @@ export default function AdminModal({
         <div>
           <h2>Name</h2>
           <Input
-            placeholder="Admin Name"
+            placeholder="User Name"
             value={adminName}
             onChange={event => setAdminName(event.target.value)}
           />
@@ -125,7 +125,7 @@ export default function AdminModal({
         <div>
           <h2>Email</h2>
           <Input
-            placeholder="Admin Email"
+            placeholder="User Email"
             value={adminEmail}
             onChange={event => setAdminEmail(event.target.value)}
           />

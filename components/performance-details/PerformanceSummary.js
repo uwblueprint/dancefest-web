@@ -28,15 +28,15 @@ export default function PerformanceSummary({ performance }) {
           <div>
             <div>
               <h2>Entry ID</h2>
-              <span>{danceEntry}</span>
+              <span>{danceEntry || 'None'}</span>
             </div>
             <div>
               <h2>Dancer(s)</h2>
-              <span>{performers.join(', ')}</span>
+              <span>{performers.join(', ') || 'None'}</span>
             </div>
             <div>
               <h2>Choreographer(s)</h2>
-              <span>{choreographers.join(', ')}</span>
+              <span>{choreographers.join(', ') || 'None'}</span>
             </div>
           </div>
           <div>

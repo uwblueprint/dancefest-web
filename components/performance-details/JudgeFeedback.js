@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from 'react'; // React
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import Navigation from '@containers/Navigation'; // Navigation state
 
 import Button from '@components/Button'; // Button
-import Dropdown, { formatDropdownOptions } from '@components/Dropdown'; // Dropdown
+import Input from '@components/Input'; // Input
+import { formatDropdownOptions } from '@components/Dropdown'; // Dropdown
 import ScoreCard from '@components/ScoreCard'; // Score Card
 import DropdownGrid from '@components/DropdownGrid'; // Dropdown Grid
 import PlayIcon from '@assets/play.svg'; // Play icon
 import styles from '@styles/components/performance-details/JudgeFeedback.module.scss'; // Component styles
+
+const SPECIAL_AWARD_TYPE = 'SPECIAL';
+const DANCE_ARTISTRY_AWARD_TYPE = 'DANCE_ARTISTRY';
 
 export default function JudgeFeedback({
   getPerformance = () => {},
@@ -16,6 +21,7 @@ export default function JudgeFeedback({
   adjudication,
   nominations: initialNominations,
 }) {
+  const { event: eventId } = Navigation.useContainer();
   const router = useRouter();
   const { id: performanceId } = router.query;
   const {
@@ -27,12 +33,12 @@ export default function JudgeFeedback({
     cumulativeScore: initialCumulativeScore,
   } = adjudication;
   const initialNormalAwards = formatDropdownOptions(
-    (initialNominations || []).filter(({ isCategory }) => !!isCategory),
+    (initialNominations || []).filter(({ type }) => type === DANCE_ARTISTRY_AWARD_TYPE),
     { value: 'id', label: 'title' }
   );
   const initialSpecialAward =
     formatDropdownOptions(
-      (initialNominations || []).filter(({ isCategory }) => !isCategory),
+      (initialNominations || []).filter(({ type }) => type === SPECIAL_AWARD_TYPE),
       {
         value: 'id',
         label: 'title',
@@ -41,17 +47,7 @@ export default function JudgeFeedback({
   const normalAwardsOptions = [
     { value: null, label: 'None' },
     ...formatDropdownOptions(
-      Object.values(awardsDict).filter(({ is_category }) => !!is_category),
-      {
-        value: 'id',
-        label: 'title',
-      }
-    ),
-  ];
-  const specialAwardOptions = [
-    { value: null, label: 'None' },
-    ...formatDropdownOptions(
-      Object.values(awardsDict).filter(({ is_category }) => !is_category),
+      Object.values(awardsDict).filter(({ type }) => type === DANCE_ARTISTRY_AWARD_TYPE),
       {
         value: 'id',
         label: 'title',
@@ -65,7 +61,10 @@ export default function JudgeFeedback({
   const [artisticScore, setArtisticScore] = useState(initialArtisticScore);
   const [cumulativeScore, setCumulativeScore] = useState(initialCumulativeScore);
   const [normalAwards, setNormalAwards] = useState(initialNormalAwards);
-  const [specialAward, setSpecialAward] = useState(initialSpecialAward);
+  const [specialAward, setSpecialAward] = useState(initialSpecialAward); // Existing special award
+  const [specialAwardName, setSpecialAwardName] = useState(
+    initialSpecialAward ? initialSpecialAward.label : ''
+  ); // New/existing special award
 
   const normalAwardsData = normalAwards
     .filter(award => !!award)
@@ -106,12 +105,14 @@ export default function JudgeFeedback({
         method: 'put',
         url: `/api/performances/nominate`,
         data: {
-          performanceID: performanceId,
-          awardIDs: [...normalAwards, specialAward]
+          eventID: parseInt(eventId),
+          performanceID: parseInt(performanceId),
+          awardIDs: (specialAward === null ? [...normalAwards] : [...normalAwards, specialAward])
             .filter(award => award !== null)
             .map(award => award.value)
             .filter(awardId => awardId !== null),
           judgeID,
+          specialAwardName,
         },
       });
 
@@ -207,13 +208,12 @@ export default function JudgeFeedback({
         <div className={styles.judge__feedback_awards}>
           <h2>Special Award:</h2>
           {editMode ? (
-            <Dropdown
-              placeholder="Select Award"
-              options={specialAwardOptions}
-              selected={specialAward}
-              setSelected={setSpecialAward}
+            <Input
+              placeholder="Special Award"
+              value={specialAwardName}
+              onChange={event => setSpecialAwardName(event.target.value)}
             />
-          ) : specialAwardData ? (
+          ) : specialAwardData && specialAwardData.title ? (
             <p>{specialAwardData.title}</p>
           ) : (
             <p>None</p>

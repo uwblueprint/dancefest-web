@@ -38,31 +38,20 @@ export default function PerformanceDetails() {
   const currentNominations =
     nominations && currentJudgeUserId ? nominations[currentJudgeUserId] : undefined;
 
-  const getPerformance = async () => {
+  const getAwards = async performance => {
     setLoading(true);
+
+    const { dance_size_id, dance_style_id, competition_level_id } = performance;
 
     try {
       const response = await axios({
-        method: 'get',
-        url: `/api/performances/get?id=${id}`,
-      });
-      const formattedPerformance = formatPerformance(response.data);
-      setPerformance(formattedPerformance);
-    } catch {
-      // Temporary solution, as error UI has not been implemented
-      router.push('/performances');
-    }
-
-    setLoading(false);
-  };
-
-  const getAwards = async () => {
-    setLoading(true);
-
-    try {
-      const response = await axios({
-        method: 'get',
-        url: `/api/awards/collect`,
+        method: 'post', // TODO: Fix
+        url: `/api/settings/awards`,
+        // url: `/api/awards/collect?eventID=${eventId}`,
+        data: {
+          eventID: eventId,
+          settingIDs: [dance_size_id, dance_style_id, competition_level_id],
+        },
       });
 
       const newAwardsDict = {};
@@ -77,12 +66,31 @@ export default function PerformanceDetails() {
     setLoading(false);
   };
 
+  const getPerformance = async () => {
+    setLoading(true);
+
+    try {
+      const response = await axios({
+        method: 'get',
+        url: `/api/performances/get?id=${id}`,
+      });
+      const formattedPerformance = formatPerformance(response.data);
+      setPerformance(formattedPerformance);
+
+      await getAwards(response.data);
+    } catch {
+      // Temporary solution, as error UI has not been implemented
+      router.push('/performances');
+    }
+
+    setLoading(false);
+  };
+
   useEffect(() => {
     if (eventId === null) {
       router.push('/performances');
     } else if (eventId) {
       getPerformance();
-      getAwards();
     }
     // TODO: Validate that the performance id is from the currently selected event id (from navigation state)
   }, [eventId]);

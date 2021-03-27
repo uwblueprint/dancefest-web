@@ -160,7 +160,7 @@ export default function Performances() {
       const danceSizeSettings = settings.filter(setting => setting.type === 'DANCE_SIZE');
 
       const formatOptionsFields = {
-        value: 'value',
+        value: 'id',
         label: 'value',
       };
 
@@ -219,8 +219,11 @@ export default function Performances() {
     choreographersString,
     school,
     competitionLevel,
+    competitionLevelID,
     danceStyle,
+    danceStyleID,
     danceSize,
+    danceSizeID,
   }) => {
     setLoading(true);
 
@@ -236,8 +239,11 @@ export default function Performances() {
             .map(choreographer => choreographer.trim()),
           schoolID: school,
           competitionLevel,
+          competitionLevelID,
           danceStyle,
+          danceStyleID,
           danceSize,
+          danceSizeID,
           eventID: event,
         },
       });
@@ -301,19 +307,19 @@ export default function Performances() {
     if (activePerformanceLevelFilters.length > 0) {
       updatedTableFilters.push({
         id: 'performanceLevel',
-        value: activePerformanceLevelFilters.map(filter => filter.value),
+        value: activePerformanceLevelFilters.map(filter => filter.label),
       });
     }
     if (activeDanceStyleFilters.length > 0) {
       updatedTableFilters.push({
         id: 'danceStyle',
-        value: activeDanceStyleFilters.map(filter => filter.value),
+        value: activeDanceStyleFilters.map(filter => filter.label),
       });
     }
     if (activeDanceSizeFilters.length > 0) {
       updatedTableFilters.push({
         id: 'danceSize',
-        value: activeDanceSizeFilters.map(filter => filter.value),
+        value: activeDanceSizeFilters.map(filter => filter.label),
       });
     }
 

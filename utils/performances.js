@@ -7,11 +7,13 @@ import { formatAdjudication } from '@utils/adjudications'; // Format adjudicatio
  * @returns {Object} Formatted performance
  */
 export const formatPerformance = ({
-  academic_level: academicLevel,
   competition_level: performanceLevel,
+  competition_level_id: performanceLevelID,
   dance_entry: danceEntry,
   dance_size: danceSize,
+  dance_size_id: danceSizeID,
   dance_style: danceStyle,
+  dance_style_id: danceStyleID,
   dance_title: danceTitle,
   event_id: eventId,
   school: { school_name: schoolName },
@@ -31,11 +33,13 @@ export const formatPerformance = ({
   });
 
   return {
-    academicLevel,
     performanceLevel,
+    performanceLevelID,
     danceEntry,
     danceSize,
+    danceSizeID,
     danceStyle,
+    danceStyleID,
     danceTitle,
     eventId,
     schoolName,
