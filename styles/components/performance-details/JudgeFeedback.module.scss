@@ -50,23 +50,8 @@
     }
   }
 
-  .judge__feedback_audio_player {
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 24px;
-    border: 1px solid #0b0504;
-    box-sizing: border-box;
-    border-radius: 5px;
+  .judge__feedback_audio_player_wrapper {
     margin-bottom: 42px;
-    height: 56px;
-
-    span {
-      display: flex;
-      flex-direction: row;
-    }
   }
 
   .judge__feedback_nominations {

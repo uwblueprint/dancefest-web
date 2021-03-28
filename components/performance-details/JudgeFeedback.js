@@ -8,7 +8,7 @@ import Input from '@components/Input'; // Input
 import { formatDropdownOptions } from '@components/Dropdown'; // Dropdown
 import ScoreCard from '@components/ScoreCard'; // Score Card
 import DropdownGrid from '@components/DropdownGrid'; // Dropdown Grid
-import PlayIcon from '@assets/play.svg'; // Play icon
+import AudioPlayer from '@components/AudioPlayer'; // Audio Player
 import styles from '@styles/components/performance-details/JudgeFeedback.module.scss'; // Component styles
 
 const SPECIAL_AWARD_TYPE = 'SPECIAL';
@@ -27,6 +27,7 @@ export default function JudgeFeedback({
   const {
     id,
     userId: judgeID,
+    audioUrl,
     notes: initialNotes,
     technicalScore: initialTechnicalScore,
     artisticScore: initialArtisticScore,
@@ -183,12 +184,8 @@ export default function JudgeFeedback({
             <p>{notes || 'None'}</p>
           )}
         </div>
-        <div className={styles.judge__feedback_audio_player}>
-          <p>{`OSSDF2021_1.mp3`}</p>
-          <span>
-            <p>{`3:07`}</p>
-            <img src={PlayIcon} />
-          </span>
+        <div className={styles.judge__feedback_audio_player_wrapper}>
+          <AudioPlayer audioUrl={audioUrl} />
         </div>
         <div className={styles.judge__feedback_nominations}>
           <h2>Nominated for:</h2>
