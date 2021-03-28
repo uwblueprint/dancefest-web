@@ -23,9 +23,6 @@ import DancerRedJump from '@assets/dancer-red-jump.svg'; // Jumping Dancer SVG
 import DancerYellowBlue from '@assets/dancer-yellow-blue.svg'; // Jumping Dancer SVG
 import styles from '@styles/pages/Awards.module.scss'; // Page styles
 
-// Temp constants
-import data, { columns } from '../../data/mockAwards';
-
 const PAGE_SIZE = 6; // Rows per page
 
 // Get the active filters (list of column accessors) from an object of filter dropdown values
@@ -40,7 +37,7 @@ const removeKeyFromObject = (object, key) => {
   return rest;
 };
 
-// Page: Performances
+// Page: Awards
 export default function Awards() {
   const router = useRouter();
   const { event } = Navigation.useContainer();
@@ -130,23 +127,35 @@ export default function Awards() {
   async function getAwards() {
     try {
       const resp = await axios({
-        method: 'GET',
+        method: 'POST',
         url: '/api/awards/collect',
+        data: {
+          eventID: event,
+        },
       });
       setAwardData(resp.data);
     } catch (err) {
       // Empty catch block
-      console.log(err);
     }
   }
 
   useEffect(() => {
     getAwards();
-  }, []);
+  }, [event]);
 
+  // Clean up API Response
   useEffect(() => {
     if (awardData) {
       awardData.forEach(award => {
+        // Award Type
+        if (award.type === 'SPECIAL') {
+          award.type = 'Special Award';
+        } else if (award.type === 'SCORE_BASED') {
+          award.type = 'Score Based';
+        } else {
+          award.type = 'Dance Artistry';
+        }
+        // Filter based on award status
         if (award.is_finalized) {
           award.performances.forEach(perf => {
             if (perf.status === 'FINALIST') {
@@ -162,10 +171,6 @@ export default function Awards() {
       setLoading(false);
     }
   }, [awardData]);
-
-  useEffect(() => {
-    console.log(finalizedAwards);
-  }, [finalizedAwards]);
 
   useEffect(() => {
     async function nominate() {
