@@ -283,6 +283,34 @@ async function dataSeed() {
     },
   ];
 
+  // ADJUDICATION SEEDING
+  // const ajudications = [
+  //   {
+  //     id: 1,
+  //     artistic_mark: 100,
+  //     technical_mark: 95,
+  //     cumulative_mark: 100,
+  //     performance_id: performanceUpserts[1].id,
+  //     user_id: userUpserts[0].id,
+  //   },
+  //   {
+  //     id: 2,
+  //     artistic_mark: 98,
+  //     technical_mark: 88,
+  //     cumulative_mark: 90,
+  //     performance_id: performanceUpserts[1].id,
+  //     user_id: userUpserts[1].id,
+  //   },
+  //   {
+  //     id: 3,
+  //     artistic_mark: 50,
+  //     technical_mark: 60,
+  //     cumulative_mark: 55,
+  //     performance_id: performanceUpserts[1].id,
+  //     user_id: userUpserts[2].id,
+  //   },
+  // ];
+
   const adjudicationUpserts = [];
   for (const adjudication of ajudications) {
     const adjudicationUpsert = await prisma.adjudication.upsert({
