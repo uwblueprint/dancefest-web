@@ -10,7 +10,6 @@ export const formatPerformance = ({
   audio_recording_link: audioRecordingLink,
   competition_level: performanceLevel,
   competition_level_id: performanceLevelID,
-  dance_entry: danceEntry,
   dance_size: danceSize,
   dance_size_id: danceSizeID,
   dance_style: danceStyle,
@@ -37,7 +36,6 @@ export const formatPerformance = ({
     audioRecordingLink,
     performanceLevel,
     performanceLevelID,
-    danceEntry,
     danceSize,
     danceSizeID,
     danceStyle,
@@ -49,7 +47,10 @@ export const formatPerformance = ({
     score: cumulativeScore,
     cumulativeScore,
     awards,
-    awardsString: awards.map(({ title }) => title).join(', '),
+    awardsString: awards
+      .map(({ title }) => title)
+      .filter(award => !!award)
+      .join(', '),
     adjudications: adjudications.map(formatAdjudication),
     nominations,
     ...rest,

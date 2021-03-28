@@ -5,7 +5,6 @@ import styles from '@styles/components/performance-details/PerformanceSummary.mo
 export default function PerformanceSummary({ performance }) {
   const {
     audioRecordingLink,
-    danceEntry,
     performers,
     choreographers,
     schoolName,
@@ -30,8 +29,8 @@ export default function PerformanceSummary({ performance }) {
         <div className={styles.performance__summary_performanceInfo}>
           <div>
             <div>
-              <h2>Entry ID</h2>
-              <span>{danceEntry || 'None'}</span>
+              <h2>School</h2>
+              <span>{schoolName}</span>
             </div>
             <div>
               <h2>Dancer(s)</h2>
@@ -43,10 +42,6 @@ export default function PerformanceSummary({ performance }) {
             </div>
           </div>
           <div>
-            <div>
-              <h2>School</h2>
-              <span>{schoolName}</span>
-            </div>
             <div>
               <h2>Competition Level</h2>
               <span>{performanceLevel}</span>

@@ -143,10 +143,6 @@ export default function PerformanceModal({
     >
       <div className={styles.modal}>
         <div>
-          <h2>Entry ID</h2>
-          <Input className={styles.modal__entryId} placeholder="##" disabled />
-        </div>
-        <div>
           <h2>Dance Title</h2>
           <Input
             placeholder="Title"
