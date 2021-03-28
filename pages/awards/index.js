@@ -159,7 +159,7 @@ export default function Awards() {
         if (award.is_finalized) {
           award.performances.forEach(perf => {
             if (perf.status === 'FINALIST') {
-              award.winner = perf;
+              award.winner = perf.name;
             }
           });
           setFinalizedAwards(prevFinalized => [...prevFinalized, award]);
@@ -347,7 +347,8 @@ const NominationTable = ({ nominatedAwards, ...props }) => {
 
   const goToPerformanceDetails = row => {
     // Go to /performances/[id] page
-    router.push(`/awards/${row.original.type}`); // Route to "/performance/:id" page
+    console.log(row);
+    router.push(`/awards/${row.original.id}`); // Route to "/performance/:id" page
   };
 
   return (
@@ -364,6 +365,8 @@ const NominationTable = ({ nominatedAwards, ...props }) => {
 
 // Judging Table
 const FinalizedTable = ({ finalizedAwards, ...props }) => {
+  const router = useRouter(); // Collect router
+
   const columns = [
     {
       Header: 'Award Title',
@@ -375,13 +378,13 @@ const FinalizedTable = ({ finalizedAwards, ...props }) => {
     },
     {
       Header: 'Winner',
-      accessor: 'winner.dance_title',
+      accessor: 'winner',
     },
   ];
 
   const goToPerformanceDetails = row => {
-    // Go to /performances/[id] page
     console.log(row);
+    router.push(`/awards/${row.original.id}`); // Route to "/performance/:id" page
   };
 
   return (
