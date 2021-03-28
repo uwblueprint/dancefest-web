@@ -13,7 +13,7 @@ export default async (req, res) => {
 
   let { schoolIDs } = req.query;
 
-  // If schoolIDs were not provided
+  // If schoolIDs are not provided, we want to get every school ID
   if (!schoolIDs || schoolIDs.length === 0) {
     const schoolsData = await prisma.school.findMany({
       select: {
@@ -26,6 +26,7 @@ export default async (req, res) => {
   const schoolIdSet = new Set(schoolIDs);
   const performances = await getPerformances();
 
+  // Create a map where key: schoolId, value: array of performances of that school
   const schoolToPerformancesMap = {};
   performances.forEach(performance => {
     if (schoolIdSet.has(performance.school_id)) {
@@ -39,6 +40,7 @@ export default async (req, res) => {
 
   const mailerPromises = [];
 
+  // Send email to each school
   for (const school in schoolToPerformancesMap) {
     const schoolPerformances = schoolToPerformancesMap[school];
     if (schoolPerformances && schoolPerformances.length > 0) {
