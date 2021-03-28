@@ -16,7 +16,7 @@ export default function Table({
   initialSort = [],
   emptyComponent,
   hiddenColumns = [],
-  // onRowClick = () => {},
+  onRowClick = () => {},
 }) {
   const {
     getTableBodyProps,
@@ -69,10 +69,10 @@ export default function Table({
     setAllFilters(filters);
   }, [filters]);
 
-  // const handleRowClick = row => () => {
-  //   // Call the prop - onRowClick
-  //   onRowClick(row);
-  // };
+  const handleRowClick = row => () => {
+    // Call the prop - onRowClick
+    onRowClick(row);
+  };
 
   return (
     <div className={styles.table__div}>
@@ -120,7 +120,7 @@ export default function Table({
             {(paginate ? page : rows).map((row, i) => {
               prepareRow(row);
               return (
-                <tr key={i} {...row.getRowProps()}>
+                <tr key={i} {...row.getRowProps()} onClick={handleRowClick(row)}>
                   {row.cells.map((cell, i) => {
                     return (
                       <td key={i} {...cell.getCellProps()}>
