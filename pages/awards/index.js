@@ -179,8 +179,8 @@ export default function Awards() {
           method: 'POST',
           url: '/api/performances/nominate',
           data: {
-            performanceID: 5,
-            awardIDs: [1],
+            performanceID: 2,
+            awardIDs: [4],
           },
         });
         console.log('resp ' + resp);

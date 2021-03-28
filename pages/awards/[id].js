@@ -38,6 +38,12 @@ function AwardDetails({ award }) {
 
   useEffect(() => {
     setIsAwardFinalized(award.is_finalized);
+    if (award.is_finalized) {
+      setIsAwardFinalized(true);
+      award.awards_performances = award.awards_performances.filter(
+        awards_performance => awards_performance.status === 'FINALIST'
+      );
+    }
   }, []);
 
   useEffect(() => {
