@@ -1,61 +1,70 @@
+import prisma from '@prisma/index'; // Prisma client
 import { getSession } from 'next-auth/client'; // Session handling
 import { getPerformances } from '@pages/api/performances/collect';
-import { getSchools } from '@pages/api/schools/collect';
 import { transporter } from 'aws/index';
+import { json2csvParser } from 'utils/csvParser';
 
 export default async (req, res) => {
   const session = await getSession({ req });
 
-  if (session) {
-    const { schoolIDs } = req.query;
+  if (!session) {
+    return res.status(401).end();
+  }
 
-    // Set filter to obtain schools with schoolIDs passed in. If schoolIDs is not passed in, we want to get all schools.
-    const schoolFilter = schoolIDs ? { id: { in: schoolIDs.split(',').map(i => +i) } } : {};
-    const schools = await getSchools(schoolFilter);
+  let { schoolIDs } = req.query;
 
-    // If no schools are returned from the filter
-    if (schools.length === 0)
-      return res.status(400).json({ error: 'No schools to email feedback to.' });
-
-    // Filter for obtaining performances for the schools
-    const performanceFilter = {
-      school_id: {
-        in: schools.map(school => school.id),
+  // If schoolIDs were not provided
+  if (!schoolIDs || schoolIDs.length === 0) {
+    const schoolsData = await prisma.school.findMany({
+      select: {
+        id: true,
       },
-    };
-
-    // Obtain all performances matching the performanceFilter
-    const performances = await getPerformances(performanceFilter);
-
-    // Build a map where we can access all the performances of a school using the school id
-    const performancesMap = {};
-    performances.forEach(performance => {
-      if (performance.school_id in performancesMap) {
-        performancesMap[performance.school_id].push(performance);
-      } else {
-        performancesMap[performance.school_id] = [performance];
-      }
     });
+    schoolIDs = schoolsData.map(school => school.id);
+  }
 
-    const mailerPromises = [];
+  const schoolIdSet = new Set(schoolIDs);
+  const performances = await getPerformances();
 
-    // Send email for each school
-    schools.forEach(school => {
-      // if there are performances for the school and the school has a contact email
-      if (school.id in performancesMap && 'contacts' in school && school.contacts.length > 0) {
-        // Obtain the first contact email for the school
-        const mailData = {
-          from: process.env.FEEDBACK_EMAIL_FROM,
-          to: school.contacts[0].email,
-          subject: `Feedback for ${school.name}`,
-          //TODO: format the response with HTML
-          text: JSON.stringify(performancesMap[school.id]),
-        };
+  const schoolToPerformancesMap = {};
+  performances.forEach(performance => {
+    if (schoolIdSet.has(performance.school_id)) {
+      if (performances.school_id in schoolToPerformancesMap) {
+        schoolToPerformancesMap[performance.school_id].push(performance);
+      } else {
+        schoolToPerformancesMap[performance.school_id] = [performance];
+      }
+    }
+  });
+
+  const mailerPromises = [];
+
+  for (const school in schoolToPerformancesMap) {
+    const schoolPerformances = schoolToPerformancesMap[school];
+    if (schoolPerformances && schoolPerformances.length > 0) {
+      // TODO: Figure out which fields to remove before sending!
+      const csv = json2csvParser.parse(schoolPerformances);
+      const mailData = {
+        from: process.env.FEEDBACK_EMAIL_FROM,
+        //TODO: switch back
+        to: 'ericfeng610@gmail.com',
+        // to: schoolPerformances[0].school.email,
+        subject: `Feedback for ${schoolPerformances[0].school.school_name}`,
+        //TODO: format the response with HTML
+        text: 'Please see the attachment for feedback!',
+        html: '<p>Please see the attachment for feedback!</p>',
+        attachments: [
+          {
+            filename: `${schoolPerformances[0].school.school_name}-feedback.csv`,
+            content: csv,
+          },
+        ],
+      };
 
         // Send all performance data for the school
         mailerPromises.push(transporter.sendMail(mailData));
       }
-    });
+    }
 
     await Promise.all(mailerPromises).catch(() => {
       return res.status(400).json({ error: 'Could not send email.' });

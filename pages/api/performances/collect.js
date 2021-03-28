@@ -69,6 +69,7 @@ export const getPerformances = async filter => {
       school: {
         select: {
           school_name: true,
+          email: true,
         },
       },
       adjudications: true,
