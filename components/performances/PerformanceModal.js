@@ -52,9 +52,12 @@ export default function PerformanceModal({
       dancersString,
       choreographersString,
       school: school.value,
-      competitionLevel: competitionLevel.value,
-      danceStyle: danceStyle.value,
-      danceSize: danceSize.value,
+      competitionLevel: competitionLevel.label,
+      competitionLevelID: competitionLevel.value,
+      danceStyle: danceStyle.label,
+      danceStyleID: danceStyle.value,
+      danceSize: danceSize.label,
+      danceSizeID: danceSize.value,
     });
 
     setPerformanceToEdit(null);
@@ -77,9 +80,12 @@ export default function PerformanceModal({
           choreographers: choreographersString
             .split(',')
             .map(choreographer => choreographer.trim()),
-          competitionLevel: competitionLevel.value,
-          danceSize: danceSize.value,
-          danceStyle: danceStyle.value,
+          competitionLevel: competitionLevel.label,
+          competitionLevelID: competitionLevel.value,
+          danceSize: danceSize.label,
+          danceSizeID: danceSize.value,
+          danceStyle: danceStyle.label,
+          danceStyleID: danceStyle.value,
           danceTitle,
           eventID: EVENT_ID,
           schoolID: school.value,
@@ -106,16 +112,19 @@ export default function PerformanceModal({
         schoolName,
         schoolId,
         performanceLevel,
+        performanceLevelID,
         danceStyle,
+        danceStyleID,
         danceSize,
+        danceSizeID,
       } = performanceToEdit;
       setDanceTitle(danceTitle);
       setDancersString(performers.join(', '));
       setChoreographersString(choreographers.join(', '));
       setSchool({ label: schoolName, value: schoolId });
-      setCompetitionLevel({ label: performanceLevel, value: performanceLevel });
-      setDanceStyle({ label: danceStyle, value: danceStyle });
-      setDanceSize({ label: danceSize, value: danceSize });
+      setCompetitionLevel({ label: performanceLevel, value: performanceLevelID });
+      setDanceStyle({ label: danceStyle, value: danceStyleID });
+      setDanceSize({ label: danceSize, value: danceSizeID });
     } else {
       clearFields();
     }
@@ -133,10 +142,6 @@ export default function PerformanceModal({
       onSubmit={performanceToEdit !== null ? updatePerformance : onSubmit}
     >
       <div className={styles.modal}>
-        <div>
-          <h2>Entry ID</h2>
-          <Input className={styles.modal__entryId} placeholder="##" disabled />
-        </div>
         <div>
           <h2>Dance Title</h2>
           <Input

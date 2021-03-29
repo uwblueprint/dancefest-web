@@ -69,6 +69,7 @@ export const getPerformances = async filter => {
             user_id,
           };
         }),
+        adjudications,
         totalAdjudications: (JSON.parse(judgesString) || []).filter(judge => judge !== '').length,
         completedAdjudications: adjudications.length,
         artisticScore: calculateAverageScore(adjudications.map(a => a.artistic_mark)),

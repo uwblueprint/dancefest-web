@@ -164,8 +164,7 @@ export default function Setting() {
       });
 
       setValueToDelete(null);
-    } catch (err) {
-      console.log(err.error);
+    } catch {
       setDeleteValueError(true);
     }
 

@@ -11,7 +11,7 @@ export default async (req, res) => {
     return res.status(401).end();
   }
 
-  const { eventID } = req.body;
+  const { eventID } = req.query;
 
   if (!eventID) {
     return res.status(400).json({

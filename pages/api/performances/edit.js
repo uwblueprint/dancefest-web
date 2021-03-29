@@ -44,8 +44,6 @@ export default async (req, res) => {
     !danceSize ||
     !danceStyle ||
     !danceTitle ||
-    !performanceLink ||
-    !audioRecordingLink ||
     !eventID ||
     !schoolID
   ) {
