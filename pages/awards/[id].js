@@ -15,12 +15,10 @@ import styles from '@styles/pages/AwardDetails.module.scss';
 export default function DetailsRoute({ award }) {
   console.log('award is');
   console.log(award);
-  return award.type === 'SPECIAL' ? (
-    <AwardDetails award={award} />
-  ) : award.type === 'DANCE_ARTISTRY' ? (
-    <AwardDetails award={award} />
+  return award.type === 'SCORE_BASED' && !award.is_finalized ? (
+    <ScoreBasedAwards award={award} />
   ) : (
-    <ScoreBasedAwards />
+    <AwardDetails award={award} />
   );
 }
 
@@ -37,7 +35,6 @@ function AwardDetails({ award }) {
   const handleTabClick = () => {};
 
   useEffect(() => {
-    setIsAwardFinalized(award.is_finalized);
     if (award.is_finalized) {
       setIsAwardFinalized(true);
       award.awards_performances = award.awards_performances.filter(
@@ -45,6 +42,12 @@ function AwardDetails({ award }) {
       );
     }
   }, []);
+
+  useEffect(() => {
+    if (isAwardFinalized) {
+      // TODO: Change awards displayed to only finalized award
+    }
+  }, [isAwardFinalized]);
 
   useEffect(() => {
     // Make sure that the index is in bounds and not -1
@@ -226,7 +229,7 @@ const JudgeFeedback = ({ feedback, finalizeAward, unfinalizeAward, isAwardFinali
             </Button>
           ) : isAwardFinalized ? (
             <Button variant="contained" onClick={() => unfinalizeAward(feedback.id)}>
-              Unfinalize
+              Remove Winner
             </Button>
           ) : (
             <Button variant="contained" onClick={() => finalizeAward(feedback.id)}>

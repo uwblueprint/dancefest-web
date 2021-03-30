@@ -300,9 +300,10 @@ export default function Awards() {
                   filters={filters}
                   pageNumber={pageNumber}
                   setPageCount={setPageCount}
+                  clickable
                 />
               }
-              secondTabContent={<FinalizedTable finalizedAwards={finalizedAwards} />}
+              secondTabContent={<FinalizedTable finalizedAwards={finalizedAwards} clickable />}
             />
           </div>
         ) : (
