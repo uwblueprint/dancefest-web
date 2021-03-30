@@ -17,6 +17,7 @@ export default function Table({
   emptyComponent,
   hiddenColumns = [],
   onRowClick = () => {},
+  clickable,
 }) {
   const {
     getTableBodyProps,
@@ -119,8 +120,18 @@ export default function Table({
           <tbody {...getTableBodyProps()}>
             {(paginate ? page : rows).map((row, i) => {
               prepareRow(row);
-              return (
+              return clickable ? (
                 <tr key={i} {...row.getRowProps()} onClick={handleRowClick(row)}>
+                  {row.cells.map((cell, i) => {
+                    return (
+                      <td key={i} {...cell.getCellProps()}>
+                        {cell.render('Cell')}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ) : (
+                <tr key={i} {...row.getRowProps()}>
                   {row.cells.map((cell, i) => {
                     return (
                       <td key={i} {...cell.getCellProps()}>
