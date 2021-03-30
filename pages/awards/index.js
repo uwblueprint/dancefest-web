@@ -6,14 +6,14 @@ import Loader from 'react-loader-spinner'; // Spinning loader
 import Layout from '@components/Layout'; // Layout wrapper
 import Navigation from '@containers/Navigation'; // Navigation state
 
+import { formatDropdownOptions } from '@components/Dropdown'; // Format dropdown options util
 import AwardModal from '@components/awards/AwardModal';
 import Button from '@components/Button'; // Button
 import Title from '@components/Title'; // Title
 import Input from '@components/Input'; // Input
 import Tabs from '@components/Tabs'; // Tabs
-import FilterDropdown from '@components/FilterDropdown'; // Filter Dropdown
+import FilterDropdown, { formatFilterDropdownOptions } from '@components/FilterDropdown'; // Filter Dropdown
 import Table from '@components/Table'; // Table
-import Pill from '@components/Pill'; // Pill
 import Pagination from '@components/Pagination'; // Pagination
 import BackArrow from '@assets/back-arrow.svg'; // Back arrow icon
 import Search from '@assets/search.svg'; // Search icon
@@ -31,36 +31,52 @@ const getActiveFilters = options => {
 };
 
 // Remove key from object (returns new object)
-const removeKeyFromObject = (object, key) => {
-  // eslint-disable-next-line no-unused-vars
-  const { [key]: _, ...rest } = object;
-  return rest;
-};
+// const removeKeyFromObject = (object, key) => {
+//   // eslint-disable-next-line no-unused-vars
+//   const { [key]: _, ...rest } = object;
+//   return rest;
+// };
+
+const awardOptions = [
+  {
+    value: 'SCORE_BASED',
+    label: 'Score Based',
+  },
+  {
+    value: 'DANCE_ARTISTRY',
+    label: 'Dance Artistry',
+  },
+];
 
 // Page: Awards
 export default function Awards() {
-  const router = useRouter();
-  const { event } = Navigation.useContainer();
+  const router = useRouter(); // collect router
+  const { event } = Navigation.useContainer(); // get event from global state
 
+  // Modal
   const [modalOpen, setModalOpen] = useState(false);
+
+  // Options
+  // Filter dropdown options
+  const [performanceLevelFilters, setPerformanceLevelFilters] = useState({});
+  const [danceSizeFilters, setDanceSizeFilters] = useState({});
+
+  // Modal dropdown options
+  const [performanceLevelDropdownOptions, setPerformanceLevelDropdownOptions] = useState([]);
+  const [danceSizeDropdownOptions, setDanceSizeDropdownOptions] = useState([]);
+  const [awardTypeDropdownOptions] = useState(awardOptions);
+
+  // All Filter
   const [showFilters, setShowFilters] = useState(false);
   const [query, setQuery] = useState('');
-  const [danceTypeOptions, setDanceTypeOptions] = useState({});
-  // All Filter
   const [filters, setFilters] = useState([]);
   // Pagination
   const [pageNumber, setPageNumber] = useState(0);
   const [pageCount, setPageCount] = useState(0);
 
-  // Award Creation details
-  const [, setAwardTitle] = useState('');
-
-  // Award types, hardcoded for now
-  const [awardTypeOptions, setAwardTypeOptions] = useState({});
-  // Store response
+  // API response
   const [awardData, setAwardData] = useState();
-
-  // Award Nominations, Finalized
+  // Award Nominations, Finalized data
   const [nominatedAwards, setNominatedAwards] = useState([]);
   const [finalizedAwards, setFinalizedAwards] = useState([]);
 
@@ -76,55 +92,101 @@ export default function Awards() {
   // Update table filters
   useEffect(() => {
     const newFilters = [];
-    const awardTypeFilters = getActiveFilters(awardTypeOptions);
-    const danceTypeFilters = getActiveFilters(danceTypeOptions);
+    const activeSizeFilters = getActiveFilters(danceSizeFilters);
+    const activePerfFilters = getActiveFilters(performanceLevelFilters);
+
     if (query) {
       newFilters.push({
         id: 'title',
         value: query,
       });
     }
-    if (awardTypeFilters.length > 0) {
+    if (activeSizeFilters.length > 0) {
       newFilters.push({
         id: 'award_type',
-        value: awardTypeFilters,
+        value: activeSizeFilters,
       });
     }
-    if (danceTypeFilters.length > 0) {
+    if (activePerfFilters.length > 0) {
       newFilters.push({
         id: 'dance_type',
-        value: danceTypeFilters,
+        value: activePerfFilters,
       });
     }
 
     setFilters(newFilters);
     setPageNumber(0);
-  }, [query, awardTypeOptions, danceTypeOptions]);
+  }, [query, danceSizeFilters, performanceLevelFilters]);
 
   // Render filter pills
-  const renderActiveFilters = () => {
-    let elements = [];
-    for (const { id, value: activeFilters } of filters) {
-      switch (id) {
-        case 'award_type':
-          elements = [
-            ...elements,
-            ...activeFilters.map((f, i) => (
-              <Pill
-                key={i}
-                value={f}
-                onDelete={() => setAwardTypeOptions(removeKeyFromObject(awardTypeOptions, f))}
-              />
-            )),
-          ];
-          break;
-      }
-    }
+  // const renderActiveFilters = () => {
+  //   let elements = [];
+  //   for (const { id, value: activeFilters } of filters) {
+  //     switch (id) {
+  //       case 'award_type':
+  //         elements = [
+  //           ...elements,
+  //           ...activeFilters.map((f, i) => (
+  //             <Pill
+  //               key={i}
+  //               value={f}
+  //               onDelete={() => setAwardTypeOptions(removeKeyFromObject(awardTypeOptions, f))}
+  //             />
+  //           )),
+  //         ];
+  //         break;
+  //     }
+  //   }
 
-    return elements;
+  //   return elements;
+  // };
+
+  const getSettings = async () => {
+    try {
+      const response = await axios({
+        method: 'GET',
+        url: '/api/settings/collect',
+      });
+      const settings = response.data;
+
+      const performanceLevelSettings = settings.filter(
+        setting => setting.type === 'COMPETITION_LEVEL'
+      );
+      const danceSizeSettings = settings.filter(setting => setting.type === 'DANCE_SIZE');
+
+      const formatOptionsFields = {
+        value: 'id',
+        label: 'value',
+      };
+
+      // Modal dropdown options
+      setPerformanceLevelDropdownOptions(
+        formatDropdownOptions(performanceLevelSettings, formatOptionsFields)
+      );
+      setDanceSizeDropdownOptions(formatDropdownOptions(danceSizeSettings, formatOptionsFields));
+
+      // Filters
+      const initialPerformanceLevelFilters = formatFilterDropdownOptions(
+        performanceLevelSettings,
+        formatOptionsFields
+      );
+      const initialDanceSizeFilters = formatFilterDropdownOptions(
+        danceSizeSettings,
+        formatOptionsFields
+      );
+
+      setPerformanceLevelFilters(initialPerformanceLevelFilters);
+      setDanceSizeFilters(initialDanceSizeFilters);
+    } catch {
+      // empty catch block
+    }
   };
 
+  // Collect all awards
   async function getAwards() {
+    // Clear existing finalized and nominated awards
+    setFinalizedAwards([]);
+    setNominatedAwards([]);
     try {
       const resp = await axios({
         method: 'POST',
@@ -133,6 +195,7 @@ export default function Awards() {
           eventID: event,
         },
       });
+      console.log(resp.data);
       setAwardData(resp.data);
     } catch (err) {
       // Empty catch block
@@ -141,10 +204,12 @@ export default function Awards() {
 
   useEffect(() => {
     getAwards();
+    getSettings();
   }, [event]);
 
   // Clean up API Response
   useEffect(() => {
+    console.log('Here');
     if (awardData) {
       awardData.forEach(award => {
         // Award Type
@@ -172,56 +237,37 @@ export default function Awards() {
     }
   }, [awardData]);
 
-  useEffect(() => {
-    async function nominate() {
-      try {
-        const resp = await axios({
-          method: 'POST',
-          url: '/api/performances/nominate',
-          data: {
-            performanceID: 2,
-            awardIDs: [4],
-          },
-        });
-        console.log('resp ' + resp);
-      } catch (err) {
-        // Empty catch block
-        console.log('Something went wrong ' + err);
-      }
+  const createAward = async (
+    awardTitle,
+    awardType,
+    danceSizeOption = null,
+    performanceLevelOption = null
+  ) => {
+    console.log(awardTitle, awardType, danceSizeOption, performanceLevelOption);
+    setLoading(true);
+    try {
+      const resp = await axios({
+        url: '/api/awards/create',
+        method: 'POST',
+        data: {
+          title: awardTitle,
+          type: awardType,
+          eventID: event,
+          settingIDs:
+            [] &&
+            ([danceSizeOption, performanceLevelOption] || [danceSizeOption] || [
+                performanceLevelOption,
+              ]),
+        },
+      });
+      console.log(resp.data);
+    } catch (err) {
+      // Empty catch block
+      console.log('Error occured', err);
     }
-
-    async function finalize() {
-      try {
-        const resp = await axios({
-          method: 'PUT',
-          url: '/api/awards/finalize',
-          data: {
-            awardID: 1,
-            performanceID: 4,
-          },
-        });
-        console.log('resp ' + resp);
-      } catch (err) {
-        // Empty catch block
-        console.log('Something went wrong ' + err);
-      }
-    }
-
-    async function createAward(title) {
-      try {
-        await axios({
-          url: '/api/awards/create',
-          method: 'POST',
-          data: {
-            title: title,
-          },
-        });
-      } catch (err) {
-        // Empty catch block
-        console.log('Error occured', err);
-      }
-    }
-  }, []);
+    await getAwards();
+    setLoading(false);
+  };
 
   return (
     <Layout>
@@ -274,19 +320,19 @@ export default function Awards() {
           <div className={styles.performances__filters}>
             <div className={styles.performances__filters__buttons}>
               <FilterDropdown
-                buttonText="Award Type"
-                options={awardTypeOptions}
-                setOptions={setAwardTypeOptions}
+                buttonText="Dance Size"
+                options={danceSizeFilters}
+                setOptions={setDanceSizeFilters}
               />
               <FilterDropdown
-                buttonText="Dance Type"
-                options={danceTypeOptions}
-                setOptions={setDanceTypeOptions}
+                buttonText="Performance Level"
+                options={performanceLevelFilters}
+                setOptions={setPerformanceLevelFilters}
               />
             </div>
-            <div className={styles.performances__filters__appliedFilters}>
+            {/* <div className={styles.performances__filters__appliedFilters}>
               {renderActiveFilters()}
-            </div>
+            </div> */}
           </div>
         )}
         {!loading ? (
@@ -318,8 +364,10 @@ export default function Awards() {
         mode="new"
         open={modalOpen}
         setOpen={setModalOpen}
-        setAwardTitle={setAwardTitle}
-        submitAward={() => {}}
+        danceSizeOptions={danceSizeDropdownOptions}
+        performanceLevelOptions={performanceLevelDropdownOptions}
+        awardTypeOptions={awardTypeDropdownOptions}
+        createAward={createAward}
       />
     </Layout>
   );

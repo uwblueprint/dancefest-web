@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from 'react'; // React
-import PropTypes from 'prop-types'; // PropTypes
-import axios from 'axios'; // axios
+import React, { useState } from 'react'; // React
 
 import Input from '@components/Input'; // Input
 import Modal from '@components/Modal'; // Modal
@@ -8,9 +6,35 @@ import Dropdown from '@components/Dropdown'; // Dropdown
 import styles from '@styles/components/awards/AwardModal.module.scss'; // Component styles
 
 // Create/Edit Performance Modal
-export default function AwardModal({ mode, open, setOpen, setAwardTitle, submitAward }) {
+export default function AwardModal({
+  mode,
+  open,
+  setOpen,
+  danceSizeOptions,
+  awardTypeOptions,
+  performanceLevelOptions,
+  createAward,
+}) {
+  const [awardTitle, setAwardTitle] = useState('');
+  const [awardType, setAwardType] = useState(null);
+  const [danceSize, setDanceSize] = useState(null);
+  const [performanceLevel, setPerformanceLevel] = useState(null);
+
   const handleOnChange = e => {
     setAwardTitle(e.target.value);
+  };
+
+  const discardChanges = () => {
+    setAwardTitle('');
+    setAwardType(null);
+    setDanceSize(null);
+    setPerformanceLevel(null);
+    setOpen(false);
+  };
+
+  const onSubmit = async () => {
+    await createAward(awardTitle, awardType.value, danceSize.value, performanceLevel.value);
+    setOpen(false);
   };
 
   return (
@@ -20,9 +44,9 @@ export default function AwardModal({ mode, open, setOpen, setAwardTitle, submitA
       open={open}
       setModalOpen={setOpen}
       cancelText="Discard"
-      submitText="Add Award"
-      onCancel={() => setOpen(false)}
-      onSubmit={submitAward}
+      submitText={mode === 'edit' ? 'Confirm Edit' : 'Add Award'}
+      onCancel={discardChanges}
+      onSubmit={onSubmit}
     >
       <div className={styles.modal}>
         <div>
@@ -30,19 +54,34 @@ export default function AwardModal({ mode, open, setOpen, setAwardTitle, submitA
           <Input className={styles.modal__entryId} placeholder="Title" onChange={handleOnChange} />
         </div>
         <div>
-          <h2>Nominated Dance</h2>
-          <h3>If the award is to be given to a performance enter their entry ID here:</h3>
-          <Input className={styles.modal__entryId} placeholder="Entry ID" />
+          <h2>Elligible dance categories</h2>
+          <h3>
+            Select categories that apply to the potential winners of this award. (Selecting no
+            categories will mean that all performances are elligible for this award).
+          </h3>
+          <Dropdown
+            className={styles.modal__dropdown}
+            placeholder="Dance Size"
+            options={danceSizeOptions}
+            onChange={size => setDanceSize(size)}
+          />
+        </div>
+        <div>
+          <Dropdown
+            className={styles.modal__dropdown}
+            placeholder="Performance Level"
+            options={performanceLevelOptions}
+            onChange={level => setPerformanceLevel(level)}
+          />
         </div>
         <div>
           <h2>Award Type*</h2>
-          <Dropdown className={styles.modal__dropdown} placeholder="Award Type" />
-        </div>
-        <div>
-          <h2>Nominated Dancer(s)</h2>
-          <h3>If the award is to be given to a specific student enter their name here:</h3>
-          <Input placeholder="names, names, names" />
-          <h3>Separated by comma (ie: John Smith, Jane Doe...)</h3>
+          <Dropdown
+            className={styles.modal__dropdown}
+            placeholder="Award Type"
+            options={awardTypeOptions}
+            onChange={type => setAwardType(type)}
+          />
         </div>
       </div>
     </Modal>

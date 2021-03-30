@@ -82,7 +82,7 @@ export default function Performances({ award }) {
 
   async function nominate() {
     try {
-      const resp = await axios({
+      await axios({
         method: 'POST',
         url: '/api/performances/nominate',
         data: {
@@ -90,7 +90,6 @@ export default function Performances({ award }) {
           awardIDs: [award.id],
         },
       });
-      console.log('resp ' + resp);
     } catch (err) {
       // Empty catch block
       console.log(err);
@@ -99,7 +98,7 @@ export default function Performances({ award }) {
 
   async function finalizeAward() {
     try {
-      const resp = await axios({
+      await axios({
         method: 'POST',
         url: '/api/awards/finalize',
         data: {
@@ -107,8 +106,6 @@ export default function Performances({ award }) {
           performanceID: performanceToFinalize,
         },
       });
-      console.log('resp ');
-      console.log(resp);
 
       router.push('/awards');
     } catch (err) {
@@ -186,7 +183,9 @@ export default function Performances({ award }) {
         onCancel={() => setConfirmationModalOpen(false)}
         onSubmit={() => {
           nominate(); // TODO: this is a janky move - maybe handle it better on the backend?
-          finalizeAward();
+          setTimeout(() => {
+            finalizeAward();
+          }, 500);
           setPerformanceToFinalize(-1);
         }}
       >
