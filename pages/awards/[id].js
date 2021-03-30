@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react'; // React
 import axios from 'axios'; // Axios
+import { useRouter } from 'next/router'; // Collect Router
 import Loader from 'react-loader-spinner'; // Spinning loader
 import Layout from '@components/Layout'; // Layout wrapper
 import Button from '@components/Button'; // Button Component
 import ScoreBasedAwards from '@components/awards/ScoreBasedAwards'; // Score Based Awards View
 import { getSession } from 'next-auth/client'; // Session handling
 import { getAward } from 'pages/api/awards/get'; // Helper method to get award details by ID
+import Modal from '@components/Modal.js'; // Modal component
 
 import Title from '@components/Title'; // Title
 import DancerRedJump from '@assets/dancer-red-jump.svg'; // Jumping Dancer SVG
-import PlayIcon from '@assets/play.svg';
+import PlayIcon from '@assets/play.svg'; // Play icon
 import styles from '@styles/pages/AwardDetails.module.scss';
 
 export default function DetailsRoute({ award }) {
@@ -32,7 +34,11 @@ function AwardDetails({ award }) {
 
   const [loading, setLoading] = useState(false);
 
-  const handleTabClick = () => {};
+  const router = useRouter();
+
+  // Confirmation Modal
+  const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
+  const [performanceToFinalize, setPerformanceToFinalize] = useState(-1);
 
   useEffect(() => {
     if (award.is_finalized) {
@@ -42,12 +48,6 @@ function AwardDetails({ award }) {
       );
     }
   }, []);
-
-  useEffect(() => {
-    if (isAwardFinalized) {
-      // TODO: Change awards displayed to only finalized award
-    }
-  }, [isAwardFinalized]);
 
   useEffect(() => {
     // Make sure that the index is in bounds and not -1
@@ -61,44 +61,43 @@ function AwardDetails({ award }) {
     }
   }, [selectedTab]);
 
-  async function finalizeAward(performance_id) {
+  async function finalizeAward() {
     setLoading(true);
     setIsAwardFinalized(true);
     try {
-      const resp = await axios({
+      await axios({
         method: 'PUT',
         url: '/api/awards/finalize',
         data: {
           awardID: award.id,
-          performanceID: performance_id,
+          performanceID: performanceToFinalize,
         },
       });
-      console.log('resp ');
-      console.log(resp);
-    } catch (err) {
+      // Go back to awards
+      router.push('/awards');
+    } catch {
       // Empty catch block
-      console.log('Something went wrong ' + err);
     }
     setLoading(false);
   }
 
-  async function unfinalizeAward(performance_id) {
+  async function unfinalizeAward() {
     setLoading(true);
     setIsAwardFinalized(false);
+    console.log(performanceToFinalize);
     try {
-      const resp = await axios({
+      await axios({
         method: 'PUT',
         url: '/api/awards/unfinalize',
         data: {
           awardID: award.id,
-          performanceID: performance_id,
+          performanceID: performanceToFinalize,
         },
       });
-      console.log('resp ');
-      console.log(resp);
-    } catch (err) {
+      // Go back to awards
+      router.push('/awards');
+    } catch {
       // Empty catch block
-      console.log('Something went wrong ' + err);
     }
     setLoading(false);
   }
@@ -132,7 +131,7 @@ function AwardDetails({ award }) {
                 selected={selectedTab === index}
                 setSelectedTab={setSelectedTab}
                 tabIndex={index}
-                handleClick={handleTabClick}
+                handleClick={() => {}}
                 nominations={awards_performance.nominator.name}
                 key={index}
               >
@@ -150,9 +149,9 @@ function AwardDetails({ award }) {
             ) : feedbackAvailable ? (
               <JudgeFeedback
                 feedback={feedback}
-                finalizeAward={finalizeAward}
-                unfinalizeAward={unfinalizeAward}
+                setPerformanceToFinalize={setPerformanceToFinalize}
                 isAwardFinalized={isAwardFinalized}
+                setConfirmationModalOpen={setConfirmationModalOpen}
                 loading={loading}
               />
             ) : (
@@ -161,6 +160,27 @@ function AwardDetails({ award }) {
           </div>
         </div>
       </div>
+      <Modal
+        containerClassName={styles.confirmation__modal}
+        title={isAwardFinalized ? `Remove Winner?` : `Select Winner?`}
+        open={confirmationModalOpen}
+        cancelText="Cancel"
+        submitText="Confirm"
+        setModalOpen={setConfirmationModalOpen}
+        onCancel={() => setConfirmationModalOpen(false)}
+        onSubmit={() => {
+          isAwardFinalized ? unfinalizeAward() : finalizeAward();
+          setPerformanceToFinalize(-1);
+        }}
+      >
+        {loading ? (
+          <Loader type="Oval" color="#6B778C" height={40} width={40} />
+        ) : isAwardFinalized ? (
+          <p>This award will now be shown in “Nominations” for you to select a new winner.</p>
+        ) : (
+          <p>This award will now be shown in the “Finalized” tab.</p>
+        )}
+      </Modal>
     </Layout>
   );
 }
@@ -215,7 +235,13 @@ const AwardSummary = ({ type, nominations }) => {
   );
 };
 
-const JudgeFeedback = ({ feedback, finalizeAward, unfinalizeAward, isAwardFinalized, loading }) => {
+const JudgeFeedback = ({
+  feedback,
+  setConfirmationModalOpen,
+  setPerformanceToFinalize,
+  isAwardFinalized,
+  loading,
+}) => {
   return (
     <div className={styles.judge__feedback_container}>
       <div className={styles.judge__feedback_header}>
@@ -228,11 +254,23 @@ const JudgeFeedback = ({ feedback, finalizeAward, unfinalizeAward, isAwardFinali
               </span>
             </Button>
           ) : isAwardFinalized ? (
-            <Button variant="contained" onClick={() => unfinalizeAward(feedback.id)}>
+            <Button
+              variant="contained"
+              onClick={() => {
+                setConfirmationModalOpen(true);
+                setPerformanceToFinalize(feedback.id);
+              }}
+            >
               Remove Winner
             </Button>
           ) : (
-            <Button variant="contained" onClick={() => finalizeAward(feedback.id)}>
+            <Button
+              variant="contained"
+              onClick={() => {
+                setConfirmationModalOpen(true);
+                setPerformanceToFinalize(feedback.id);
+              }}
+            >
               Finalize
             </Button>
           )}
