@@ -229,7 +229,11 @@ export default function Awards() {
           });
           setFinalizedAwards(prevFinalized => [...prevFinalized, award]);
         } else {
-          award.nominations = award.performances.length;
+          if (award.type === 'Score Based') {
+            award.nominations = 'N/A';
+          } else {
+            award.nominations = award.performances.length;
+          }
           setNominatedAwards(prevNominated => [...prevNominated, award]);
         }
       });

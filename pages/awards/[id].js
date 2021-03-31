@@ -63,7 +63,6 @@ function AwardDetails({ award }) {
 
   async function finalizeAward() {
     setLoading(true);
-    setIsAwardFinalized(true);
     try {
       await axios({
         method: 'PUT',
@@ -83,7 +82,6 @@ function AwardDetails({ award }) {
 
   async function unfinalizeAward() {
     setLoading(true);
-    setIsAwardFinalized(false);
     console.log(performanceToFinalize);
     try {
       await axios({

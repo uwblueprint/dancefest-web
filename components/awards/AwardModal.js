@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; // React
+import React, { useEffect, useState } from 'react'; // React
 
 import Input from '@components/Input'; // Input
 import Modal from '@components/Modal'; // Modal
@@ -19,10 +19,19 @@ export default function AwardModal({
   const [awardType, setAwardType] = useState(null);
   const [danceSize, setDanceSize] = useState(null);
   const [performanceLevel, setPerformanceLevel] = useState(null);
+  const [disableButton, setDisableButton] = useState(true);
 
   const handleOnChange = e => {
     setAwardTitle(e.target.value);
   };
+
+  useEffect(() => {
+    if (awardTitle !== '' && awardType !== null) {
+      setDisableButton(false);
+    } else {
+      setDisableButton(true);
+    }
+  }, [awardTitle, awardType]);
 
   const discardChanges = () => {
     setAwardTitle('');
@@ -47,6 +56,7 @@ export default function AwardModal({
       submitText={mode === 'edit' ? 'Confirm Edit' : 'Add Award'}
       onCancel={discardChanges}
       onSubmit={onSubmit}
+      disableSubmitButton={disableButton}
     >
       <div className={styles.modal}>
         <div>
