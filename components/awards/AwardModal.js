@@ -42,7 +42,12 @@ export default function AwardModal({
   };
 
   const onSubmit = async () => {
-    await createAward(awardTitle, awardType.value, danceSize.value, performanceLevel.value);
+    let sizeSelection = null;
+    let perfLevelSelection = null;
+    if (danceSize !== null) sizeSelection = danceSize.value;
+    if (performanceLevel !== null) perfLevelSelection = performanceLevel.value;
+
+    await createAward(awardTitle, awardType.value, sizeSelection, perfLevelSelection);
     setOpen(false);
   };
 

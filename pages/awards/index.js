@@ -23,7 +23,7 @@ import DancerRedJump from '@assets/dancer-red-jump.svg'; // Jumping Dancer SVG
 import DancerYellowBlue from '@assets/dancer-yellow-blue.svg'; // Jumping Dancer SVG
 import styles from '@styles/pages/Awards.module.scss'; // Page styles
 
-const PAGE_SIZE = 6; // Rows per page
+const PAGE_SIZE = 15; // Rows per page
 
 // Get the active filters (list of column accessors) from an object of filter dropdown values
 const getActiveFilters = options => {
@@ -190,12 +190,9 @@ export default function Awards() {
     try {
       const resp = await axios({
         method: 'POST',
-        url: '/api/awards/collect',
-        data: {
-          eventID: event,
-        },
+        url: `/api/awards/collect?eventID=${event}`,
       });
-      console.log(resp.data);
+
       setAwardData(resp.data);
     } catch (err) {
       // Empty catch block
@@ -209,7 +206,6 @@ export default function Awards() {
 
   // Clean up API Response
   useEffect(() => {
-    console.log('Here');
     if (awardData) {
       awardData.forEach(award => {
         // Award Type
@@ -247,24 +243,22 @@ export default function Awards() {
     danceSizeOption = null,
     performanceLevelOption = null
   ) => {
-    console.log(awardTitle, awardType, danceSizeOption, performanceLevelOption);
     setLoading(true);
+    const settingIds = [];
+    if (danceSizeOption !== null) settingIds.push(danceSizeOption);
+    if (performanceLevelOption !== null) settingIds.push(performanceLevelOption);
+
     try {
-      const resp = await axios({
+      await axios({
         url: '/api/awards/create',
         method: 'POST',
         data: {
           title: awardTitle,
           type: awardType,
           eventID: event,
-          settingIDs:
-            [] &&
-            ([danceSizeOption, performanceLevelOption] || [danceSizeOption] || [
-                performanceLevelOption,
-              ]),
+          settingIDs: settingIds,
         },
       });
-      console.log(resp.data);
     } catch (err) {
       // Empty catch block
       console.log('Error occured', err);
@@ -400,7 +394,6 @@ const NominationTable = ({ nominatedAwards, ...props }) => {
 
   const goToPerformanceDetails = row => {
     // Go to /performances/[id] page
-    console.log(row);
     router.push(`/awards/${row.original.id}`); // Route to "/performance/:id" page
   };
 
