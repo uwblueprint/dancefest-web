@@ -52,6 +52,7 @@ export const getAward = async filter => {
           users: true,
         },
       },
+      awards_categories: true,
     },
   });
 
@@ -74,5 +75,6 @@ export const getAward = async filter => {
         };
       }
     ),
+    awards_categories: award.awards_categories.map(({ category_id }) => category_id),
   };
 };
