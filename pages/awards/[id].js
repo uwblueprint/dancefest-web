@@ -1,45 +1,110 @@
-import React, { useState } from 'react'; // React
+import React, { useEffect, useState } from 'react'; // React
+import axios from 'axios'; // Axios
+import { useRouter } from 'next/router'; // Collect Router
+import Loader from 'react-loader-spinner'; // Spinning loader
 import Layout from '@components/Layout'; // Layout wrapper
 import Button from '@components/Button'; // Button Component
 import ScoreBasedAwards from '@components/awards/ScoreBasedAwards'; // Score Based Awards View
 import { getSession } from 'next-auth/client'; // Session handling
+import { getAward } from 'pages/api/awards/get'; // Helper method to get award details by ID
+import Modal from '@components/Modal.js'; // Modal component
 
 import Title from '@components/Title'; // Title
 import DancerRedJump from '@assets/dancer-red-jump.svg'; // Jumping Dancer SVG
-import PlayIcon from '@assets/play.svg';
+import PlayIcon from '@assets/play.svg'; // Play icon
 import styles from '@styles/pages/AwardDetails.module.scss';
 
 export default function DetailsRoute({ award }) {
-  return award.type === 'Special Award' ? (
-    <AwardDetails />
-  ) : award.type === 'Dance Artistry' ? (
-    <AwardDetails />
+  return award.type === 'SCORE_BASED' && !award.is_finalized ? (
+    <ScoreBasedAwards award={award} />
   ) : (
-    <ScoreBasedAwards />
+    <AwardDetails award={award} />
   );
 }
 
 // Page: Award Details
-function AwardDetails() {
+function AwardDetails({ award }) {
   const [selectedTab, setSelectedTab] = useState(-1);
   const [showAwardSummary, setShowAwardSummary] = useState(true);
   const [feedbackAvailable, setFeedbackAvailable] = useState(true);
+  const [feedback, setFeedback] = useState({});
+  const [isAwardFinalized, setIsAwardFinalized] = useState(false);
 
-  const handleTabClick = () => {
-    setFeedbackAvailable(!feedbackAvailable); // TODO: Change this!!
-    setShowAwardSummary(false);
-  };
+  const [loading, setLoading] = useState(false);
+
+  const router = useRouter();
+
+  // Confirmation Modal
+  const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
+  const [performanceToFinalize, setPerformanceToFinalize] = useState(-1);
+
+  useEffect(() => {
+    if (award.is_finalized) {
+      setIsAwardFinalized(true);
+      award.awards_performances = award.awards_performances.filter(
+        awards_performance => awards_performance.status === 'FINALIST'
+      );
+    }
+  }, []);
+
+  useEffect(() => {
+    // Make sure that the index is in bounds and not -1
+    if (selectedTab !== -1 && selectedTab < award.awards_performances.length) {
+      setShowAwardSummary(false);
+      setFeedback(award.awards_performances[selectedTab]);
+      setFeedbackAvailable(true);
+    } else if (selectedTab === -1) {
+      setFeedback(false);
+      setShowAwardSummary(true);
+    }
+  }, [selectedTab]);
+
+  async function finalizeAward() {
+    setLoading(true);
+    try {
+      await axios({
+        method: 'PUT',
+        url: '/api/awards/finalize',
+        data: {
+          awardID: award.id,
+          performanceID: performanceToFinalize,
+        },
+      });
+      // Go back to awards
+      router.push('/awards');
+    } catch {
+      // Empty catch block
+    }
+    setLoading(false);
+  }
+
+  async function unfinalizeAward() {
+    setLoading(true);
+    try {
+      await axios({
+        method: 'PUT',
+        url: '/api/awards/unfinalize',
+        data: {
+          awardID: award.id,
+          performanceID: performanceToFinalize,
+        },
+      });
+      // Go back to awards
+      router.push('/awards');
+    } catch {
+      // Empty catch block
+    }
+    setLoading(false);
+  }
 
   return (
     <Layout>
       <div>
         <div>
-          <h2 className={styles.performances_details__eventName}>{`OSSDF2021- Let's Dis-dance`}</h2>
+          <h2 className={styles.performances_details__eventName}>{`Event Title`}</h2>
         </div>
         <div>
-          <Title
-            className={styles.performances__header__pageTitle}
-          >{`Most Inspiring Medium Group Performance Awards`}</Title>
+          <Title className={styles.performances__header__pageTitle}>{award.title}</Title>
         </div>
         <div className={styles.performance_details__content_container}>
           <div className={styles.performance_details__tabs_container}>
@@ -50,41 +115,24 @@ function AwardDetails() {
             >
               <button
                 onClick={() => {
-                  setShowAwardSummary(true);
-                  setFeedbackAvailable(true);
                   setSelectedTab(-1);
                 }}
               >
                 <h3>Award Details</h3>
               </button>
             </div>
-            <Tab
-              selected={selectedTab === 0}
-              setSelectedTab={setSelectedTab}
-              tabIndex={0}
-              handleClick={handleTabClick}
-              nominations={`1/3 Judges`}
-            >
-              You’re The One That I Want
-            </Tab>
-            <Tab
-              selected={selectedTab === 1}
-              setSelectedTab={setSelectedTab}
-              tabIndex={1}
-              handleClick={handleTabClick}
-              nominations={`3/3 Judges`}
-            >
-              You’re The One That I Want
-            </Tab>
-            <Tab
-              selected={selectedTab === 2}
-              setSelectedTab={setSelectedTab}
-              tabIndex={2}
-              handleClick={handleTabClick}
-              nominations={`2/3 Judges`}
-            >
-              You’re The One That I Want
-            </Tab>
+            {award.awards_performances.map((awards_performance, index) => (
+              <Tab
+                selected={selectedTab === index}
+                setSelectedTab={setSelectedTab}
+                tabIndex={index}
+                handleClick={() => {}}
+                nominations={awards_performance.nominator.name}
+                key={index}
+              >
+                {awards_performance.name}
+              </Tab>
+            ))}
           </div>
           <div
             className={`${styles.performance_details__content} ${
@@ -92,15 +140,42 @@ function AwardDetails() {
             }`}
           >
             {showAwardSummary ? (
-              <AwardSummary />
+              <AwardSummary type={award.type} nominations={award.awards_performances.length} />
             ) : feedbackAvailable ? (
-              <JudgeFeedback />
+              <JudgeFeedback
+                feedback={feedback}
+                setPerformanceToFinalize={setPerformanceToFinalize}
+                isAwardFinalized={isAwardFinalized}
+                setConfirmationModalOpen={setConfirmationModalOpen}
+                loading={loading}
+              />
             ) : (
               <EmptyComponent />
             )}
           </div>
         </div>
       </div>
+      <Modal
+        containerClassName={styles.confirmation__modal}
+        title={isAwardFinalized ? `Remove Winner?` : `Select Winner?`}
+        open={confirmationModalOpen}
+        cancelText="Cancel"
+        submitText="Confirm"
+        setModalOpen={setConfirmationModalOpen}
+        onCancel={() => setConfirmationModalOpen(false)}
+        onSubmit={() => {
+          isAwardFinalized ? unfinalizeAward() : finalizeAward();
+          setPerformanceToFinalize(-1);
+        }}
+      >
+        {loading ? (
+          <Loader type="Oval" color="#6B778C" height={40} width={40} />
+        ) : isAwardFinalized ? (
+          <p>This award will now be shown in “Nominations” for you to select a new winner.</p>
+        ) : (
+          <p>This award will now be shown in the “Finalized” tab.</p>
+        )}
+      </Modal>
     </Layout>
   );
 }
@@ -138,45 +213,75 @@ const EmptyComponent = () => {
   );
 };
 
-const AwardSummary = () => {
+const AwardSummary = ({ type, nominations }) => {
   return (
     <div className={styles.award__summary_container}>
       <div className={styles.award__summary}>
         <div>
           <h2>Type</h2>
-          <span>{`Performance`}</span>
+          <span>{type}</span>
         </div>
         <div>
           <h2>No. of Nominations</h2>
-          <span>{`1`}</span>
+          <span>{nominations}</span>
         </div>
       </div>
     </div>
   );
 };
 
-const JudgeFeedback = () => {
+const JudgeFeedback = ({
+  feedback,
+  setConfirmationModalOpen,
+  setPerformanceToFinalize,
+  isAwardFinalized,
+  loading,
+}) => {
   return (
     <div className={styles.judge__feedback_container}>
       <div className={styles.judge__feedback_header}>
-        <h3>{`You’re The One That I Want`}</h3>
+        <h3>{feedback.name}</h3>
         <span>
-          <Button variant="contained" onClick={() => {}}>
-            Finalize
-          </Button>
+          {loading ? (
+            <Button disabled>
+              <span>
+                <Loader type="Oval" color="#fff" height={15} width={15} />
+              </span>
+            </Button>
+          ) : isAwardFinalized ? (
+            <Button
+              variant="contained"
+              onClick={() => {
+                setConfirmationModalOpen(true);
+                setPerformanceToFinalize(feedback.id);
+              }}
+            >
+              Remove Winner
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              onClick={() => {
+                setConfirmationModalOpen(true);
+                setPerformanceToFinalize(feedback.id);
+              }}
+            >
+              Finalize
+            </Button>
+          )}
         </span>
       </div>
 
       <div className={styles.performance_details__score_content}>
         <div className={styles.performance_details__score_card}>
           <div style={{ textAlign: 'center' }}>
-            <h1>{`88`}</h1>
+            <h1>{feedback.technicalScore}</h1>
             <h2>{`Technical`}</h2>
           </div>
         </div>
         <div className={styles.performance_details__score_card}>
           <div style={{ textAlign: 'center' }}>
-            <h1>{`88`}</h1>
+            <h1>{feedback.artisticScore}</h1>
             <h2>{`ARTISTIC`}</h2>
           </div>
         </div>
@@ -184,35 +289,31 @@ const JudgeFeedback = () => {
           className={`${styles.performance_details__score_card} ${styles.performance_details__score_card_cumulative}`}
         >
           <div style={{ textAlign: 'center' }}>
-            <h1>{`88`}</h1>
+            <h1>{feedback.cumulativeScore}</h1>
             <h2>{`CUMULATIVE`}</h2>
           </div>
         </div>
       </div>
-      {/* {judges.map(v => {
-        <IndividualFeedback key={v} />;
-      })} */}
-      <IndividualFeedback />
-      <IndividualFeedback />
-      <IndividualFeedback />
+      {feedback.adjudications.map((adjudication, index) => (
+        <IndividualFeedback feedback={adjudication} key={index} />
+      ))}
     </div>
   );
 };
 
-const IndividualFeedback = () => {
-  const notes =
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
+const IndividualFeedback = ({ feedback }) => {
+  const notes = 'None Entered';
 
   return (
     <div className={styles.individual__feedback_container}>
       <div className={styles.individual__feedback_header}>
-        <h3>{`Judge 1`}</h3>
-        <h2>{`ARTISTIC: 90.9`}</h2>
-        <h2>{`TECHNICAL: 92.5`}</h2>
-        <h2>{`CUMULATIVE: 96.1`}</h2>
+        <h3>{feedback.user.name}</h3>
+        <h2>{`ARTISTIC: ${feedback.artistic_mark}`}</h2>
+        <h2>{`TECHNICAL: ${feedback.technical_mark}`}</h2>
+        <h2>{`CUMULATIVE: ${feedback.cumulative_mark}`}</h2>
       </div>
       <h2>NOTES</h2>
-      <p className={styles.individual__feedback_notes}>{notes}</p>
+      <p className={styles.individual__feedback_notes}>{feedback.notes || notes}</p>
       <div className={styles.judge__feedback_audio_player}>
         <p>{`OSSDF2021_1.mp3`}</p>
         <span>
@@ -240,16 +341,30 @@ export async function getServerSideProps(context) {
     };
   }
 
-  // TODO: Get award details from award ID, parse and pass back details as prop
-
   // Collect eventID from URL params
-  const { id: eventID } = context.params;
+  const { id: awardID } = context.params;
+
+  // TODO: Get award details from award ID, parse and pass back details as prop
+  let award;
+
+  const filter = { id: parseInt(awardID) };
+  award = await getAward(filter);
+
+  if (!award) {
+    return {
+      redirect: {
+        // Redirect user to login page
+        destination: '/awards',
+        permanent: false,
+      },
+    };
+  }
+
+  award = JSON.parse(JSON.stringify(award));
 
   return {
     props: {
-      award: {
-        type: eventID,
-      },
+      award,
     },
   };
 }

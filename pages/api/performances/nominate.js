@@ -88,9 +88,6 @@ export default async (req, res) => {
 
           continue;
         }
-      } else if (award.type === 'SCORE_BASED') {
-        // We should not be able to nominate performances for score based awards
-        continue;
       }
 
       awardPerformanceUpserts.push(

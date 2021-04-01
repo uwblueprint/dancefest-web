@@ -9,8 +9,9 @@ export default function Tabs({
   firstTabContent = null,
   secondTabContent = null,
   onSwitchTab = () => {},
+  selected = 0,
 }) {
-  const [selectedTab, setSelectedTab] = useState(0);
+  const [selectedTab, setSelectedTab] = useState(selected);
 
   return (
     <div className={styles.tabs}>

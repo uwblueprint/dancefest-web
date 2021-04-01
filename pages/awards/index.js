@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react'; // React
+import axios from 'axios';
 import { useRouter } from 'next/router'; // Routing (with buttons)
 import Link from 'next/link'; // Next link
+import Loader from 'react-loader-spinner'; // Spinning loader
 import Layout from '@components/Layout'; // Layout wrapper
 import Navigation from '@containers/Navigation'; // Navigation state
 
+import { formatDropdownOptions } from '@components/Dropdown'; // Format dropdown options util
+import AwardModal from '@components/awards/AwardModal';
 import Button from '@components/Button'; // Button
 import Title from '@components/Title'; // Title
 import Input from '@components/Input'; // Input
 import Tabs from '@components/Tabs'; // Tabs
-import Modal from '@components/Modal'; // Modal
-import Dropdown from '@components/Dropdown'; // Dropdown
-import FilterDropdown from '@components/FilterDropdown'; // Filter Dropdown
+import FilterDropdown, { formatFilterDropdownOptions } from '@components/FilterDropdown'; // Filter Dropdown
 import Table from '@components/Table'; // Table
-import Pill from '@components/Pill'; // Pill
 import Pagination from '@components/Pagination'; // Pagination
 import BackArrow from '@assets/back-arrow.svg'; // Back arrow icon
 import Search from '@assets/search.svg'; // Search icon
@@ -20,12 +21,9 @@ import ChevronDown from '@assets/chevron-down.svg'; // Chevron down icon
 import ChevronDownGrey from '@assets/chevron-down-grey.svg'; // Chevron down grey icon
 import DancerRedJump from '@assets/dancer-red-jump.svg'; // Jumping Dancer SVG
 import DancerYellowBlue from '@assets/dancer-yellow-blue.svg'; // Jumping Dancer SVG
-import styles from '@styles/pages/Performances.module.scss'; // Page styles
+import styles from '@styles/pages/Awards.module.scss'; // Page styles
 
-// Temp constants
-import data, { columns } from '../../data/mockAwards';
-
-const PAGE_SIZE = 6; // Rows per page
+const PAGE_SIZE = 20; // Rows per page
 
 // Get the active filters (list of column accessors) from an object of filter dropdown values
 const getActiveFilters = options => {
@@ -33,32 +31,57 @@ const getActiveFilters = options => {
 };
 
 // Remove key from object (returns new object)
-const removeKeyFromObject = (object, key) => {
-  // eslint-disable-next-line no-unused-vars
-  const { [key]: _, ...rest } = object;
-  return rest;
-};
+// const removeKeyFromObject = (object, key) => {
+//   // eslint-disable-next-line no-unused-vars
+//   const { [key]: _, ...rest } = object;
+//   return rest;
+// };
 
-// Page: Performances
-export default function Performances() {
-  const router = useRouter();
-  const { event } = Navigation.useContainer();
+const awardOptions = [
+  {
+    value: 'SCORE_BASED',
+    label: 'Score Based',
+  },
+  {
+    value: 'DANCE_ARTISTRY',
+    label: 'Dance Artistry',
+  },
+];
 
+// Page: Awards
+export default function Awards() {
+  const router = useRouter(); // collect router
+  const { event } = Navigation.useContainer(); // get event from global state
+
+  // Modal
   const [modalOpen, setModalOpen] = useState(false);
+
+  // Options
+  // Filter dropdown options
+  const [performanceLevelFilters, setPerformanceLevelFilters] = useState({});
+  const [danceSizeFilters, setDanceSizeFilters] = useState({});
+
+  // Modal dropdown options
+  const [performanceLevelDropdownOptions, setPerformanceLevelDropdownOptions] = useState([]);
+  const [danceSizeDropdownOptions, setDanceSizeDropdownOptions] = useState([]);
+  const [awardTypeDropdownOptions] = useState(awardOptions);
+
+  // All Filter
   const [showFilters, setShowFilters] = useState(false);
   const [query, setQuery] = useState('');
-  const [danceTypeOptions, setDanceTypeOptions] = useState({});
-  // All Filter
   const [filters, setFilters] = useState([]);
   // Pagination
   const [pageNumber, setPageNumber] = useState(0);
   const [pageCount, setPageCount] = useState(0);
 
-  // Award Creation details
-  const [, setAwardTitle] = useState('');
+  // API response
+  const [awardData, setAwardData] = useState();
+  // Award Nominations, Finalized data
+  const [nominatedAwards, setNominatedAwards] = useState([]);
+  const [finalizedAwards, setFinalizedAwards] = useState([]);
 
-  // Award types, hardcoded for now
-  const [awardTypeOptions, setAwardTypeOptions] = useState({});
+  // Loading State
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (event === null) {
@@ -69,52 +92,178 @@ export default function Performances() {
   // Update table filters
   useEffect(() => {
     const newFilters = [];
-    const awardTypeFilters = getActiveFilters(awardTypeOptions);
-    const danceTypeFilters = getActiveFilters(danceTypeOptions);
+    const activeSizeFilters = getActiveFilters(danceSizeFilters);
+    const activePerfFilters = getActiveFilters(performanceLevelFilters);
+
     if (query) {
       newFilters.push({
         id: 'title',
         value: query,
       });
     }
-    if (awardTypeFilters.length > 0) {
+    if (activeSizeFilters.length > 0) {
       newFilters.push({
         id: 'award_type',
-        value: awardTypeFilters,
+        value: activeSizeFilters,
       });
     }
-    if (danceTypeFilters.length > 0) {
+    if (activePerfFilters.length > 0) {
       newFilters.push({
         id: 'dance_type',
-        value: danceTypeFilters,
+        value: activePerfFilters,
       });
     }
 
     setFilters(newFilters);
     setPageNumber(0);
-  }, [query, awardTypeOptions, danceTypeOptions]);
+  }, [query, danceSizeFilters, performanceLevelFilters]);
 
   // Render filter pills
-  const renderActiveFilters = () => {
-    let elements = [];
-    for (const { id, value: activeFilters } of filters) {
-      switch (id) {
-        case 'award_type':
-          elements = [
-            ...elements,
-            ...activeFilters.map((f, i) => (
-              <Pill
-                key={i}
-                value={f}
-                onDelete={() => setAwardTypeOptions(removeKeyFromObject(awardTypeOptions, f))}
-              />
-            )),
-          ];
-          break;
-      }
-    }
+  // const renderActiveFilters = () => {
+  //   let elements = [];
+  //   for (const { id, value: activeFilters } of filters) {
+  //     switch (id) {
+  //       case 'award_type':
+  //         elements = [
+  //           ...elements,
+  //           ...activeFilters.map((f, i) => (
+  //             <Pill
+  //               key={i}
+  //               value={f}
+  //               onDelete={() => setAwardTypeOptions(removeKeyFromObject(awardTypeOptions, f))}
+  //             />
+  //           )),
+  //         ];
+  //         break;
+  //     }
+  //   }
 
-    return elements;
+  //   return elements;
+  // };
+
+  const getSettings = async () => {
+    try {
+      const response = await axios({
+        method: 'GET',
+        url: '/api/settings/collect',
+      });
+      const settings = response.data;
+
+      const performanceLevelSettings = settings.filter(
+        setting => setting.type === 'COMPETITION_LEVEL'
+      );
+      const danceSizeSettings = settings.filter(setting => setting.type === 'DANCE_SIZE');
+
+      const formatOptionsFields = {
+        value: 'id',
+        label: 'value',
+      };
+
+      // Modal dropdown options
+      setPerformanceLevelDropdownOptions(
+        formatDropdownOptions(performanceLevelSettings, formatOptionsFields)
+      );
+      setDanceSizeDropdownOptions(formatDropdownOptions(danceSizeSettings, formatOptionsFields));
+
+      // Filters
+      const initialPerformanceLevelFilters = formatFilterDropdownOptions(
+        performanceLevelSettings,
+        formatOptionsFields
+      );
+      const initialDanceSizeFilters = formatFilterDropdownOptions(
+        danceSizeSettings,
+        formatOptionsFields
+      );
+
+      setPerformanceLevelFilters(initialPerformanceLevelFilters);
+      setDanceSizeFilters(initialDanceSizeFilters);
+    } catch {
+      // empty catch block
+    }
+  };
+
+  // Collect all awards
+  async function getAwards() {
+    // Clear existing finalized and nominated awards
+    setFinalizedAwards([]);
+    setNominatedAwards([]);
+    try {
+      const resp = await axios({
+        method: 'POST',
+        url: `/api/awards/collect?eventID=${event}`,
+      });
+
+      setAwardData(resp.data);
+    } catch (err) {
+      // Empty catch block
+    }
+  }
+
+  useEffect(() => {
+    getAwards();
+    getSettings();
+  }, [event]);
+
+  // Clean up API Response
+  useEffect(() => {
+    if (awardData) {
+      awardData.forEach(award => {
+        // Award Type
+        if (award.type === 'SPECIAL') {
+          award.type = 'Special Award';
+        } else if (award.type === 'SCORE_BASED') {
+          award.type = 'Score Based';
+        } else {
+          award.type = 'Dance Artistry';
+        }
+        // Filter based on award status
+        if (award.is_finalized) {
+          award.performances.forEach(perf => {
+            if (perf.status === 'FINALIST') {
+              award.winner = perf.name;
+            }
+          });
+          setFinalizedAwards(prevFinalized => [...prevFinalized, award]);
+        } else {
+          if (award.type === 'Score Based') {
+            award.nominations = 'N/A';
+          } else {
+            award.nominations = award.performances.length;
+          }
+          setNominatedAwards(prevNominated => [...prevNominated, award]);
+        }
+      });
+      setLoading(false);
+    }
+  }, [awardData]);
+
+  const createAward = async (
+    awardTitle,
+    awardType,
+    danceSizeOption = null,
+    performanceLevelOption = null
+  ) => {
+    setLoading(true);
+    const settingIds = [];
+    if (danceSizeOption !== null) settingIds.push(danceSizeOption);
+    if (performanceLevelOption !== null) settingIds.push(performanceLevelOption);
+
+    try {
+      await axios({
+        url: '/api/awards/create',
+        method: 'POST',
+        data: {
+          title: awardTitle,
+          type: awardType,
+          eventID: event,
+          settingIDs: settingIds,
+        },
+      });
+    } catch {
+      // Empty catch block
+    }
+    await getAwards();
+    setLoading(false);
   };
 
   return (
@@ -168,62 +317,64 @@ export default function Performances() {
           <div className={styles.performances__filters}>
             <div className={styles.performances__filters__buttons}>
               <FilterDropdown
-                buttonText="Award Type"
-                options={awardTypeOptions}
-                setOptions={setAwardTypeOptions}
+                buttonText="Dance Size"
+                options={danceSizeFilters}
+                setOptions={setDanceSizeFilters}
               />
               <FilterDropdown
-                buttonText="Dance Type"
-                options={danceTypeOptions}
-                setOptions={setDanceTypeOptions}
+                buttonText="Performance Level"
+                options={performanceLevelFilters}
+                setOptions={setPerformanceLevelFilters}
               />
             </div>
-            <div className={styles.performances__filters__appliedFilters}>
+            {/* <div className={styles.performances__filters__appliedFilters}>
               {renderActiveFilters()}
-            </div>
+            </div> */}
           </div>
         )}
-        <div className={styles.performances__content}>
-          <Tabs
-            firstTabName="Nominations"
-            secondTabName="Finalized"
-            firstTabContent={
-              <NominationTable
-                filters={filters}
-                pageNumber={pageNumber}
-                setPageCount={setPageCount}
-              />
-            }
-            secondTabContent={<FinalizedTable />}
-          />
-        </div>
+        {!loading ? (
+          <div className={styles.performances__content}>
+            <Tabs
+              firstTabName="Nominations"
+              secondTabName="Finalized"
+              firstTabContent={
+                <NominationTable
+                  nominatedAwards={nominatedAwards}
+                  filters={filters}
+                  pageNumber={pageNumber}
+                  setPageCount={setPageCount}
+                  clickable
+                />
+              }
+              secondTabContent={<FinalizedTable finalizedAwards={finalizedAwards} clickable />}
+            />
+          </div>
+        ) : (
+          // All else, if still loading, display loader
+          <div className={styles.awards__loader}>
+            <Loader type="Oval" color="#c90c0f" height={80} width={80} />
+          </div>
+        )}
       </div>
-      <PerformanceModal
+
+      <AwardModal
         mode="new"
         open={modalOpen}
         setOpen={setModalOpen}
-        setAwardTitle={setAwardTitle}
-        submitAward={() => {}}
+        danceSizeOptions={danceSizeDropdownOptions}
+        performanceLevelOptions={performanceLevelDropdownOptions}
+        awardTypeOptions={awardTypeDropdownOptions}
+        createAward={createAward}
       />
     </Layout>
   );
 }
 
 // Entries Table
-const NominationTable = props => {
+const NominationTable = ({ nominatedAwards, ...props }) => {
   const router = useRouter(); // Collect router
 
   const columns = [
-    {
-      Header: 'Edit',
-      accessor: 'edit',
-      // eslint-disable-next-line react/display-name
-      Cell: () => (
-        <div className={styles.entryTable__editCell}>
-          <Button variant="edit" />
-        </div>
-      ),
-    },
     {
       Header: 'Award Title',
       accessor: 'title',
@@ -242,13 +393,13 @@ const NominationTable = props => {
 
   const goToPerformanceDetails = row => {
     // Go to /performances/[id] page
-    router.push(`/awards/${row.original.type}`); // Route to "/performance/:id" page
+    router.push(`/awards/${row.original.id}`); // Route to "/performance/:id" page
   };
 
   return (
     <Table
       columns={columns}
-      data={data}
+      data={nominatedAwards}
       pageSize={PAGE_SIZE}
       emptyComponent={<EmptyTableComponent />}
       onRowClick={goToPerformanceDetails}
@@ -258,51 +409,37 @@ const NominationTable = props => {
 };
 
 // Judging Table
-const FinalizedTable = () => {
-  return (
-    <Table columns={columns} data={[]} filters={[]} emptyComponent={<EmptyTableComponent />} />
-  );
-};
+const FinalizedTable = ({ finalizedAwards, ...props }) => {
+  const router = useRouter(); // Collect router
 
-// Create/Edit Performance Modal
-const PerformanceModal = ({ mode, open, setOpen, setAwardTitle, submitAward }) => {
-  const handleOnChange = e => {
-    setAwardTitle(e.target.value);
+  const columns = [
+    {
+      Header: 'Award Title',
+      accessor: 'title',
+    },
+    {
+      Header: 'Type',
+      accessor: 'type',
+    },
+    {
+      Header: 'Winner',
+      accessor: 'winner',
+    },
+  ];
+
+  const goToPerformanceDetails = row => {
+    router.push(`/awards/${row.original.id}`); // Route to "/performance/:id" page
   };
 
   return (
-    <Modal
-      containerClassName={styles.modal__container}
-      title={mode === 'edit' ? 'Edit Award' : 'New Award'}
-      open={open}
-      setModalOpen={setOpen}
-      cancelText="Discard"
-      submitText="Add Award"
-      onCancel={() => setOpen(false)}
-      onSubmit={submitAward}
-    >
-      <div className={styles.modal}>
-        <div>
-          <h2>Award Title*</h2>
-          <Input className={styles.modal__entryId} placeholder="Title" onChange={handleOnChange} />
-        </div>
-        <div>
-          <h2>Nominated Dance</h2>
-          <h3>If the award is to be given to a performance enter their entry ID here:</h3>
-          <Input className={styles.modal__entryId} placeholder="Entry ID" />
-        </div>
-        <div>
-          <h2>Award Type*</h2>
-          <Dropdown className={styles.modal__dropdown} placeholder="Award Type" />
-        </div>
-        <div>
-          <h2>Nominated Dancer(s)</h2>
-          <h3>If the award is to be given to a specific student enter their name here:</h3>
-          <Input placeholder="names, names, names" />
-          <h3>Separated by comma (ie: John Smith, Jane Doe...)</h3>
-        </div>
-      </div>
-    </Modal>
+    <Table
+      columns={columns}
+      data={finalizedAwards}
+      filters={[]}
+      emptyComponent={<EmptyTableComponent />}
+      onRowClick={goToPerformanceDetails}
+      {...props}
+    />
   );
 };
 
@@ -311,8 +448,8 @@ const EmptyTableComponent = () => {
     <div className={styles.page__performances_list_empty}>
       <img src={DancerYellowBlue} />
       <div>
-        <h2>No Performances Listed</h2>
-        <h3>Create your first performance</h3>
+        <h2>No Awards Listed</h2>
+        <h3>Create an award!</h3>
       </div>
       <img src={DancerRedJump} />
     </div>
