@@ -84,6 +84,7 @@ export default function Performances({ award }) {
         data: {
           performanceID: performanceToFinalize,
           awardIDs: [award.id],
+          eventID: event,
         },
       });
     } catch {
