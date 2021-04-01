@@ -15,8 +15,6 @@ import PlayIcon from '@assets/play.svg'; // Play icon
 import styles from '@styles/pages/AwardDetails.module.scss';
 
 export default function DetailsRoute({ award }) {
-  console.log('award is');
-  console.log(award);
   return award.type === 'SCORE_BASED' && !award.is_finalized ? (
     <ScoreBasedAwards award={award} />
   ) : (
@@ -82,7 +80,6 @@ function AwardDetails({ award }) {
 
   async function unfinalizeAward() {
     setLoading(true);
-    console.log(performanceToFinalize);
     try {
       await axios({
         method: 'PUT',

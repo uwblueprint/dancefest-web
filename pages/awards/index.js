@@ -23,7 +23,7 @@ import DancerRedJump from '@assets/dancer-red-jump.svg'; // Jumping Dancer SVG
 import DancerYellowBlue from '@assets/dancer-yellow-blue.svg'; // Jumping Dancer SVG
 import styles from '@styles/pages/Awards.module.scss'; // Page styles
 
-const PAGE_SIZE = 15; // Rows per page
+const PAGE_SIZE = 20; // Rows per page
 
 // Get the active filters (list of column accessors) from an object of filter dropdown values
 const getActiveFilters = options => {
@@ -259,9 +259,8 @@ export default function Awards() {
           settingIDs: settingIds,
         },
       });
-    } catch (err) {
+    } catch {
       // Empty catch block
-      console.log('Error occured', err);
     }
     await getAwards();
     setLoading(false);
@@ -429,7 +428,6 @@ const FinalizedTable = ({ finalizedAwards, ...props }) => {
   ];
 
   const goToPerformanceDetails = row => {
-    console.log(row);
     router.push(`/awards/${row.original.id}`); // Route to "/performance/:id" page
   };
 

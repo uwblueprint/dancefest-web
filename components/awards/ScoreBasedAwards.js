@@ -18,7 +18,7 @@ import styles from '@styles/pages/Awards.module.scss'; // Page styles
 import { formatPerformances } from '@utils/performances'; // Format performances util
 import AwardPill from '@components/awards/FinalizePill.js'; // Award Finalize Pill
 
-const PAGE_SIZE = 8; // Rows per page
+const PAGE_SIZE = 20; // Rows per page
 
 // Page: Performances
 export default function Performances({ award }) {
@@ -45,10 +45,6 @@ export default function Performances({ award }) {
   useEffect(() => {
     getPerformances();
   }, [event]);
-
-  useEffect(() => {
-    console.log(performances);
-  }, [performances]);
 
   const getPerformances = async () => {
     setLoading(true);
@@ -90,9 +86,8 @@ export default function Performances({ award }) {
           awardIDs: [award.id],
         },
       });
-    } catch (err) {
+    } catch {
       // Empty catch block
-      console.log(err);
     }
   }
 
@@ -108,9 +103,8 @@ export default function Performances({ award }) {
       });
 
       router.push('/awards');
-    } catch (err) {
+    } catch {
       // Empty catch block
-      console.log(err);
     }
   }
 
