@@ -8,7 +8,7 @@ export default async (req, res) => {
   const session = await getSession({ req });
 
   //TODO: if it is required, I think it should be request body?
-  const { eventID, schoolIDs } = req.query;
+  const { eventID, schoolIDs, settingIDs } = req.query;
 
   // If not authenticated
   if (!session) {
@@ -26,6 +26,26 @@ export default async (req, res) => {
 
   // If schoolIDs exist, we convert it into an array of integers to add to the filter
   if (schoolIDs) filter.school_id = { in: schoolIDs.split(',').map(i => +i) };
+  if (settingIDs) {
+    const settingIDArray = settingIDs.split(',').map(i => +i);
+    filter.OR = [
+      {
+        competition_level_id: {
+          in: settingIDArray,
+        },
+      },
+      {
+        dance_size_id: {
+          in: settingIDArray,
+        },
+      },
+      {
+        dance_style_id: {
+          in: settingIDArray,
+        },
+      },
+    ];
+  }
 
   const performances = await getPerformances(filter);
   return res.status(200).json(performances);
