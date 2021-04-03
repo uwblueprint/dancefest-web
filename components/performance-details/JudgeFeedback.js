@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'; // React
-import axios from 'axios';
+import axios from 'axios'; // axios
 import { useRouter } from 'next/router';
+import { useS3Upload } from 'next-s3-upload'; // Upload files to S3
 import Navigation from '@containers/Navigation'; // Navigation state
 
 import Button from '@components/Button'; // Button
@@ -8,7 +9,7 @@ import Input from '@components/Input'; // Input
 import { formatDropdownOptions } from '@components/Dropdown'; // Dropdown
 import ScoreCard from '@components/ScoreCard'; // Score Card
 import DropdownGrid from '@components/DropdownGrid'; // Dropdown Grid
-import AudioPlayer from '@components/AudioPlayer'; // Audio Player
+import FeedbackAudio from '@components/performance-details/FeedbackAudio'; // Feedback audio
 import styles from '@styles/components/performance-details/JudgeFeedback.module.scss'; // Component styles
 
 const SPECIAL_AWARD_TYPE = 'SPECIAL';
@@ -24,10 +25,10 @@ export default function JudgeFeedback({
   const { event: eventId } = Navigation.useContainer();
   const router = useRouter();
   const { id: performanceId } = router.query;
+  const { uploadToS3 } = useS3Upload();
   const {
     id,
     userId: judgeID,
-    audioUrl,
     notes: initialNotes,
     technicalScore: initialTechnicalScore,
     artisticScore: initialArtisticScore,
@@ -67,6 +68,11 @@ export default function JudgeFeedback({
     initialSpecialAward ? initialSpecialAward.label : ''
   ); // New/existing special award
 
+  // Audio state
+  const [recordingChanged, setRecordingChanged] = useState(false);
+  const [recording, setRecording] = useState(false);
+  const [recordedBlob, setRecordedBlob] = useState(null);
+
   const normalAwardsData = normalAwards
     .filter(award => !!award)
     .map(award => awardsDict[award.value]);
@@ -83,6 +89,24 @@ export default function JudgeFeedback({
     }
   }, [adjudication, initialNominations]);
 
+  // Upload audio blob to S3
+  const uploadAudio = async () => {
+    if (recordedBlob) {
+      const file = new File(
+        [recordedBlob.blob],
+        `performance-${performanceId}-judge-${judgeID}-feedback.mp3`,
+        {
+          type: 'audio/mp3',
+          lastModified: Date.now(),
+        }
+      );
+      const { url } = await uploadToS3(file);
+      return url;
+    } else {
+      throw new Error('Missing audio recording blob');
+    }
+  };
+
   // Submit updated feedback
   const updateFeedback = async () => {
     setLoading(true);
@@ -98,6 +122,7 @@ export default function JudgeFeedback({
           technicalMark: technicalScore,
           cumulativeMark: cumulativeScore,
           notes,
+          audioUrl: recordingChanged ? await uploadAudio() : undefined,
         },
       });
 
@@ -120,6 +145,12 @@ export default function JudgeFeedback({
       await getPerformance();
     } catch {
       // Empty catch block
+    } finally {
+      // Reset audio state
+      if (recordingChanged) {
+        setRecordingChanged(false);
+        setRecordedBlob(false);
+      }
     }
 
     setLoading(false);
@@ -185,7 +216,15 @@ export default function JudgeFeedback({
           )}
         </div>
         <div className={styles.judge__feedback_audio_player_wrapper}>
-          <AudioPlayer audioUrl={audioUrl} />
+          <FeedbackAudio
+            adjudication={adjudication}
+            edit={editMode}
+            setRecordingChanged={setRecordingChanged}
+            recording={recording}
+            setRecording={setRecording}
+            recordedBlob={recordedBlob}
+            setRecordedBlob={setRecordedBlob}
+          />
         </div>
         <div className={styles.judge__feedback_nominations}>
           <h2>Nominated for:</h2>
