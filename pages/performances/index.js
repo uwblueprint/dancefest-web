@@ -7,7 +7,7 @@ import { getSession } from 'next-auth/client'; // Session handling
 import { useRouter } from 'next/router'; // Routing
 
 import PerformancesTable from '@components/performances/PerformancesTable'; // Performances table
-import PerformanceModal from '@components/performances/PerformanceModal'; // Performance modal
+import AddPerformanceModal from '@components/performances/AddPerformanceModal'; // Performance modal
 
 import Loader from 'react-loader-spinner'; // Loading spinner
 import Button from '@components/Button'; // Button
@@ -27,20 +27,8 @@ import styles from '@styles/pages/Performances.module.scss'; // Page styles
 import { formatSchools } from '@utils/schools'; // Format schools util
 import { formatPerformances } from '@utils/performances'; // Format performances util
 
-const ENTRY_VIEW_HIDDEN_COLUMNS = [
-  'technicalScore',
-  'artisticScore',
-  'cumulativeScore',
-  'awardsString',
-  'status',
-];
-const JUDGING_VIEW_HIDDEN_COLUMNS = [
-  'schoolName',
-  'performanceLevel',
-  'danceStyle',
-  'danceSize',
-  'score',
-];
+const ENTRY_VIEW_HIDDEN_COLUMNS = ['technicalScore', 'artisticScore', 'awardsString', 'status'];
+const JUDGING_VIEW_HIDDEN_COLUMNS = ['schoolName', 'performanceLevel', 'danceStyle', 'danceSize'];
 
 /**
  * Get the active filters from an object of filter dropdown values
@@ -256,23 +244,6 @@ export default function Performances() {
     setLoading(false);
   };
 
-  // const getAdjudications = async () => {
-  //   setLoading(true);
-
-  //   try {
-  //     const response = await axios({
-  //       method: 'GET',
-  //       url: `/api/performances/getJudgingData?eventId=${event}`,
-  //     });
-  //     const adjudicationsData = response.data;
-  //     setAdjudications(formatPerformancesForJudgingTable(adjudicationsData));
-  //   } catch {
-  //     // Empty catch block
-  //   }
-
-  //   setLoading(false);
-  // };
-
   // Get initial filter options and performances
   useEffect(() => {
     if (event === null) {
@@ -485,8 +456,6 @@ export default function Performances() {
                   filters={tableFilters}
                   pageNumber={pageNumber}
                   setPageCount={setPageCount}
-                  setPerformanceToEdit={setPerformanceToEdit}
-                  setModalOpen={setModalOpen}
                   hiddenColumns={JUDGING_VIEW_HIDDEN_COLUMNS}
                 />
               )
@@ -494,7 +463,7 @@ export default function Performances() {
           />
         </div>
       </div>
-      <PerformanceModal
+      <AddPerformanceModal
         open={modalOpen}
         setOpen={setModalOpen}
         setLoading={setLoading}

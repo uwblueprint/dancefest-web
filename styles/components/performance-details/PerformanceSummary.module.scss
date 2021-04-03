@@ -5,8 +5,12 @@
   box-sizing: border-box;
 
   .performance__summary_performanceLink {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 30px;
 
+    // Watch performance link
     & > a {
       font-family: DM Sans;
       font-style: normal;
@@ -17,6 +21,11 @@
 
       color: var(--system-light-blue);
       cursor: pointer;
+    }
+
+    // Edit performance button
+    & > button {
+      height: 40px;
     }
   }
 
