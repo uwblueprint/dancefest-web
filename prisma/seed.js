@@ -206,7 +206,7 @@ async function dataSeed() {
   const performances = [
     {
       id: 1,
-      name: 'Performance 1',
+      dance_title: 'Performance 1',
       performers: ['Performer 1', 'Performer 2'],
       cheoreographers: ['Choreo 1'],
       event_id: eventUpsert.id,
@@ -214,7 +214,7 @@ async function dataSeed() {
     },
     {
       id: 2,
-      name: 'Performance 2',
+      dance_title: 'Performance 2',
       performers: ['Performer 3'],
       cheoreographers: ['Choreo 2', 'Choreo 3'],
       event_id: eventUpsert.id,
@@ -222,7 +222,7 @@ async function dataSeed() {
     },
     {
       id: 3,
-      name: 'Performance 3',
+      dance_title: 'Performance 3',
       performers: ['Performer 4', 'Performer 5', 'Performer 6'],
       cheoreographers: ['Choreo 4', 'Choreo 5'],
       event_id: eventUpsert.id,
@@ -237,14 +237,14 @@ async function dataSeed() {
         id: performance.id,
       },
       update: {
-        name: performance.name,
+        dance_title: performance.dance_title,
         performers: performance.performers,
         choreographers: performance.cheoreographers,
         event_id: performance.event_id,
         school_id: performance.school_id,
       },
       create: {
-        name: performance.name,
+        dance_title: performance.dance_title,
         performers: performance.performers,
         choreographers: performance.cheoreographers,
         event_id: performance.event_id,

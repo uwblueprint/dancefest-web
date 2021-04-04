@@ -77,7 +77,7 @@ model Setting {
 
 model Performance {
   id                                                   Int                @id @default(autoincrement())
-  name                                                 String?            @db.VarChar(255)
+  dance_title                                          String?            @db.VarChar(255)
   performance_link                                     String?            @db.VarChar(255)
   audio_recording_link                                 String?            @db.VarChar(255)
   performers                                           String[]           @db.VarChar(255)
@@ -85,7 +85,6 @@ model Performance {
   competition_level                                    String?            @db.VarChar(255)
   dance_size                                           String?            @db.VarChar(255)
   dance_style                                          String?            @db.VarChar(255)
-  dance_title                                          String?            @db.VarChar(255)
   dance_size_id                                        Int?
   dance_style_id                                       Int?
   competition_level_id                                 Int?
