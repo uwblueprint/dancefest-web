@@ -190,7 +190,7 @@ export default function Performances({ session }) {
   useEffect(() => {
     // If judge view - filter performances for specific judge
     if (session.role === 'JUDGE') {
-      const [adjudicated, pending] = filterPerformancesForJudge(performances, session.id);
+      const [adjudicated, pending] = filterPerformancesForJudge(performances, 15);
       setPendingPerformances(pending);
       setAdjudicatedPerformances(adjudicated);
     }

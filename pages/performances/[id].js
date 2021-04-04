@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'; // React
 import axios from 'axios'; // axios
 import Layout from '@components/Layout'; // Layout wrapper
-import { getSession } from 'next-auth/client'; // Session handling
+import { getSession, session } from 'next-auth/client'; // Session handling
 import { useRouter } from 'next/router'; // Routing
 import Navigation from '@containers/Navigation'; // Navigation state
 
@@ -121,7 +121,8 @@ export default function PerformanceDetails() {
                   <h3>Performance Details</h3>
                 </button>
               </div>
-              {adjudications.map((adjudication, i) => (
+              {adjudications.map((adjudication, i) => {
+                session.role === 'ADMIN'? (
                 <Tab
                   key={i}
                   adjudication={adjudication}
@@ -131,7 +132,17 @@ export default function PerformanceDetails() {
                 >
                   {adjudication.user.name}
                 </Tab>
-              ))}
+              ) : adjudication.userId === session.id? (
+                <Tab
+                  key={i}
+                  adjudication={adjudication}
+                  nominations={nominations[adjudication.userId]}
+                  selected={selectedTab === i}
+                  handleClick={() => setSelectedTab(i)}
+                >
+                  {adjudication.user.name}
+                </Tab>
+              ): <></>);}
             </div>
             <div
               className={`${styles.performance_details__content} ${
