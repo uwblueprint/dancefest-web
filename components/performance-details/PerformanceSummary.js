@@ -1,8 +1,8 @@
-import React from 'react';
+import Button from '@components/Button'; // Button
 import ScoreCard from '@components/ScoreCard'; // Score Card
 import styles from '@styles/components/performance-details/PerformanceSummary.module.scss'; // Component styles
 
-export default function PerformanceSummary({ performance }) {
+export default function PerformanceSummary({ performance, setModalOpen }) {
   const {
     audioRecordingLink,
     performers,
@@ -25,6 +25,9 @@ export default function PerformanceSummary({ performance }) {
           <a href={audioRecordingLink || undefined} target="_blank" rel="noreferrer noopener">
             Watch Performance
           </a>
+          <Button variant="outlined" onClick={() => setModalOpen(true)}>
+            Edit
+          </Button>
         </div>
         <div className={styles.performance__summary_performanceInfo}>
           <div>

@@ -10,6 +10,7 @@ import Tab from '@components/performance-details/Tab'; // Tab
 import EmptyComponent from '@components/performance-details/EmptyComponent'; // EmptyComponent
 import JudgeFeedback from '@components/performance-details/JudgeFeedback'; // JudgeFeedback
 import PerformanceSummary from '@components/performance-details/PerformanceSummary'; // PerformanceSummary
+import EditPerformanceModal from '@components/performance-details/EditPerformanceModal'; // Edit Performance Modal
 
 import Loader from 'react-loader-spinner'; // Loading spinner
 import Title from '@components/Title'; // Title
@@ -22,6 +23,7 @@ export default function PerformanceDetails() {
   const { id } = router.query;
   const { event: eventId } = Navigation.useContainer();
 
+  const [modalOpen, setModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [performance, setPerformance] = useState(null);
   const [selectedTab, setSelectedTab] = useState(-1);
@@ -47,7 +49,6 @@ export default function PerformanceDetails() {
       const response = await axios({
         method: 'post', // TODO: Fix
         url: `/api/settings/awards`,
-        // url: `/api/awards/collect?eventID=${eventId}`,
         data: {
           eventID: eventId,
           settingIDs: [dance_size_id, dance_style_id, competition_level_id],
@@ -138,7 +139,7 @@ export default function PerformanceDetails() {
               }`}
             >
               {performance && showPerformanceDetails ? (
-                <PerformanceSummary performance={performance} />
+                <PerformanceSummary performance={performance} setModalOpen={setModalOpen} />
               ) : performance && showJudgeFeedback ? (
                 <JudgeFeedback
                   getPerformance={getPerformance}
@@ -154,6 +155,13 @@ export default function PerformanceDetails() {
           </div>
         </>
       )}
+      <EditPerformanceModal
+        open={modalOpen}
+        setOpen={setModalOpen}
+        setLoading={setLoading}
+        getPerformance={getPerformance}
+        performance={performance}
+      />
     </Layout>
   );
 }

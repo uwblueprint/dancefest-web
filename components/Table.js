@@ -70,11 +70,6 @@ export default function Table({
     setAllFilters(filters);
   }, [filters]);
 
-  const handleRowClick = row => () => {
-    // Call the prop - onRowClick
-    onRowClick(row);
-  };
-
   return (
     <div className={styles.table__div}>
       {data && data.length === 0 ? (
@@ -121,7 +116,7 @@ export default function Table({
             {(paginate ? page : rows).map((row, i) => {
               prepareRow(row);
               return clickable ? (
-                <tr key={i} {...row.getRowProps()} onClick={handleRowClick(row)}>
+                <tr key={i} {...row.getRowProps()} onClick={() => onRowClick(row)}>
                   {row.cells.map((cell, i) => {
                     return (
                       <td key={i} {...cell.getCellProps()}>
