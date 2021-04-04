@@ -138,7 +138,7 @@ function Footer() {
   return (
     // Standard footer content
     <div className={styles.layout__footer}>
-      <p>&copy; 2020 Dancefest Adjudication Portal. v0.0.3.</p>
+      <p>&copy; 2020 Dancefest Adjudication Portal. v0.0.4.</p>
       <p>
         A project by{' '}
         <a
@@ -147,7 +147,7 @@ function Footer() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          UWBlueprint
+          UW Blueprint
         </a>
         .
       </p>
