@@ -11,6 +11,8 @@ import DropdownGrid from '@components/DropdownGrid'; // Dropdown Grid
 import AudioPlayer from '@components/AudioPlayer'; // Audio Player
 import styles from '@styles/components/performance-details/JudgeFeedback.module.scss'; // Component styles
 
+import { calculateAverageScore } from '@utils/performances'; // Calculate average score util
+
 const SPECIAL_AWARD_TYPE = 'SPECIAL';
 const DANCE_ARTISTRY_AWARD_TYPE = 'DANCE_ARTISTRY';
 
@@ -132,6 +134,10 @@ export default function JudgeFeedback({
     setLoading(false);
   };
 
+  useEffect(() => {
+    setCumulativeScore(calculateAverageScore([parseInt(technicalScore), parseInt(artisticScore)]));
+  }, [technicalScore, artisticScore]);
+
   return (
     <>
       <div className={styles.judge__feedback_container}>
@@ -230,13 +236,7 @@ export default function JudgeFeedback({
           score={artisticScore}
           setScore={setArtisticScore}
         />
-        <ScoreCard
-          edit={editMode}
-          title="Cumulative"
-          score={cumulativeScore}
-          setScore={setCumulativeScore}
-          variant="grey"
-        />
+        <ScoreCard title="Cumulative" score={cumulativeScore} variant="grey" />
       </div>
     </>
   );
