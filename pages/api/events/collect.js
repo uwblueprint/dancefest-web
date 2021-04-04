@@ -8,13 +8,18 @@ export default async (req, res) => {
   // If session exists (thus, user is authenticated)
   if (session) {
     // Collect all events from database
-    let events = await prisma.event.findMany();
+    let events = await prisma.event.findMany({
+      include: {
+        performances: true,
+      },
+    });
 
     // Map over all events
     events = events.map(event => ({
       ...event,
       // And parse the JSON field for judges (filtering for empty strings)
       judges: (JSON.parse(event.judges) || []).filter(judge => judge !== ''),
+      performances: event.performances ? event.performances.length : 0,
     }));
 
     // If the authenticated user is an admin
