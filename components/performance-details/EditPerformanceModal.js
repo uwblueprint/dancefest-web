@@ -69,6 +69,9 @@ export default function EditPerformanceModal({
       const danceStyleSettings = settings.filter(setting => setting.type === 'STYLE');
       const danceSizeSettings = settings.filter(setting => setting.type === 'DANCE_SIZE');
 
+      // Set the label of each dropdown option to the `value` field of each setting (the setting name in the DB)
+      // Set the selected value (which is sent to API upon save) to the `id` field of each setting (the setting id in the DB)
+      // upon clicking a dropdown option
       const formatOptionsFields = {
         value: 'id',
         label: 'value',
