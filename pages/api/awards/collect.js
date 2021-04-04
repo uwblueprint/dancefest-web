@@ -36,13 +36,14 @@ export const getAwards = async filter => {
           performances: true,
         },
       },
+      awards_categories: true,
     },
   });
 
   if (!awards) return;
 
   // Remove the relation table data
-  return awards.map(({ awards_performances, ...rest }) => {
+  return awards.map(({ awards_performances, awards_categories, ...rest }) => {
     return {
       ...rest,
       performances: awards_performances.map(({ performances, status, user_id }) => {
@@ -52,6 +53,7 @@ export const getAwards = async filter => {
           user_id,
         };
       }),
+      categories: awards_categories.map(({ category_id }) => category_id),
     };
   });
 };
