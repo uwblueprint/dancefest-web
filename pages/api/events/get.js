@@ -17,6 +17,7 @@ export default async (req, res) => {
         let event = await getEventByID(eventID);
         // Parse and filter event judges
         event.judges = (JSON.parse(event.judges) || []).filter(judge => judge !== '');
+        event.performances = event.performances ? event.performances.length : 0;
 
         // If admin
         if (session.role === 'ADMIN') {
@@ -38,21 +39,14 @@ export default async (req, res) => {
   res.status(401).end();
 };
 
-// Select all fields but created/updated_at
-const eventFieldSelection = {
-  id: true,
-  name: true,
-  event_date: true,
-  num_performances: true,
-  judges: true,
-};
-
 export const getEventByID = async id => {
   // Collect event with eventID
   return await prisma.event.findUnique({
     where: {
       id: parseInt(id),
     },
-    select: eventFieldSelection,
+    include: {
+      performances: true,
+    },
   });
 };

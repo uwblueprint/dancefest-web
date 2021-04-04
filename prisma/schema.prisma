@@ -34,16 +34,15 @@ model VerificationRequest {
 }
 
 model Event {
-  id               Int           @id @default(autoincrement())
-  name             String        @db.VarChar(255)
-  location         String?       @db.VarChar(255)
-  event_date       DateTime?     @db.Timestamp(6)
-  num_performances Int           @default(0)
-  judges           Json?         @db.Json
-  created_at       DateTime      @default(now()) @db.Timestamp(6)
-  updated_at       DateTime      @default(now()) @db.Timestamp(6)
-  awards           Award[]       @relation("awardsToevents")
-  Performance      Performance[]
+  id           Int           @id @default(autoincrement())
+  name         String        @db.VarChar(255)
+  location     String?       @db.VarChar(255)
+  event_date   DateTime?     @db.Timestamp(6)
+  judges       Json?         @db.Json
+  created_at   DateTime      @default(now()) @db.Timestamp(6)
+  updated_at   DateTime      @default(now()) @db.Timestamp(6)
+  awards       Award[]       @relation("awardsToevents")
+  performances Performance[]
 
   @@map("events")
 }
@@ -56,7 +55,7 @@ model School {
   phone        String?       @db.VarChar(255)
   created_at   DateTime      @default(now()) @db.Timestamp(6)
   updated_at   DateTime      @default(now()) @db.Timestamp(6)
-  Performance  Performance[]
+  performances Performance[]
 
   @@map("schools")
 }
