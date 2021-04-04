@@ -39,7 +39,7 @@ function AwardDetails({ award }) {
   const [performanceToFinalize, setPerformanceToFinalize] = useState(-1);
 
   // Delete award confirmation modal
-  const [deleteConfirmationModal, setDeleteConfirmationModal] = useState(false);
+  const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] = useState(false);
 
   useEffect(() => {
     if (award.is_finalized) {
@@ -127,7 +127,7 @@ function AwardDetails({ award }) {
           <Title>{award.title}</Title>
           <Button
             className={styles.award_details__delete_button}
-            onClick={() => setDeleteConfirmationModal(true)}
+            onClick={() => setDeleteConfirmationModalOpen(true)}
           >
             Delete Award
           </Button>
@@ -205,12 +205,12 @@ function AwardDetails({ award }) {
       <Modal
         containerClassName={styles.confirmation__modal}
         title="Delete Award?"
-        open={deleteConfirmationModal}
+        open={deleteConfirmationModalOpen}
         cancelText="Cancel"
         submitText="Confirm"
-        setModalOpen={setDeleteConfirmationModal}
-        onCancel={() => setDeleteConfirmationModal(false)}
-        onSubmit={() => deleteAward()}
+        setModalOpen={setDeleteConfirmationModalOpen}
+        onCancel={() => setDeleteConfirmationModalOpen(false)}
+        onSubmit={deleteAward}
       >
         <p>Are you sure you want to delete this award?</p>
       </Modal>
