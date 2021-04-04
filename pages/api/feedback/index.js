@@ -11,7 +11,19 @@ export default async (req, res) => {
     return res.status(401).end();
   }
 
-  let { schoolIDs } = req.query;
+  let { eventID, schoolIDs } = req.query;
+
+  if (!eventID) {
+    return res.status(400).json({
+      error: 'eventID was not provided',
+    });
+  }
+
+  const event = await prisma.event.findUnique({
+    where: {
+      id: parseInt(eventID),
+    },
+  });
 
   // If schoolIDs are not provided, we want to get every school ID
   if (!schoolIDs || schoolIDs.length === 0) {
@@ -51,10 +63,18 @@ export default async (req, res) => {
         //TODO: switch back
         to: 'ericfeng610@gmail.com',
         // to: schoolPerformances[0].school.email,
-        subject: `Feedback for ${schoolPerformances[0].school.school_name}`,
-        //TODO: format the response with HTML
-        text: 'Please see the attachment for feedback!',
-        html: '<p>Please see the attachment for feedback!</p>',
+        subject: `Automated Feedback from Dancefest Event`,
+        html: `<p>Hi ${
+          schoolPerformances[0].school.contact_name
+            ? schoolPerformances[0].school.contact_name
+            : schoolPerformances[0].school.school_name
+        },</p>
+              <p>Thank you for your participation in ${event.name}!</p>
+              <p>Attached you will find a summary of the scores and awards won by all performances from your school. Audio feedback from the judges is also included. Feel free to share this feedback with other contacts and/or performers from your school as you see fit.</p>
+              <p>If you have any questions regarding the feedback, do not reply to this email as it is automatically generated and the inbox is not monitored. Instead, please contact Ontario Secondary School Dancefest directly.</p>
+              <p>We hope you enjoyed ${
+                event.name
+              } and we look forward to seeing you again at future events!</p>`,
         attachments: [
           {
             filename: `${schoolPerformances[0].school.school_name}-feedback.csv`,
