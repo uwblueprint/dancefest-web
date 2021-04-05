@@ -38,6 +38,9 @@ function AwardDetails({ award }) {
   const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
   const [performanceToFinalize, setPerformanceToFinalize] = useState(-1);
 
+  // Delete award confirmation modal
+  const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] = useState(false);
+
   useEffect(() => {
     if (award.is_finalized) {
       setIsAwardFinalized(true);
@@ -97,14 +100,37 @@ function AwardDetails({ award }) {
     setLoading(false);
   }
 
+  async function deleteAward() {
+    setLoading(true);
+    try {
+      await axios({
+        method: 'PUT',
+        url: '/api/awards/delete',
+        data: {
+          id: award.id,
+        },
+      });
+      // Go back to awards
+      router.push('/awards');
+    } catch {
+      // Empty catch statement
+    }
+  }
+
   return (
     <Layout>
       <div>
         <div>
           <h2 className={styles.performances_details__eventName}>{`Event Title`}</h2>
         </div>
-        <div>
-          <Title className={styles.performances__header__pageTitle}>{award.title}</Title>
+        <div className={styles.award_details__header_container}>
+          <Title>{award.title}</Title>
+          <Button
+            className={styles.award_details__delete_button}
+            onClick={() => setDeleteConfirmationModalOpen(true)}
+          >
+            Delete Award
+          </Button>
         </div>
         <div className={styles.performance_details__content_container}>
           <div className={styles.performance_details__tabs_container}>
@@ -175,6 +201,18 @@ function AwardDetails({ award }) {
         ) : (
           <p>This award will now be shown in the “Finalized” tab.</p>
         )}
+      </Modal>
+      <Modal
+        containerClassName={styles.confirmation__modal}
+        title="Delete Award?"
+        open={deleteConfirmationModalOpen}
+        cancelText="Cancel"
+        submitText="Confirm"
+        setModalOpen={setDeleteConfirmationModalOpen}
+        onCancel={() => setDeleteConfirmationModalOpen(false)}
+        onSubmit={deleteAward}
+      >
+        <p>Are you sure you want to delete this award?</p>
       </Modal>
     </Layout>
   );
