@@ -91,7 +91,7 @@ async function dataSeed() {
     console.log({ userUpsert });
   }
 
-  // SETTING SEEDING
+  // SETTINGS SEEDING
   const sizeSettings = ['Small Group', 'Medium Group', 'Large Group', 'Creative Collaboration'];
   const styleSettings = [
     'Jazz',
@@ -330,6 +330,7 @@ async function dataSeed() {
     console.log(adjudicationUpsert);
   }
 
+  // AWARDS SEEDING
   const awards = [
     {
       id: 1,
