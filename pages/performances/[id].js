@@ -126,7 +126,7 @@ export default function PerformanceDetails({ session }) {
                 </button>
               </div>
               {adjudications.map((adjudication, i) =>
-                session.role == 'ADMIN' ? (
+                session.role === 'ADMIN' ? (
                   <Tab
                     key={i}
                     adjudication={adjudication}
@@ -137,7 +137,7 @@ export default function PerformanceDetails({ session }) {
                     {adjudication.user.name}
                   </Tab>
                 ) : (
-                  session.id == adjudication.userId && (
+                  session.id === adjudication.userId && (
                     <Tab
                       key={i}
                       adjudication={adjudication}
