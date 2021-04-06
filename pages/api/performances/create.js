@@ -12,13 +12,12 @@ export default async (req, res) => {
 
   // Collect performance information from request body
   const {
-    name,
+    danceTitle,
     performers,
     choreographers,
     competitionLevel,
     danceSize,
     danceStyle,
-    danceTitle,
     performanceLink,
     audioRecordingLink,
     danceSizeID,
@@ -52,13 +51,12 @@ export default async (req, res) => {
   try {
     const performance = await prisma.performance.create({
       data: {
-        name: name,
+        dance_title: danceTitle,
         performers: performers,
         choreographers: choreographers,
         competition_level: competitionLevel,
         dance_size: danceSize,
         dance_style: danceStyle,
-        dance_title: danceTitle,
         performance_link: performanceLink,
         audio_recording_link: audioRecordingLink,
         dance_size_id: danceSizeID,

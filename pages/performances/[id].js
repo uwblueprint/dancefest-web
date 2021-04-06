@@ -31,7 +31,7 @@ export default function PerformanceDetails() {
 
   const showPerformanceDetails = selectedTab === -1;
   const showJudgeFeedback = selectedTab >= 0;
-  const { name, event, adjudications: initialAdjudications = [], nominations = [] } =
+  const { danceTitle, event, adjudications: initialAdjudications = [], nominations = [] } =
     performance || {};
   const adjudications = initialAdjudications.sort((a, b) => (a.user.name > b.user.name ? 1 : -1));
   const eventName = event && event.name;
@@ -108,7 +108,7 @@ export default function PerformanceDetails() {
             <h2 className={styles.performances_details__eventName}>{eventName}</h2>
           </div>
           <div>
-            <Title className={styles.performances__header__pageTitle}>{name}</Title>
+            <Title className={styles.performances__header__pageTitle}>{danceTitle}</Title>
           </div>
           <div className={styles.performance_details__content_container}>
             <div className={styles.performance_details__tabs_container}>

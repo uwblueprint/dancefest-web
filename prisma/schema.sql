@@ -67,7 +67,7 @@ CREATE TABLE settings (
 -- Create performances table
 CREATE TABLE performances (
   id SERIAL PRIMARY KEY NOT NULL,
-  name VARCHAR(255),
+  dance_title VARCHAR(255),
   performance_link VARCHAR(255),
   audio_recording_link VARCHAR(255),
   performers VARCHAR(255)[],
@@ -75,7 +75,6 @@ CREATE TABLE performances (
   competition_level VARCHAR(255),
   dance_size VARCHAR(255),
   dance_style VARCHAR(255),
-  dance_title VARCHAR(255),
   dance_size_id INTEGER,
   dance_style_id INTEGER,
   competition_level_id INTEGER,
