@@ -13,8 +13,8 @@ Table: Styles
 }
 
 .table__div > table tr:last-child {
-  border-spacing: 0;
-  border-bottom: 2px solid #dfe1e6;
+  // border-spacing: 0;
+  border-bottom: 2px solid #f5f6f7;
 }
 
 .table__div > table > tbody > tr:hover {
@@ -32,7 +32,7 @@ Table: Styles
   line-height: 21px;
   letter-spacing: 0.05em;
   color: #0b0504;
-  border-bottom: 2px solid #f5f6f7;
+  border-bottom: 3px solid #f5f6f7;
   word-wrap: break-word;
   max-width: 220px;
 }

@@ -103,11 +103,13 @@ function Header() {
                   </li>
                 </>
               )}
-              <li className={pathname === '/settings' && styles.selected}>
-                <Link href="/settings">
-                  <a>Settings</a>
-                </Link>
-              </li>
+              {session.role == 'ADMIN' && (
+                <li className={pathname === '/settings' && styles.selected}>
+                  <Link href="/settings">
+                    <a>Settings</a>
+                  </Link>
+                </li>
+              )}
               <li>
                 <button
                   onClick={() => {

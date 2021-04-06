@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'; // React
 import axios from 'axios'; // axios
 import Layout from '@components/Layout'; // Layout wrapper
-import { getSession, session } from 'next-auth/client'; // Session handling
+import { getSession } from 'next-auth/client'; // Session handling
 import { useRouter } from 'next/router'; // Routing
 import Navigation from '@containers/Navigation'; // Navigation state
 
@@ -18,7 +18,7 @@ import styles from '@styles/pages/PerformanceDetails.module.scss';
 import { formatPerformance } from '@utils/performances'; // Format performance util
 
 // Page: Settings
-export default function PerformanceDetails() {
+export default function PerformanceDetails({ session }) {
   const router = useRouter();
   const { id } = router.query;
   const { event: eventId } = Navigation.useContainer();
@@ -88,6 +88,10 @@ export default function PerformanceDetails() {
   };
 
   useEffect(() => {
+    console.log(adjudications);
+  }, [adjudications]);
+
+  useEffect(() => {
     if (eventId === null) {
       router.push('/performances');
     } else if (eventId) {
@@ -121,28 +125,31 @@ export default function PerformanceDetails() {
                   <h3>Performance Details</h3>
                 </button>
               </div>
-              {adjudications.map((adjudication, i) => {
-                session.role === 'ADMIN'? (
-                <Tab
-                  key={i}
-                  adjudication={adjudication}
-                  nominations={nominations[adjudication.userId]}
-                  selected={selectedTab === i}
-                  handleClick={() => setSelectedTab(i)}
-                >
-                  {adjudication.user.name}
-                </Tab>
-              ) : adjudication.userId === session.id? (
-                <Tab
-                  key={i}
-                  adjudication={adjudication}
-                  nominations={nominations[adjudication.userId]}
-                  selected={selectedTab === i}
-                  handleClick={() => setSelectedTab(i)}
-                >
-                  {adjudication.user.name}
-                </Tab>
-              ): <></>);}
+              {adjudications.map((adjudication, i) =>
+                session.role == 'ADMIN' ? (
+                  <Tab
+                    key={i}
+                    adjudication={adjudication}
+                    nominations={nominations[adjudication.userId]}
+                    selected={selectedTab === i}
+                    handleClick={() => setSelectedTab(i)}
+                  >
+                    {adjudication.user.name}
+                  </Tab>
+                ) : (
+                  session.id == adjudication.userId && (
+                    <Tab
+                      key={i}
+                      adjudication={adjudication}
+                      nominations={nominations[adjudication.userId]}
+                      selected={selectedTab === i}
+                      handleClick={() => setSelectedTab(i)}
+                    >
+                      {adjudication.user.name}
+                    </Tab>
+                  )
+                )
+              )}
             </div>
             <div
               className={`${styles.performance_details__content} ${
@@ -150,7 +157,11 @@ export default function PerformanceDetails() {
               }`}
             >
               {performance && showPerformanceDetails ? (
-                <PerformanceSummary performance={performance} setModalOpen={setModalOpen} />
+                <PerformanceSummary
+                  performance={performance}
+                  setModalOpen={setModalOpen}
+                  admin={session.role == 'ADMIN'}
+                />
               ) : performance && showJudgeFeedback ? (
                 <JudgeFeedback
                   getPerformance={getPerformance}
@@ -195,6 +206,6 @@ export async function getServerSideProps(context) {
 
   // Else, return
   return {
-    props: {},
+    props: { session },
   };
 }

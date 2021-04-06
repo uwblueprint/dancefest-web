@@ -190,7 +190,7 @@ export default function Performances({ session }) {
   useEffect(() => {
     // If judge view - filter performances for specific judge
     if (session.role === 'JUDGE') {
-      const [adjudicated, pending] = filterPerformancesForJudge(performances, 15);
+      const [adjudicated, pending] = filterPerformancesForJudge(performances, session.id);
       setPendingPerformances(pending);
       setAdjudicatedPerformances(adjudicated);
     }
@@ -500,7 +500,6 @@ export default function Performances({ session }) {
 export async function getServerSideProps(context) {
   // Collect session
   const session = await getSession(context);
-  console.log(session);
   // If session does not exist
   if (!session) {
     return {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'; // React
 import axios from 'axios';
 import { useRouter } from 'next/router'; // Routing (with buttons)
+import { getSession } from 'next-auth/client'; // Session handling
 import Link from 'next/link'; // Next link
 import Loader from 'react-loader-spinner'; // Spinning loader
 import Layout from '@components/Layout'; // Layout wrapper
@@ -49,7 +50,7 @@ const awardOptions = [
 ];
 
 // Page: Awards
-export default function Awards() {
+export default function Awards({ session }) {
   const router = useRouter(); // collect router
   const { event } = Navigation.useContainer(); // get event from global state
 
@@ -230,9 +231,14 @@ export default function Awards() {
           } else {
             award.nominations = award.performances.length;
           }
+          // If judge view - don't show score based award
+          if (session.role === 'JUDGE' && award.type === 'Score Based') {
+            return;
+          }
           setNominatedAwards(prevNominated => [...prevNominated, award]);
         }
       });
+
       setLoading(false);
     }
   }, [awardData]);
@@ -334,10 +340,23 @@ export default function Awards() {
         )}
         {!loading ? (
           <div className={styles.performances__content}>
-            <Tabs
-              firstTabName="Nominations"
-              secondTabName="Finalized"
-              firstTabContent={
+            {session.role == 'ADMIN' ? (
+              <Tabs
+                firstTabName="Nominations"
+                secondTabName="Finalized"
+                firstTabContent={
+                  <NominationTable
+                    nominatedAwards={nominatedAwards}
+                    filters={filters}
+                    pageNumber={pageNumber}
+                    setPageCount={setPageCount}
+                    clickable
+                  />
+                }
+                secondTabContent={<FinalizedTable finalizedAwards={finalizedAwards} clickable />}
+              />
+            ) : (
+              <div className={styles.awards__judge_table}>
                 <NominationTable
                   nominatedAwards={nominatedAwards}
                   filters={filters}
@@ -345,9 +364,8 @@ export default function Awards() {
                   setPageCount={setPageCount}
                   clickable
                 />
-              }
-              secondTabContent={<FinalizedTable finalizedAwards={finalizedAwards} clickable />}
-            />
+              </div>
+            )}
           </div>
         ) : (
           // All else, if still loading, display loader
@@ -455,3 +473,26 @@ const EmptyTableComponent = () => {
     </div>
   );
 };
+
+// Run: server side
+export async function getServerSideProps(context) {
+  // Collect session
+  const session = await getSession(context);
+  // If session does not exist
+  if (!session) {
+    return {
+      redirect: {
+        // Redirect user to login page
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+
+  // Else, return
+  return {
+    props: {
+      session,
+    },
+  };
+}

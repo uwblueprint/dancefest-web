@@ -23,7 +23,7 @@ export default function DetailsRoute({ award }) {
 }
 
 // Page: Award Details
-function AwardDetails({ award }) {
+function AwardDetails({ session, award }) {
   const [selectedTab, setSelectedTab] = useState(-1);
   const [showAwardSummary, setShowAwardSummary] = useState(true);
   const [feedbackAvailable, setFeedbackAvailable] = useState(true);
@@ -40,6 +40,11 @@ function AwardDetails({ award }) {
 
   // Delete award confirmation modal
   const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] = useState(false);
+
+  useEffect(() => {
+    console.log(session);
+    console.log(award);
+  }, [session, award]);
 
   useEffect(() => {
     if (award.is_finalized) {
@@ -125,12 +130,14 @@ function AwardDetails({ award }) {
         </div>
         <div className={styles.award_details__header_container}>
           <Title>{award.title}</Title>
+          {/* {session.role === 'ADMIN' && ( */}
           <Button
             className={styles.award_details__delete_button}
             onClick={() => setDeleteConfirmationModalOpen(true)}
           >
             Delete Award
           </Button>
+          {/* )} */}
         </div>
         <div className={styles.performance_details__content_container}>
           <div className={styles.performance_details__tabs_container}>
@@ -399,9 +406,10 @@ export async function getServerSideProps(context) {
   }
 
   award = JSON.parse(JSON.stringify(award));
-
+  console.log(session, award);
   return {
     props: {
+      session,
       award,
     },
   };

@@ -407,7 +407,7 @@ export async function getServerSideProps(context) {
   const session = await getSession(context);
 
   // If session does not exist
-  if (!session) {
+  if (!session || session.role != 'ADMIN') {
     return {
       redirect: {
         // Redirect user to login page
