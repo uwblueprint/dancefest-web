@@ -88,10 +88,6 @@ export default function PerformanceDetails({ session }) {
   };
 
   useEffect(() => {
-    console.log(adjudications);
-  }, [adjudications]);
-
-  useEffect(() => {
     if (eventId === null) {
       router.push('/performances');
     } else if (eventId) {

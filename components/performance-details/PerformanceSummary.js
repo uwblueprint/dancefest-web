@@ -25,12 +25,10 @@ export default function PerformanceSummary({ performance, setModalOpen, admin })
           <a href={audioRecordingLink || undefined} target="_blank" rel="noreferrer noopener">
             Watch Performance
           </a>
-          {admin ? (
+          {admin && (
             <Button variant="outlined" onClick={() => setModalOpen(true)}>
               Edit
             </Button>
-          ) : (
-            <></>
           )}
         </div>
         <div className={styles.performance__summary_performanceInfo}>

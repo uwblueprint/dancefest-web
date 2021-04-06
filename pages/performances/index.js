@@ -393,12 +393,10 @@ export default function Performances({ session }) {
               Filters
               <img src={showFilters ? ChevronDown : ChevronDownGrey} />
             </Button>
-            {session.role === 'ADMIN' ? (
+            {session.role === 'ADMIN' && (
               <Button variant="contained" onClick={() => setModalOpen(true)}>
                 Add Performance
               </Button>
-            ) : (
-              <></>
             )}
           </div>
           <div>
