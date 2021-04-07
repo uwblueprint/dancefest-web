@@ -22,6 +22,7 @@ const ADMIN_ROLE_OPTIONS = [
   },
 ];
 export default function AdminModal({
+  loading,
   setLoading,
   open,
   setOpen,
@@ -111,7 +112,7 @@ export default function AdminModal({
         clearFields();
       }}
       onSubmit={adminToEdit ? updateAdmin : addAdmin}
-      disableSubmitButton={!adminName || !adminEmail}
+      disableSubmitButton={loading || !adminName || !adminEmail}
     >
       <div className={styles.adminModal}>
         <div>

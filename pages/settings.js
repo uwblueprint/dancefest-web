@@ -358,10 +358,12 @@ export default function Setting() {
         setModalOpen={setModalOpen}
         onCancel={() => setModalOpen(false)}
         onSubmit={handleDeleteValue}
+        disableSubmitButton={loading}
       >
         <p>Deleted category values cannot be restored.</p>
       </Modal>
       <SchoolModal
+        loading={loading}
         setLoading={setLoading}
         open={schoolModalOpen}
         setOpen={setSchoolModalOpen}
@@ -370,6 +372,7 @@ export default function Setting() {
         setSchoolToEdit={setSchoolToEdit}
       />
       <AdminModal
+        loading={loading}
         setLoading={setLoading}
         open={adminModalOpen}
         setOpen={setAdminModalOpen}

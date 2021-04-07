@@ -143,6 +143,7 @@ export default function PerformanceDetails() {
               ) : performance && showJudgeFeedback ? (
                 <JudgeFeedback
                   getPerformance={getPerformance}
+                  loading={loading}
                   setLoading={setLoading}
                   awardsDict={awardsDict}
                   adjudication={currentAdjudication}
@@ -158,6 +159,7 @@ export default function PerformanceDetails() {
       <EditPerformanceModal
         open={modalOpen}
         setOpen={setModalOpen}
+        loading={loading}
         setLoading={setLoading}
         getPerformance={getPerformance}
         performance={performance}
