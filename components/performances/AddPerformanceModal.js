@@ -7,6 +7,7 @@ import Dropdown from '@components/Dropdown'; // Dropdown
 import styles from '@styles/components/performances/PerformanceModal.module.scss'; // Component styles
 
 export default function AddPerformanceModal({
+  loading,
   open,
   setOpen,
   addPerformance,
@@ -66,6 +67,7 @@ export default function AddPerformanceModal({
       submitText={'Add Performance'}
       onCancel={onCancel}
       onSubmit={onSubmit}
+      disableSubmitButton={loading}
     >
       <div className={styles.modal}>
         <div>

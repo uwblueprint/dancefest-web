@@ -381,7 +381,7 @@ export default function Performances() {
               Filters
               <img src={showFilters ? ChevronDown : ChevronDownGrey} />
             </Button>
-            <Button variant="contained" onClick={() => setModalOpen(true)}>
+            <Button variant="contained" onClick={() => setModalOpen(true)} disabled={loading}>
               Add Performance
             </Button>
           </div>
@@ -464,6 +464,7 @@ export default function Performances() {
         </div>
       </div>
       <AddPerformanceModal
+        loading={loading}
         open={modalOpen}
         setOpen={setModalOpen}
         setLoading={setLoading}

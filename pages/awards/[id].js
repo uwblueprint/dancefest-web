@@ -128,6 +128,7 @@ function AwardDetails({ award }) {
           <Button
             className={styles.award_details__delete_button}
             onClick={() => setDeleteConfirmationModalOpen(true)}
+            disabled={loading}
           >
             Delete Award
           </Button>
@@ -193,6 +194,7 @@ function AwardDetails({ award }) {
           isAwardFinalized ? unfinalizeAward() : finalizeAward();
           setPerformanceToFinalize(-1);
         }}
+        disableSubmitButton={loading}
       >
         {loading ? (
           <Loader type="Oval" color="#6B778C" height={40} width={40} />
@@ -211,6 +213,7 @@ function AwardDetails({ award }) {
         setModalOpen={setDeleteConfirmationModalOpen}
         onCancel={() => setDeleteConfirmationModalOpen(false)}
         onSubmit={deleteAward}
+        disableSubmitButton={loading}
       >
         <p>Are you sure you want to delete this award?</p>
       </Modal>
@@ -293,6 +296,7 @@ const JudgeFeedback = ({
                 setConfirmationModalOpen(true);
                 setPerformanceToFinalize(feedback.id);
               }}
+              disabled={loading}
             >
               Remove Winner
             </Button>
@@ -303,6 +307,7 @@ const JudgeFeedback = ({
                 setConfirmationModalOpen(true);
                 setPerformanceToFinalize(feedback.id);
               }}
+              disabled={loading}
             >
               Finalize
             </Button>

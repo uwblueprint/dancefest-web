@@ -7,6 +7,7 @@ import Input from '@components/Input'; // Input
 import styles from '@styles/components/settings/SchoolModal.module.scss'; // Component styles
 
 export default function SchoolModal({
+  loading,
   setLoading,
   open,
   setOpen,
@@ -102,7 +103,7 @@ export default function SchoolModal({
         clearFields();
       }}
       onSubmit={schoolToEdit ? updateSchool : addSchool}
-      disableSubmitButton={!schoolName || !contactName || !contactEmail || !phoneNumber}
+      disableSubmitButton={loading || !schoolName || !contactName || !contactEmail || !phoneNumber}
     >
       <div className={styles.schoolModal}>
         <div>
