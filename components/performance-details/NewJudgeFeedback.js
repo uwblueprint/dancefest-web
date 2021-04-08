@@ -17,25 +17,19 @@ import { calculateAverageScore } from '@utils/performances'; // Calculate averag
 const SPECIAL_AWARD_TYPE = 'SPECIAL';
 const DANCE_ARTISTRY_AWARD_TYPE = 'DANCE_ARTISTRY';
 
-export default function JudgeFeedback({
+export default function NewJudgeFeedback({
   getPerformance = () => {},
   setLoading = () => {},
   awardsDict,
-  adjudication,
   nominations: initialNominations,
+  judgeID,
 }) {
   const { event: eventId } = Navigation.useContainer();
   const router = useRouter();
   const { id: performanceId } = router.query;
   const { uploadToS3 } = useS3Upload();
-  const {
-    id,
-    userId: judgeID,
-    notes: initialNotes,
-    technicalScore: initialTechnicalScore,
-    artisticScore: initialArtisticScore,
-    cumulativeScore: initialCumulativeScore,
-  } = adjudication;
+
+  // Get valid Award options
   const initialNormalAwards = formatDropdownOptions(
     (initialNominations || []).filter(({ type }) => type === DANCE_ARTISTRY_AWARD_TYPE),
     { value: 'id', label: 'title' }
@@ -59,11 +53,11 @@ export default function JudgeFeedback({
     ),
   ];
 
-  const [editMode, setEditMode] = useState(false);
-  const [notes, setNotes] = useState(initialNotes);
-  const [technicalScore, setTechnicalScore] = useState(initialTechnicalScore);
-  const [artisticScore, setArtisticScore] = useState(initialArtisticScore);
-  const [cumulativeScore, setCumulativeScore] = useState(initialCumulativeScore);
+  const [editMode, setEditMode] = useState(true);
+  const [notes, setNotes] = useState('');
+  const [technicalScore, setTechnicalScore] = useState(0);
+  const [artisticScore, setArtisticScore] = useState(0);
+  const [cumulativeScore, setCumulativeScore] = useState(0);
   const [normalAwards, setNormalAwards] = useState(initialNormalAwards);
   const [specialAward, setSpecialAward] = useState(initialSpecialAward); // Existing special award
   const [specialAwardName, setSpecialAwardName] = useState(
@@ -75,21 +69,10 @@ export default function JudgeFeedback({
   const [recording, setRecording] = useState(false);
   const [recordedBlob, setRecordedBlob] = useState(null);
 
-  const normalAwardsData = normalAwards
-    .filter(award => !!award)
-    .map(award => awardsDict[award.value]);
-  const specialAwardData = specialAward && awardsDict[specialAward.value];
-
   useEffect(() => {
-    if (adjudication) {
-      setNormalAwards(initialNormalAwards);
-      setSpecialAward(initialSpecialAward);
-      setNotes(adjudication.notes);
-      setTechnicalScore(adjudication.technicalScore);
-      setArtisticScore(adjudication.artisticScore);
-      setCumulativeScore(adjudication.cumulativeScore);
-    }
-  }, [adjudication, initialNominations]);
+    setNormalAwards(initialNormalAwards);
+    setSpecialAward(initialSpecialAward);
+  }, [initialNominations]);
 
   // Upload audio blob to S3
   const uploadAudio = async () => {
@@ -109,22 +92,22 @@ export default function JudgeFeedback({
     }
   };
 
-  // Submit updated feedback
-  const updateFeedback = async () => {
+  // Submit new feedback
+  const createFeedback = async () => {
     setLoading(true);
 
     try {
-      // Update adjudication
+      // Create adjudication
       await axios({
         method: 'put',
-        url: `/api/adjudications/edit`,
+        url: `/api/adjudications/create`,
         data: {
-          id,
           artisticMark: artisticScore,
           technicalMark: technicalScore,
           cumulativeMark: cumulativeScore,
           notes,
           audioUrl: recordingChanged ? await uploadAudio() : undefined,
+          performanceID: parseInt(performanceId),
         },
       });
 
@@ -174,56 +157,41 @@ export default function JudgeFeedback({
       <div className={styles.judge__feedback_container}>
         <div className={styles.judge__feedback_header}>
           <h2>Notes</h2>
-          {editMode ? (
-            <span>
-              <Button
-                variant="outlined"
-                onClick={() => {
-                  cancelUpdate();
-                  setEditMode(false);
-                }}
-                className={styles.judge__feedback_buttons_spacing}
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={() => {
-                  updateFeedback();
-                  setEditMode(false);
-                }}
-              >
-                Save
-              </Button>
-            </span>
-          ) : (
+          <span>
             <Button
               variant="outlined"
               onClick={() => {
-                setEditMode(true);
+                cancelUpdate();
+                setEditMode(false);
+              }}
+              className={styles.judge__feedback_buttons_spacing}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={() => {
+                createFeedback();
+                setEditMode(false);
               }}
             >
-              Edit Feedback
+              Submit
             </Button>
-          )}
+          </span>
         </div>
         <div className={styles.judge__feedback_notes_wrapper}>
-          {editMode ? (
-            <div className={styles.judge__feedback_notes_input}>
-              <textarea
-                onChange={e => {
-                  setNotes(e.target.value);
-                }}
-              >
-                {notes}
-              </textarea>
-            </div>
-          ) : (
-            <p>{notes || 'None'}</p>
-          )}
+          <div className={styles.judge__feedback_notes_input}>
+            <textarea
+              onChange={e => {
+                setNotes(e.target.value);
+              }}
+            >
+              {notes}
+            </textarea>
+          </div>
         </div>
         <div className={styles.judge__feedback_audio_player_wrapper}>
           <FeedbackAudio
-            audioUrl={adjudication.audioUrl}
+            audioUrl={null}
             edit={editMode}
             setRecordingChanged={setRecordingChanged}
             recording={recording}
@@ -234,32 +202,20 @@ export default function JudgeFeedback({
         </div>
         <div className={styles.judge__feedback_nominations}>
           <h2>Nominated for:</h2>
-          {editMode ? (
-            <DropdownGrid
-              placeholder="Select Award"
-              options={normalAwardsOptions}
-              values={normalAwards}
-              setValues={setNormalAwards}
-            />
-          ) : normalAwardsData.length > 0 ? (
-            normalAwardsData.map(({ title }, i) => <p key={i}>{title}</p>)
-          ) : (
-            <p>None</p>
-          )}
+          <DropdownGrid
+            placeholder="Select Award"
+            options={normalAwardsOptions}
+            values={normalAwards}
+            setValues={setNormalAwards}
+          />
         </div>
         <div className={styles.judge__feedback_awards}>
           <h2>Special Award:</h2>
-          {editMode ? (
-            <Input
-              placeholder="Special Award"
-              value={specialAwardName}
-              onChange={event => setSpecialAwardName(event.target.value)}
-            />
-          ) : specialAwardData && specialAwardData.title ? (
-            <p>{specialAwardData.title}</p>
-          ) : (
-            <p>None</p>
-          )}
+          <Input
+            placeholder="Special Award"
+            value={specialAwardName}
+            onChange={event => setSpecialAwardName(event.target.value)}
+          />
         </div>
       </div>
       <div className={styles.performance_summary__score_content}>

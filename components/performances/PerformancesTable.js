@@ -8,7 +8,7 @@ import Table from '@components/Table'; // Table
 
 const PAGE_SIZE = 20; // Rows per page
 
-export default function PerformancesTable({ performances, ...props }) {
+export default function PerformancesTable({ performances, emptyPrompt, ...props }) {
   const router = useRouter();
 
   const columns = [
@@ -84,7 +84,7 @@ export default function PerformancesTable({ performances, ...props }) {
       columns={columns}
       data={performances}
       pageSize={PAGE_SIZE}
-      emptyComponent={<EmptyTableComponent />}
+      emptyComponent={<EmptyTableComponent prompt={emptyPrompt} />}
       initialSort={[{ id: 'id' }]}
       onRowClick={goToPerformanceDetails}
       clickable

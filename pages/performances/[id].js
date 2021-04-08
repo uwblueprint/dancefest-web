@@ -9,6 +9,7 @@ import Navigation from '@containers/Navigation'; // Navigation state
 import Tab from '@components/performance-details/Tab'; // Tab
 import EmptyComponent from '@components/performance-details/EmptyComponent'; // EmptyComponent
 import JudgeFeedback from '@components/performance-details/JudgeFeedback'; // JudgeFeedback
+import NewJudgeFeedback from '@components/performance-details/NewJudgeFeedback'; // NewJudgeFeedback
 import PerformanceSummary from '@components/performance-details/PerformanceSummary'; // PerformanceSummary
 import EditPerformanceModal from '@components/performance-details/EditPerformanceModal'; // Edit Performance Modal
 
@@ -28,6 +29,8 @@ export default function PerformanceDetails({ session }) {
   const [performance, setPerformance] = useState(null);
   const [selectedTab, setSelectedTab] = useState(-1);
   const [awardsDict, setAwardsDict] = useState({}); // Object mapping award id to award data
+  // Flag to check whether a judge's adjudication exists - used in judge view, set to true if there's an existing adjudication
+  const [judgeFeedbackExists, setJudgeFeedbackExists] = useState(false);
 
   const showPerformanceDetails = selectedTab === -1;
   const showJudgeFeedback = selectedTab >= 0;
@@ -66,6 +69,16 @@ export default function PerformanceDetails({ session }) {
 
     setLoading(false);
   };
+
+  useEffect(() => {
+    if (session.role === 'JUDGE') {
+      adjudications.map(adjudication => {
+        if (adjudication.userId == session.id) {
+          setJudgeFeedbackExists(true);
+        }
+      });
+    }
+  }, [adjudications]);
 
   const getPerformance = async () => {
     setLoading(true);
@@ -146,6 +159,11 @@ export default function PerformanceDetails({ session }) {
                   )
                 )
               )}
+              {session.role === 'JUDGE' && !judgeFeedbackExists && (
+                <Tab selected={selectedTab === 0} handleClick={() => setSelectedTab(0)} newFeedback>
+                  {session.user.name}
+                </Tab>
+              )}
             </div>
             <div
               className={`${styles.performance_details__content} ${
@@ -159,13 +177,23 @@ export default function PerformanceDetails({ session }) {
                   admin={session.role == 'ADMIN'}
                 />
               ) : performance && showJudgeFeedback ? (
-                <JudgeFeedback
-                  getPerformance={getPerformance}
-                  setLoading={setLoading}
-                  awardsDict={awardsDict}
-                  adjudication={currentAdjudication}
-                  nominations={currentNominations}
-                />
+                session.role === 'JUDGE' && !judgeFeedbackExists ? (
+                  <NewJudgeFeedback
+                    getPerformance={getPerformance}
+                    setLoading={setLoading}
+                    awardsDict={awardsDict}
+                    nominations={currentNominations}
+                    judgeID={session.id}
+                  />
+                ) : (
+                  <JudgeFeedback
+                    getPerformance={getPerformance}
+                    setLoading={setLoading}
+                    awardsDict={awardsDict}
+                    adjudication={currentAdjudication}
+                    nominations={currentNominations}
+                  />
+                )
               ) : (
                 <EmptyComponent />
               )}

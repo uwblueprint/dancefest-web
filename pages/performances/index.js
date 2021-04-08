@@ -450,6 +450,7 @@ export default function Performances({ session }) {
               ) : (
                 <PerformancesTable
                   performances={session.role === 'ADMIN' ? performances : pendingPerformances}
+                  emptyPrompt={session.role === 'JUDGE' && 'No performances left to adjudicate'}
                   filters={tableFilters}
                   pageNumber={pageNumber}
                   setPageCount={setPageCount}
@@ -467,6 +468,7 @@ export default function Performances({ session }) {
               ) : (
                 <PerformancesTable
                   performances={session.role === 'ADMIN' ? performances : adjudicatedPerformances}
+                  emptyPrompt={session.role === 'JUDGE' && ''}
                   filters={tableFilters}
                   pageNumber={pageNumber}
                   setPageCount={setPageCount}
