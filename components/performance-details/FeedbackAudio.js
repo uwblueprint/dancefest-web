@@ -5,7 +5,7 @@ import MicrophoneIcon from '@assets/record.svg'; // Microphone icon
 import styles from '@styles/components/performance-details/FeedbackAudio.module.scss'; // Component styles
 
 export default function FeedbackAudio({
-  adjudication,
+  audioUrl,
   edit = false,
   setRecordingChanged,
   recording,
@@ -13,8 +13,6 @@ export default function FeedbackAudio({
   recordedBlob,
   setRecordedBlob,
 }) {
-  const { audioUrl } = adjudication;
-
   const onStopRecording = blob => {
     setRecordingChanged(true);
     setRecording(false);

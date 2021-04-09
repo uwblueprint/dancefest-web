@@ -25,7 +25,7 @@ import ChevronDownGrey from '@assets/chevron-down-grey.svg'; // Chevron down gre
 import styles from '@styles/pages/Performances.module.scss'; // Page styles
 
 import { formatSchools } from '@utils/schools'; // Format schools util
-import { formatPerformances } from '@utils/performances'; // Format performances util
+import { formatPerformances, filterPerformancesForJudge } from '@utils/performances'; // Format performances util
 
 const ENTRY_VIEW_HIDDEN_COLUMNS = ['technicalScore', 'artisticScore', 'awardsString', 'status'];
 const JUDGING_VIEW_HIDDEN_COLUMNS = ['schoolName', 'performanceLevel', 'danceStyle', 'danceSize'];
@@ -57,7 +57,7 @@ const removeKeyFromObject = (object, key) => {
 };
 
 // Page: Performances
-export default function Performances() {
+export default function Performances({ session }) {
   const router = useRouter();
   const { event } = Navigation.useContainer();
 
@@ -87,6 +87,9 @@ export default function Performances() {
   // Table data
   const [performances, setPerformances] = useState([]);
   const [performanceToEdit, setPerformanceToEdit] = useState(null);
+  // Table data - judge view
+  const [pendingPerformances, setPendingPerformances] = useState([]);
+  const [adjudicatedPerformances, setAdjudicatedPerformances] = useState([]);
 
   const getEvent = async () => {
     setLoading(true);
@@ -183,6 +186,15 @@ export default function Performances() {
 
     setLoading(false);
   };
+
+  useEffect(() => {
+    // If judge view - filter performances for specific judge
+    if (session.role === 'JUDGE') {
+      const [adjudicated, pending] = filterPerformancesForJudge(performances, session.id);
+      setPendingPerformances(pending);
+      setAdjudicatedPerformances(adjudicated);
+    }
+  }, [performances]);
 
   const getPerformances = async () => {
     setLoading(true);
@@ -381,9 +393,11 @@ export default function Performances() {
               Filters
               <img src={showFilters ? ChevronDown : ChevronDownGrey} />
             </Button>
-            <Button variant="contained" onClick={() => setModalOpen(true)} disabled={loading}>
-              Add Performance
-            </Button>
+            {session.role === 'ADMIN' && (
+              <Button variant="contained" onClick={() => setModalOpen(true)} disabled={loading}>
+                Add Performance
+              </Button>
+            )}
           </div>
           <div>
             {performances.length > 0 && (
@@ -426,8 +440,8 @@ export default function Performances() {
         )}
         <div className={styles.performances__content}>
           <Tabs
-            firstTabName="Entry View"
-            secondTabName="Judging View"
+            firstTabName={session.role === 'ADMIN' ? `Entry View` : `Needs Feedback`}
+            secondTabName={session.role === 'ADMIN' ? `Judging View` : `Feedback Given`}
             firstTabContent={
               loading ? (
                 <div className={styles.performances__loadingSpinner}>
@@ -435,7 +449,8 @@ export default function Performances() {
                 </div>
               ) : (
                 <PerformancesTable
-                  performances={performances}
+                  performances={session.role === 'ADMIN' ? performances : pendingPerformances}
+                  emptyPrompt={session.role === 'JUDGE' && 'No performances left to adjudicate'}
                   filters={tableFilters}
                   pageNumber={pageNumber}
                   setPageCount={setPageCount}
@@ -452,7 +467,8 @@ export default function Performances() {
                 </div>
               ) : (
                 <PerformancesTable
-                  performances={performances}
+                  performances={session.role === 'ADMIN' ? performances : adjudicatedPerformances}
+                  emptyPrompt={session.role === 'JUDGE' && ''}
                   filters={tableFilters}
                   pageNumber={pageNumber}
                   setPageCount={setPageCount}
@@ -485,7 +501,6 @@ export default function Performances() {
 export async function getServerSideProps(context) {
   // Collect session
   const session = await getSession(context);
-
   // If session does not exist
   if (!session) {
     return {
@@ -499,6 +514,8 @@ export async function getServerSideProps(context) {
 
   // Else, return
   return {
-    props: {},
+    props: {
+      session,
+    },
   };
 }

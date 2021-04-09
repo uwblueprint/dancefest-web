@@ -84,3 +84,21 @@ export const calculateAverageScore = scores => {
   const average = scores.reduce((a, v) => a + v, 0) / scores.length;
   return Math.round(average * 10) / 10;
 };
+
+export const filterPerformancesForJudge = (performances, judgeID) => {
+  let adjudicated = [];
+  let pending = [];
+  performances.map(performance => {
+    let judgeFound = false;
+    performance.adjudications.map(adjudication => {
+      if (adjudication.userId === judgeID) judgeFound = true;
+    });
+
+    if (judgeFound) {
+      adjudicated.push(performance);
+    } else {
+      pending.push(performance);
+    }
+  });
+  return [adjudicated, pending];
+};

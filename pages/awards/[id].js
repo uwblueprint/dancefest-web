@@ -14,16 +14,16 @@ import DancerRedJump from '@assets/dancer-red-jump.svg'; // Jumping Dancer SVG
 import PlayIcon from '@assets/play.svg'; // Play icon
 import styles from '@styles/pages/AwardDetails.module.scss';
 
-export default function DetailsRoute({ award }) {
+export default function DetailsRoute({ award, session }) {
   return award.type === 'SCORE_BASED' && !award.is_finalized ? (
     <ScoreBasedAwards award={award} />
   ) : (
-    <AwardDetails award={award} />
+    <AwardDetails award={award} session={session} />
   );
 }
 
 // Page: Award Details
-function AwardDetails({ award }) {
+function AwardDetails({ award, session }) {
   const [selectedTab, setSelectedTab] = useState(-1);
   const [showAwardSummary, setShowAwardSummary] = useState(true);
   const [feedbackAvailable, setFeedbackAvailable] = useState(true);
@@ -125,13 +125,15 @@ function AwardDetails({ award }) {
         </div>
         <div className={styles.award_details__header_container}>
           <Title>{award.title}</Title>
-          <Button
-            className={styles.award_details__delete_button}
-            onClick={() => setDeleteConfirmationModalOpen(true)}
-            disabled={loading}
-          >
-            Delete Award
-          </Button>
+          {session.role === 'ADMIN' && (
+            <Button
+              className={styles.award_details__delete_button}
+              onClick={() => setDeleteConfirmationModalOpen(true)}
+              disabled={loading}
+            >
+              Delete Award
+            </Button>
+          )}
         </div>
         <div className={styles.performance_details__content_container}>
           <div className={styles.performance_details__tabs_container}>
@@ -157,7 +159,7 @@ function AwardDetails({ award }) {
                 nominations={awards_performance.nominator.name}
                 key={index}
               >
-                {awards_performance.name}
+                {awards_performance.dance_title}
               </Tab>
             ))}
           </div>
@@ -175,6 +177,7 @@ function AwardDetails({ award }) {
                 isAwardFinalized={isAwardFinalized}
                 setConfirmationModalOpen={setConfirmationModalOpen}
                 loading={loading}
+                session={session}
               />
             ) : (
               <EmptyComponent />
@@ -277,11 +280,12 @@ const JudgeFeedback = ({
   setPerformanceToFinalize,
   isAwardFinalized,
   loading,
+  session,
 }) => {
   return (
     <div className={styles.judge__feedback_container}>
       <div className={styles.judge__feedback_header}>
-        <h3>{feedback.name}</h3>
+        <h3>{feedback.dance_title}</h3>
         <span>
           {loading ? (
             <Button disabled>
@@ -337,9 +341,15 @@ const JudgeFeedback = ({
           </div>
         </div>
       </div>
-      {feedback.adjudications.map((adjudication, index) => (
-        <IndividualFeedback feedback={adjudication} key={index} />
-      ))}
+      {feedback.adjudications.map((adjudication, index) =>
+        session.role === 'ADMIN' ? (
+          <IndividualFeedback feedback={adjudication} key={index} />
+        ) : (
+          session.id === adjudication.user_id && (
+            <IndividualFeedback feedback={adjudication} key={index} />
+          )
+        )
+      )}
     </div>
   );
 };
@@ -407,6 +417,7 @@ export async function getServerSideProps(context) {
 
   return {
     props: {
+      session,
       award,
     },
   };
