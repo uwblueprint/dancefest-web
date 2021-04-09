@@ -307,9 +307,11 @@ export default function Awards({ session }) {
               Filters
               <img src={showFilters ? ChevronDown : ChevronDownGrey} />
             </Button>
-            <Button variant="contained" onClick={() => setModalOpen(true)} disabled={loading}>
-              Add Award
-            </Button>
+            {session.role === 'ADMIN' && (
+              <Button variant="contained" onClick={() => setModalOpen(true)} disabled={loading}>
+                Add Award
+              </Button>
+            )}
           </div>
           <div>
             <Pagination
