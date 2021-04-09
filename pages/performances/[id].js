@@ -175,6 +175,7 @@ export default function PerformanceDetails({ session }) {
                   performance={performance}
                   setModalOpen={setModalOpen}
                   admin={session.role == 'ADMIN'}
+                />
               ) : performance && showJudgeFeedback ? (
                 session.role === 'JUDGE' && !judgeFeedbackExists ? (
                   <NewJudgeFeedback
