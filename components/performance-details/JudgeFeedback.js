@@ -19,6 +19,7 @@ const DANCE_ARTISTRY_AWARD_TYPE = 'DANCE_ARTISTRY';
 
 export default function JudgeFeedback({
   getPerformance = () => {},
+  loading,
   setLoading = () => {},
   awardsDict,
   adjudication,
@@ -183,6 +184,7 @@ export default function JudgeFeedback({
                   setEditMode(false);
                 }}
                 className={styles.judge__feedback_buttons_spacing}
+                disabled={loading}
               >
                 Cancel
               </Button>
@@ -191,6 +193,7 @@ export default function JudgeFeedback({
                   updateFeedback();
                   setEditMode(false);
                 }}
+                disabled={loading}
               >
                 Save
               </Button>

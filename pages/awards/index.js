@@ -307,7 +307,7 @@ export default function Awards({ session }) {
               Filters
               <img src={showFilters ? ChevronDown : ChevronDownGrey} />
             </Button>
-            <Button variant="contained" onClick={() => setModalOpen(true)}>
+            <Button variant="contained" onClick={() => setModalOpen(true)} disabled={loading}>
               Add Award
             </Button>
           </div>
@@ -383,6 +383,7 @@ export default function Awards({ session }) {
         performanceLevelOptions={performanceLevelDropdownOptions}
         awardTypeOptions={awardTypeDropdownOptions}
         createAward={createAward}
+        loading={loading}
       />
     </Layout>
   );

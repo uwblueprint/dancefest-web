@@ -77,6 +77,8 @@ export default function Performances({ award }) {
   }, [query]);
 
   async function nominate() {
+    setLoading(true);
+
     try {
       await axios({
         method: 'POST',
@@ -90,6 +92,8 @@ export default function Performances({ award }) {
     } catch {
       // Empty catch block
     }
+
+    setLoading(false);
   }
 
   async function finalizeAward() {
@@ -183,6 +187,7 @@ export default function Performances({ award }) {
           }, 500);
           setPerformanceToFinalize(-1);
         }}
+        disableSubmitButton={loading}
       >
         <p>This award will now be shown in the “Finalized” tab.</p>
       </Modal>

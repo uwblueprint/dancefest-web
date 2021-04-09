@@ -13,6 +13,7 @@ import { formatSchools } from '@utils/schools'; // Format schools util
 export default function EditPerformanceModal({
   open,
   setOpen,
+  loading,
   setLoading,
   getPerformance,
   performance,
@@ -182,6 +183,7 @@ export default function EditPerformanceModal({
       submitText={'Edit Performance'}
       onCancel={onCancel}
       onSubmit={updatePerformance}
+      disableSubmitButton={loading}
     >
       <div className={styles.modal}>
         <div>

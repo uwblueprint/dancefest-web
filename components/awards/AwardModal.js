@@ -14,6 +14,7 @@ export default function AwardModal({
   awardTypeOptions,
   performanceLevelOptions,
   createAward,
+  loading,
 }) {
   const [awardTitle, setAwardTitle] = useState('');
   const [awardType, setAwardType] = useState(null);
@@ -61,7 +62,7 @@ export default function AwardModal({
       submitText={mode === 'edit' ? 'Confirm Edit' : 'Add Award'}
       onCancel={discardChanges}
       onSubmit={onSubmit}
-      disableSubmitButton={disableButton}
+      disableSubmitButton={loading || disableButton}
     >
       <div className={styles.modal}>
         <div>
@@ -69,7 +70,7 @@ export default function AwardModal({
           <Input className={styles.modal__entryId} placeholder="Title" onChange={handleOnChange} />
         </div>
         <div>
-          <h2>Elligible dance categories</h2>
+          <h2>Eligible dance categories</h2>
           <h3>
             Select categories that apply to the potential winners of this award. (Selecting no
             categories will mean that all performances are elligible for this award).

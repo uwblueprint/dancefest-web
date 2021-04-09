@@ -394,7 +394,7 @@ export default function Performances({ session }) {
               <img src={showFilters ? ChevronDown : ChevronDownGrey} />
             </Button>
             {session.role === 'ADMIN' && (
-              <Button variant="contained" onClick={() => setModalOpen(true)}>
+              <Button variant="contained" onClick={() => setModalOpen(true)} disabled={loading}>
                 Add Performance
               </Button>
             )}
@@ -480,6 +480,7 @@ export default function Performances({ session }) {
         </div>
       </div>
       <AddPerformanceModal
+        loading={loading}
         open={modalOpen}
         setOpen={setModalOpen}
         setLoading={setLoading}

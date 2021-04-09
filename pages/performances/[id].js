@@ -175,7 +175,6 @@ export default function PerformanceDetails({ session }) {
                   performance={performance}
                   setModalOpen={setModalOpen}
                   admin={session.role == 'ADMIN'}
-                />
               ) : performance && showJudgeFeedback ? (
                 session.role === 'JUDGE' && !judgeFeedbackExists ? (
                   <NewJudgeFeedback
@@ -188,6 +187,7 @@ export default function PerformanceDetails({ session }) {
                 ) : (
                   <JudgeFeedback
                     getPerformance={getPerformance}
+                    loading={loading}
                     setLoading={setLoading}
                     awardsDict={awardsDict}
                     adjudication={currentAdjudication}
@@ -204,6 +204,7 @@ export default function PerformanceDetails({ session }) {
       <EditPerformanceModal
         open={modalOpen}
         setOpen={setModalOpen}
+        loading={loading}
         setLoading={setLoading}
         getPerformance={getPerformance}
         performance={performance}
