@@ -371,7 +371,7 @@ export default function Performances({ session }) {
               Back to Events
             </Button>
           </Link>
-          <FeedbackReadyNotification />
+          {false && <FeedbackReadyNotification />}
         </div>
         <h2 className={styles.performances__eventName}>{eventName}</h2>
         <div className={styles.performances__header}>
