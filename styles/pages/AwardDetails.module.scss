@@ -337,21 +337,8 @@
   }
 }
 
-.judge__feedback_audio_player {
-  box-sizing: border-box;
-  display: flex;
-  flex: row;
-  justify-content: space-between;
-  padding: 0 24px;
-  border: 1px solid #0b0504;
-  box-sizing: border-box;
-  border-radius: 5px;
-  margin-bottom: 2em;
-
-  span {
-    display: flex;
-    flex: row;
-  }
+.judge__feedback_audio_player_wrapper {
+  margin-bottom: 42px;
 }
 
 .judge__feedback_notes_input {

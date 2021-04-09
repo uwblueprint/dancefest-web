@@ -357,10 +357,6 @@ const JudgeFeedback = ({
 const IndividualFeedback = ({ feedback }) => {
   const notes = 'None Entered';
 
-  useEffect(() => {
-    console.log(feedback);
-  }, [feedback]);
-
   return (
     <div className={styles.individual__feedback_container}>
       <div className={styles.individual__feedback_header}>
@@ -373,7 +369,7 @@ const IndividualFeedback = ({ feedback }) => {
       <p className={styles.individual__feedback_notes}>{feedback.notes || notes}</p>
       <div className={styles.judge__feedback_audio_player_wrapper}>
         <FeedbackAudio
-          audioUrl={feedback.audioUrl}
+          audioUrl={feedback.audio_url}
           edit={false}
           setRecordingChanged={() => {}}
           recording={null}
