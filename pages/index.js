@@ -2,7 +2,7 @@ import axios from 'axios'; // Axios requests
 import Layout from '@components/Layout'; // Layout wrapper
 import Loader from 'react-loader-spinner'; // Spinning loader
 import { useState, useEffect } from 'react';
-import Navigation from '@containers/Navigation'; // State management
+import Event from '@containers/Event'; // State management
 
 import DancefestModal from '@components/Modal'; // Modal component
 import { getSession } from 'next-auth/client'; // Session handling
@@ -24,7 +24,7 @@ const modalStates = Object.freeze({
 
 // Page: Events
 export default function Events({ session }) {
-  const { setEvent } = Navigation.useContainer();
+  const [, setEvent] = Event.useContainer();
 
   const [events, setEvents] = useState([]); // Available events
   const [loading, setLoading] = useState(true); // Loading state

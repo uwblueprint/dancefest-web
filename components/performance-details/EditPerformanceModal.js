@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'; // React
 import PropTypes from 'prop-types'; // PropTypes
 import axios from 'axios'; // axios
-import Navigation from '@containers/Navigation'; // Navigation state
+import Event from '@containers/Event'; // Event state
 
 import Input from '@components/Input'; // Input
 import Modal from '@components/Modal'; // Modal
@@ -18,7 +18,7 @@ export default function EditPerformanceModal({
   getPerformance,
   performance,
 }) {
-  const { event: eventId } = Navigation.useContainer();
+  const [event] = Event.useContainer();
 
   const [danceTitle, setDanceTitle] = useState('');
   const [dancersString, setDancersString] = useState('');
@@ -129,7 +129,7 @@ export default function EditPerformanceModal({
           danceStyle: danceStyle.label,
           danceStyleID: danceStyle.value,
           danceTitle,
-          eventID: eventId,
+          eventID: event.id,
           schoolID: school.value,
         },
       });

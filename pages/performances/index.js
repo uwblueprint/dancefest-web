@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'; // React
 import axios from 'axios'; // axios
 import Link from 'next/link'; // Next link
 import Layout from '@components/Layout'; // Layout wrapper
-import Navigation from '@containers/Navigation'; // Navigation state
+import Event from '@containers/Event'; // Event state
 import { getSession } from 'next-auth/client'; // Session handling
 import { useRouter } from 'next/router'; // Routing
 
@@ -26,6 +26,7 @@ import styles from '@styles/pages/Performances.module.scss'; // Page styles
 
 import { formatSchools } from '@utils/schools'; // Format schools util
 import { formatPerformances, filterPerformancesForJudge } from '@utils/performances'; // Format performances util
+import FeedbackReadyNotification from '@components/performances/FeedbackReadyNotification';
 
 const ENTRY_VIEW_HIDDEN_COLUMNS = ['technicalScore', 'artisticScore', 'awardsString', 'status'];
 const JUDGING_VIEW_HIDDEN_COLUMNS = ['schoolName', 'performanceLevel', 'danceStyle', 'danceSize'];
@@ -59,7 +60,7 @@ const removeKeyFromObject = (object, key) => {
 // Page: Performances
 export default function Performances({ session }) {
   const router = useRouter();
-  const { event } = Navigation.useContainer();
+  const [event] = Event.useContainer();
 
   const [eventName, setEventName] = useState(''); // Event name
   const [loading, setLoading] = useState(true); // Loading
@@ -97,7 +98,7 @@ export default function Performances({ session }) {
     try {
       const response = await axios({
         method: 'GET',
-        url: `/api/events/get?eventID=${event}`,
+        url: `/api/events/get?eventID=${event.id}`,
       });
       const { name } = response.data;
 
@@ -202,7 +203,7 @@ export default function Performances({ session }) {
     try {
       const response = await axios({
         method: 'GET',
-        url: `/api/performances/collect?eventID=${event}`,
+        url: `/api/performances/collect?eventID=${event.id}`,
       });
 
       setPerformances(formatPerformances(response.data));
@@ -244,7 +245,7 @@ export default function Performances({ session }) {
           danceStyleID,
           danceSize,
           danceSizeID,
-          eventID: event,
+          eventID: event.id,
         },
       });
 
@@ -370,9 +371,9 @@ export default function Performances({ session }) {
               Back to Events
             </Button>
           </Link>
-
-          <h2 className={styles.performances__navigation__eventName}>{eventName}</h2>
+          <FeedbackReadyNotification />
         </div>
+        <h2 className={styles.performances__eventName}>{eventName}</h2>
         <div className={styles.performances__header}>
           <div>
             <Title className={styles.performances__header__pageTitle}>Performances</Title>

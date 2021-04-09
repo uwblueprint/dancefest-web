@@ -5,7 +5,7 @@ import { getSession } from 'next-auth/client'; // Session handling
 import Link from 'next/link'; // Next link
 import Loader from 'react-loader-spinner'; // Spinning loader
 import Layout from '@components/Layout'; // Layout wrapper
-import Navigation from '@containers/Navigation'; // Navigation state
+import Event from '@containers/Event'; // Event state
 
 import { formatDropdownOptions } from '@components/Dropdown'; // Format dropdown options util
 import AwardModal from '@components/awards/AwardModal';
@@ -52,7 +52,7 @@ const awardOptions = [
 // Page: Awards
 export default function Awards({ session }) {
   const router = useRouter(); // collect router
-  const { event } = Navigation.useContainer(); // get event from global state
+  const [event] = Event.useContainer(); // get event from global state
 
   // Modal
   const [modalOpen, setModalOpen] = useState(false);
@@ -191,7 +191,7 @@ export default function Awards({ session }) {
     try {
       const resp = await axios({
         method: 'POST',
-        url: `/api/awards/collect?eventID=${event}`,
+        url: `/api/awards/collect?eventID=${event.id}`,
       });
 
       setAwardData(resp.data);
@@ -261,7 +261,7 @@ export default function Awards({ session }) {
         data: {
           title: awardTitle,
           type: awardType,
-          eventID: event,
+          eventID: event.id,
           settingIDs: settingIds,
         },
       });

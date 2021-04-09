@@ -1,0 +1,96 @@
+/*
+****************************************
+Share Feedback
+****************************************
+*/
+.feedback {
+  padding-top: 56px;
+
+  // Event name
+  & > h2 {
+    margin: 0 0 4px;
+    font-family: DM Sans;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 21px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+
+    color: var(--brand-pop-blue);
+  }
+
+  // Header
+  .feedback__title_wrapper {
+    display: flex;
+    align-items: center;
+    margin-bottom: 36px;
+
+    // Page title
+    .feedback__title {
+      display: inline-block;
+      margin-right: 28px;
+    }
+
+    // Send Feedback button
+    & > button {
+      height: 37px;
+    }
+  }
+
+  // Table
+  div:last-child {
+    width: 100%;
+    padding: 0;
+
+    // Table
+    table {
+      width: 100%;
+      padding: 40px 48px;
+
+      // Preview Link
+      .previewLink {
+        font-family: DM Sans;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 20px;
+
+        text-decoration-line: underline;
+        color: var(--brand-navy);
+      }
+    }
+  }
+}
+
+/*
+****************************************
+Confirmation Modal
+****************************************
+*/
+.confirmationModal {
+  height: 268px;
+  width: 576px;
+  padding: 48px;
+
+  // Modal title
+  h1 {
+    font-family: DM Sans;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 31px;
+  }
+
+  // Description text
+  p {
+    margin: 0;
+    font-family: DM Sans;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 26px;
+
+    color: var(--system-neutral-grey);
+  }
+}
