@@ -11,8 +11,8 @@ import Modal from '@components/Modal.js'; // Modal component
 
 import Title from '@components/Title'; // Title
 import DancerRedJump from '@assets/dancer-red-jump.svg'; // Jumping Dancer SVG
-import FeedbackAudio from '@components/performance-details/FeedbackAudio'; // Feedback audio
 import styles from '@styles/pages/AwardDetails.module.scss';
+import AudioPlayer from '@components/AudioPlayer';
 
 export default function DetailsRoute({ award, session }) {
   return award.type === 'SCORE_BASED' && !award.is_finalized ? (
@@ -368,15 +368,7 @@ const IndividualFeedback = ({ feedback }) => {
       <h2>NOTES</h2>
       <p className={styles.individual__feedback_notes}>{feedback.notes || notes}</p>
       <div className={styles.judge__feedback_audio_player_wrapper}>
-        <FeedbackAudio
-          audioUrl={feedback.audio_url}
-          edit={false}
-          setRecordingChanged={() => {}}
-          recording={null}
-          setRecording={() => {}}
-          recordedBlob={null}
-          setRecordedBlob={() => {}}
-        />
+        <AudioPlayer audioUrl={feedback.audio_url} />
       </div>
     </div>
   );
