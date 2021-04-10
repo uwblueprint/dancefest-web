@@ -18,6 +18,7 @@ import { formatDropdownOptions } from '@components/Dropdown'; // Format dropdown
 import FilterDropdown, { formatFilterDropdownOptions } from '@components/FilterDropdown'; // Filter Dropdown + Format filter dropdown options util
 import Pill from '@components/Pill'; // Pill
 import Pagination from '@components/Pagination'; // Pagination
+// import FeedbackReadyNotification from '@components/performances/FeedbackReadyNotification'; // Feedback Ready Notification
 import BackArrow from '@assets/back-arrow.svg'; // Back arrow icon
 import Search from '@assets/search.svg'; // Search icon
 import ChevronDown from '@assets/chevron-down.svg'; // Chevron down icon
@@ -26,7 +27,6 @@ import styles from '@styles/pages/Performances.module.scss'; // Page styles
 
 import { formatSchools } from '@utils/schools'; // Format schools util
 import { formatPerformances, filterPerformancesForJudge } from '@utils/performances'; // Format performances util
-import FeedbackReadyNotification from '@components/performances/FeedbackReadyNotification';
 
 const ENTRY_VIEW_HIDDEN_COLUMNS = ['technicalScore', 'artisticScore', 'awardsString', 'status'];
 const JUDGING_VIEW_HIDDEN_COLUMNS = ['schoolName', 'performanceLevel', 'danceStyle', 'danceSize'];
@@ -371,7 +371,7 @@ export default function Performances({ session }) {
               Back to Events
             </Button>
           </Link>
-          {false && <FeedbackReadyNotification />}
+          {/* <FeedbackReadyNotification /> */}
         </div>
         <h2 className={styles.performances__eventName}>{eventName}</h2>
         <div className={styles.performances__header}>
