@@ -18,6 +18,19 @@ export default async (req, res) => {
     });
   }
 
+  const adjudicationsExist = await prisma.adjudication.findFirst({
+    where: {
+      performance_id: id,
+    },
+  });
+
+  // If adjudications exist for the performance, do not allow editing
+  if (adjudicationsExist) {
+    return res.status(400).json({
+      error: 'Performance can not be deleted as it has an adjudication',
+    });
+  }
+
   const deletedAwardPerformance = prisma.awardPerformance.deleteMany({
     where: {
       performance_id: id,

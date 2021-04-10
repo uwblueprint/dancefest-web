@@ -34,21 +34,21 @@ export default async (req, res) => {
     danceStyleID,
     competitionLevelID,
   **/
-  if (
-    !id ||
-    !danceTitle ||
-    !performers ||
-    !choreographers ||
-    !competitionLevel ||
-    !danceSize ||
-    !danceStyle ||
-    !eventID ||
-    !schoolID
-  ) {
-    return res.status(400).json({
-      error: 'Required fields to update performance were not provided',
-    });
-  }
+  // if (
+  //   !id ||
+  //   !danceTitle ||
+  //   !performers ||
+  //   !choreographers ||
+  //   !competitionLevel ||
+  //   !danceSize ||
+  //   !danceStyle ||
+  //   !eventID ||
+  //   !schoolID
+  // ) {
+  //   return res.status(400).json({
+  //     error: 'Required fields to update performance were not provided',
+  //   });
+  // }
 
   // Check that the event exists
   const eventExists = await prisma.event.findUnique({
@@ -61,6 +61,19 @@ export default async (req, res) => {
   if (!eventExists) {
     return res.status(400).json({
       error: 'Event does not exist',
+    });
+  }
+
+  const adjudicationsExist = await prisma.adjudication.findFirst({
+    where: {
+      performance_id: id,
+    },
+  });
+
+  // If adjudications exist for the performance, do not allow editing
+  if (adjudicationsExist) {
+    return res.status(400).json({
+      error: 'Performance can not be edited as it has an adjudication',
     });
   }
 
