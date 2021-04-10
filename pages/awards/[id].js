@@ -11,12 +11,12 @@ import Modal from '@components/Modal.js'; // Modal component
 
 import Title from '@components/Title'; // Title
 import DancerRedJump from '@assets/dancer-red-jump.svg'; // Jumping Dancer SVG
-import PlayIcon from '@assets/play.svg'; // Play icon
 import styles from '@styles/pages/AwardDetails.module.scss';
+import AudioPlayer from '@components/AudioPlayer';
 
 export default function DetailsRoute({ award, session }) {
   return award.type === 'SCORE_BASED' && !award.is_finalized ? (
-    <ScoreBasedAwards award={award} />
+    <ScoreBasedAwards award={award} session={session} />
   ) : (
     <AwardDetails award={award} session={session} />
   );
@@ -367,12 +367,8 @@ const IndividualFeedback = ({ feedback }) => {
       </div>
       <h2>NOTES</h2>
       <p className={styles.individual__feedback_notes}>{feedback.notes || notes}</p>
-      <div className={styles.judge__feedback_audio_player}>
-        <p>{`OSSDF2021_1.mp3`}</p>
-        <span>
-          <p>{`3:07`}</p>
-          <img src={PlayIcon} />
-        </span>
+      <div className={styles.judge__feedback_audio_player_wrapper}>
+        <AudioPlayer audioUrl={feedback.audio_url} />
       </div>
     </div>
   );
