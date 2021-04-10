@@ -20,13 +20,40 @@ export default async (req, res) => {
     });
   }
 
-  const updatedAdjudication = await prisma.adjudication.update({
-    // Where
+  // Check if the adjudication exists
+  const adjudication = await prisma.adjudication.findUnique({
     where: {
-      // Id is passed
       id: id,
     },
-    // With
+  });
+
+  // If adjudication does not exist
+  if (!adjudication) {
+    return res.status(400).json({
+      error: 'Adjudication does not exist',
+    });
+  }
+
+  // Check if the performance that adjudication is associated with is finalized
+  const isFinalized = await prisma.awardPerformance.findFirst({
+    where: {
+      performance_id: adjudication.performance_id,
+      status: 'FINALIST',
+    },
+  });
+
+  // If it is finalized, we do not allow deleting adjudication
+  if (isFinalized) {
+    return res.status(400).json({
+      error: 'Adjudication cannot be edited as the performance is finalized',
+    });
+  }
+
+  // Update adjudication
+  const updatedAdjudication = await prisma.adjudication.update({
+    where: {
+      id: id,
+    },
     data: {
       artistic_mark: parseInt(artisticMark),
       technical_mark: parseInt(technicalMark),

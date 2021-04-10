@@ -18,27 +18,38 @@ export default async (req, res) => {
     });
   }
 
-  // Check if the performance has an adjudication
-  const adjudicationsExist = await prisma.adjudication.findFirst({
+  const performance = await prisma.performance.findUnique({
     where: {
-      performance_id: id,
+      id: id,
     },
   });
 
-  // If adjudications exist for the performance, do not allow editing
-  if (adjudicationsExist) {
+  // If the performance does not exist, we throw an error
+  if (!performance) {
     return res.status(400).json({
-      error: 'Performance can not be deleted as it has an adjudication',
+      error: 'Performance does not exist',
     });
   }
 
-  const deletedAwardPerformance = prisma.awardPerformance.deleteMany({
-    where: {
-      performance_id: id,
-    },
-  });
+  // If the performance has adjudications, we do not allow editing
+  if (performance.adjudications && performance.adjudications.length !== 0) {
+    return res.status(400).json({
+      error: 'Performance cannot be edited as it has an adjudication',
+    });
+  }
 
-  const deletedAdjudications = prisma.adjudication.deleteMany({
+  // If the performance is finalized, we do not allow deletion
+  if (performance.awards_performances && performance.awards_performances.length !== 0) {
+    for (const nomination in performance.awards_performances) {
+      if (nomination.status === 'FINALIST') {
+        return res.status(400).json({
+          error: 'Performance cannot be deleted as it is finalized',
+        });
+      }
+    }
+  }
+
+  const deletedAwardPerformance = prisma.awardPerformance.deleteMany({
     where: {
       performance_id: id,
     },
@@ -51,7 +62,7 @@ export default async (req, res) => {
   });
 
   try {
-    await prisma.$transaction([deletedAwardPerformance, deletedAdjudications, deletedPerformance]);
+    await prisma.$transaction([deletedAwardPerformance, deletedPerformance]);
   } catch {
     return res.status(400).json({
       error: 'Error deleting performance',

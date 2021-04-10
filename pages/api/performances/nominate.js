@@ -39,6 +39,21 @@ export default async (req, res) => {
     });
   }
 
+  // Check if the performance is a finalist for even one award, it means that the performance is finalized
+  const isFinalized = await prisma.awardPerformance.findFirst({
+    where: {
+      performance_id: performanceID,
+      status: 'FINALIST',
+    },
+  });
+
+  // If it is finalized, we do not allow deleting adjudication
+  if (isFinalized) {
+    return res.status(400).json({
+      error: 'Nominations cannot be changed as performance is finalized',
+    });
+  }
+
   // TODO for now we assume frontend will filter correctly and only
   // eligible awards will show up for validation
   try {

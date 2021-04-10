@@ -64,18 +64,35 @@ export default async (req, res) => {
     });
   }
 
-  // Check if the performance has an adjudication
-  const adjudicationsExist = await prisma.adjudication.findFirst({
+  const performance = await prisma.performance.findUnique({
     where: {
-      performance_id: id,
+      id: id,
     },
   });
 
-  // If adjudications exist for the performance, do not allow editing
-  if (adjudicationsExist) {
+  // If the performance does not exist, throw error
+  if (!performance) {
     return res.status(400).json({
-      error: 'Performance can not be edited as it has an adjudication',
+      error: 'Performance does not exist',
     });
+  }
+
+  // If the performance has adjudications, we do not allow editing
+  if (performance.adjudications && performance.adjudications.length !== 0) {
+    return res.status(400).json({
+      error: 'Performance cannot be edited as it has an adjudication',
+    });
+  }
+
+  // If the performance is nominated for an award and it is a finalist, we do not allow editing
+  if (performance.awards_performances && performance.awards_performances.length !== 0) {
+    for (const nomination in performance.awards_performances) {
+      if (nomination.status === 'FINALIST') {
+        return res.status(400).json({
+          error: 'Performance cannot be edited as it is a finalist for an award',
+        });
+      }
+    }
   }
 
   const updatedPerformance = await prisma.performance.update({
