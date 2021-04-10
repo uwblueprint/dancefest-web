@@ -18,6 +18,7 @@ export default async (req, res) => {
     });
   }
 
+  // Check if the performance has an adjudication
   const adjudicationsExist = await prisma.adjudication.findFirst({
     where: {
       performance_id: id,
