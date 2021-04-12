@@ -106,6 +106,12 @@ Performances: Filters
   }
 }
 
+.performances__delete_pagination_container {
+  background-color: var(--brand-other-red);
+  border: 2px solid var(--brand-white);
+  // padding-right: 10px;
+}
+
 /*
 ****************************************
 Performances: Content

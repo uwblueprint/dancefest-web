@@ -5,6 +5,7 @@ import Layout from '@components/Layout'; // Layout wrapper
 
 import Navigation from '@containers/Navigation'; // Navigation state
 import Loader from 'react-loader-spinner'; // Spinning loader
+import Button from '@components/Button'; // Button
 import Title from '@components/Title'; // Title
 import Input from '@components/Input'; // Input
 import Tabs from '@components/Tabs'; // Tabs
@@ -21,7 +22,7 @@ import AwardPill from '@components/awards/FinalizePill.js'; // Award Finalize Pi
 const PAGE_SIZE = 20; // Rows per page
 
 // Page: Performances
-export default function Performances({ award }) {
+export default function Performances({ award, session }) {
   const { event } = Navigation.useContainer();
 
   const router = useRouter();
@@ -40,6 +41,9 @@ export default function Performances({ award }) {
   // Confirmation Modal
   const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
   const [performanceToFinalize, setPerformanceToFinalize] = useState(-1);
+
+  // Delete award confirmation modal
+  const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] = useState(false);
 
   // Get peformances on load
   useEffect(() => {
@@ -113,6 +117,23 @@ export default function Performances({ award }) {
     }
   }
 
+  async function deleteAward() {
+    setLoading(true);
+    try {
+      await axios({
+        method: 'PUT',
+        url: '/api/awards/delete',
+        data: {
+          id: award.id,
+        },
+      });
+      // Go back to awards
+      router.push('/awards');
+    } catch {
+      // Empty catch statement
+    }
+  }
+
   return (
     <Layout>
       <div>
@@ -131,6 +152,15 @@ export default function Performances({ award }) {
             />
           </div>
           <div>
+            {session.role === 'ADMIN' && (
+              <Button
+                className={styles.performances__delete_pagination_container}
+                onClick={() => setDeleteConfirmationModalOpen(true)}
+                disabled={loading}
+              >
+                Delete Award
+              </Button>
+            )}
             <Pagination
               pageCount={pageCount}
               pageNumber={pageNumber}
@@ -190,6 +220,19 @@ export default function Performances({ award }) {
         disableSubmitButton={loading}
       >
         <p>This award will now be shown in the “Finalized” tab.</p>
+      </Modal>
+      <Modal
+        containerClassName={styles.confirmation__modal}
+        title="Delete Award?"
+        open={deleteConfirmationModalOpen}
+        cancelText="Cancel"
+        submitText="Confirm"
+        setModalOpen={setDeleteConfirmationModalOpen}
+        onCancel={() => setDeleteConfirmationModalOpen(false)}
+        onSubmit={deleteAward}
+        disableSubmitButton={loading}
+      >
+        <p>Are you sure you want to delete this award?</p>
       </Modal>
     </Layout>
   );
