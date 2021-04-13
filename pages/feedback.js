@@ -25,7 +25,7 @@ const SAMPLE_DATA = [
 
 export default function Feedback() {
   const [event] = Event.useContainer();
-  const { name: eventName } = event;
+  const eventName = event ? event.name : '';
 
   const [modalOpen, setModalOpen] = useState(false);
 
