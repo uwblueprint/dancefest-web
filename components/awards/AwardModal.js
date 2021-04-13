@@ -13,6 +13,7 @@ export default function AwardModal({
   danceSizeOptions,
   awardTypeOptions,
   performanceLevelOptions,
+  danceStyleOptions,
   createAward,
   loading,
 }) {
@@ -20,6 +21,7 @@ export default function AwardModal({
   const [awardType, setAwardType] = useState(null);
   const [danceSize, setDanceSize] = useState(null);
   const [performanceLevel, setPerformanceLevel] = useState(null);
+  const [danceStyle, setDanceStyle] = useState(null);
   const [disableButton, setDisableButton] = useState(true);
 
   const handleOnChange = e => {
@@ -39,16 +41,25 @@ export default function AwardModal({
     setAwardType(null);
     setDanceSize(null);
     setPerformanceLevel(null);
+    setDanceStyle(null);
     setOpen(false);
   };
 
   const onSubmit = async () => {
     let sizeSelection = null;
     let perfLevelSelection = null;
+    let styleSelection = null;
     if (danceSize !== null) sizeSelection = danceSize.value;
     if (performanceLevel !== null) perfLevelSelection = performanceLevel.value;
+    if (danceStyle !== null) styleSelection = danceStyle.value;
 
-    await createAward(awardTitle, awardType.value, sizeSelection, perfLevelSelection);
+    await createAward(
+      awardTitle,
+      awardType.value,
+      sizeSelection,
+      perfLevelSelection,
+      styleSelection
+    );
     setOpen(false);
   };
 
@@ -68,6 +79,15 @@ export default function AwardModal({
         <div>
           <h2>Award Title*</h2>
           <Input className={styles.modal__entryId} placeholder="Title" onChange={handleOnChange} />
+        </div>
+        <div>
+          <h2>Award Type*</h2>
+          <Dropdown
+            className={styles.modal__dropdown}
+            placeholder="Award Type"
+            options={awardTypeOptions}
+            onChange={type => setAwardType(type)}
+          />
         </div>
         <div>
           <h2>Eligible dance categories</h2>
@@ -91,12 +111,11 @@ export default function AwardModal({
           />
         </div>
         <div>
-          <h2>Award Type*</h2>
           <Dropdown
             className={styles.modal__dropdown}
-            placeholder="Award Type"
-            options={awardTypeOptions}
-            onChange={type => setAwardType(type)}
+            placeholder="Dance Style"
+            options={danceStyleOptions}
+            onChange={style => setDanceStyle(style)}
           />
         </div>
       </div>

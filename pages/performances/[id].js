@@ -31,6 +31,7 @@ export default function PerformanceDetails({ session }) {
   const [awardsDict, setAwardsDict] = useState({}); // Object mapping award id to award data
   // Flag to check whether a judge's adjudication exists - used in judge view, set to true if there's an existing adjudication
   const [judgeFeedbackExists, setJudgeFeedbackExists] = useState(false);
+  const [editingJudgeFeedback, setEditingJudgeFeedback] = useState(false);
 
   const showPerformanceDetails = selectedTab === -1;
   const showJudgeFeedback = selectedTab >= 0;
@@ -130,7 +131,7 @@ export default function PerformanceDetails({ session }) {
                   showPerformanceDetails && styles.performance_details__tabs_selected
                 }`}
               >
-                <button onClick={() => setSelectedTab(-1)}>
+                <button onClick={() => !editingJudgeFeedback && setSelectedTab(-1)}>
                   <h3>Performance Details</h3>
                 </button>
               </div>
@@ -141,18 +142,19 @@ export default function PerformanceDetails({ session }) {
                     adjudication={adjudication}
                     nominations={nominations[adjudication.userId]}
                     selected={selectedTab === i}
-                    handleClick={() => setSelectedTab(i)}
+                    handleClick={() => !editingJudgeFeedback && setSelectedTab(i)}
                   >
                     {adjudication.user.name}
                   </Tab>
                 ) : (
+                  // Judge View, only show specific judge's tab
                   session.id === adjudication.userId && (
                     <Tab
                       key={i}
                       adjudication={adjudication}
                       nominations={nominations[adjudication.userId]}
                       selected={selectedTab === i}
-                      handleClick={() => setSelectedTab(i)}
+                      handleClick={() => !editingJudgeFeedback && setSelectedTab(i)}
                     >
                       {adjudication.user.name}
                     </Tab>
@@ -160,6 +162,7 @@ export default function PerformanceDetails({ session }) {
                 )
               )}
               {session.role === 'JUDGE' && !judgeFeedbackExists && (
+                // No existing feedback, show a new feedback tab
                 <Tab selected={selectedTab === 0} handleClick={() => setSelectedTab(0)} newFeedback>
                   {session.user.name}
                 </Tab>
@@ -193,6 +196,8 @@ export default function PerformanceDetails({ session }) {
                     awardsDict={awardsDict}
                     adjudication={currentAdjudication}
                     nominations={currentNominations}
+                    editingJudgeFeedback={editingJudgeFeedback}
+                    setEditingJudgeFeedback={setEditingJudgeFeedback}
                   />
                 )
               ) : (
