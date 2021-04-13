@@ -39,6 +39,38 @@ export default async (req, res) => {
     });
   }
 
+  const awards = await prisma.award.findMany({
+    where: {
+      id: { in: awardIDs },
+    },
+  });
+
+  // Even if one of the awards we are attempting to nominate the performance for is finalized, we prevent the nomination from occurring.
+  if (awards && awards.length !== 0) {
+    for (const id in awards) {
+      if (awards[id].is_finalized) {
+        return res.status(400).json({
+          error: 'Performance cannot be nominated as one of the awards is finalized',
+        });
+      }
+    }
+  }
+
+  // Check if the performance is a finalist for even one award, it means that the performance is finalized
+  const isFinalized = await prisma.awardPerformance.findFirst({
+    where: {
+      performance_id: performanceID,
+      status: 'FINALIST',
+    },
+  });
+
+  // If it is finalized, we do not allow deleting adjudication
+  if (isFinalized) {
+    return res.status(400).json({
+      error: 'Nominations cannot be changed as performance is finalized',
+    });
+  }
+
   // TODO for now we assume frontend will filter correctly and only
   // eligible awards will show up for validation
   try {

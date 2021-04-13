@@ -13,7 +13,7 @@ export default async (req, res) => {
 
   // Collect award information from request body
   // type must be string in all capitals matching corresponding enum AwardType
-  const { id, title, type, eventID, settingIDs, isFinalized } = req.body;
+  const { id, title, type, eventID, settingIDs } = req.body;
 
   if (!id) {
     return res.status(400).json({
@@ -24,7 +24,6 @@ export default async (req, res) => {
   const editData = {};
   if (title) editData.title = title;
   if (type) editData.type = type;
-  if (isFinalized === false) editData.is_finalized = isFinalized;
   if (eventID) {
     // Check that the event exists
     const eventExists = await prisma.event.findUnique({
@@ -41,6 +40,34 @@ export default async (req, res) => {
     }
   }
 
+  const award = await prisma.award.findUnique({
+    where: {
+      id: id,
+    },
+  });
+
+  // If the award does not exist, throw error
+  if (!award) {
+    return res.status(400).json({
+      error: 'Award does not exist',
+    });
+  }
+
+  // If the award is finalized, do not allow editing
+  if (award.is_finalized) {
+    return res.status(400).json({
+      error: 'Award cannot be edited as it is finalized',
+    });
+  }
+
+  // If the award has nominations, we do not allow editing
+  if (award.awardPerformance && award.awardPerformance.length !== 0) {
+    return res.status(400).json({
+      error: 'Award cannot be edited as a performance is nominated for the award',
+    });
+  }
+
+  // If all validations pass, we update the award.
   const updatedAward = await prisma.award.update({
     where: {
       id,

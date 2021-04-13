@@ -64,6 +64,41 @@ export default async (req, res) => {
     });
   }
 
+  const performance = await prisma.performance.findUnique({
+    where: {
+      id: id,
+    },
+    include: {
+      adjudications: true,
+      awards_performances: true,
+    },
+  });
+
+  // If the performance does not exist, throw error
+  if (!performance) {
+    return res.status(400).json({
+      error: 'Performance does not exist',
+    });
+  }
+
+  // If the performance has adjudications, we do not allow editing
+  if (performance.adjudications && performance.adjudications.length !== 0) {
+    return res.status(400).json({
+      error: 'Performance cannot be edited as it has an adjudication',
+    });
+  }
+
+  // If the performance is nominated for an award and it is a finalist, we do not allow editing
+  if (performance.awards_performances && performance.awards_performances.length !== 0) {
+    for (const nomination of performance.awards_performances) {
+      if (nomination.status === 'FINALIST') {
+        return res.status(400).json({
+          error: 'Performance cannot be edited as it is a finalist for an award',
+        });
+      }
+    }
+  }
+
   const updatedPerformance = await prisma.performance.update({
     where: {
       id,
