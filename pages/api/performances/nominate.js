@@ -39,7 +39,24 @@ export default async (req, res) => {
     });
   }
 
-  //TODO: I think the use case doesn't make sense
+  const awards = await prisma.award.findMany({
+    where: {
+      id: { in: awardIDs },
+    },
+  });
+
+  console.log(awards);
+  // Even if one of the awards we are attempting to nominate the performance for is finalized, we prevent the nomination from occurring.
+  if (awards && awards.length !== 0) {
+    for (const id in awards) {
+      if (awards[id].is_finalized) {
+        return res.status(400).json({
+          error: 'Performance cannot be nominated as one of the awards is finalized',
+        });
+      }
+    }
+  }
+
   // Check if the performance is a finalist for even one award, it means that the performance is finalized
   const isFinalized = await prisma.awardPerformance.findFirst({
     where: {

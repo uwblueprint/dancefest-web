@@ -44,8 +44,8 @@ export default async (req, res) => {
 
   // If the performance is finalized, we do not allow deletion
   if (performance.awards_performances && performance.awards_performances.length !== 0) {
-    for (const nomination in performance.awards_performances) {
-      if (nomination.status === 'FINALIST') {
+    for (const index in performance.awards_performances) {
+      if (performance.awards_performances[index].status === 'FINALIST') {
         return res.status(400).json({
           error: 'Performance cannot be deleted as it is finalized',
         });
