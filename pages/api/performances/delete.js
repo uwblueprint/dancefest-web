@@ -22,6 +22,10 @@ export default async (req, res) => {
     where: {
       id: id,
     },
+    include: {
+      adjudications: true,
+      awards_performances: true,
+    },
   });
 
   // If the performance does not exist, we throw an error

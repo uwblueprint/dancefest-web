@@ -39,6 +39,7 @@ export default async (req, res) => {
     });
   }
 
+  //TODO: I think the use case doesn't make sense
   // Check if the performance is a finalist for even one award, it means that the performance is finalized
   const isFinalized = await prisma.awardPerformance.findFirst({
     where: {
