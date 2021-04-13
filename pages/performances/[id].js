@@ -22,7 +22,8 @@ import { formatPerformance } from '@utils/performances'; // Format performance u
 export default function PerformanceDetails({ session }) {
   const router = useRouter();
   const { id } = router.query;
-  const [{ id: eventId }] = Event.useContainer();
+  const [eventData] = Event.useContainer();
+  const eventId = eventData ? eventData.id : null;
 
   const [modalOpen, setModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
