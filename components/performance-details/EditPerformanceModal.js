@@ -23,6 +23,7 @@ export default function EditPerformanceModal({
   const [danceTitle, setDanceTitle] = useState('');
   const [dancersString, setDancersString] = useState('');
   const [choreographersString, setChoreographersString] = useState('');
+  const [performanceLink, setPerformanceLink] = useState('');
   const [school, setSchool] = useState(null);
   const [competitionLevel, setCompetitionLevel] = useState(null);
   const [danceStyle, setDanceStyle] = useState(null);
@@ -122,6 +123,7 @@ export default function EditPerformanceModal({
           choreographers: choreographersString
             .split(',')
             .map(choreographer => choreographer.trim()),
+          performanceLink,
           competitionLevel: competitionLevel.label,
           competitionLevelID: competitionLevel.value,
           danceSize: danceSize.label,
@@ -154,6 +156,7 @@ export default function EditPerformanceModal({
         danceTitle,
         performers,
         choreographers,
+        performanceLink,
         schoolName,
         schoolId,
         performanceLevel,
@@ -164,6 +167,7 @@ export default function EditPerformanceModal({
         danceSizeID,
       } = performance;
       setDanceTitle(danceTitle);
+      setPerformanceLink(performanceLink);
       setDancersString(performers.join(', '));
       setChoreographersString(choreographers.join(', '));
       setSchool({ label: schoolName, value: schoolId });
@@ -211,6 +215,14 @@ export default function EditPerformanceModal({
             onChange={event => setChoreographersString(event.target.value)}
           />
           <h3>Separated by comma (ie: John Smith, Jane Doe...)</h3>
+        </div>
+        <div>
+          <h2>Performance link</h2>
+          <Input
+            placeholder="Performance Link"
+            value={performanceLink}
+            onChange={event => setPerformanceLink(event.target.value)}
+          />
         </div>
         <div>
           <h2>School</h2>

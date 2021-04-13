@@ -217,6 +217,7 @@ export default function Performances({ session }) {
     danceTitle,
     dancersString,
     choreographersString,
+    performanceLink,
     school,
     competitionLevel,
     competitionLevelID,
@@ -237,6 +238,7 @@ export default function Performances({ session }) {
           choreographers: choreographersString
             .split(',')
             .map(choreographer => choreographer.trim()),
+          performanceLink,
           schoolID: school,
           competitionLevel,
           competitionLevelID,

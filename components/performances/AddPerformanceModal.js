@@ -18,6 +18,7 @@ export default function AddPerformanceModal({
 }) {
   const [danceTitle, setDanceTitle] = useState('');
   const [dancersString, setDancersString] = useState('');
+  const [performanceLink, setPerformanceLink] = useState('');
   const [choreographersString, setChoreographersString] = useState('');
   const [school, setSchool] = useState(null);
   const [competitionLevel, setCompetitionLevel] = useState(null);
@@ -44,6 +45,7 @@ export default function AddPerformanceModal({
       danceTitle,
       dancersString,
       choreographersString,
+      performanceLink,
       school: school.value,
       competitionLevel: competitionLevel.label,
       competitionLevelID: competitionLevel.value,
@@ -95,6 +97,14 @@ export default function AddPerformanceModal({
             onChange={event => setChoreographersString(event.target.value)}
           />
           <h3>Separated by comma (ie: John Smith, Jane Doe...)</h3>
+        </div>
+        <div>
+          <h2>Performance link</h2>
+          <Input
+            placeholder="Performance link"
+            value={performanceLink}
+            onChange={event => setPerformanceLink(event.target.value)}
+          />
         </div>
         <div>
           <h2>School</h2>
