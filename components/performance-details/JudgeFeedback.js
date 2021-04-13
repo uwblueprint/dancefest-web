@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'; // React
 import axios from 'axios'; // axios
 import { useRouter } from 'next/router';
 import { useS3Upload } from 'next-s3-upload'; // Upload files to S3
-import Navigation from '@containers/Navigation'; // Navigation state
+import Event from '@containers/Event'; // Event state
 
 import Button from '@components/Button'; // Button
 import Input from '@components/Input'; // Input
@@ -25,7 +25,7 @@ export default function JudgeFeedback({
   adjudication,
   nominations: initialNominations,
 }) {
-  const { event: eventId } = Navigation.useContainer();
+  const [event] = Event.useContainer();
   const router = useRouter();
   const { id: performanceId } = router.query;
   const { uploadToS3 } = useS3Upload();
@@ -134,7 +134,7 @@ export default function JudgeFeedback({
         method: 'put',
         url: `/api/performances/nominate`,
         data: {
-          eventID: parseInt(eventId),
+          eventID: parseInt(event.id),
           performanceID: parseInt(performanceId),
           awardIDs: (specialAward === null ? [...normalAwards] : [...normalAwards, specialAward])
             .filter(award => award !== null)

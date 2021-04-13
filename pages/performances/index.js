@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'; // React
 import axios from 'axios'; // axios
 import Link from 'next/link'; // Next link
 import Layout from '@components/Layout'; // Layout wrapper
-import Navigation from '@containers/Navigation'; // Navigation state
+import Event from '@containers/Event'; // Event state
 import { getSession } from 'next-auth/client'; // Session handling
 import { useRouter } from 'next/router'; // Routing
 
@@ -18,6 +18,7 @@ import { formatDropdownOptions } from '@components/Dropdown'; // Format dropdown
 import FilterDropdown, { formatFilterDropdownOptions } from '@components/FilterDropdown'; // Filter Dropdown + Format filter dropdown options util
 import Pill from '@components/Pill'; // Pill
 import Pagination from '@components/Pagination'; // Pagination
+// import FeedbackReadyNotification from '@components/performances/FeedbackReadyNotification'; // Feedback Ready Notification
 import BackArrow from '@assets/back-arrow.svg'; // Back arrow icon
 import Search from '@assets/search.svg'; // Search icon
 import ChevronDown from '@assets/chevron-down.svg'; // Chevron down icon
@@ -59,7 +60,7 @@ const removeKeyFromObject = (object, key) => {
 // Page: Performances
 export default function Performances({ session }) {
   const router = useRouter();
-  const { event } = Navigation.useContainer();
+  const [event] = Event.useContainer();
 
   const [eventName, setEventName] = useState(''); // Event name
   const [loading, setLoading] = useState(true); // Loading
@@ -97,7 +98,7 @@ export default function Performances({ session }) {
     try {
       const response = await axios({
         method: 'GET',
-        url: `/api/events/get?eventID=${event}`,
+        url: `/api/events/get?eventID=${event.id}`,
       });
       const { name } = response.data;
 
@@ -202,7 +203,7 @@ export default function Performances({ session }) {
     try {
       const response = await axios({
         method: 'GET',
-        url: `/api/performances/collect?eventID=${event}`,
+        url: `/api/performances/collect?eventID=${event.id}`,
       });
 
       setPerformances(formatPerformances(response.data));
@@ -246,7 +247,7 @@ export default function Performances({ session }) {
           danceStyleID,
           danceSize,
           danceSizeID,
-          eventID: event,
+          eventID: event.id,
         },
       });
 
@@ -372,9 +373,9 @@ export default function Performances({ session }) {
               Back to Events
             </Button>
           </Link>
-
-          <h2 className={styles.performances__navigation__eventName}>{eventName}</h2>
+          {/* <FeedbackReadyNotification /> */}
         </div>
+        <h2 className={styles.performances__eventName}>{eventName}</h2>
         <div className={styles.performances__header}>
           <div>
             <Title className={styles.performances__header__pageTitle}>Performances</Title>

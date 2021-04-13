@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'; // Collect Router
 import axios from 'axios'; // Axios
 import Layout from '@components/Layout'; // Layout wrapper
 
-import Navigation from '@containers/Navigation'; // Navigation state
+import Event from '@containers/Event'; // Event state
 import Loader from 'react-loader-spinner'; // Spinning loader
 import Button from '@components/Button'; // Button
 import Title from '@components/Title'; // Title
@@ -22,8 +22,8 @@ import AwardPill from '@components/awards/FinalizePill.js'; // Award Finalize Pi
 const PAGE_SIZE = 20; // Rows per page
 
 // Page: Performances
-export default function Performances({ award, session }) {
-  const { event } = Navigation.useContainer();
+export default function Performances({ award }) {
+  const [event] = Event.useContainer();
 
   const router = useRouter();
 
@@ -56,7 +56,7 @@ export default function Performances({ award, session }) {
     try {
       const response = await axios({
         method: 'GET',
-        url: `/api/performances/collect?eventID=${event}`,
+        url: `/api/performances/collect?eventID=${event.id}`,
       });
 
       setPerformances(formatPerformances(response.data));
@@ -90,7 +90,7 @@ export default function Performances({ award, session }) {
         data: {
           performanceID: performanceToFinalize,
           awardIDs: [award.id],
-          eventID: event,
+          eventID: event.id,
         },
       });
     } catch {

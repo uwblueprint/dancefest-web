@@ -1,0 +1,28 @@
+.feedbackReadyNotification {
+  flex-grow: 1;
+  height: 54px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid var(--brand-pop-yellow);
+  box-sizing: border-box;
+  border-radius: 4px;
+
+  // Message text
+  span {
+    margin-right: 32px;
+
+    font-family: DM Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+
+    color: var(--brand-navy);
+  }
+
+  // Share feedback button
+  button {
+    height: 37px;
+  }
+}

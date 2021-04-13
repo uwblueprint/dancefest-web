@@ -51,6 +51,13 @@ Button
   color: var(--system-light-grey);
 }
 
+// Warning button
+.button__warning {
+  border-color: var(--brand-pop-yellow);
+  background-color: var(--brand-pop-yellow);
+  color: var(--brand-navy);
+}
+
 /* Edit button */
 .button__edit {
   height: 24px;

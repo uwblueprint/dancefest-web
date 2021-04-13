@@ -39,6 +39,19 @@ export default function Button({
           {children}
         </button>
       );
+    case 'warning':
+      return (
+        <button
+          className={`${styles.button} ${styles.button__warning} ${className} ${
+            // If fullWidth toggled, apply fullwidth class
+            fullWidth ? styles.button__fullwidth : null
+          }`}
+          onClick={onClick}
+          {...props}
+        >
+          {children}
+        </button>
+      );
     default:
       return (
         <button

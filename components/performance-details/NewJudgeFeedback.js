@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'; // React
 import axios from 'axios'; // axios
 import { useRouter } from 'next/router';
 import { useS3Upload } from 'next-s3-upload'; // Upload files to S3
-import Navigation from '@containers/Navigation'; // Navigation state
+import Event from '@containers/Event'; // Event state
 
 import Button from '@components/Button'; // Button
 import Input from '@components/Input'; // Input
@@ -24,9 +24,10 @@ export default function NewJudgeFeedback({
   nominations: initialNominations,
   judgeID,
 }) {
-  const { event: eventId } = Navigation.useContainer();
+  const [event] = Event.useContainer();
   const router = useRouter();
   const { id: performanceId } = router.query;
+  const { id: eventId } = event;
   const { uploadToS3 } = useS3Upload();
 
   // Get valid Award options

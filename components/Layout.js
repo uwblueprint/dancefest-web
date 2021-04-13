@@ -2,14 +2,28 @@ import Link from 'next/link'; // Dynamic routing
 import Head from 'next/head'; // HTML head handling
 import { useRouter } from 'next/router'; // Routing
 import { signOut, useSession } from 'next-auth/client'; // Authentication
-import Navigation from '@containers/Navigation'; // Navigation state
+import Event from '@containers/Event'; // Event state
+import Banner from '@components/Banner'; // Banner
 import styles from '@styles/components/Layout.module.scss'; // Component styles
 
 export default function Layout({ children }) {
+  // const { pathname } = useRouter();
+
   return (
     <div>
       {/* Layout: Meta */}
       <Meta />
+
+      {/* Layout: Banner */}
+      <Banner
+        visible={false}
+        // visible={pathname !== '/performances' && pathname !== '/feedback'}
+      >
+        {'Feedback sharing available for “OSSDF2021-Let’s Dis-Dance”. '}
+        <Link href="/performances">
+          <a>Go to Performance Page</a>
+        </Link>
+      </Banner>
 
       {/* Layout: Header */}
       <Header />
@@ -65,7 +79,7 @@ function Header() {
   // Collect auth status
   const { pathname } = useRouter();
   const [session] = useSession();
-  const { event } = Navigation.useContainer();
+  const [event] = Event.useContainer();
 
   return (
     <div className={styles.layout__header}>

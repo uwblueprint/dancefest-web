@@ -3,20 +3,27 @@
 Performances: Navigation header
 ****************************************
 */
-.performances__navigation__button {
+.performances__navigation {
   display: flex;
-  padding: 6px 12px 6px 8px;
+  justify-content: space-between;
+  align-items: center;
+
+  .performances__navigation__button {
+    display: flex;
+    padding: 6px 12px 6px 8px;
+    margin-right: 48px;
+
+    img {
+      margin-right: 2px;
+    }
+  }
 }
 
-.performances__navigation__button > img {
-  margin-right: 2px;
-}
-
-.performances__navigation__eventName {
+.performances__eventName {
   display: flex;
   align-items: center;
   text-align: center;
-  margin: 24px 0 0 0;
+  margin: 12px 0 0 0;
 
   font-family: DM Sans;
   font-style: normal;

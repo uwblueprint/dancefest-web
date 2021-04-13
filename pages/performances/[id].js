@@ -3,7 +3,7 @@ import axios from 'axios'; // axios
 import Layout from '@components/Layout'; // Layout wrapper
 import { getSession } from 'next-auth/client'; // Session handling
 import { useRouter } from 'next/router'; // Routing
-import Navigation from '@containers/Navigation'; // Navigation state
+import Event from '@containers/Event'; // Event state
 
 /* Page components */
 import Tab from '@components/performance-details/Tab'; // Tab
@@ -22,7 +22,7 @@ import { formatPerformance } from '@utils/performances'; // Format performance u
 export default function PerformanceDetails({ session }) {
   const router = useRouter();
   const { id } = router.query;
-  const { event: eventId } = Navigation.useContainer();
+  const [{ id: eventId }] = Event.useContainer();
 
   const [modalOpen, setModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
