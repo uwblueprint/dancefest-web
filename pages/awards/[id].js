@@ -287,35 +287,36 @@ const JudgeFeedback = ({
       <div className={styles.judge__feedback_header}>
         <h3>{feedback.dance_title}</h3>
         <span>
-          {loading ? (
-            <Button disabled>
-              <span>
-                <Loader type="Oval" color="#fff" height={15} width={15} />
-              </span>
-            </Button>
-          ) : isAwardFinalized ? (
-            <Button
-              variant="contained"
-              onClick={() => {
-                setConfirmationModalOpen(true);
-                setPerformanceToFinalize(feedback.id);
-              }}
-              disabled={loading}
-            >
-              Remove Winner
-            </Button>
-          ) : (
-            <Button
-              variant="contained"
-              onClick={() => {
-                setConfirmationModalOpen(true);
-                setPerformanceToFinalize(feedback.id);
-              }}
-              disabled={loading}
-            >
-              Finalize
-            </Button>
-          )}
+          {session.role === 'ADMIN' &&
+            (loading ? (
+              <Button disabled>
+                <span>
+                  <Loader type="Oval" color="#fff" height={15} width={15} />
+                </span>
+              </Button>
+            ) : isAwardFinalized ? (
+              <Button
+                variant="contained"
+                onClick={() => {
+                  setConfirmationModalOpen(true);
+                  setPerformanceToFinalize(feedback.id);
+                }}
+                disabled={loading}
+              >
+                Remove Winner
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                onClick={() => {
+                  setConfirmationModalOpen(true);
+                  setPerformanceToFinalize(feedback.id);
+                }}
+                disabled={loading}
+              >
+                Finalize
+              </Button>
+            ))}
         </span>
       </div>
 

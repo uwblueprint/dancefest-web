@@ -24,6 +24,8 @@ export default function JudgeFeedback({
   awardsDict,
   adjudication,
   nominations: initialNominations,
+  editingJudgeFeedback: editingFeedback,
+  setEditingJudgeFeedback: setEditingFeedback,
 }) {
   const [event] = Event.useContainer();
   const router = useRouter();
@@ -60,7 +62,6 @@ export default function JudgeFeedback({
     ),
   ];
 
-  const [editMode, setEditMode] = useState(false);
   const [notes, setNotes] = useState(initialNotes);
   const [technicalScore, setTechnicalScore] = useState(initialTechnicalScore);
   const [artisticScore, setArtisticScore] = useState(initialArtisticScore);
@@ -175,13 +176,13 @@ export default function JudgeFeedback({
       <div className={styles.judge__feedback_container}>
         <div className={styles.judge__feedback_header}>
           <h2>Notes</h2>
-          {editMode ? (
+          {editingFeedback ? (
             <span>
               <Button
                 variant="outlined"
                 onClick={() => {
                   cancelUpdate();
-                  setEditMode(false);
+                  setEditingFeedback(false);
                 }}
                 className={styles.judge__feedback_buttons_spacing}
                 disabled={loading}
@@ -191,7 +192,7 @@ export default function JudgeFeedback({
               <Button
                 onClick={() => {
                   updateFeedback();
-                  setEditMode(false);
+                  setEditingFeedback(false);
                 }}
                 disabled={loading}
               >
@@ -202,7 +203,7 @@ export default function JudgeFeedback({
             <Button
               variant="outlined"
               onClick={() => {
-                setEditMode(true);
+                setEditingFeedback(true);
               }}
             >
               Edit Feedback
@@ -210,7 +211,7 @@ export default function JudgeFeedback({
           )}
         </div>
         <div className={styles.judge__feedback_notes_wrapper}>
-          {editMode ? (
+          {editingFeedback ? (
             <div className={styles.judge__feedback_notes_input}>
               <textarea
                 onChange={e => {
@@ -227,7 +228,7 @@ export default function JudgeFeedback({
         <div className={styles.judge__feedback_audio_player_wrapper}>
           <FeedbackAudio
             audioUrl={adjudication.audioUrl}
-            edit={editMode}
+            edit={editingFeedback}
             setRecordingChanged={setRecordingChanged}
             recording={recording}
             setRecording={setRecording}
@@ -237,7 +238,7 @@ export default function JudgeFeedback({
         </div>
         <div className={styles.judge__feedback_nominations}>
           <h2>Nominated for:</h2>
-          {editMode ? (
+          {editingFeedback ? (
             <DropdownGrid
               placeholder="Select Award"
               options={normalAwardsOptions}
@@ -252,7 +253,7 @@ export default function JudgeFeedback({
         </div>
         <div className={styles.judge__feedback_awards}>
           <h2>Special Award:</h2>
-          {editMode ? (
+          {editingFeedback ? (
             <Input
               placeholder="Special Award"
               value={specialAwardName}
@@ -267,13 +268,13 @@ export default function JudgeFeedback({
       </div>
       <div className={styles.performance_summary__score_content}>
         <ScoreCard
-          edit={editMode}
+          edit={editingFeedback}
           title="Technical"
           score={technicalScore}
           setScore={setTechnicalScore}
         />
         <ScoreCard
-          edit={editMode}
+          edit={editingFeedback}
           title="Artistic"
           score={artisticScore}
           setScore={setArtisticScore}

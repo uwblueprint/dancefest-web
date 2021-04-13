@@ -27,9 +27,9 @@ import styles from '@styles/pages/Awards.module.scss'; // Page styles
 const PAGE_SIZE = 20; // Rows per page
 
 // Get the active filters (list of column accessors) from an object of filter dropdown values
-const getActiveFilters = options => {
-  return Object.keys(options).filter(option => options[option].selected);
-};
+// const getActiveFilters = options => {
+//   return Object.keys(options).filter(option => options[option].selected);
+// };
 
 // Remove key from object (returns new object)
 // const removeKeyFromObject = (object, key) => {
@@ -66,6 +66,7 @@ export default function Awards({ session }) {
   const [performanceLevelDropdownOptions, setPerformanceLevelDropdownOptions] = useState([]);
   const [danceSizeDropdownOptions, setDanceSizeDropdownOptions] = useState([]);
   const [awardTypeDropdownOptions] = useState(awardOptions);
+  const [danceStyleDropdownOptions, setDanceStyleDropdownOptions] = useState([]);
 
   // All Filter
   const [showFilters, setShowFilters] = useState(false);
@@ -93,8 +94,8 @@ export default function Awards({ session }) {
   // Update table filters
   useEffect(() => {
     const newFilters = [];
-    const activeSizeFilters = getActiveFilters(danceSizeFilters);
-    const activePerfFilters = getActiveFilters(performanceLevelFilters);
+    // const activeSizeFilters = getActiveFilters(danceSizeFilters);
+    // const activePerfFilters = getActiveFilters(performanceLevelFilters);
 
     if (query) {
       newFilters.push({
@@ -102,45 +103,10 @@ export default function Awards({ session }) {
         value: query,
       });
     }
-    if (activeSizeFilters.length > 0) {
-      newFilters.push({
-        id: 'award_type',
-        value: activeSizeFilters,
-      });
-    }
-    if (activePerfFilters.length > 0) {
-      newFilters.push({
-        id: 'dance_type',
-        value: activePerfFilters,
-      });
-    }
 
     setFilters(newFilters);
     setPageNumber(0);
-  }, [query, danceSizeFilters, performanceLevelFilters]);
-
-  // Render filter pills
-  // const renderActiveFilters = () => {
-  //   let elements = [];
-  //   for (const { id, value: activeFilters } of filters) {
-  //     switch (id) {
-  //       case 'award_type':
-  //         elements = [
-  //           ...elements,
-  //           ...activeFilters.map((f, i) => (
-  //             <Pill
-  //               key={i}
-  //               value={f}
-  //               onDelete={() => setAwardTypeOptions(removeKeyFromObject(awardTypeOptions, f))}
-  //             />
-  //           )),
-  //         ];
-  //         break;
-  //     }
-  //   }
-
-  //   return elements;
-  // };
+  }, [query]);
 
   const getSettings = async () => {
     try {
@@ -155,6 +121,8 @@ export default function Awards({ session }) {
       );
       const danceSizeSettings = settings.filter(setting => setting.type === 'DANCE_SIZE');
 
+      const danceStyleSettings = settings.filter(setting => setting.type === 'STYLE');
+
       const formatOptionsFields = {
         value: 'id',
         label: 'value',
@@ -165,6 +133,7 @@ export default function Awards({ session }) {
         formatDropdownOptions(performanceLevelSettings, formatOptionsFields)
       );
       setDanceSizeDropdownOptions(formatDropdownOptions(danceSizeSettings, formatOptionsFields));
+      setDanceStyleDropdownOptions(formatDropdownOptions(danceStyleSettings, formatOptionsFields));
 
       // Filters
       const initialPerformanceLevelFilters = formatFilterDropdownOptions(
@@ -247,12 +216,14 @@ export default function Awards({ session }) {
     awardTitle,
     awardType,
     danceSizeOption = null,
-    performanceLevelOption = null
+    performanceLevelOption = null,
+    danceStyleOption = null
   ) => {
     setLoading(true);
     const settingIds = [];
     if (danceSizeOption !== null) settingIds.push(danceSizeOption);
     if (performanceLevelOption !== null) settingIds.push(performanceLevelOption);
+    if (danceStyleOption !== null) settingIds.push(danceStyleOption);
 
     try {
       await axios({
@@ -384,6 +355,7 @@ export default function Awards({ session }) {
         danceSizeOptions={danceSizeDropdownOptions}
         performanceLevelOptions={performanceLevelDropdownOptions}
         awardTypeOptions={awardTypeDropdownOptions}
+        danceStyleOptions={danceStyleDropdownOptions}
         createAward={createAward}
         loading={loading}
       />
