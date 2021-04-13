@@ -4,7 +4,7 @@ import styles from '@styles/components/performance-details/PerformanceSummary.mo
 
 export default function PerformanceSummary({ performance, setModalOpen, admin }) {
   const {
-    audioRecordingLink,
+    performanceLink,
     performers,
     choreographers,
     schoolName,
@@ -22,7 +22,7 @@ export default function PerformanceSummary({ performance, setModalOpen, admin })
     <>
       <div className={styles.performance__summary_container}>
         <div className={styles.performance__summary_performanceLink}>
-          <a href={audioRecordingLink || undefined} target="_blank" rel="noreferrer noopener">
+          <a href={performanceLink || undefined} target="_blank" rel="noreferrer noopener">
             Watch Performance
           </a>
           {admin && (
