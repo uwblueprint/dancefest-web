@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react'; // React
 import axios from 'axios'; // axios
 import Link from 'next/link'; // Next link
 import Layout from '@components/Layout'; // Layout wrapper
-import Navigation from '@containers/Navigation'; // Navigation state
+import Event from '@containers/Event'; // Event state
 import { getSession } from 'next-auth/client'; // Session handling
 import { useRouter } from 'next/router'; // Routing
 
 import PerformancesTable from '@components/performances/PerformancesTable'; // Performances table
-import PerformanceModal from '@components/performances/PerformanceModal'; // Performance modal
+import AddPerformanceModal from '@components/performances/AddPerformanceModal'; // Performance modal
 
 import Loader from 'react-loader-spinner'; // Loading spinner
 import Button from '@components/Button'; // Button
@@ -18,6 +18,7 @@ import { formatDropdownOptions } from '@components/Dropdown'; // Format dropdown
 import FilterDropdown, { formatFilterDropdownOptions } from '@components/FilterDropdown'; // Filter Dropdown + Format filter dropdown options util
 import Pill from '@components/Pill'; // Pill
 import Pagination from '@components/Pagination'; // Pagination
+// import FeedbackReadyNotification from '@components/performances/FeedbackReadyNotification'; // Feedback Ready Notification
 import BackArrow from '@assets/back-arrow.svg'; // Back arrow icon
 import Search from '@assets/search.svg'; // Search icon
 import ChevronDown from '@assets/chevron-down.svg'; // Chevron down icon
@@ -25,23 +26,10 @@ import ChevronDownGrey from '@assets/chevron-down-grey.svg'; // Chevron down gre
 import styles from '@styles/pages/Performances.module.scss'; // Page styles
 
 import { formatSchools } from '@utils/schools'; // Format schools util
-import { formatPerformances } from '@utils/performances'; // Format performances util
+import { formatPerformances, filterPerformancesForJudge } from '@utils/performances'; // Format performances util
 
-const DANCE_ENTRY = 1; // TEMPORARY. TODO: Figure out what this is for
-const ENTRY_VIEW_HIDDEN_COLUMNS = [
-  'technicalScore',
-  'artisticScore',
-  'cumulativeScore',
-  'awardsString',
-  'status',
-];
-const JUDGING_VIEW_HIDDEN_COLUMNS = [
-  'schoolName',
-  'performanceLevel',
-  'danceStyle',
-  'danceSize',
-  'score',
-];
+const ENTRY_VIEW_HIDDEN_COLUMNS = ['technicalScore', 'artisticScore', 'awardsString', 'status'];
+const JUDGING_VIEW_HIDDEN_COLUMNS = ['schoolName', 'performanceLevel', 'danceStyle', 'danceSize'];
 
 /**
  * Get the active filters from an object of filter dropdown values
@@ -70,9 +58,9 @@ const removeKeyFromObject = (object, key) => {
 };
 
 // Page: Performances
-export default function Performances() {
+export default function Performances({ session }) {
   const router = useRouter();
-  const { event } = Navigation.useContainer();
+  const [event] = Event.useContainer();
 
   const [eventName, setEventName] = useState(''); // Event name
   const [loading, setLoading] = useState(true); // Loading
@@ -82,7 +70,6 @@ export default function Performances() {
 
   // Filter dropdown options
   const [schoolFilters, setSchoolFilters] = useState({});
-  const [academicLevelFilters, setAcademicLevelFilters] = useState({});
   const [performanceLevelFilters, setPerformanceLevelFilters] = useState({});
   const [danceStyleFilters, setDanceStyleFilters] = useState({});
   const [danceSizeFilters, setDanceSizeFilters] = useState({});
@@ -101,6 +88,9 @@ export default function Performances() {
   // Table data
   const [performances, setPerformances] = useState([]);
   const [performanceToEdit, setPerformanceToEdit] = useState(null);
+  // Table data - judge view
+  const [pendingPerformances, setPendingPerformances] = useState([]);
+  const [adjudicatedPerformances, setAdjudicatedPerformances] = useState([]);
 
   const getEvent = async () => {
     setLoading(true);
@@ -108,7 +98,7 @@ export default function Performances() {
     try {
       const response = await axios({
         method: 'GET',
-        url: `/api/events/get?eventID=${event}`,
+        url: `/api/events/get?eventID=${event.id}`,
       });
       const { name } = response.data;
 
@@ -162,7 +152,7 @@ export default function Performances() {
       const danceSizeSettings = settings.filter(setting => setting.type === 'DANCE_SIZE');
 
       const formatOptionsFields = {
-        value: 'value',
+        value: 'id',
         label: 'value',
       };
 
@@ -198,13 +188,22 @@ export default function Performances() {
     setLoading(false);
   };
 
+  useEffect(() => {
+    // If judge view - filter performances for specific judge
+    if (session.role === 'JUDGE') {
+      const [adjudicated, pending] = filterPerformancesForJudge(performances, session.id);
+      setPendingPerformances(pending);
+      setAdjudicatedPerformances(adjudicated);
+    }
+  }, [performances]);
+
   const getPerformances = async () => {
     setLoading(true);
 
     try {
       const response = await axios({
         method: 'GET',
-        url: `/api/performances/collect?eventID=${event}`,
+        url: `/api/performances/collect?eventID=${event.id}`,
       });
 
       setPerformances(formatPerformances(response.data));
@@ -219,10 +218,14 @@ export default function Performances() {
     danceTitle,
     dancersString,
     choreographersString,
+    performanceLink,
     school,
     competitionLevel,
+    competitionLevelID,
     danceStyle,
+    danceStyleID,
     danceSize,
+    danceSizeID,
   }) => {
     setLoading(true);
 
@@ -236,12 +239,15 @@ export default function Performances() {
           choreographers: choreographersString
             .split(',')
             .map(choreographer => choreographer.trim()),
+          performanceLink,
           schoolID: school,
           competitionLevel,
+          competitionLevelID,
           danceStyle,
+          danceStyleID,
           danceSize,
-          eventID: event,
-          danceEntry: DANCE_ENTRY,
+          danceSizeID,
+          eventID: event.id,
         },
       });
 
@@ -252,23 +258,6 @@ export default function Performances() {
 
     setLoading(false);
   };
-
-  // const getAdjudications = async () => {
-  //   setLoading(true);
-
-  //   try {
-  //     const response = await axios({
-  //       method: 'GET',
-  //       url: `/api/performances/getJudgingData?eventId=${event}`,
-  //     });
-  //     const adjudicationsData = response.data;
-  //     setAdjudications(formatPerformancesForJudgingTable(adjudicationsData));
-  //   } catch {
-  //     // Empty catch block
-  //   }
-
-  //   setLoading(false);
-  // };
 
   // Get initial filter options and performances
   useEffect(() => {
@@ -286,7 +275,6 @@ export default function Performances() {
   useEffect(() => {
     const updatedTableFilters = [];
     const activeSchoolFilters = getActiveFilters(schoolFilters);
-    const activeAcademicLevelFilters = getActiveFilters(academicLevelFilters);
     const activePerformanceLevelFilters = getActiveFilters(performanceLevelFilters);
     const activeDanceStyleFilters = getActiveFilters(danceStyleFilters);
     const activeDanceSizeFilters = getActiveFilters(danceSizeFilters);
@@ -302,47 +290,33 @@ export default function Performances() {
         value: activeSchoolFilters.map(filter => filter.label), // For schools, need to filter by label, not schoolId due to Table accessor being `schoolName`
       });
     }
-    if (activeAcademicLevelFilters.length > 0) {
-      updatedTableFilters.push({
-        id: 'academicLevel',
-        value: activeAcademicLevelFilters.map(filter => filter.value),
-      });
-    }
     if (activePerformanceLevelFilters.length > 0) {
       updatedTableFilters.push({
         id: 'performanceLevel',
-        value: activePerformanceLevelFilters.map(filter => filter.value),
+        value: activePerformanceLevelFilters.map(filter => filter.label),
       });
     }
     if (activeDanceStyleFilters.length > 0) {
       updatedTableFilters.push({
         id: 'danceStyle',
-        value: activeDanceStyleFilters.map(filter => filter.value),
+        value: activeDanceStyleFilters.map(filter => filter.label),
       });
     }
     if (activeDanceSizeFilters.length > 0) {
       updatedTableFilters.push({
         id: 'danceSize',
-        value: activeDanceSizeFilters.map(filter => filter.value),
+        value: activeDanceSizeFilters.map(filter => filter.label),
       });
     }
 
     setTableFilters(updatedTableFilters);
     setPageNumber(0);
-  }, [
-    searchQuery,
-    schoolFilters,
-    academicLevelFilters,
-    performanceLevelFilters,
-    danceStyleFilters,
-    danceSizeFilters,
-  ]);
+  }, [searchQuery, schoolFilters, performanceLevelFilters, danceStyleFilters, danceSizeFilters]);
 
   // Render active filter pills
   const renderActiveFilters = () => {
     const activeFilterPills = [];
     const activeSchoolFilters = getActiveFilters(schoolFilters);
-    const activeAcademicLevelFilters = getActiveFilters(academicLevelFilters);
     const activePerformanceLevelFilters = getActiveFilters(performanceLevelFilters);
     const activeDanceStyleFilters = getActiveFilters(danceStyleFilters);
     const activeDanceSizeFilters = getActiveFilters(danceSizeFilters);
@@ -353,15 +327,6 @@ export default function Performances() {
           key={i}
           label={label}
           onDelete={() => setSchoolFilters(removeKeyFromObject(schoolFilters, value))}
-        />
-      );
-    });
-    activeAcademicLevelFilters.forEach(({ label, value }, i) => {
-      activeFilterPills.push(
-        <Pill
-          key={i}
-          label={label}
-          onDelete={() => setAcademicLevelFilters(removeKeyFromObject(academicLevelFilters, value))}
         />
       );
     });
@@ -408,9 +373,9 @@ export default function Performances() {
               Back to Events
             </Button>
           </Link>
-
-          <h2 className={styles.performances__navigation__eventName}>{eventName}</h2>
+          {/* <FeedbackReadyNotification /> */}
         </div>
+        <h2 className={styles.performances__eventName}>{eventName}</h2>
         <div className={styles.performances__header}>
           <div>
             <Title className={styles.performances__header__pageTitle}>Performances</Title>
@@ -431,9 +396,11 @@ export default function Performances() {
               Filters
               <img src={showFilters ? ChevronDown : ChevronDownGrey} />
             </Button>
-            <Button variant="contained" onClick={() => setModalOpen(true)}>
-              Add Performance
-            </Button>
+            {session.role === 'ADMIN' && (
+              <Button variant="contained" onClick={() => setModalOpen(true)} disabled={loading}>
+                Add Performance
+              </Button>
+            )}
           </div>
           <div>
             {performances.length > 0 && (
@@ -452,11 +419,6 @@ export default function Performances() {
                 buttonText="School"
                 options={schoolFilters}
                 setOptions={setSchoolFilters}
-              />
-              <FilterDropdown
-                buttonText="Academic Level"
-                options={academicLevelFilters}
-                setOptions={setAcademicLevelFilters}
               />
               <FilterDropdown
                 buttonText="Competition Level"
@@ -481,8 +443,8 @@ export default function Performances() {
         )}
         <div className={styles.performances__content}>
           <Tabs
-            firstTabName="Entry View"
-            secondTabName="Judging View"
+            firstTabName={session.role === 'ADMIN' ? `Entry View` : `Needs Feedback`}
+            secondTabName={session.role === 'ADMIN' ? `Judging View` : `Feedback Given`}
             firstTabContent={
               loading ? (
                 <div className={styles.performances__loadingSpinner}>
@@ -490,7 +452,8 @@ export default function Performances() {
                 </div>
               ) : (
                 <PerformancesTable
-                  performances={performances}
+                  performances={session.role === 'ADMIN' ? performances : pendingPerformances}
+                  emptyPrompt={session.role === 'JUDGE' && 'No performances left to adjudicate'}
                   filters={tableFilters}
                   pageNumber={pageNumber}
                   setPageCount={setPageCount}
@@ -507,12 +470,11 @@ export default function Performances() {
                 </div>
               ) : (
                 <PerformancesTable
-                  performances={performances}
+                  performances={session.role === 'ADMIN' ? performances : adjudicatedPerformances}
+                  emptyPrompt={session.role === 'JUDGE' && ''}
                   filters={tableFilters}
                   pageNumber={pageNumber}
                   setPageCount={setPageCount}
-                  setPerformanceToEdit={setPerformanceToEdit}
-                  setModalOpen={setModalOpen}
                   hiddenColumns={JUDGING_VIEW_HIDDEN_COLUMNS}
                 />
               )
@@ -520,7 +482,8 @@ export default function Performances() {
           />
         </div>
       </div>
-      <PerformanceModal
+      <AddPerformanceModal
+        loading={loading}
         open={modalOpen}
         setOpen={setModalOpen}
         setLoading={setLoading}
@@ -541,7 +504,6 @@ export default function Performances() {
 export async function getServerSideProps(context) {
   // Collect session
   const session = await getSession(context);
-
   // If session does not exist
   if (!session) {
     return {
@@ -555,6 +517,8 @@ export async function getServerSideProps(context) {
 
   // Else, return
   return {
-    props: {},
+    props: {
+      session,
+    },
   };
 }

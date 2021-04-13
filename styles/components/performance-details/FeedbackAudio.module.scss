@@ -1,0 +1,51 @@
+.audioRecorder__wrapper {
+  &.hidden {
+    height: 0;
+
+    .audioRecorder {
+      height: 0;
+    }
+  }
+
+  .audioRecorder {
+    width: 100%;
+  }
+}
+
+.recordButton,
+.stopButton {
+  width: 100%;
+  justify-content: center;
+
+  // Microphone and Stop icons
+  img {
+    height: 24px;
+    margin-right: 4px;
+  }
+}
+
+.rerecordButton__wrapper {
+  display: flex;
+  justify-content: flex-end;
+
+  // Rerecord button
+  & > button {
+    display: flex;
+    align-items: center;
+    border: none;
+    background-color: transparent;
+
+    font-family: DM Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 20px;
+    line-height: 26px;
+    color: var(--brand-black);
+
+    // Microphone icon
+    img {
+      height: 24px;
+      margin-right: 4px;
+    }
+  }
+}

@@ -1,41 +1,17 @@
 import React from 'react'; // React
 import PropTypes from 'prop-types'; // PropTypes
-// import { useRouter } from 'next/router'; // Routing
+import { useRouter } from 'next/router'; // Routing
 
 import JudgingStatusPill from '@components/performances/JudgingStatusPill'; // Judging status pill
 import EmptyTableComponent from '@components/performances/EmptyTableComponent'; // Empty table component
 import Table from '@components/Table'; // Table
-import Button from '@components/Button'; // Button
 
 const PAGE_SIZE = 20; // Rows per page
 
-export default function PerformancesTable({
-  performances,
-  setPerformanceToEdit,
-  setModalOpen,
-  ...props
-}) {
-  // const router = useRouter(); // Collect router
+export default function PerformancesTable({ performances, emptyPrompt, ...props }) {
+  const router = useRouter();
 
   const columns = [
-    {
-      Header: 'Edit',
-      accessor: 'edit',
-      // eslint-disable-next-line react/display-name
-      Cell: ({ row: { original } }) => (
-        <Button
-          variant="edit"
-          onClick={() => {
-            setPerformanceToEdit(original);
-            setModalOpen(true);
-          }}
-        />
-      ),
-    },
-    {
-      Header: 'ID',
-      accessor: 'id',
-    },
     {
       Header: 'Title',
       accessor: 'danceTitle',
@@ -47,7 +23,7 @@ export default function PerformancesTable({
       filter: 'matchEnum',
     },
     {
-      Header: 'Level',
+      Header: 'Perf. Lvl',
       accessor: 'performanceLevel',
       filter: 'matchEnum',
     },
@@ -60,11 +36,6 @@ export default function PerformancesTable({
       Header: 'Size',
       accessor: 'danceSize',
       filter: 'matchEnum',
-    },
-    {
-      Header: 'Score',
-      accessor: 'score',
-      Cell: ({ value }) => (value !== null ? String(value) : 'N/A'),
     },
     // Judging view columns
     {
@@ -104,19 +75,19 @@ export default function PerformancesTable({
     },
   ];
 
-  // const goToPerformanceDetails = row => {
-  //   // Go to /performances/[id] page
-  //   router.push(`/performances/${row.id}`); // Route to "/performance/:id" page
-  // };
+  const goToPerformanceDetails = row => {
+    router.push(`/performances/${row.original.id}`); // Route to "/performance/:id" page
+  };
 
   return (
     <Table
       columns={columns}
       data={performances}
       pageSize={PAGE_SIZE}
-      emptyComponent={<EmptyTableComponent />}
+      emptyComponent={<EmptyTableComponent prompt={emptyPrompt} />}
       initialSort={[{ id: 'id' }]}
-      // onRowClick={goToPerformanceDetails}
+      onRowClick={goToPerformanceDetails}
+      clickable
       {...props}
     />
   );

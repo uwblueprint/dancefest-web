@@ -12,47 +12,72 @@ export default async (req, res) => {
 
   // Collect performance information from request body
   const {
-    name,
-    academicLevel,
+    danceTitle,
     performers,
     choreographers,
     competitionLevel,
     danceSize,
-    danceEntry,
     danceStyle,
-    danceTitle,
+    performanceLink,
+    audioRecordingLink,
+    danceSizeID,
+    danceStyleID,
+    competitionLevelID,
     eventID,
     schoolID,
   } = req.body;
 
   // If required fields were not provided, return an error
-  if (!danceEntry || !eventID || !schoolID) {
+  if (!eventID || !schoolID) {
     return res.status(400).json({
-      error: 'Required fields danceEntry, eventId, or schoolID were not provided',
+      error: 'Required fields eventId, or schoolID were not provided',
     });
   }
 
-  const performance = await prisma.performance.create({
-    data: {
-      name: name,
-      academic_level: academicLevel,
-      performers: performers,
-      choreographers: choreographers,
-      competition_level: competitionLevel,
-      dance_size: danceSize,
-      dance_entry: danceEntry,
-      dance_style: danceStyle,
-      dance_title: danceTitle,
-      event_id: eventID,
-      school_id: schoolID,
+  // Check that the event exists
+  const eventExists = await prisma.event.findUnique({
+    where: {
+      id: eventID,
     },
   });
 
-  if (performance) {
-    return res.status(200).json(performance);
-  } else {
+  // If event does not exist
+  if (!eventExists) {
     return res.status(400).json({
-      error: 'Performance was unable to be created',
+      error: 'Event does not exist',
+    });
+  }
+
+  try {
+    const performance = await prisma.performance.create({
+      data: {
+        dance_title: danceTitle,
+        performers: performers,
+        choreographers: choreographers,
+        competition_level: competitionLevel,
+        dance_size: danceSize,
+        dance_style: danceStyle,
+        performance_link: performanceLink,
+        audio_recording_link: audioRecordingLink,
+        dance_size_id: danceSizeID,
+        dance_style_id: danceStyleID,
+        competition_level_id: competitionLevelID,
+        event_id: eventID,
+        school_id: schoolID,
+      },
+    });
+
+    if (performance) {
+      return res.status(200).json(performance);
+    } else {
+      return res.status(400).json({
+        error: 'Performance was unable to be created',
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({
+      error: 'Error creating new performance',
     });
   }
 };

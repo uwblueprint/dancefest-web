@@ -1,0 +1,87 @@
+.scoreCard {
+  width: 190px;
+  height: 99px;
+  border: 1px solid var(--brand-navy);
+  box-sizing: border-box;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  // Focused state
+  &.focused {
+    border: 2px solid var(--system-light-blue);
+  }
+
+  // Score
+  h1 {
+    display: block;
+    margin: 0;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 36px;
+    line-height: 47px;
+    color: var(--brand-navy);
+  }
+
+  // Title
+  h2 {
+    display: block;
+    font-size: 16px;
+    line-height: 21px;
+    margin: 0 0 12px 0;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+
+    color: var(--system-neutral-grey);
+  }
+
+  // Editing score
+  input {
+    max-width: 104px;
+    border: none;
+    border-bottom: 2px solid var(--brand-pop-blue);
+    margin-bottom: 4px;
+    padding: 0;
+    background-color: transparent;
+    text-align: center;
+
+    font-style: normal;
+    font-weight: bold;
+    font-size: 36px;
+    line-height: 36px;
+    color: var(--brand-navy);
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &.grey {
+    background-color: var(--brand-pop-blue);
+
+    h1,
+    h2 {
+      color: #fff;
+    }
+
+    input {
+      border-bottom: 2px solid #ffffff;
+      color: #fff;
+    }
+  }
+
+  &.red {
+    background-color: var(--brand-other-red);
+    h1,
+    h2 {
+      color: #fff;
+    }
+
+    input {
+      border-bottom: 2px solid #ffffff;
+      color: #fff;
+    }
+  }
+}

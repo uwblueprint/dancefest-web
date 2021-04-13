@@ -6,12 +6,18 @@ import { getSession } from 'next-auth/client'; // Session handling
 export default async (req, res) => {
   // Collect session from request
   const session = await getSession({ req });
-  const { settingIDs } = req.body;
+  const { eventID, settingIDs } = req.body;
 
   // If session exists (user authenticated)
   if (session) {
+    if (!eventID) {
+      return res.status(400).json({
+        error: 'eventID not provided',
+      });
+    }
+
     // get awards
-    const awards = await getAwards(settingIDs);
+    const awards = await getAwards(eventID, settingIDs);
     // filtering in the API, TODO move to filtering via query
     res.send(awards);
   }
@@ -20,9 +26,12 @@ export default async (req, res) => {
   res.status(401).end();
 };
 
-export const getAwards = async settingIDs => {
+export const getAwards = async (eventID, settingIDs) => {
   // Collect all awards from database
   const awards = await prisma.award.findMany({
+    where: {
+      event_id: parseInt(eventID),
+    },
     include: {
       awards_categories: {
         include: {
@@ -43,7 +52,7 @@ export const getAwards = async settingIDs => {
     })
     .filter(
       award =>
-        award.is_category === false ||
-        award.categories.every(category => settingIDs.includes(category))
+        award.type === 'SPECIAL' ||
+        award.awards_categories.every(category => settingIDs.includes(category.category_id))
     );
 };

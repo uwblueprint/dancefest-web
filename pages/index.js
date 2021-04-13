@@ -2,7 +2,7 @@ import axios from 'axios'; // Axios requests
 import Layout from '@components/Layout'; // Layout wrapper
 import Loader from 'react-loader-spinner'; // Spinning loader
 import { useState, useEffect } from 'react';
-import Navigation from '@containers/Navigation'; // State management
+import Event from '@containers/Event'; // State management
 
 import DancefestModal from '@components/Modal'; // Modal component
 import { getSession } from 'next-auth/client'; // Session handling
@@ -24,7 +24,7 @@ const modalStates = Object.freeze({
 
 // Page: Events
 export default function Events({ session }) {
-  const { setEvent } = Navigation.useContainer();
+  const [, setEvent] = Event.useContainer();
 
   const [events, setEvents] = useState([]); // Available events
   const [loading, setLoading] = useState(true); // Loading state
@@ -209,11 +209,13 @@ function NewEvent({ judgeOptions, setModalOpen, reloadEvents }) {
   const [title, setTitle] = useState(''); // Event title
   const [date, setDate] = useState(new Date()); // Event date
   const [judges, setJudges] = useState([null, null, null]); // Event judges
+  const [loading, setLoading] = useState(false);
 
   /**
    * Submits new event creation
    */
   const submitEvent = async () => {
+    setLoading(true);
     // Post /api/events/create
     await axios.post('/api/events/create', {
       // With required data
@@ -224,6 +226,7 @@ function NewEvent({ judgeOptions, setModalOpen, reloadEvents }) {
 
     reloadEvents(); // Begin reloading all events in background
     setModalOpen(false); // Close modal
+    setLoading(false);
   };
 
   /**
@@ -295,7 +298,12 @@ function NewEvent({ judgeOptions, setModalOpen, reloadEvents }) {
         </Button>
 
         {/* Create event button */}
-        <Button variant="contained" style={{ marginLeft: '32px' }} onClick={submitEvent}>
+        <Button
+          variant="contained"
+          style={{ marginLeft: '32px' }}
+          onClick={submitEvent}
+          disabled={loading}
+        >
           Add Event
         </Button>
       </div>
@@ -315,11 +323,13 @@ function EditEvent({ event, judgeOptions, setModalOpen, reloadEvents }) {
   const [title, setTitle] = useState(event.name); // Event title
   const [judges, setJudges] = useState(event.judges.map(email => ({ label: email, value: email }))); // Event judges
   const [date, setDate] = useState(new Date(event.event_date)); // Event date
+  const [loading, setLoading] = useState(false);
 
   /**
    * Edits event
    */
   const editEvent = async () => {
+    setLoading(true);
     // Post /api/events/edit
     await axios.post('/api/events/edit', {
       // With id of event to edit
@@ -332,6 +342,7 @@ function EditEvent({ event, judgeOptions, setModalOpen, reloadEvents }) {
 
     reloadEvents(); // Begin reloading events in background
     setModalOpen(false); // Close modal
+    setLoading(false);
   };
 
   /**
@@ -418,7 +429,12 @@ function EditEvent({ event, judgeOptions, setModalOpen, reloadEvents }) {
         </Button>
 
         {/* Create event button */}
-        <Button variant="contained" style={{ marginLeft: '32px' }} onClick={editEvent}>
+        <Button
+          variant="contained"
+          style={{ marginLeft: '32px' }}
+          onClick={editEvent}
+          disabled={loading}
+        >
           Save Edits
         </Button>
       </div>

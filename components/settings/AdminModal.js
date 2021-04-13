@@ -22,6 +22,7 @@ const ADMIN_ROLE_OPTIONS = [
   },
 ];
 export default function AdminModal({
+  loading,
   setLoading,
   open,
   setOpen,
@@ -111,13 +112,13 @@ export default function AdminModal({
         clearFields();
       }}
       onSubmit={adminToEdit ? updateAdmin : addAdmin}
-      disableSubmitButton={!adminName || !adminEmail}
+      disableSubmitButton={loading || !adminName || !adminEmail}
     >
       <div className={styles.adminModal}>
         <div>
           <h2>Name</h2>
           <Input
-            placeholder="Admin Name"
+            placeholder="User Name"
             value={adminName}
             onChange={event => setAdminName(event.target.value)}
           />
@@ -125,7 +126,7 @@ export default function AdminModal({
         <div>
           <h2>Email</h2>
           <Input
-            placeholder="Admin Email"
+            placeholder="User Email"
             value={adminEmail}
             onChange={event => setAdminEmail(event.target.value)}
           />

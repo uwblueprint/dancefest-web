@@ -6,7 +6,7 @@ export default async (req, res) => {
   const session = await getSession({ req });
 
   // If session exists (thus, user is authenticated)
-  if (session && session.role === 'ADMIN') {
+  if (session && (session.role === 'ADMIN' || session.role === 'JUDGE')) {
     const { role } = req.query;
 
     const filter = {};

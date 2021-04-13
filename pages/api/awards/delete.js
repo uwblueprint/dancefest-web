@@ -20,6 +20,26 @@ export default async (req, res) => {
     });
   }
 
+  const award = await prisma.award.findUnique({
+    where: {
+      id: id,
+    },
+  });
+
+  // If the award does not exist, throw an error
+  if (!award) {
+    return res.status(400).json({
+      error: 'Award does not exist',
+    });
+  }
+
+  // If the award is finalized, do not allow editing
+  if (award.is_finalized) {
+    return res.status(400).json({
+      error: 'Award cannot be edited as it is finalized',
+    });
+  }
+
   const deletedAwardPerformance = prisma.awardPerformance.deleteMany({
     where: {
       award_id: id,

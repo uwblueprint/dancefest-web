@@ -1,0 +1,135 @@
+.judge__feedback_container {
+  width: 100%;
+  padding-top: 30px;
+
+  p {
+    font-family: DM Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 20px;
+    line-height: 26px;
+
+    color: var(--brand-navy);
+  }
+
+  h2 {
+    font-family: DM Sans;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 21px;
+    text-transform: uppercase;
+
+    color: var(--system-neutral-grey);
+  }
+
+  .judge__feedback_header {
+    box-sizing: border-box;
+    display: flex;
+    flex: row;
+    justify-content: space-between;
+
+    h2 {
+      color: var(--system-neutral-grey);
+      vertical-align: baseline;
+    }
+
+    button {
+      position: relative;
+      top: -30px;
+      max-height: 40px;
+      vertical-align: top;
+    }
+  }
+
+  .judge__feedback_notes_wrapper {
+    margin-bottom: 32px;
+
+    p {
+      margin: 0;
+    }
+  }
+
+  .judge__feedback_audio_player_wrapper {
+    margin-bottom: 42px;
+  }
+
+  .judge__feedback_nominations {
+    margin-bottom: 20px;
+
+    p {
+      margin: 0 0 16px;
+    }
+  }
+
+  .judge__feedback_awards {
+    h2 {
+      font-family: DM Sans;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 16px;
+      line-height: 21px;
+      text-transform: capitalize;
+    }
+
+    p {
+      margin: 0 0 16px;
+    }
+
+    input {
+      width: 300px;
+    }
+  }
+}
+
+.judge__feedback_buttons_spacing {
+  margin-right: 45px;
+}
+
+.judge__feedback_notes_input {
+  width: 100%;
+  padding: 20px 0px;
+
+  textarea {
+    width: 100%;
+    resize: none;
+    height: 140px;
+    max-height: 140px;
+    border: 2px solid #dfe1e6;
+    box-sizing: border-box;
+    border-radius: 3px;
+    outline: none;
+    padding: 8px;
+
+    font-family: DM Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 20px;
+    line-height: 140.62%;
+    /* or 28px */
+    color: var(--system-neutral-grey);
+  }
+}
+
+.judge__feedback_dropdown_wrapper {
+  max-width: 400px;
+  width: 100%;
+  margin: 20px 0px;
+}
+
+.judge__feedback_input_wrapper {
+  max-width: 260px;
+  width: 100%;
+  margin: 20px 0px;
+}
+
+.performance_summary__score_content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 36px;
+
+  & > div:nth-child(2) {
+    margin: 0 24px;
+  }
+}

@@ -164,8 +164,7 @@ export default function Setting() {
       });
 
       setValueToDelete(null);
-    } catch (err) {
-      console.log(err.error);
+    } catch {
       setDeleteValueError(true);
     }
 
@@ -359,10 +358,12 @@ export default function Setting() {
         setModalOpen={setModalOpen}
         onCancel={() => setModalOpen(false)}
         onSubmit={handleDeleteValue}
+        disableSubmitButton={loading}
       >
         <p>Deleted category values cannot be restored.</p>
       </Modal>
       <SchoolModal
+        loading={loading}
         setLoading={setLoading}
         open={schoolModalOpen}
         setOpen={setSchoolModalOpen}
@@ -371,6 +372,7 @@ export default function Setting() {
         setSchoolToEdit={setSchoolToEdit}
       />
       <AdminModal
+        loading={loading}
         setLoading={setLoading}
         open={adminModalOpen}
         setOpen={setAdminModalOpen}
@@ -408,7 +410,7 @@ export async function getServerSideProps(context) {
   const session = await getSession(context);
 
   // If session does not exist
-  if (!session) {
+  if (!session || session.role != 'ADMIN') {
     return {
       redirect: {
         // Redirect user to login page

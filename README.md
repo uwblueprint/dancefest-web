@@ -87,7 +87,9 @@ yarn dev
 
 ## Development
 
-To run the linters:
+Linters are run automatically as a pre-commit hook on files you edit and commit.
+
+To run the linters manually on the whole codebase:
 
 ```bash
 # Runs linting
@@ -97,9 +99,8 @@ yarn lint
 yarn fix
 ```
 
-If you want to deploy a branch for testing, open a PR against staging and comment /deploy in the
-PR!  
-Make sure someone else isn't using the deployment environment at the same time as you.
+Future work: Per branch deploys for testing where you can open a PR against staging and comment
+/deploy in the PR!
 
 ## Deploy
 

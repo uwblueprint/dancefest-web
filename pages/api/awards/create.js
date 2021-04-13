@@ -12,27 +12,46 @@ export default async (req, res) => {
   }
 
   // Collect award information from request body
-  const { title, settingIDs } = req.body;
+  // type must be string in all capitals matching corresponding enum AwardType
+  const { title, type, eventID, settingIDs } = req.body;
 
   // If required fields do not exist
-  if (!title) {
+  if (!title || !type || !eventID) {
     return res.status(400).json({
       error: 'Required fields not provided',
     });
   }
 
+  // Check that the event exists
+  const eventExists = await prisma.event.findUnique({
+    where: {
+      id: eventID,
+    },
+  });
+
+  // If the event does not exist
+  if (!eventExists) {
+    return res.status(400).json({
+      error: 'Event does not exist',
+    });
+  }
+
   try {
-    const isCategory = settingIDs && settingIDs.length > 0;
-    // create award
+    // Create award
     const award = await prisma.award.create({
       data: {
         title: title,
-        is_category: isCategory,
+        type: type,
+        event_id: eventID,
       },
     });
 
-    // create award category references
-    if (isCategory) {
+    // Create award category references if it is a category award
+    if (
+      (award.type === 'DANCE_ARTISTRY' || award.type === 'SCORE_BASED') &&
+      settingIDs &&
+      settingIDs.length > 0
+    ) {
       await prisma.$transaction(
         settingIDs.map(settingID =>
           prisma.awardCategory.upsert({

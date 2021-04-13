@@ -1,0 +1,232 @@
+/*
+****************************************
+Performances: Navigation header
+****************************************
+*/
+.performances__navigation__button {
+  display: flex;
+  padding: 6px 12px 6px 8px;
+}
+
+.performances__navigation__button > img {
+  margin-right: 2px;
+}
+
+.performances__navigation__eventName {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 24px 0 0 0;
+
+  font-family: DM Sans;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 21px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+
+  color: var(--brand-pop-blue);
+}
+
+/*
+****************************************
+Performances: Header
+****************************************
+*/
+.performances__header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  & > div {
+    display: flex;
+    align-items: center;
+  }
+
+  button {
+    height: 40px;
+  }
+
+  .performances__header__pageTitle {
+    display: inline;
+    margin-right: 72px;
+  }
+
+  .performances__header__search {
+    width: 240px;
+    margin-right: 8px;
+  }
+
+  .performances__header__filtersButton {
+    padding-left: 12px;
+    padding-right: 12px;
+    margin-right: 8px;
+
+    border: 2px solid var(--system-light-grey);
+    border-radius: 4px;
+
+    font-family: DM Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .performances__header__filtersButtonOpen {
+    border: 2px solid var(--brand-pop-blue);
+  }
+
+  .performances__header__filtersButton > img {
+    margin-left: 4px;
+  }
+}
+
+/*
+****************************************
+Performances: Filters
+****************************************
+*/
+.performances__filters {
+  margin: 20px 0 24px;
+
+  .performances__filters__buttons {
+    margin-bottom: 12px;
+
+    div:not(:last-child) {
+      margin-right: 8px;
+    }
+  }
+}
+
+.performances__filters__appliedFilters {
+  & > div {
+    margin: 0 8px 8px 0;
+  }
+}
+
+.performances__delete_pagination_container {
+  background-color: var(--brand-other-red);
+  border: 2px solid var(--brand-white);
+  // padding-right: 10px;
+}
+
+/*
+****************************************
+Performances: Content
+****************************************
+*/
+.performances__content {
+  margin: 36px 0;
+}
+
+/*
+****************************************
+Performances: Content
+****************************************
+*/
+
+.awards__judge_table {
+  padding: 45px 50px;
+  background-color: #ffffff;
+}
+
+/*
+****************************************
+Awards: Loader
+****************************************
+*/
+
+.awards__loader {
+  padding-top: 36px;
+  text-align: center;
+}
+
+/*
+****************************************
+Performances: Table
+****************************************
+*/
+.performances__content table {
+  width: 100%;
+}
+
+/*
+****************************************
+Performances: Loading spinner
+****************************************
+*/
+.performances__loadingSpinner {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 32px;
+}
+
+/*
+****************************************
+Performances: Table - Empty Component
+****************************************
+*/
+
+.page__performances_list_empty {
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  h2 {
+    font-size: 32px;
+    line-height: 42px;
+    color: var(--brand-pop-blue);
+    margin-block-end: 16px;
+  }
+
+  h3 {
+    font-size: 16px;
+    line-height: 21px;
+    letter-spacing: 5%;
+    text-transform: uppercase;
+    color: var(--brand-pop-blue);
+    margin-block-end: 24px;
+  }
+
+  img {
+    max-width: 230px;
+    max-height: 400px;
+  }
+}
+
+/*
+****************************************
+Awards: Confirmation Modal
+****************************************
+*/
+.confirmation__modal {
+  height: auto;
+  width: 576px;
+  padding: 48px 54px;
+
+  // Title
+  h1 {
+    font-family: DM Sans;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 31px;
+  }
+
+  // Warning description
+  p {
+    font-family: DM Sans;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 26px;
+    margin: 6px 0 20px 0;
+
+    color: var(--system-neutral-grey);
+  }
+}

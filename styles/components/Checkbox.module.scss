@@ -1,0 +1,31 @@
+/*
+****************************************
+Checkbox
+****************************************
+*/
+.checkbox {
+  position: relative;
+  display: inline-block;
+  height: 12px !important;
+  width: 12px !important;
+  min-width: 12px;
+  margin-right: 16px;
+
+  background-color: #ffffff;
+  border: 2px solid var(--system-light-grey);
+  border-radius: 2px;
+
+  cursor: pointer;
+
+  // Checkbox (checked)
+  &.selected {
+    background-color: var(--system-light-blue);
+    border: 2px solid var(--system-light-blue);
+
+    img {
+      position: absolute;
+      top: 2px;
+      left: 1px;
+    }
+  }
+}

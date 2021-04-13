@@ -1,3 +1,64 @@
+import { formatAdjudication } from '@utils/adjudications'; // Format adjudication util
+
+/**
+ * Formats a performance response from /api/performances/collect to a format that is easy to use
+ * on the frontend. Converts all field names to camelCase
+ * @param {Object} performance - Performance returned in the response
+ * @returns {Object} Formatted performance
+ */
+export const formatPerformance = ({
+  audio_recording_link: audioRecordingLink,
+  competition_level: performanceLevel,
+  competition_level_id: performanceLevelID,
+  dance_size: danceSize,
+  dance_size_id: danceSizeID,
+  dance_style: danceStyle,
+  dance_style_id: danceStyleID,
+  dance_title: danceTitle,
+  event_id: eventId,
+  performance_link: performanceLink,
+  school: { school_name: schoolName },
+  school_id: schoolId,
+  cumulativeScore,
+  awards,
+  adjudications,
+  ...rest
+}) => {
+  const nominations = {};
+  awards.forEach(award => {
+    if (award.user_id in nominations) {
+      nominations[award.user_id].push({ isCategory: award.is_category, ...award });
+    } else {
+      nominations[award.user_id] = [{ isCategory: award.is_category, ...award }];
+    }
+  });
+
+  return {
+    audioRecordingLink,
+    performanceLevel,
+    performanceLevelID,
+    danceSize,
+    danceSizeID,
+    danceStyle,
+    danceStyleID,
+    danceTitle,
+    eventId,
+    performanceLink,
+    schoolName,
+    schoolId,
+    score: cumulativeScore,
+    cumulativeScore,
+    awards,
+    awardsString: awards
+      .map(({ title }) => title)
+      .filter(award => !!award)
+      .join(', '),
+    adjudications: adjudications.map(formatAdjudication),
+    nominations,
+    ...rest,
+  };
+};
+
 /**
  * Formats performances response from /api/performances/collect to a format that is easy to use with Table component
  * in the Entry View. Converts all field names to camelCase
@@ -5,36 +66,7 @@
  * @returns {Object[]} Formatted performances
  */
 export const formatPerformances = performances => {
-  return performances.map(
-    ({
-      academic_level: academicLevel,
-      competition_level: performanceLevel,
-      dance_entry: danceEntry,
-      dance_size: danceSize,
-      dance_style: danceStyle,
-      dance_title: danceTitle,
-      event_id: eventId,
-      school: { school_name: schoolName },
-      school_id: schoolId,
-      cumulativeScore,
-      awards,
-      ...rest
-    }) => ({
-      academicLevel,
-      performanceLevel,
-      danceEntry,
-      danceSize,
-      danceStyle,
-      danceTitle,
-      eventId,
-      schoolName,
-      schoolId,
-      score: cumulativeScore,
-      cumulativeScore,
-      awardsString: awards.map(({ title }) => title).join(', '),
-      ...rest,
-    })
-  );
+  return performances.map(formatPerformance);
 };
 
 /**
@@ -53,4 +85,22 @@ export const calculateAverageScore = scores => {
 
   const average = scores.reduce((a, v) => a + v, 0) / scores.length;
   return Math.round(average * 10) / 10;
+};
+
+export const filterPerformancesForJudge = (performances, judgeID) => {
+  let adjudicated = [];
+  let pending = [];
+  performances.map(performance => {
+    let judgeFound = false;
+    performance.adjudications.map(adjudication => {
+      if (adjudication.userId === judgeID) judgeFound = true;
+    });
+
+    if (judgeFound) {
+      adjudicated.push(performance);
+    } else {
+      pending.push(performance);
+    }
+  });
+  return [adjudicated, pending];
 };

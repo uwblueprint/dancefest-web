@@ -2,14 +2,28 @@ import Link from 'next/link'; // Dynamic routing
 import Head from 'next/head'; // HTML head handling
 import { useRouter } from 'next/router'; // Routing
 import { signOut, useSession } from 'next-auth/client'; // Authentication
-import Navigation from '@containers/Navigation'; // Navigation state
+import Event from '@containers/Event'; // Event state
+import Banner from '@components/Banner'; // Banner
 import styles from '@styles/components/Layout.module.scss'; // Component styles
 
 export default function Layout({ children }) {
+  // const { pathname } = useRouter();
+
   return (
     <div>
       {/* Layout: Meta */}
       <Meta />
+
+      {/* Layout: Banner */}
+      <Banner
+        visible={false}
+        // visible={pathname !== '/performances' && pathname !== '/feedback'}
+      >
+        {'Feedback sharing available for “OSSDF2021-Let’s Dis-Dance”. '}
+        <Link href="/performances">
+          <a>Go to Performance Page</a>
+        </Link>
+      </Banner>
 
       {/* Layout: Header */}
       <Header />
@@ -65,7 +79,7 @@ function Header() {
   // Collect auth status
   const { pathname } = useRouter();
   const [session] = useSession();
-  const { event } = Navigation.useContainer();
+  const [event] = Event.useContainer();
 
   return (
     <div className={styles.layout__header}>
@@ -91,23 +105,25 @@ function Header() {
               </li>
               {event !== null && (
                 <>
-                  <li className={pathname === '/performances' && styles.selected}>
+                  <li className={pathname.includes('/performances') && styles.selected}>
                     <Link href="/performances">
                       <a>Performances</a>
                     </Link>
                   </li>
-                  <li className={pathname === '/awards' && styles.selected}>
+                  <li className={pathname.includes('/awards') && styles.selected}>
                     <Link href="/awards">
                       <a>Awards</a>
                     </Link>
                   </li>
                 </>
               )}
-              <li className={pathname === '/settings' && styles.selected}>
-                <Link href="/settings">
-                  <a>Settings</a>
-                </Link>
-              </li>
+              {session.role == 'ADMIN' && (
+                <li className={pathname === '/settings' && styles.selected}>
+                  <Link href="/settings">
+                    <a>Settings</a>
+                  </Link>
+                </li>
+              )}
               <li>
                 <button
                   onClick={() => {
@@ -138,7 +154,7 @@ function Footer() {
   return (
     // Standard footer content
     <div className={styles.layout__footer}>
-      <p>&copy; 2020 Dancefest Adjudication Portal. v0.0.3.</p>
+      <p>&copy; 2020 Dancefest Adjudication Portal. v1.0.0.</p>
       <p>
         A project by{' '}
         <a
@@ -147,7 +163,7 @@ function Footer() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          UWBlueprint
+          UW Blueprint
         </a>
         .
       </p>

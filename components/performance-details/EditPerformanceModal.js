@@ -1,34 +1,97 @@
 import React, { useState, useEffect } from 'react'; // React
 import PropTypes from 'prop-types'; // PropTypes
 import axios from 'axios'; // axios
+import Event from '@containers/Event'; // Event state
 
 import Input from '@components/Input'; // Input
 import Modal from '@components/Modal'; // Modal
-import Dropdown from '@components/Dropdown'; // Dropdown
+import Dropdown, { formatDropdownOptions } from '@components/Dropdown'; // Dropdown
 import styles from '@styles/components/performances/PerformanceModal.module.scss'; // Component styles
 
-const EVENT_ID = 1; // Temp event id
+import { formatSchools } from '@utils/schools'; // Format schools util
 
-export default function PerformanceModal({
+export default function EditPerformanceModal({
   open,
   setOpen,
+  loading,
   setLoading,
-  getPerformances,
-  addPerformance,
-  schoolOptions,
-  performanceLevelOptions,
-  danceStyleOptions,
-  danceSizeOptions,
-  performanceToEdit = null,
-  setPerformanceToEdit,
+  getPerformance,
+  performance,
 }) {
+  const [event] = Event.useContainer();
+
   const [danceTitle, setDanceTitle] = useState('');
   const [dancersString, setDancersString] = useState('');
   const [choreographersString, setChoreographersString] = useState('');
+  const [performanceLink, setPerformanceLink] = useState('');
   const [school, setSchool] = useState(null);
   const [competitionLevel, setCompetitionLevel] = useState(null);
   const [danceStyle, setDanceStyle] = useState(null);
   const [danceSize, setDanceSize] = useState(null);
+
+  // Dropdown options
+  const [schoolDropdownOptions, setSchoolDropdownOptions] = useState([]);
+  const [performanceLevelDropdownOptions, setPerformanceLevelDropdownOptions] = useState([]);
+  const [danceStyleDropdownOptions, setDanceStyleDropdownOptions] = useState([]);
+  const [danceSizeDropdownOptions, setDanceSizeDropdownOptions] = useState([]);
+
+  const getFilters = async () => {
+    setLoading(true);
+
+    const getSchools = async () => {
+      try {
+        const response = await axios({
+          method: 'GET',
+          url: '/api/schools/collect',
+        });
+        const schools = formatSchools(response.data);
+
+        // Modal dropdown options
+        setSchoolDropdownOptions(
+          formatDropdownOptions(schools, {
+            value: 'id',
+            label: 'schoolName',
+          })
+        );
+      } catch {
+        // Empty catch block
+      }
+    };
+
+    const getSettings = async () => {
+      const response = await axios({
+        method: 'GET',
+        url: '/api/settings/collect',
+      });
+      const settings = response.data;
+
+      const performanceLevelSettings = settings.filter(
+        setting => setting.type === 'COMPETITION_LEVEL'
+      );
+      const danceStyleSettings = settings.filter(setting => setting.type === 'STYLE');
+      const danceSizeSettings = settings.filter(setting => setting.type === 'DANCE_SIZE');
+
+      // Set the label of each dropdown option to the `value` field of each setting (the setting name in the DB)
+      // Set the selected value (which is sent to API upon save) to the `id` field of each setting (the setting id in the DB)
+      // upon clicking a dropdown option
+      const formatOptionsFields = {
+        value: 'id',
+        label: 'value',
+      };
+
+      // Modal dropdown options
+      setPerformanceLevelDropdownOptions(
+        formatDropdownOptions(performanceLevelSettings, formatOptionsFields)
+      );
+      setDanceStyleDropdownOptions(formatDropdownOptions(danceStyleSettings, formatOptionsFields));
+      setDanceSizeDropdownOptions(formatDropdownOptions(danceSizeSettings, formatOptionsFields));
+    };
+
+    await getSchools();
+    await getSettings();
+
+    setLoading(false);
+  };
 
   const clearFields = () => {
     setDanceTitle('');
@@ -41,29 +104,12 @@ export default function PerformanceModal({
   };
 
   const onCancel = () => {
-    setPerformanceToEdit(null);
-    setOpen(false);
-    clearFields();
-  };
-
-  const onSubmit = async () => {
-    await addPerformance({
-      danceTitle,
-      dancersString,
-      choreographersString,
-      school: school.value,
-      competitionLevel: competitionLevel.value,
-      danceStyle: danceStyle.value,
-      danceSize: danceSize.value,
-    });
-
-    setPerformanceToEdit(null);
     setOpen(false);
     clearFields();
   };
 
   const updatePerformance = async () => {
-    const { id } = performanceToEdit;
+    const { id } = performance;
     setLoading(true);
 
     try {
@@ -73,72 +119,77 @@ export default function PerformanceModal({
         data: {
           id,
           name: danceTitle,
-          academicLevel: '??',
           performers: dancersString.split(',').map(dancer => dancer.trim()),
           choreographers: choreographersString
             .split(',')
             .map(choreographer => choreographer.trim()),
-          competitionLevel: competitionLevel.value,
-          danceSize: danceSize.value,
-          danceEntry: 1, // HARD-CODED, TODO: Make dynamic
-          danceStyle: danceStyle.value,
+          performanceLink,
+          competitionLevel: competitionLevel.label,
+          competitionLevelID: competitionLevel.value,
+          danceSize: danceSize.label,
+          danceSizeID: danceSize.value,
+          danceStyle: danceStyle.label,
+          danceStyleID: danceStyle.value,
           danceTitle,
-          eventID: EVENT_ID,
+          eventID: event.id,
           schoolID: school.value,
         },
       });
 
-      getPerformances();
+      getPerformance();
     } catch {
       // Empty catch block
     }
 
     setLoading(false);
-    setPerformanceToEdit(null);
     setOpen(false);
     clearFields();
   };
 
   useEffect(() => {
-    if (performanceToEdit) {
+    getFilters();
+  }, []);
+
+  useEffect(() => {
+    if (performance) {
       const {
         danceTitle,
         performers,
         choreographers,
+        performanceLink,
         schoolName,
         schoolId,
         performanceLevel,
+        performanceLevelID,
         danceStyle,
+        danceStyleID,
         danceSize,
-      } = performanceToEdit;
+        danceSizeID,
+      } = performance;
       setDanceTitle(danceTitle);
+      setPerformanceLink(performanceLink);
       setDancersString(performers.join(', '));
       setChoreographersString(choreographers.join(', '));
       setSchool({ label: schoolName, value: schoolId });
-      setCompetitionLevel({ label: performanceLevel, value: performanceLevel });
-      setDanceStyle({ label: danceStyle, value: danceStyle });
-      setDanceSize({ label: danceSize, value: danceSize });
-    } else {
-      clearFields();
+      setCompetitionLevel({ label: performanceLevel, value: performanceLevelID });
+      setDanceStyle({ label: danceStyle, value: danceStyleID });
+      setDanceSize({ label: danceSize, value: danceSizeID });
     }
-  }, [performanceToEdit]);
+  }, [performance]);
 
   return (
     <Modal
       containerClassName={styles.modal__container}
-      title={performanceToEdit !== null ? 'Edit Performance' : 'New Performance'}
+      title={'Edit Performance'}
       open={open}
       setModalOpen={setOpen}
       cancelText="Discard"
-      submitText={performanceToEdit !== null ? 'Edit Performance' : 'Add Performance'}
+      submitText={'Edit Performance'}
       onCancel={onCancel}
-      onSubmit={performanceToEdit !== null ? updatePerformance : onSubmit}
+      onSubmit={updatePerformance}
+      disableSubmitButton={loading}
     >
       <div className={styles.modal}>
-        <div>
-          <h2>Entry ID</h2>
-          <Input className={styles.modal__entryId} placeholder="##" disabled />
-        </div>
         <div>
           <h2>Dance Title</h2>
           <Input
@@ -166,11 +217,19 @@ export default function PerformanceModal({
           <h3>Separated by comma (ie: John Smith, Jane Doe...)</h3>
         </div>
         <div>
+          <h2>Performance link</h2>
+          <Input
+            placeholder="Performance Link"
+            value={performanceLink}
+            onChange={event => setPerformanceLink(event.target.value)}
+          />
+        </div>
+        <div>
           <h2>School</h2>
           <Dropdown
             className={styles.modal__dropdown}
             placeholder="School"
-            options={schoolOptions}
+            options={schoolDropdownOptions}
             selected={school}
             onChange={school => setSchool(school)}
           />
@@ -180,7 +239,7 @@ export default function PerformanceModal({
           <Dropdown
             className={styles.modal__dropdown}
             placeholder="Level"
-            options={performanceLevelOptions}
+            options={performanceLevelDropdownOptions}
             selected={competitionLevel}
             onChange={competitionLevel => setCompetitionLevel(competitionLevel)}
           />
@@ -190,7 +249,7 @@ export default function PerformanceModal({
           <Dropdown
             className={styles.modal__dropdown}
             placeholder="Style"
-            options={danceStyleOptions}
+            options={danceStyleDropdownOptions}
             selected={danceStyle}
             onChange={danceStyle => setDanceStyle(danceStyle)}
           />
@@ -200,7 +259,7 @@ export default function PerformanceModal({
           <Dropdown
             className={styles.modal__dropdown}
             placeholder="Size"
-            options={danceSizeOptions}
+            options={danceSizeDropdownOptions}
             selected={danceSize}
             onChange={danceSize => setDanceSize(danceSize)}
           />
@@ -210,29 +269,33 @@ export default function PerformanceModal({
   );
 }
 
-PerformanceModal.propTypes = {
+EditPerformanceModal.propTypes = {
   addPerformance: PropTypes.func,
-  danceSizeOptions: PropTypes.any,
-  danceStyleOptions: PropTypes.any,
-  getPerformances: PropTypes.func,
+  getPerformance: PropTypes.func,
   open: PropTypes.any,
-  performanceLevelOptions: PropTypes.any,
-  performanceToEdit: PropTypes.shape({
+  performance: PropTypes.shape({
     choreographers: PropTypes.shape({
       join: PropTypes.func,
     }),
     competition_level: PropTypes.any,
+    danceSize: PropTypes.any,
+    danceSizeID: PropTypes.any,
+    danceStyle: PropTypes.any,
+    danceStyleID: PropTypes.any,
+    danceTitle: PropTypes.any,
     dance_size: PropTypes.any,
     dance_style: PropTypes.any,
     dance_title: PropTypes.any,
     id: PropTypes.any,
+    performanceLevel: PropTypes.any,
+    performanceLevelID: PropTypes.any,
     performers: PropTypes.shape({
       join: PropTypes.func,
     }),
+    schoolId: PropTypes.any,
+    schoolName: PropTypes.any,
     school_id: PropTypes.any,
   }),
-  schoolOptions: PropTypes.any,
   setLoading: PropTypes.func,
   setOpen: PropTypes.func,
-  setPerformanceToEdit: PropTypes.func,
 };

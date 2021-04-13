@@ -1,5 +1,6 @@
 import prisma from '@prisma/index'; // Prisma client
 import { getSession } from 'next-auth/client'; // Session handling
+import { calculateAverageScore } from '@utils/performances'; // Calculate average score util
 
 // Get awards by specifying the corresponding award id
 export default async (req, res) => {
@@ -39,9 +40,19 @@ export const getAward = async filter => {
     include: {
       awards_performances: {
         include: {
-          performances: true,
+          performances: {
+            include: {
+              adjudications: {
+                include: {
+                  user: true,
+                },
+              },
+            },
+          },
+          users: true,
         },
       },
+      awards_categories: true,
     },
   });
 
@@ -50,12 +61,20 @@ export const getAward = async filter => {
   // Remove the relation table data
   return {
     ...award,
-    awards_performances: award.awards_performances.map(({ performances, status, user_id }) => {
-      return {
-        ...performances,
-        status,
-        user_id,
-      };
-    }),
+    awards_performances: award.awards_performances.map(
+      ({ performances, status, users: nominator }) => {
+        const { adjudications, ...rest } = performances;
+        return {
+          ...rest,
+          adjudications,
+          artisticScore: calculateAverageScore(adjudications.map(a => a.artistic_mark)),
+          technicalScore: calculateAverageScore(adjudications.map(a => a.technical_mark)),
+          cumulativeScore: calculateAverageScore(adjudications.map(a => a.cumulative_mark)),
+          status,
+          nominator,
+        };
+      }
+    ),
+    awards_categories: award.awards_categories.map(({ category_id }) => category_id),
   };
 };
