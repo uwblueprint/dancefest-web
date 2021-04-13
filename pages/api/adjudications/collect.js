@@ -7,7 +7,7 @@ export default async (req, res) => {
 
   // If session does not exist
   if (!session) {
-    return res.status(401).end();
+    return res.status(401).send('Unauthorized');
   }
 
   const adjudications = await prisma.adjudication.findMany();

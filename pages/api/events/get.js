@@ -30,13 +30,13 @@ export default async (req, res) => {
             res.send(event);
         }
       } catch (error) {
-        res.status(401).end();
+        res.status(401).send('Unauthorized');
       }
     }
   }
 
   // Else, return 401 for all failures
-  res.status(401).end();
+  res.status(401).send('Unauthorized');
 };
 
 export const getEventByID = async id => {

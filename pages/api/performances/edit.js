@@ -7,7 +7,7 @@ export default async (req, res) => {
 
   // If not authenticated or is not an admin
   if (!session) {
-    return res.status(401).end();
+    return res.status(401).send('Unauthorized');
   }
 
   // Collect performance information from request body

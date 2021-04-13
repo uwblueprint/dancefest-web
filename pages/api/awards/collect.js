@@ -8,7 +8,7 @@ export default async (req, res) => {
 
   // If session does not exists
   if (!session) {
-    return res.status(401).end();
+    return res.status(401).send('Unauthorized');
   }
 
   const { eventID } = req.query;
