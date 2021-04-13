@@ -45,7 +45,6 @@ export default async (req, res) => {
     },
   });
 
-  console.log(awards);
   // Even if one of the awards we are attempting to nominate the performance for is finalized, we prevent the nomination from occurring.
   if (awards && awards.length !== 0) {
     for (const id in awards) {
