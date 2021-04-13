@@ -154,7 +154,7 @@ function Footer() {
   return (
     // Standard footer content
     <div className={styles.layout__footer}>
-      <p>&copy; 2020 Dancefest Adjudication Portal. v0.0.4.</p>
+      <p>&copy; 2020 Dancefest Adjudication Portal. v1.0.0.</p>
       <p>
         A project by{' '}
         <a

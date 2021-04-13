@@ -3,11 +3,103 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 async function main() {
-  // TODO: perform data seeding dependent on environment
-  await dataSeed();
+  if (process.env.SEED === 'production') {
+    await prodSeed();
+  } else {
+    await devSeed();
+  }
 }
 
-async function dataSeed() {
+async function prodSeed() {
+  const admins = [{ name: 'Eric L', email: 'ericli+admin@uwblueprint.org' }];
+
+  const adminUpserts = [];
+  for (const admin of admins) {
+    const adminUpsert = await prisma.user.upsert({
+      where: { email: admin.email },
+      update: {
+        role: 'ADMIN',
+        name: admin.name,
+      },
+      create: {
+        role: 'ADMIN',
+        email: admin.email,
+        name: admin.name,
+      },
+    });
+    adminUpserts.push(adminUpsert);
+    console.log({ adminUpsert });
+  }
+
+  const sizeSettings = ['Small Group', 'Medium Group', 'Large Group', 'Creative Collaboration'];
+  const styleSettings = [
+    'Jazz',
+    'Lyrical',
+    'Ballet',
+    'Open/Fusion',
+    'Modern/Contemporary',
+    'Hip Hop',
+    'Tap',
+    'Cultural',
+    'Musical Theatre',
+    'Live Vocals',
+  ];
+  const levelSettings = ['Easy', 'Intermediate', 'Advanced'];
+  for (const size of sizeSettings) {
+    const setting = await prisma.setting.upsert({
+      where: {
+        settings_unique: {
+          type: 'DANCE_SIZE',
+          value: size,
+        },
+      },
+      update: {},
+      create: {
+        type: 'DANCE_SIZE',
+        value: size,
+      },
+    });
+    console.log(setting);
+  }
+
+  const styleSettingUpserts = [];
+  for (const style of styleSettings) {
+    const setting = await prisma.setting.upsert({
+      where: {
+        settings_unique: {
+          type: 'STYLE',
+          value: style,
+        },
+      },
+      update: {},
+      create: {
+        type: 'STYLE',
+        value: style,
+      },
+    });
+    console.log(setting);
+    styleSettingUpserts.push(setting);
+  }
+
+  for (const level of levelSettings) {
+    const setting = await prisma.setting.upsert({
+      where: {
+        settings_unique: {
+          type: 'COMPETITION_LEVEL',
+          value: level,
+        },
+      },
+      update: {},
+      create: {
+        type: 'COMPETITION_LEVEL',
+        value: level,
+      },
+    });
+    console.log(setting);
+  }
+}
+
+async function devSeed() {
   // USER SEEDING
   const admins = [
     { name: 'Eric L', email: 'ericli+admin@uwblueprint.org' },
