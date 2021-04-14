@@ -42,6 +42,7 @@ export default function AwardModal({
     setDanceSize(null);
     setPerformanceLevel(null);
     setDanceStyle(null);
+    setDisableButton(true);
     setOpen(false);
   };
 
