@@ -60,7 +60,8 @@ export default function AwardModal({
       perfLevelSelection,
       styleSelection
     );
-    setOpen(false);
+    setDisableButton(true);
+    discardChanges();
   };
 
   return (
