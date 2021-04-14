@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'; // React
 import { useRouter } from 'next/router'; // Collect Router
 import axios from 'axios'; // Axios
-import { useSession } from 'next-auth/client'; // Authentication
 import Layout from '@components/Layout'; // Layout wrapper
 
 import Event from '@containers/Event'; // Event state
@@ -26,8 +25,8 @@ const PAGE_SIZE = 20; // Rows per page
 
 // Page: Performances
 export default function Performances({ award, session }) {
+  const { snackbarError } = useSnackbar();
   const [event] = Event.useContainer();
-  const [session] = useSession();
 
   const router = useRouter();
 

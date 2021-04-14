@@ -97,9 +97,7 @@ export default function PerformanceDetails({ session }) {
 
       await getAwards(response.data);
     } catch (err) {
-      // Temporary solution, as error UI has not been implemented
       snackbarError(err);
-      router.push('/performances');
     }
 
     setLoading(false);
