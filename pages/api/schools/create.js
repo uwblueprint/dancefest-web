@@ -24,15 +24,15 @@ export default async (req, res) => {
 
       // If school creation is successful, return school
       if (school) {
-        res.send(school);
+        return res.json(school);
       }
       // Else, return server error
       else {
-        res.status(500).end();
+        return res.status(500).end();
       }
     }
   }
 
   // Return unauthorized for all other requests
-  res.status(401).send('Unauthorized');
+  return res.status(401).send('Unauthorized');
 };

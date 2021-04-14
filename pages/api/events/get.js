@@ -22,21 +22,21 @@ export default async (req, res) => {
         // If admin
         if (session.role === 'ADMIN') {
           // Send event immediately
-          res.send(event);
+          return res.json(event);
         } else {
           // If array of judges includes current user
           if (event.judges.includes(session.user.email))
             // Send event
-            res.send(event);
+            return res.json(event);
         }
       } catch (error) {
-        res.status(401).send('Unauthorized');
+        return res.status(401).send('Unauthorized');
       }
     }
   }
 
   // Else, return 401 for all failures
-  res.status(401).send('Unauthorized');
+  return res.status(401).send('Unauthorized');
 };
 
 export const getEventByID = async id => {

@@ -16,11 +16,11 @@ export default async (req, res) => {
 
     // Collect users
     const users = await getUsers(filter);
-    res.send(users);
+    return res.json(users);
   }
 
   // Else, return 401 for all failures
-  res.status(401).send('Unauthorized');
+  return res.status(401).send('Unauthorized');
 };
 
 export const getUsers = async filter => {

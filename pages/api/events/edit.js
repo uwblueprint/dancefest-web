@@ -30,15 +30,15 @@ export default async (req, res) => {
 
       // If event updating is successful, return updated event
       if (updatedEvent) {
-        res.send(updatedEvent);
+        return res.json(updatedEvent);
       }
       // Else, return server error
       else {
-        res.status(500).end();
+        return res.status(500).end();
       }
     }
   }
 
   // Else, throw unauthenticated for all
-  res.status(401).send('Unauthorized');
+  return res.status(401).send('Unauthorized');
 };

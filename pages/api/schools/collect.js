@@ -14,11 +14,11 @@ export default async (req, res) => {
 
     // Collect schools
     const schools = await getSchools(filter);
-    res.send(schools);
+    return res.json(schools);
   }
 
   // Else, return 401 for all failures
-  res.status(401).send('Unauthorized');
+  return res.status(401).send('Unauthorized');
 };
 
 export const getSchools = async filter => {

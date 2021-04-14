@@ -18,12 +18,12 @@ export default async (req, res) => {
       },
     });
     if (school) {
-      res.send(school);
+      return res.json(school);
     } else {
-      res.status(404).end();
+      return res.status(404).end();
     }
   }
 
   // Else, return 401 for all failures
-  res.status(401).send('Unauthorized');
+  return res.status(401).send('Unauthorized');
 };
