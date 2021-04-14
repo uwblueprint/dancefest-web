@@ -8,6 +8,7 @@ import Modal from '@components/Modal'; // Modal
 import Dropdown, { formatDropdownOptions } from '@components/Dropdown'; // Dropdown
 import styles from '@styles/components/performances/PerformanceModal.module.scss'; // Component styles
 
+import useSnackbar from '@utils/useSnackbar'; // Snackbar
 import { formatSchools } from '@utils/schools'; // Format schools util
 
 export default function EditPerformanceModal({
@@ -18,6 +19,7 @@ export default function EditPerformanceModal({
   getPerformance,
   performance,
 }) {
+  const { snackbarError } = useSnackbar();
   const [event] = Event.useContainer();
 
   const [danceTitle, setDanceTitle] = useState('');
@@ -53,8 +55,8 @@ export default function EditPerformanceModal({
             label: 'schoolName',
           })
         );
-      } catch {
-        // Empty catch block
+      } catch (err) {
+        snackbarError(err);
       }
     };
 
@@ -137,8 +139,8 @@ export default function EditPerformanceModal({
       });
 
       getPerformance();
-    } catch {
-      // Empty catch block
+    } catch (err) {
+      snackbarError(err);
     }
 
     setLoading(false);

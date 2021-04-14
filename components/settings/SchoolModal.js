@@ -6,6 +6,8 @@ import Modal from '@components/Modal'; // Modal
 import Input from '@components/Input'; // Input
 import styles from '@styles/components/settings/SchoolModal.module.scss'; // Component styles
 
+import useSnackbar from '@utils/useSnackbar'; // Snackbar
+
 export default function SchoolModal({
   loading,
   setLoading,
@@ -15,6 +17,8 @@ export default function SchoolModal({
   schoolToEdit = null,
   setSchoolToEdit,
 }) {
+  const { snackbarError } = useSnackbar();
+
   const [schoolName, setSchoolName] = useState('');
   const [contactName, setContactName] = useState('');
   const [contactEmail, setContactEmail] = useState('');
@@ -43,8 +47,8 @@ export default function SchoolModal({
       });
 
       await getSchools();
-    } catch {
-      // Empty catch block
+    } catch (err) {
+      snackbarError(err);
     }
 
     setLoading(false);
@@ -68,8 +72,8 @@ export default function SchoolModal({
       });
 
       await getSchools();
-    } catch {
-      // Empty catch block
+    } catch (err) {
+      snackbarError(err);
     }
 
     setLoading(false);

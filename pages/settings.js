@@ -27,7 +27,7 @@ const SETTINGS_OPTIONS = [
 
 // Page: Settings
 export default function Setting() {
-  const [openSnackbar] = useSnackbar();
+  const { snackbarError } = useSnackbar();
   const addCategoryValueInputRef = useRef(null);
   const [loading, setLoading] = useState(false);
 
@@ -127,7 +127,7 @@ export default function Setting() {
 
       setValues(settings);
     } catch (err) {
-      openSnackbar(err.response.data);
+      snackbarError(err);
     }
 
     setLoading(false);
@@ -147,7 +147,7 @@ export default function Setting() {
       });
       setNewValue('');
     } catch (err) {
-      openSnackbar(err.response.data);
+      snackbarError(err);
     }
 
     setLoading(false);
@@ -169,7 +169,7 @@ export default function Setting() {
       setValueToDelete(null);
     } catch (err) {
       setDeleteValueError(true);
-      openSnackbar(err.response.data);
+      snackbarError(err);
     }
 
     setLoading(false);
@@ -186,7 +186,7 @@ export default function Setting() {
       const schools = response.data;
       setSchools(schools);
     } catch (err) {
-      openSnackbar(err.response.data);
+      snackbarError(err);
     }
 
     setLoading(false);
@@ -203,7 +203,7 @@ export default function Setting() {
       const admins = response.data;
       setAdmins(admins);
     } catch (err) {
-      openSnackbar(err.response.data);
+      snackbarError(err);
     }
 
     setLoading(false);

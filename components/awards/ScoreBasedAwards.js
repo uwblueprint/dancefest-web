@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'; // React
 import { useRouter } from 'next/router'; // Collect Router
 import axios from 'axios'; // Axios
+import { useSession } from 'next-auth/client'; // Authentication
 import Layout from '@components/Layout'; // Layout wrapper
 
 import Event from '@containers/Event'; // Event state
@@ -19,11 +20,14 @@ import styles from '@styles/pages/Awards.module.scss'; // Page styles
 import { formatPerformances } from '@utils/performances'; // Format performances util
 import AwardPill from '@components/awards/FinalizePill.js'; // Award Finalize Pill
 
+import useSnackbar from '@utils/useSnackbar'; // Snackbar
+
 const PAGE_SIZE = 20; // Rows per page
 
 // Page: Performances
 export default function Performances({ award, session }) {
   const [event] = Event.useContainer();
+  const [session] = useSession();
 
   const router = useRouter();
 
@@ -61,7 +65,7 @@ export default function Performances({ award, session }) {
 
       setPerformances(formatPerformances(response.data));
     } catch (err) {
-      // Empty catch block
+      snackbarError(err);
     }
 
     setLoading(false);
@@ -93,8 +97,8 @@ export default function Performances({ award, session }) {
           eventID: event.id,
         },
       });
-    } catch {
-      // Empty catch block
+    } catch (err) {
+      snackbarError(err);
     }
 
     setLoading(false);
@@ -112,8 +116,8 @@ export default function Performances({ award, session }) {
       });
 
       router.push('/awards');
-    } catch {
-      // Empty catch block
+    } catch (err) {
+      snackbarError(err);
     }
   }
 
@@ -129,8 +133,8 @@ export default function Performances({ award, session }) {
       });
       // Go back to awards
       router.push('/awards');
-    } catch {
-      // Empty catch statement
+    } catch (err) {
+      snackbarError(err);
     }
   }
 

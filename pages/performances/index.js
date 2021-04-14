@@ -25,6 +25,7 @@ import ChevronDown from '@assets/chevron-down.svg'; // Chevron down icon
 import ChevronDownGrey from '@assets/chevron-down-grey.svg'; // Chevron down grey icon
 import styles from '@styles/pages/Performances.module.scss'; // Page styles
 
+import useSnackbar from '@utils/useSnackbar'; // Snackbar
 import { formatSchools } from '@utils/schools'; // Format schools util
 import { formatPerformances, filterPerformancesForJudge } from '@utils/performances'; // Format performances util
 
@@ -59,6 +60,7 @@ const removeKeyFromObject = (object, key) => {
 
 // Page: Performances
 export default function Performances({ session }) {
+  const { snackbarError } = useSnackbar();
   const router = useRouter();
   const [event] = Event.useContainer();
 
@@ -103,8 +105,8 @@ export default function Performances({ session }) {
       const { name } = response.data;
 
       setEventName(name);
-    } catch {
-      // Empty catch block
+    } catch (err) {
+      snackbarError(err);
     }
   };
 
@@ -133,8 +135,8 @@ export default function Performances({ session }) {
           label: 'schoolName',
         });
         setSchoolFilters(initialSchoolFilters);
-      } catch {
-        // Empty catch block
+      } catch (err) {
+        snackbarError(err);
       }
     };
 
@@ -207,8 +209,8 @@ export default function Performances({ session }) {
       });
 
       setPerformances(formatPerformances(response.data));
-    } catch {
-      // Empty catch block
+    } catch (err) {
+      snackbarError(err);
     }
 
     setLoading(false);
@@ -252,8 +254,8 @@ export default function Performances({ session }) {
       });
 
       getPerformances();
-    } catch {
-      // Empty catch block
+    } catch (err) {
+      snackbarError(err);
     }
 
     setLoading(false);

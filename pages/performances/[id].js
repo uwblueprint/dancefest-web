@@ -17,9 +17,11 @@ import Loader from 'react-loader-spinner'; // Loading spinner
 import Title from '@components/Title'; // Title
 import styles from '@styles/pages/PerformanceDetails.module.scss';
 import { formatPerformance } from '@utils/performances'; // Format performance util
+import useSnackbar from '@utils/useSnackbar'; // Snackbar
 
 // Page: Settings
 export default function PerformanceDetails({ session }) {
+  const { snackbarError } = useSnackbar();
   const router = useRouter();
   const { id } = router.query;
   const [eventData] = Event.useContainer();
@@ -65,8 +67,8 @@ export default function PerformanceDetails({ session }) {
         newAwardsDict[award.id] = award;
       });
       setAwardsDict(newAwardsDict);
-    } catch {
-      // Empty catch block
+    } catch (err) {
+      snackbarError(err);
     }
 
     setLoading(false);
@@ -94,8 +96,9 @@ export default function PerformanceDetails({ session }) {
       setPerformance(formattedPerformance);
 
       await getAwards(response.data);
-    } catch {
+    } catch (err) {
       // Temporary solution, as error UI has not been implemented
+      snackbarError(err);
       router.push('/performances');
     }
 

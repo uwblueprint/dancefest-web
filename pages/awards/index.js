@@ -24,6 +24,8 @@ import DancerRedJump from '@assets/dancer-red-jump.svg'; // Jumping Dancer SVG
 import DancerYellowBlue from '@assets/dancer-yellow-blue.svg'; // Jumping Dancer SVG
 import styles from '@styles/pages/Awards.module.scss'; // Page styles
 
+import useSnackbar from '@utils/useSnackbar'; // Snackbar
+
 const PAGE_SIZE = 20; // Rows per page
 
 // Get the active filters (list of column accessors) from an object of filter dropdown values
@@ -51,6 +53,7 @@ const awardOptions = [
 
 // Page: Awards
 export default function Awards({ session }) {
+  const { snackbarError } = useSnackbar();
   const router = useRouter(); // collect router
   const [event] = Event.useContainer(); // get event from global state
 
@@ -147,8 +150,8 @@ export default function Awards({ session }) {
 
       setPerformanceLevelFilters(initialPerformanceLevelFilters);
       setDanceSizeFilters(initialDanceSizeFilters);
-    } catch {
-      // empty catch block
+    } catch (err) {
+      snackbarError(err);
     }
   };
 
@@ -165,7 +168,7 @@ export default function Awards({ session }) {
 
       setAwardData(resp.data);
     } catch (err) {
-      // Empty catch block
+      snackbarError(err);
     }
   }
 
@@ -236,8 +239,8 @@ export default function Awards({ session }) {
           settingIDs: settingIds,
         },
       });
-    } catch {
-      // Empty catch block
+    } catch (err) {
+      snackbarError(err);
     }
     await getAwards();
     setLoading(false);
