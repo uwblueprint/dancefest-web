@@ -27,14 +27,14 @@ export default async (req, res) => {
 
       // If user updated send it back
       if (user) {
-        res.send(user);
+        return res.json(user);
       }
       // Else, return server error
       else {
-        res.status(500).end();
+        return res.status(500).end();
       }
     }
   }
   // Return unauthorized for all other requests
-  res.status(401).send('Unauthorized');
+  return res.status(401).send('Unauthorized');
 };

@@ -19,11 +19,11 @@ export default async (req, res) => {
     // get awards
     const awards = await getAwards(eventID, settingIDs);
     // filtering in the API, TODO move to filtering via query
-    res.send(awards);
+    return res.json(awards);
   }
 
   // Else, return 401 for all failures
-  res.status(401).send('Unauthorized');
+  return res.status(401).send('Unauthorized');
 };
 
 export const getAwards = async (eventID, settingIDs) => {

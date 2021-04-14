@@ -25,7 +25,7 @@ export default async (req, res) => {
     // If the authenticated user is an admin
     if (session.role === 'ADMIN') {
       // Send all events
-      res.send(events);
+      return res.json(events);
     } else {
       // Else, filter over all events
       const authorizedEvents = events.filter(event => {
@@ -37,10 +37,10 @@ export default async (req, res) => {
       });
 
       // Send filtered events
-      res.send(authorizedEvents);
+      return res.json(authorizedEvents);
     }
   }
 
   // Else, return 401 for all failures
-  res.status(401).send('Unauthorized');
+  return res.status(401).send('Unauthorized');
 };

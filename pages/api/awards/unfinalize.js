@@ -76,5 +76,5 @@ export default async (req, res) => {
   const awardTransaction = await prisma.$transaction([finalizedNominations, finalizedAward]);
   const awardResult = awardTransaction[awardTransaction.length - 1];
 
-  res.status(200).json(awardResult);
+  return res.status(200).json(awardResult);
 };

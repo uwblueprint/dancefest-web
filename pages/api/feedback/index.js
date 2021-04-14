@@ -62,9 +62,9 @@ export default async (req, res) => {
     });
 
     // When all emails are sent successfully
-    res.status(200).json({ message: 'Successfully shared feedback with all schools.' });
+    return res.status(200).json({ message: 'Successfully shared feedback with all schools.' });
   }
 
   // Else, return 401 for all failures
-  res.status(401).send('Unauthorized');
+  return res.status(401).send('Unauthorized');
 };

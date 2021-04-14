@@ -22,10 +22,10 @@ export default async (req, res) => {
       });
 
       // Return deleted event
-      res.send(deletedEvent);
+      return res.json(deletedEvent);
     }
   }
 
   // Else, throw unauthenticated
-  res.status(401).send('Unauthorized');
+  return res.status(401).send('Unauthorized');
 };

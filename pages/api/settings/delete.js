@@ -42,7 +42,7 @@ export default async (req, res) => {
         performancesFilter.dance_style = setting.value;
         break;
       default:
-        res.status(500).end();
+        return res.status(500).end();
     }
     const performancesUsingSetting = await prisma.performance.findMany({
       where: performancesFilter,
@@ -63,9 +63,9 @@ export default async (req, res) => {
     });
 
     // Return deleted setting
-    res.send(deletedSetting);
+    return res.json(deletedSetting);
   }
 
   // Else, throw unauthenticated
-  res.status(401).send('Unauthorized');
+  return res.status(401).send('Unauthorized');
 };

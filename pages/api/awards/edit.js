@@ -110,9 +110,9 @@ export default async (req, res) => {
 
   // If updating award is successful, return updated event
   if (awardTransaction) {
-    res.status(200).json(updatedAward);
+    return res.status(200).json(updatedAward);
   } else {
-    res.status(400).json({
+    return res.status(400).json({
       error: 'Error updating award with provided id',
     });
   }

@@ -14,9 +14,9 @@ export default async (req, res) => {
 
     // Collect all events from database
     const settings = await prisma.setting.findMany(query);
-    res.send(settings);
+    return res.json(settings);
   }
 
   // Else, return 401 for all failures
-  res.status(401).send('Unauthorized');
+  return res.status(401).send('Unauthorized');
 };
