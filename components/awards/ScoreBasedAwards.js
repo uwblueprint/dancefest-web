@@ -19,10 +19,13 @@ import styles from '@styles/pages/Awards.module.scss'; // Page styles
 import { formatPerformances } from '@utils/performances'; // Format performances util
 import AwardPill from '@components/awards/FinalizePill.js'; // Award Finalize Pill
 
+import useSnackbar from '@utils/useSnackbar'; // Snackbar
+
 const PAGE_SIZE = 20; // Rows per page
 
 // Page: Performances
 export default function Performances({ award, session }) {
+  const { snackbarError } = useSnackbar();
   const [event] = Event.useContainer();
 
   const router = useRouter();
@@ -61,7 +64,7 @@ export default function Performances({ award, session }) {
 
       setPerformances(formatPerformances(response.data));
     } catch (err) {
-      // Empty catch block
+      snackbarError(err);
     }
 
     setLoading(false);
@@ -93,8 +96,8 @@ export default function Performances({ award, session }) {
           eventID: event.id,
         },
       });
-    } catch {
-      // Empty catch block
+    } catch (err) {
+      snackbarError(err);
     }
 
     setLoading(false);
@@ -112,8 +115,8 @@ export default function Performances({ award, session }) {
       });
 
       router.push('/awards');
-    } catch {
-      // Empty catch block
+    } catch (err) {
+      snackbarError(err);
     }
   }
 
@@ -129,8 +132,8 @@ export default function Performances({ award, session }) {
       });
       // Go back to awards
       router.push('/awards');
-    } catch {
-      // Empty catch statement
+    } catch (err) {
+      snackbarError(err);
     }
   }
 

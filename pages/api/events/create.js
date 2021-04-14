@@ -33,5 +33,5 @@ export default async (req, res) => {
   }
 
   // Return unauthorized for all other requests
-  res.status(401).end();
+  res.status(401).send('Unauthorized');
 };

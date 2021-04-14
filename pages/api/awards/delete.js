@@ -8,7 +8,7 @@ export default async (req, res) => {
 
   // If not authenticated, return error
   if (!session || session.role !== 'ADMIN') {
-    return res.status(401).end();
+    return res.status(401).send('Unauthorized');
   }
 
   // Collect id of award to delete

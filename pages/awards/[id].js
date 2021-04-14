@@ -14,6 +14,8 @@ import DancerRedJump from '@assets/dancer-red-jump.svg'; // Jumping Dancer SVG
 import styles from '@styles/pages/AwardDetails.module.scss';
 import AudioPlayer from '@components/AudioPlayer';
 
+import useSnackbar from '@utils/useSnackbar'; // Snackbar
+
 export default function DetailsRoute({ award, session }) {
   return award.type === 'SCORE_BASED' && !award.is_finalized ? (
     <ScoreBasedAwards award={award} session={session} />
@@ -24,6 +26,8 @@ export default function DetailsRoute({ award, session }) {
 
 // Page: Award Details
 function AwardDetails({ award, session }) {
+  const { snackbarError } = useSnackbar();
+
   const [selectedTab, setSelectedTab] = useState(-1);
   const [showAwardSummary, setShowAwardSummary] = useState(true);
   const [feedbackAvailable, setFeedbackAvailable] = useState(true);
@@ -75,8 +79,8 @@ function AwardDetails({ award, session }) {
       });
       // Go back to awards
       router.push('/awards');
-    } catch {
-      // Empty catch block
+    } catch (err) {
+      snackbarError(err);
     }
     setLoading(false);
   }
@@ -94,8 +98,8 @@ function AwardDetails({ award, session }) {
       });
       // Go back to awards
       router.push('/awards');
-    } catch {
-      // Empty catch block
+    } catch (err) {
+      snackbarError(err);
     }
     setLoading(false);
   }
@@ -112,8 +116,8 @@ function AwardDetails({ award, session }) {
       });
       // Go back to awards
       router.push('/awards');
-    } catch {
-      // Empty catch statement
+    } catch (err) {
+      snackbarError(err);
     }
   }
 

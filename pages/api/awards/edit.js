@@ -8,7 +8,7 @@ export default async (req, res) => {
 
   // If not authenticated
   if (!session) {
-    return res.status(401).end();
+    return res.status(401).send('Unauthorized');
   }
 
   // Collect award information from request body

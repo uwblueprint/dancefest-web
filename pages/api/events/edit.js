@@ -40,5 +40,5 @@ export default async (req, res) => {
   }
 
   // Else, throw unauthenticated for all
-  res.status(401).end();
+  res.status(401).send('Unauthorized');
 };

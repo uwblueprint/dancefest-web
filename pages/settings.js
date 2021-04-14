@@ -17,6 +17,8 @@ import Delete from '@assets/delete.svg'; // Delete icon
 import Error from '@assets/error.svg'; // Error icon
 import styles from '@styles/pages/Settings.module.scss';
 
+import useSnackbar from '@utils/useSnackbar'; // Snackbar
+
 const SETTINGS_OPTIONS = [
   { label: 'Dance Size', value: 'DANCE_SIZE' },
   { label: 'Dance Style', value: 'STYLE' },
@@ -25,6 +27,7 @@ const SETTINGS_OPTIONS = [
 
 // Page: Settings
 export default function Setting() {
+  const { snackbarError } = useSnackbar();
   const addCategoryValueInputRef = useRef(null);
   const [loading, setLoading] = useState(false);
 
@@ -123,8 +126,8 @@ export default function Setting() {
       const settings = response.data;
 
       setValues(settings);
-    } catch {
-      // Empty catch block
+    } catch (err) {
+      snackbarError(err);
     }
 
     setLoading(false);
@@ -143,8 +146,8 @@ export default function Setting() {
         },
       });
       setNewValue('');
-    } catch {
-      // Empty catch block
+    } catch (err) {
+      snackbarError(err);
     }
 
     setLoading(false);
@@ -164,8 +167,9 @@ export default function Setting() {
       });
 
       setValueToDelete(null);
-    } catch {
+    } catch (err) {
       setDeleteValueError(true);
+      snackbarError(err);
     }
 
     setLoading(false);
@@ -181,8 +185,8 @@ export default function Setting() {
       });
       const schools = response.data;
       setSchools(schools);
-    } catch {
-      // Empty catch block
+    } catch (err) {
+      snackbarError(err);
     }
 
     setLoading(false);
@@ -198,8 +202,8 @@ export default function Setting() {
       });
       const admins = response.data;
       setAdmins(admins);
-    } catch {
-      // Empty catch block
+    } catch (err) {
+      snackbarError(err);
     }
 
     setLoading(false);
