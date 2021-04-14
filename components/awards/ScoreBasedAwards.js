@@ -22,7 +22,7 @@ import AwardPill from '@components/awards/FinalizePill.js'; // Award Finalize Pi
 const PAGE_SIZE = 20; // Rows per page
 
 // Page: Performances
-export default function Performances({ award }) {
+export default function Performances({ award, session }) {
   const [event] = Event.useContainer();
 
   const router = useRouter();
