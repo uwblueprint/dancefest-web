@@ -354,31 +354,6 @@ function EditEvent({ event, judgeOptions, setModalOpen, reloadEvents }) {
     setLoading(false);
   };
 
-  // const addSchool = async () => {
-  //   setLoading(true);
-
-  //   try {
-  //     await axios({
-  //       method: 'POST',
-  //       url: '/api/schools/create',
-  //       data: {
-  //         schoolName,
-  //         contactName,
-  //         email: contactEmail,
-  //         phone: phoneNumber,
-  //       },
-  //     });
-
-  //     await getSchools();
-  //   } catch (err) {
-  //     snackbarError(err);
-  //   }
-
-  //   setLoading(false);
-  //   setOpen(false);
-  //   clearFields();
-  // };
-
   /**
    * Deletes event
    */
