@@ -12,6 +12,34 @@ export default async (req, res) => {
 
     // If all fields exist
     if (id && title && date && judges) {
+      // Check that event exists
+      const event = await prisma.event.findUnique({
+        where: {
+          id: id,
+        },
+        include: {
+          performances: true,
+          awards: true,
+        },
+      });
+
+      // If event does not exist
+      if (!event) {
+        return res.status(400).json({
+          error: 'Event does not exist',
+        });
+      }
+
+      // Check if the event has a performance or an award
+      if (
+        (event.performances && event.performances.length !== 0) ||
+        (event.awards && event.awards.length !== 0)
+      ) {
+        return res.status(400).json({
+          error: 'Event cannot be edited as there is at least one performance or award',
+        });
+      }
+
       // Update event
       const updatedEvent = await prisma.event.update({
         // Where
