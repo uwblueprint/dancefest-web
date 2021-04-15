@@ -1,6 +1,6 @@
 import { useState } from 'react'; // React
 
-import { isKeyValidOnNumberInput } from '@utils/event-handlers'; // Key validation
+import { isKeyValidOnNumberInput } from '@utils/score-validation'; // Key validation
 import styles from '@styles/components/ScoreCard.module.scss'; // Component styles
 
 export default function ScoreCard({
@@ -30,8 +30,9 @@ export default function ScoreCard({
   };
 
   const handleChange = event => {
+    const scoreInt = parseInt(event.target.value);
     // Disallow value being greater than 100
-    if (parseInt(event.target.value) > 100) {
+    if (scoreInt < 0 || scoreInt > 100) {
       return;
     }
     setScore(event.target.value);
