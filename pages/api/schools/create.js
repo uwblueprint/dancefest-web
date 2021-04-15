@@ -1,5 +1,6 @@
 import prisma from '@prisma/index'; // Prisma client
 import { getSession } from 'next-auth/client'; // Session handling
+import validator from 'validator';
 
 export default async (req, res) => {
   // Collect session from request
@@ -10,8 +11,22 @@ export default async (req, res) => {
     // Collect name of school
     const { schoolName, contactName, email, phone } = req.body;
 
+    // If phone number is passed and the phone number is not valid
+    if (phone && !validator.isMobilePhone(phone, ['en-CA'])) {
+      return res.status(400).json({
+        error: 'Provided phone number is invalid.',
+      });
+    }
+
     // If name exist
     if (schoolName && email) {
+      // If the email is invalid
+      if (!validator.isEmail(email)) {
+        return res.status(400).json({
+          error: 'Provided email is invalid.',
+        });
+      }
+
       // Create new school
       const school = await prisma.school.create({
         data: {

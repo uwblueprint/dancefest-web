@@ -137,7 +137,7 @@ export default function SchoolModal({
         <div>
           <h2>Phone Number</h2>
           <Input
-            placeholder="Phone Number"
+            placeholder="Phone Number, ###-###-####"
             value={phoneNumber}
             onChange={event => setPhoneNumber(event.target.value)}
           />
