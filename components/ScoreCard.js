@@ -19,10 +19,6 @@ export default function ScoreCard({
     if (isKeyValidOnNumberInput(key)) {
       return;
     }
-    // Disallow '0' if input is empty
-    if (event.target.value.length === 0 && key === '0') {
-      event.preventDefault();
-    }
     // Disallow +, -, 'e' (for exponent), .
     if (/\+|-|e|\./.test(key)) {
       event.preventDefault();
