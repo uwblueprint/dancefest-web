@@ -37,7 +37,7 @@ export default async (req, res) => {
 
     // check that the fields exist
     if (title && date && judges) {
-      // If the judges are different and the event has performances or awards
+      // If the judges are updated and the event has performances or awards, we want to prevent editing
       if (
         JSON.stringify(judges) !== event.judges &&
         ((event.performances && event.performances.length !== 0) ||
