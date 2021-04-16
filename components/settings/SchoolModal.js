@@ -129,7 +129,7 @@ export default function SchoolModal({
         <div>
           <h2>Contact Email</h2>
           <Input
-            placeholder="Contact Email"
+            placeholder="example@email.com"
             value={contactEmail}
             onChange={event => setContactEmail(event.target.value)}
           />
@@ -137,7 +137,7 @@ export default function SchoolModal({
         <div>
           <h2>Phone Number</h2>
           <Input
-            placeholder="Phone Number"
+            placeholder="###-###-####"
             value={phoneNumber}
             onChange={event => setPhoneNumber(event.target.value)}
           />
