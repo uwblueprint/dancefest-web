@@ -10,30 +10,38 @@ export default async (req, res) => {
     // Collect from request body
     const { id, title, date, judges } = req.body;
 
-    // If all fields exist
-    if (id && title && date && judges) {
-      // Check that event exists
-      const event = await prisma.event.findUnique({
-        where: {
-          id: id,
-        },
-        include: {
-          performances: true,
-          awards: true,
-        },
+    // If id is not provided
+    if (!id) {
+      return res.status(400).json({
+        error: 'Award Id does not exist',
       });
+    }
 
-      // If event does not exist
-      if (!event) {
-        return res.status(400).json({
-          error: 'Event does not exist',
-        });
-      }
+    // Get the event
+    const event = await prisma.event.findUnique({
+      where: {
+        id: id,
+      },
+      include: {
+        performances: true,
+        awards: true,
+      },
+    });
 
-      // Check if the event has a performance or an award
+    // If event does not exist
+    if (!event) {
+      return res.status(400).json({
+        error: 'Event does not exist',
+      });
+    }
+
+    // check that the fields exist
+    if (title && date && judges) {
+      // If the judges are different and the event has performances or awards
       if (
-        (event.performances && event.performances.length !== 0) ||
-        (event.awards && event.awards.length !== 0)
+        JSON.stringify(judges) !== event.judges &&
+        ((event.performances && event.performances.length !== 0) ||
+          (event.awards && event.awards.length !== 0))
       ) {
         return res.status(400).json({
           error: 'Event cannot be edited as there is at least one performance or award',
