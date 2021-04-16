@@ -16,6 +16,8 @@ import DancerRedJump from '@assets/dancer-red-jump.svg'; // Jumping Dancer SVG
 import DancerRedTall from '@assets/dancer-red-tall.svg'; // Jumping Dancer SVG
 import DatePicker from '@components/DatePicker';
 
+import useSnackbar from '@utils/useSnackbar'; // Snackbar
+
 // Modal content states enum
 const modalStates = Object.freeze({
   newEvent: 0,
@@ -325,22 +327,29 @@ function EditEvent({ event, judgeOptions, setModalOpen, reloadEvents }) {
   const [date, setDate] = useState(new Date(event.event_date)); // Event date
   const [loading, setLoading] = useState(false);
 
+  const { snackbarError } = useSnackbar();
+
   /**
    * Edits event
    */
   const editEvent = async () => {
     setLoading(true);
-    // Post /api/events/edit
-    await axios.post('/api/events/edit', {
-      // With id of event to edit
-      id: event.id,
-      // And data to patch
-      title,
-      date,
-      judges: [...new Set(judges.map(judge => judge.value).filter(judge => !!judge))],
-    });
+    try {
+      // Post /api/events/edit
+      await axios.post('/api/events/edit', {
+        // With id of event to edit
+        id: event.id,
+        // And data to patch
+        title,
+        date,
+        judges: [...new Set(judges.map(judge => judge.value).filter(judge => !!judge))],
+      });
 
-    reloadEvents(); // Begin reloading events in background
+      reloadEvents(); // Begin reloading events in background
+    } catch (err) {
+      snackbarError(err);
+    }
+
     setModalOpen(false); // Close modal
     setLoading(false);
   };
