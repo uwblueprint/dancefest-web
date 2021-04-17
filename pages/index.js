@@ -4,19 +4,15 @@ import Loader from 'react-loader-spinner'; // Spinning loader
 import { useState, useEffect } from 'react';
 import Event from '@containers/Event'; // State management
 
-import DancefestModal from '@components/Modal'; // Modal component
+import NewEventModal from '@components/events/NewEventModal'; // New Event
+import EditEventModal from '@components/events/EditEventModal'; // Edit Event
 import { getSession } from 'next-auth/client'; // Session handling
 import { EventCard } from '@components/Card'; // Event card component
-import TextInput from '@components/Input'; // Text input component
 import styles from '@styles/pages/Events.module.scss'; // Page styling
 import Button from '@components/Button'; // Button components
 import Title from '@components/Title'; // Title
-import Dropdown from '@components/Dropdown'; // Dropdown
 import DancerRedJump from '@assets/dancer-red-jump.svg'; // Jumping Dancer SVG
-import DancerRedTall from '@assets/dancer-red-tall.svg'; // Jumping Dancer SVG
-import DatePicker from '@components/DatePicker';
-
-import useSnackbar from '@utils/useSnackbar'; // Snackbar
+import DancerRedTall from '@assets/dancer-red-tall.svg'; // Tall Dancer SVG
 
 // Modal content states enum
 const modalStates = Object.freeze({
@@ -33,8 +29,8 @@ export default function Events({ session }) {
   const [modalOpen, setModalOpen] = useState(false); // Modal state
   const [eventToEdit, setEventToEdit] = useState(null); // Event to edit index
   const [modalContent, setModalContent] = useState(null); // Model content state
-  const [modalTitle, setModalTitle] = useState('');
   const [judgeOptions, setJudgeOptions] = useState([]);
+  const [disableSubmit, setDisableSubmit] = useState(false); // Disable submit button if inputs are invalid
 
   /**
    * Renders model content based on modalContent
@@ -45,23 +41,29 @@ export default function Events({ session }) {
       case modalStates.newEvent:
         // Return:
         return (
-          // NewEvent component
-          <NewEvent
+          // NewEventModal component
+          <NewEventModal
             judgeOptions={judgeOptions}
+            modalOpen={modalOpen}
             setModalOpen={setModalOpen}
             reloadEvents={getAllEvents}
+            disableSubmit={disableSubmit}
+            setDisableSubmit={setDisableSubmit}
           />
         );
       // Else, if modal is opened to edit an event
       case modalStates.editEvent:
         // Return:
         return (
-          // EditEvent component
-          <EditEvent
+          // EditEventModal component
+          <EditEventModal
             judgeOptions={judgeOptions}
             event={events[eventToEdit]}
+            modalOpen={modalOpen}
             setModalOpen={setModalOpen}
             reloadEvents={getAllEvents}
+            disableSubmit={disableSubmit}
+            setDisableSubmit={setDisableSubmit}
           />
         );
     }
@@ -71,7 +73,6 @@ export default function Events({ session }) {
    * Opens new event modal
    */
   const modalNewEvent = () => {
-    setModalTitle('New Event');
     setModalContent(modalStates.newEvent); // Set modal content
     setModalOpen(true); // Open modal
   };
@@ -81,7 +82,6 @@ export default function Events({ session }) {
    * @param {Number} i index for event to edit
    */
   const modalEditEvent = i => {
-    setModalTitle('Edit Event');
     setModalContent(modalStates.editEvent); // Set modal content
     setModalOpen(true); // Open modal
     setEventToEdit(i); // Set index of event to edit
@@ -188,266 +188,8 @@ export default function Events({ session }) {
       </div>
 
       {/* Events modal */}
-      <DancefestModal
-        containerClassName={styles.modal__container}
-        title={modalTitle}
-        isOpen={modalOpen}
-        setModalOpen={setModalOpen}
-      >
-        {renderModalContent()}
-      </DancefestModal>
+      {renderModalContent()}
     </Layout>
-  );
-}
-
-/**
- * New Event modal content
- * @param {Object[]} judgeOptions - List of judge options to render in each judge dropdown
- * @param {Function} setModalOpen to toggle modal state
- * @param {Function} reloadEvents to reload all events
- * @returns {HTMLElement} of modal content
- */
-function NewEvent({ judgeOptions, setModalOpen, reloadEvents }) {
-  const [title, setTitle] = useState(''); // Event title
-  const [date, setDate] = useState(new Date()); // Event date
-  const [judges, setJudges] = useState([null, null, null]); // Event judges
-  const [loading, setLoading] = useState(false);
-
-  /**
-   * Submits new event creation
-   */
-  const submitEvent = async () => {
-    setLoading(true);
-    // Post /api/events/create
-    await axios.post('/api/events/create', {
-      // With required data
-      title,
-      date,
-      judges: [...new Set(judges.filter(judge => !!judge).map(judge => judge.value))],
-    });
-
-    reloadEvents(); // Begin reloading all events in background
-    setModalOpen(false); // Close modal
-    setLoading(false);
-  };
-
-  /**
-   * Updates judge email at index
-   * @param {Number} index of judge to update
-   * @param {String} email new email to update
-   */
-  const updateJudge = (index, email) => {
-    const tempJudges = judges; // Collect judges
-    tempJudges[index] = email; // Edit email of judge at index
-    setJudges([...tempJudges]); // Update judges
-  };
-
-  /**
-   * Adds empty judge to judges array to render input
-   */
-  const addJudge = () => {
-    // Judges + ""
-    setJudges([...judges, '']);
-  };
-
-  return (
-    <div>
-      <div className={styles.modal__children}>
-        {/* Event title */}
-        <div>
-          <h3>EVENT TITLE</h3>
-          <TextInput
-            type="text"
-            placeholder="Event title"
-            value={title}
-            onChange={e => setTitle(e.target.value)}
-            fullWidth
-          />
-        </div>
-
-        {/* Event date */}
-        <div>
-          <h3>START DATE</h3>
-          <DatePicker date={date} setDate={setDate} fullWidth />
-        </div>
-
-        {/* Event judges */}
-        {judges.map((judge, i) => {
-          // For each judge in array of judges
-          return (
-            // Return text input to edit judge
-            <div key={i}>
-              <h4>Judge {i + 1}</h4>
-              <Dropdown
-                key={i}
-                wrapperClassName={styles.modal__judgeDropdown}
-                placeholder={`Judge ${i + 1}`}
-                options={judgeOptions}
-                selected={judge}
-                onChange={judge => updateJudge(i, judge)}
-              />
-            </div>
-          );
-        })}
-        <Button variant="outlined" onClick={addJudge}>
-          + Add Judge
-        </Button>
-      </div>
-      <div className={styles.modal__footer}>
-        {/* Add judge button (increment array) */}
-        <Button variant="outlined" onClick={() => setModalOpen(false)}>
-          Discard
-        </Button>
-
-        {/* Create event button */}
-        <Button
-          variant="contained"
-          style={{ marginLeft: '32px' }}
-          onClick={submitEvent}
-          disabled={loading}
-        >
-          Add Event
-        </Button>
-      </div>
-    </div>
-  );
-}
-
-/**
- * Edit Event modal content
- * @param {Object} event containing details about event being edited
- * @param {Object[]} judgeOptions - List of judge options to render in each judge dropdown
- * @param {Function} setModalOpen to toggle modal state
- * @param {Function} reloadEvents to reload all events
- * @returns {HTMLElement} of modal content
- */
-function EditEvent({ event, judgeOptions, setModalOpen, reloadEvents }) {
-  const [title, setTitle] = useState(event.name); // Event title
-  const [judges, setJudges] = useState(event.judges.map(email => ({ label: email, value: email }))); // Event judges
-  const [date, setDate] = useState(new Date(event.event_date)); // Event date
-  const [loading, setLoading] = useState(false);
-
-  const { snackbarError } = useSnackbar();
-
-  /**
-   * Edits event
-   */
-  const editEvent = async () => {
-    setLoading(true);
-    try {
-      // Post /api/events/edit
-      await axios.post('/api/events/edit', {
-        // With id of event to edit
-        id: event.id,
-        // And data to patch
-        title,
-        date,
-        judges: [...new Set(judges.map(judge => judge.value).filter(judge => !!judge))],
-      });
-
-      reloadEvents(); // Begin reloading events in background
-    } catch (err) {
-      snackbarError(err);
-    }
-
-    setModalOpen(false); // Close modal
-    setLoading(false);
-  };
-
-  /**
-   * Deletes event
-   */
-  // TODO: Add remove event button
-  // const removeEvent = async () => {
-  //   // Post /api/events/delete endpoint
-  //   await axios.post('/api/events/delete', {
-  //     // With id of event to delete
-  //     id: event.id,
-  //   });
-
-  //   reloadEvents(); // Begin reloading events in background
-  //   setModalOpen(false); // Close modal
-  // };
-
-  /**
-   * Updates judge email at index
-   * @param {Number} index of judge to update
-   * @param {String} email new email to update
-   */
-  const updateJudge = (index, email) => {
-    const tempJudges = judges; // Collect judges
-    tempJudges[index] = email; // Edit email of judge at index
-    setJudges([...tempJudges]); // Update judges
-  };
-
-  /**
-   * Adds empty judge to judges array to render input
-   */
-  const addJudge = () => {
-    // Judges + ""
-    setJudges([...judges, '']);
-  };
-
-  return (
-    <div className={styles.modal__childrenWrapper}>
-      <div className={styles.modal__children}>
-        {/* Event title */}
-        <div>
-          <h3>EVENT TITLE</h3>
-          <TextInput
-            type="text"
-            placeholder="Event title"
-            value={title}
-            onChange={e => setTitle(e.target.value)}
-            fullWidth
-          />
-        </div>
-
-        {/* Event date */}
-        <div>
-          <h3>START DATE</h3>
-          <DatePicker date={date} setDate={setDate} fullWidth />
-        </div>
-
-        {/* Event judges */}
-        {judges.map((judge, i) => {
-          // For each judge in array of judges
-          return (
-            // Return text input to edit judge
-            <div key={i}>
-              <h4>Judge {i + 1}</h4>
-              <Dropdown
-                key={i}
-                wrapperClassName={styles.modal__judgeDropdown}
-                placeholder={`Judge ${i + 1}`}
-                options={judgeOptions}
-                selected={judge}
-                onChange={judge => updateJudge(i, judge)}
-              />
-            </div>
-          );
-        })}
-        <Button variant="outlined" onClick={addJudge}>
-          + Add Judge
-        </Button>
-      </div>
-      <div className={styles.modal__footer}>
-        {/* Add judge button (increment array) */}
-        <Button variant="outlined" onClick={() => setModalOpen(false)}>
-          Cancel
-        </Button>
-
-        {/* Create event button */}
-        <Button
-          variant="contained"
-          style={{ marginLeft: '32px' }}
-          onClick={editEvent}
-          disabled={loading}
-        >
-          Save Edits
-        </Button>
-      </div>
-    </div>
   );
 }
 
