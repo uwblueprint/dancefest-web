@@ -132,11 +132,25 @@ export default function Awards({ session }) {
       };
 
       // Modal dropdown options
-      setPerformanceLevelDropdownOptions(
-        formatDropdownOptions(performanceLevelSettings, formatOptionsFields)
+      const initialPerformanceLevelDropdownOptions = formatDropdownOptions(
+        performanceLevelSettings,
+        formatOptionsFields
       );
-      setDanceSizeDropdownOptions(formatDropdownOptions(danceSizeSettings, formatOptionsFields));
-      setDanceStyleDropdownOptions(formatDropdownOptions(danceStyleSettings, formatOptionsFields));
+      const initialDanceSizeDropdownOptions = formatDropdownOptions(
+        danceSizeSettings,
+        formatOptionsFields
+      );
+      const initialDanceStyleDropdownOptions = formatDropdownOptions(
+        danceStyleSettings,
+        formatOptionsFields
+      );
+      // Add none option
+      initialPerformanceLevelDropdownOptions.unshift({ label: 'None', value: -1 });
+      initialDanceSizeDropdownOptions.unshift({ label: 'None', value: -1 });
+      initialDanceStyleDropdownOptions.unshift({ label: 'None', value: -1 });
+      setPerformanceLevelDropdownOptions(initialPerformanceLevelDropdownOptions);
+      setDanceSizeDropdownOptions(initialDanceSizeDropdownOptions);
+      setDanceStyleDropdownOptions(initialDanceStyleDropdownOptions);
 
       // Filters
       const initialPerformanceLevelFilters = formatFilterDropdownOptions(
@@ -224,9 +238,10 @@ export default function Awards({ session }) {
   ) => {
     setLoading(true);
     const settingIds = [];
-    if (danceSizeOption !== null) settingIds.push(danceSizeOption);
-    if (performanceLevelOption !== null) settingIds.push(performanceLevelOption);
-    if (danceStyleOption !== null) settingIds.push(danceStyleOption);
+    if (danceSizeOption !== null && danceSizeOption !== -1) settingIds.push(danceSizeOption);
+    if (performanceLevelOption !== null && performanceLevelOption !== -1)
+      settingIds.push(performanceLevelOption);
+    if (danceStyleOption !== null && danceStyleOption !== -1) settingIds.push(danceStyleOption);
 
     try {
       await axios({
