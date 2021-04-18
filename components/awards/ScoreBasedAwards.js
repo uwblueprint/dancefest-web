@@ -251,7 +251,7 @@ const EntryTable = ({
   const columns = [
     {
       Header: 'Title',
-      accessor: 'name',
+      accessor: 'danceTitle',
     },
     {
       Header: 'School',
@@ -306,12 +306,8 @@ const JudgingTable = ({
 }) => {
   const columns = [
     {
-      Header: 'ID',
-      accessor: 'id',
-    },
-    {
       Header: 'Title',
-      accessor: 'name',
+      accessor: 'danceTitle',
     },
     {
       Header: 'Tech. Score',
