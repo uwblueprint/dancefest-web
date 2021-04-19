@@ -27,7 +27,9 @@ export default async (req, res) => {
   // If schoolIDs exist, we convert it into an array of integers to add to the filter
   if (schoolIDs) filter.school_id = { in: schoolIDs.split(',').map(i => +i) };
   if (settingIDs) {
-    // If settingIDs array is passed in, we filter foor performances with the matching settings
+    // If settingIDs array is passed in, we filter for performances with the matching settings
+    // We get all the performances where the competition_level, dance_size, dance_style are in
+    // the requested settingIDs that are passed in
     const settingIDArray = settingIDs.split(',').map(i => +i);
     filter.competition_level_id = {
       in: settingIDArray,
