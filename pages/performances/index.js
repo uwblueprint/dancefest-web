@@ -330,7 +330,7 @@ export default function Performances({ session }) {
     activeSchoolFilters.forEach(({ label, value }, i) => {
       activeFilterPills.push(
         <Pill
-          key={i}
+          key={`school-${i}`}
           label={label}
           onDelete={() => setSchoolFilters(removeFilter(schoolFilters, value))}
         />
@@ -339,7 +339,7 @@ export default function Performances({ session }) {
     activePerformanceLevelFilters.forEach(({ label, value }, i) => {
       activeFilterPills.push(
         <Pill
-          key={i}
+          key={`performance-level-${i}`}
           label={label}
           onDelete={() => setPerformanceLevelFilters(removeFilter(performanceLevelFilters, value))}
         />
@@ -348,7 +348,7 @@ export default function Performances({ session }) {
     activeDanceStyleFilters.forEach(({ label, value }, i) => {
       activeFilterPills.push(
         <Pill
-          key={i}
+          key={`dance-style-${i}`}
           label={label}
           onDelete={() => setDanceStyleFilters(removeFilter(danceStyleFilters, value))}
         />
@@ -357,7 +357,7 @@ export default function Performances({ session }) {
     activeDanceSizeFilters.forEach(({ label, value }, i) => {
       activeFilterPills.push(
         <Pill
-          key={i}
+          key={`dance-size-${i}`}
           label={label}
           onDelete={() => setDanceSizeFilters(removeFilter(danceSizeFilters, value))}
         />
