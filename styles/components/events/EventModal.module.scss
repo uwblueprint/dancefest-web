@@ -1,0 +1,57 @@
+// Modal container
+.modal__container {
+  height: 600px;
+  width: 800px;
+
+  .modal__children_wrapper {
+    height: 308px;
+    overflow-y: auto;
+  }
+}
+
+// Modal contents
+.modal__children {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0px, 1fr));
+  grid-auto-rows: 1fr;
+  align-items: end;
+
+  h3 {
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 21px;
+    /* identical to box height */
+
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--brand-pop-blue);
+  }
+
+  h4 {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 18px;
+
+    /* Pop Blue */
+    color: var(--brand-pop-blue);
+  }
+
+  input {
+    max-width: 300px;
+  }
+
+  & > button {
+    margin-top: 54px;
+    height: 40px;
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .modal__judgeDropdown {
+    width: 300px;
+  }
+}
