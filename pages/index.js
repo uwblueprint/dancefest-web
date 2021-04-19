@@ -128,6 +128,23 @@ export default function Events({ session }) {
     getJudges();
   }, []);
 
+  // TESTING: send feedback
+  const sendFeedback = async () => {
+    try {
+      const response = await axios({
+        method: 'POST',
+        url: '/api/feedback',
+        data: {
+          eventID: 1,
+          schoolIDs: [1, 2, 3],
+        },
+      });
+      console.log(response.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <Layout>
       <div className={styles.page__events}>
@@ -137,6 +154,7 @@ export default function Events({ session }) {
           {/* If user is admin, enable event creation */}
           {session.role === 'ADMIN' ? <Button onClick={modalNewEvent}>Add Event</Button> : null}
         </div>
+        <button onClick={sendFeedback}>send feedback</button>
 
         {/* Events page events list */}
         <div className={styles.page__events_list}>
