@@ -19,11 +19,11 @@ export const json2csvParser = new Parser({
     },
     {
       label: 'Performer(s)',
-      value: row => row.performers.join(','),
+      value: row => row.performers.join(', '),
     },
     {
       label: 'Choreographer(s)',
-      value: row => row.choreographers.join(','),
+      value: row => row.choreographers.join(', '),
     },
     {
       label: 'Artistic Score',
@@ -39,7 +39,7 @@ export const json2csvParser = new Parser({
     },
     {
       label: 'Placement',
-      value: 'id',
+      value: () => null,
     },
     {
       label: 'Award(s)',
@@ -48,7 +48,7 @@ export const json2csvParser = new Parser({
           ? row.awards
               .filter(award => award.status === 'FINALIST')
               .map(award => award.title)
-              .join(',')
+              .join(', ')
           : null,
     },
     {
