@@ -48,14 +48,18 @@ const getActiveFilters = options => {
 
 /**
  * Remove key from object
- * @param {Object} object - An object
+ * @param {Object} object - An object containing all the available filters
  * @param {*} key - A key in the object
  * @returns {Object} A new object that is a copy of the `object` parameter with the `key` removed
  */
-const removeKeyFromObject = (object, key) => {
-  // eslint-disable-next-line no-unused-vars
-  const { [key]: _, ...rest } = object;
-  return rest;
+const removeFilter = (object, key) => {
+  return {
+    ...object,
+    [key]: {
+      label: object[key].label,
+      selected: false,
+    },
+  };
 };
 
 // Page: Performances
@@ -326,38 +330,36 @@ export default function Performances({ session }) {
     activeSchoolFilters.forEach(({ label, value }, i) => {
       activeFilterPills.push(
         <Pill
-          key={i}
+          key={`school-${i}`}
           label={label}
-          onDelete={() => setSchoolFilters(removeKeyFromObject(schoolFilters, value))}
+          onDelete={() => setSchoolFilters(removeFilter(schoolFilters, value))}
         />
       );
     });
     activePerformanceLevelFilters.forEach(({ label, value }, i) => {
       activeFilterPills.push(
         <Pill
-          key={i}
+          key={`performance-level-${i}`}
           label={label}
-          onDelete={() =>
-            setPerformanceLevelFilters(removeKeyFromObject(performanceLevelFilters, value))
-          }
+          onDelete={() => setPerformanceLevelFilters(removeFilter(performanceLevelFilters, value))}
         />
       );
     });
     activeDanceStyleFilters.forEach(({ label, value }, i) => {
       activeFilterPills.push(
         <Pill
-          key={i}
+          key={`dance-style-${i}`}
           label={label}
-          onDelete={() => setDanceStyleFilters(removeKeyFromObject(danceStyleFilters, value))}
+          onDelete={() => setDanceStyleFilters(removeFilter(danceStyleFilters, value))}
         />
       );
     });
     activeDanceSizeFilters.forEach(({ label, value }, i) => {
       activeFilterPills.push(
         <Pill
-          key={i}
+          key={`dance-size-${i}`}
           label={label}
-          onDelete={() => setDanceSizeFilters(removeKeyFromObject(danceSizeFilters, value))}
+          onDelete={() => setDanceSizeFilters(removeFilter(danceSizeFilters, value))}
         />
       );
     });
