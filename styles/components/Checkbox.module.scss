@@ -17,6 +17,12 @@ Checkbox
 
   cursor: pointer;
 
+  // Inner checkbox
+  & > div {
+    height: 12px;
+    width: 12px;
+  }
+
   // Checkbox (checked)
   &.selected {
     background-color: var(--system-light-blue);

@@ -7,7 +7,7 @@ import Banner from '@components/Banner'; // Banner
 import styles from '@styles/components/Layout.module.scss'; // Component styles
 
 export default function Layout({ children }) {
-  // const { pathname } = useRouter();
+  const { pathname } = useRouter();
 
   return (
     <div>
@@ -15,10 +15,7 @@ export default function Layout({ children }) {
       <Meta />
 
       {/* Layout: Banner */}
-      <Banner
-        visible={false}
-        // visible={pathname !== '/performances' && pathname !== '/feedback'}
-      >
+      <Banner visible={pathname !== '/performances' && pathname !== '/feedback'}>
         {'Feedback sharing available for “OSSDF2021-Let’s Dis-Dance”. '}
         <Link href="/performances">
           <a>Go to Performance Page</a>
