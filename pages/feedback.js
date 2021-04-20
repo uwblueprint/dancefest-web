@@ -153,11 +153,12 @@ export default function Feedback() {
               // eslint-disable-next-line react/display-name
               Cell: ({
                 row: {
-                  original: { id },
+                  original: { id, schoolName },
                 },
               }) => (
                 <CSVLink
                   className={styles.previewLink}
+                  filename={`${event.name.replaceAll(' ', '-')}-${schoolName}-feedback-preview.csv`}
                   data={csvData}
                   asyncOnClick={true}
                   onClick={async (_, done) => {
