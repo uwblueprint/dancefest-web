@@ -18,6 +18,7 @@ import DancerYellowBlue from '@assets/dancer-yellow-blue.svg'; // Jumping Dancer
 import styles from '@styles/pages/Awards.module.scss'; // Page styles
 import { formatPerformances } from '@utils/performances'; // Format performances util
 import AwardPill from '@components/awards/FinalizePill.js'; // Award Finalize Pill
+import BackButton from '@components/BackButton';
 
 import useSnackbar from '@utils/useSnackbar'; // Snackbar
 
@@ -140,6 +141,9 @@ export default function Performances({ award, session }) {
   return (
     <Layout>
       <div>
+        <div>
+          <BackButton href="/awards">Back to Awards</BackButton>
+        </div>
         <div className={styles.performances__navigation}>
           <h2 className={styles.performances__navigation__eventName}>{`EVENT NAME`}</h2>
         </div>

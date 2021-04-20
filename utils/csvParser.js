@@ -8,7 +8,16 @@ export const json2csvParser = new Parser({
   ],
   fields: [
     { label: 'Entry Title', value: 'dance_title' },
-    { label: 'Audio Feedback', value: 'audio_recording_link' },
+    {
+      label: 'Audio Feedback',
+      value: row =>
+        row.adjudications
+          ? row.adjudications
+              .map(adjudication => adjudication.audio_url)
+              .filter(audioUrl => !!audioUrl)
+              .join(', ')
+          : null,
+    },
     {
       label: 'Performance Level',
       value: 'competition_level',
@@ -38,22 +47,21 @@ export const json2csvParser = new Parser({
       value: 'cumulativeScore',
     },
     {
-      label: 'Placement',
-      value: () => null,
-    },
-    {
       label: 'Award(s)',
       value: row =>
         row.awards
           ? row.awards
-              .filter(award => award.status === 'FINALIST')
+              .filter(award => award.status === 'FINALIST' && award.type !== 'SPECIAL')
               .map(award => award.title)
               .join(', ')
           : null,
     },
     {
       label: 'Special Award',
-      value: 'specialAward.title',
+      value: row =>
+        row.awards
+          ? row.awards.filter(award => award.status === 'FINALIZED').map(award => award.title)
+          : null,
     },
   ],
 });

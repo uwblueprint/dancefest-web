@@ -91,9 +91,9 @@ export const getPerformances = async filter => {
             user_id,
           };
         }),
-        specialAward: awards_performances
+        specialAwards: awards_performances
           .filter(award => award.awards.type === 'SPECIAL')
-          .map(award => award.awards)[0],
+          .map(award => award.awards),
         adjudications,
         totalAdjudications: (JSON.parse(judgesString) || []).filter(judge => judge !== '').length,
         completedAdjudications: adjudications.length,

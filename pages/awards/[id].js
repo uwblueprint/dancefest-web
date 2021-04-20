@@ -8,6 +8,7 @@ import ScoreBasedAwards from '@components/awards/ScoreBasedAwards'; // Score Bas
 import { getSession } from 'next-auth/client'; // Session handling
 import { getAward } from 'pages/api/awards/get'; // Helper method to get award details by ID
 import Modal from '@components/Modal.js'; // Modal component
+import BackButton from '@components/BackButton';
 
 import Title from '@components/Title'; // Title
 import DancerRedJump from '@assets/dancer-red-jump.svg'; // Jumping Dancer SVG
@@ -124,6 +125,9 @@ function AwardDetails({ award, session }) {
   return (
     <Layout>
       <div>
+        <div>
+          <BackButton href="/awards">Back to Awards</BackButton>
+        </div>
         <div>
           <h2 className={styles.performances_details__eventName}>{`Event Title`}</h2>
         </div>

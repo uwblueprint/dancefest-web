@@ -18,6 +18,7 @@ import Title from '@components/Title'; // Title
 import styles from '@styles/pages/PerformanceDetails.module.scss';
 import { formatPerformance } from '@utils/performances'; // Format performance util
 import useSnackbar from '@utils/useSnackbar'; // Snackbar
+import BackButton from '@components/BackButton';
 
 // Page: Settings
 export default function PerformanceDetails({ session }) {
@@ -120,6 +121,9 @@ export default function PerformanceDetails({ session }) {
         </div>
       ) : (
         <>
+          <div>
+            <BackButton href="/performances">Back to Performances</BackButton>
+          </div>
           <div>
             <h2 className={styles.performances_details__eventName}>{eventName}</h2>
           </div>

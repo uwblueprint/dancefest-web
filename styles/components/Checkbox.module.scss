@@ -34,4 +34,11 @@ Checkbox
       left: 1px;
     }
   }
+
+  // Checkbox (disabled)
+  &.disabled {
+    background-color: var(--system-lightest-grey);
+    border: 2px solid var(--system-light-grey);
+    cursor: default;
+  }
 }

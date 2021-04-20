@@ -1,3 +1,6 @@
+/**
+ * Not in use
+ */
 import Link from 'next/link'; // Link
 import Button from '@components/Button'; // Button
 import styles from '@styles/components/performances/FeedbackReadyNotification.module.scss'; // Component styles

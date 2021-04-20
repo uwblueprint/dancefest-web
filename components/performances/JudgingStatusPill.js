@@ -7,7 +7,11 @@ export default function JudgingStatusPill({ completedAdjudications, totalAdjudic
   return (
     <div
       className={`${styles.judgingStatusPill} ${
-        completedAdjudications === totalAdjudications ? styles.complete : styles.incomplete
+        completedAdjudications === totalAdjudications
+          ? styles.complete
+          : completedAdjudications > totalAdjudications
+          ? styles.error
+          : styles.incomplete
       }`}
     >{`${completedAdjudications}/${totalAdjudications} Complete`}</div>
   );

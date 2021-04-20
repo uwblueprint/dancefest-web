@@ -56,6 +56,12 @@ Button
   border-color: var(--brand-pop-yellow);
   background-color: var(--brand-pop-yellow);
   color: var(--brand-navy);
+
+  &:disabled {
+    border-color: var(--system-light-grey);
+    background-color: var(--system-light-grey);
+    color: var(--system-neutral-grey);
+  }
 }
 
 /* Edit button */

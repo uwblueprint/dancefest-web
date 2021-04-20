@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'; // React
 import axios from 'axios'; // axios
+import { CSVLink } from 'react-csv'; // Link for downloading feedback preview
 import Layout from '@components/Layout'; // Layout
 import Title from '@components/Title'; // Title
 import Button from '@components/Button'; // Button
@@ -19,19 +20,35 @@ export default function Feedback() {
   const [modalOpen, setModalOpen] = useState(false);
   const [schools, setSchools] = useState([]);
   const [selectedSchools, setSelectedSchools] = useState([]); // List of school IDs that are currently selected
+  const [csvData, setCsvData] = useState(''); // CSV data for feedback to download
 
+  const schoolsWithFeedbackReady = schools.filter(school => school.feedbackReady);
   const selectedSchoolsSet = new Set(selectedSchools);
-  const allSchoolsSelected = schools.every(school => selectedSchoolsSet.has(school.id));
+  const allSchoolsSelected =
+    selectedSchools.length > 0 &&
+    schoolsWithFeedbackReady.every(school => selectedSchoolsSet.has(school.id));
+  const canSendFeedback = schools.some(school => school.feedbackReady);
 
   // Get schools
   const getSchools = async () => {
     try {
-      const response = await axios({
+      const schoolsResponse = await axios({
         method: 'get',
         url: `/api/schools/collect?eventID=${event.id}`,
       });
+      const schoolsData = [...schoolsResponse.data];
 
-      setSchools(formatSchools(response.data));
+      const schoolsFeedbackReadyResponse = await axios({
+        method: 'get',
+        url: `/api/feedback/is-ready?eventID=${event.id}`,
+      });
+
+      const schoolsReadyForFeedbackMap = schoolsFeedbackReadyResponse.data;
+      schoolsData.forEach(school => {
+        school.feedbackReady = schoolsReadyForFeedbackMap[school.id] || false;
+      });
+
+      setSchools(formatSchools(schoolsData));
     } catch (err) {
       snackbarError(err);
     }
@@ -44,7 +61,7 @@ export default function Feedback() {
   // Render checkbox for each school
   const renderCheckbox = ({
     row: {
-      original: { id },
+      original: { id, feedbackReady },
     },
   }) => {
     const handleSelectSchool = checked => {
@@ -52,12 +69,55 @@ export default function Feedback() {
         checked ? selectedSchools.filter(schoolId => schoolId !== id) : [...selectedSchools, id]
       );
     };
-    return <Checkbox checked={selectedSchoolsSet.has(id)} onToggle={handleSelectSchool} />;
+    return (
+      <Checkbox
+        checked={selectedSchoolsSet.has(id)}
+        disabled={!feedbackReady}
+        onToggle={handleSelectSchool}
+      />
+    );
   };
 
   // Select all schools
   const selectAllSchools = checked => {
-    setSelectedSchools(checked ? [] : schools.map(school => school.id));
+    setSelectedSchools(checked ? [] : schoolsWithFeedbackReady.map(school => school.id));
+  };
+
+  // Send feedback
+  const sendFeedback = async () => {
+    try {
+      await axios({
+        method: 'POST',
+        url: '/api/feedback',
+        data: {
+          // TODO: Replace with dynamic values
+          eventID: 1,
+          schoolIDs: [1, 2, 3],
+        },
+      });
+    } catch (err) {
+      snackbarError(err);
+    }
+  };
+
+  // Download feedback preview
+  const downloadFeedbackPreview = async schoolId => {
+    try {
+      const response = await axios({
+        method: 'GET',
+        url: `/api/feedback/download?eventID=${event.id}&schoolID=${schoolId}`,
+      });
+
+      setCsvData(response.data);
+    } catch (err) {
+      snackbarError(err);
+    }
+  };
+
+  // Handle modal submit
+  const handleModalSubmit = () => {
+    sendFeedback();
+    setModalOpen(false);
   };
 
   return (
@@ -66,14 +126,21 @@ export default function Feedback() {
         <h2 className={styles.feedback__eventName}>{eventName}</h2>
         <div className={styles.feedback__title_wrapper}>
           <Title className={styles.feedback__title}>Share Feedback</Title>
-          <Button variant="warning" onClick={() => setModalOpen(true)}>
+          <Button variant="warning" disabled={!canSendFeedback} onClick={() => setModalOpen(true)}>
             Send Feedback
           </Button>
+          <p>{canSendFeedback ? 'Feedback is available' : 'No available feedback to send'}</p>
         </div>
         <Table
           columns={[
             {
-              Header: <Checkbox checked={allSchoolsSelected} onToggle={selectAllSchools} />,
+              Header: (
+                <Checkbox
+                  checked={allSchoolsSelected}
+                  disabled={schoolsWithFeedbackReady.length === 0}
+                  onToggle={selectAllSchools}
+                />
+              ),
               accessor: 'select',
               Cell: renderCheckbox,
               disableSortBy: true,
@@ -81,15 +148,33 @@ export default function Feedback() {
             { Header: 'School', accessor: 'schoolName' },
             { Header: 'Contact email', accessor: 'email' },
             {
-              Header: '',
+              Header: 'Feedback',
               accessor: 'preview',
-              Cell: <a className={styles.previewLink}>Preview</a>,
+              // eslint-disable-next-line react/display-name
+              Cell: ({
+                row: {
+                  original: { id },
+                },
+              }) => (
+                <CSVLink
+                  className={styles.previewLink}
+                  data={csvData}
+                  asyncOnClick={true}
+                  onClick={async (_, done) => {
+                    await downloadFeedbackPreview(id);
+                    done();
+                  }}
+                >
+                  Preview
+                </CSVLink>
+              ),
             },
           ]}
           data={schools}
           filters={[]}
           paginate={false}
           clickable={false}
+          initialSort={[{ id: 'schoolName' }, { id: 'feedbackReady' }]}
         />
       </div>
       <Modal
@@ -98,7 +183,7 @@ export default function Feedback() {
         title="Send Feedback?"
         submitText="Confirm"
         cancelText="Cancel"
-        onSubmit={() => setModalOpen(false)}
+        onSubmit={handleModalSubmit}
         onCancel={() => setModalOpen(false)}
       >
         <p>This action cannot be undone.</p>
