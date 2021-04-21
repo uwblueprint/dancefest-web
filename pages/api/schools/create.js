@@ -11,13 +11,6 @@ export default async (req, res) => {
     // Collect name of school
     const { schoolName, contactName, email, phone } = req.body;
 
-    // If phone number is passed and the phone number is not valid
-    if (phone && !validator.isMobilePhone(phone, ['en-CA'])) {
-      return res.status(400).json({
-        error: 'Provided phone number is invalid.',
-      });
-    }
-
     // If name exist
     if (schoolName && email) {
       // If the email is invalid
