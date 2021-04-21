@@ -1,5 +1,6 @@
 import prisma from '@prisma/index'; // Prisma client
 import { getSession } from 'next-auth/client'; // Session handling
+import { getPerformances } from '@pages/api/performances/collect'; // Get performances
 
 export default async (req, res) => {
   // Collect session from request
@@ -7,10 +8,18 @@ export default async (req, res) => {
 
   // If session exists (thus, user is authenticated)
   if (session && (session.role === 'ADMIN' || session.role === 'JUDGE')) {
-    const { schoolIDs } = req.query;
+    const { schoolIDs, eventID } = req.query;
 
     const filter = {};
-    if (schoolIDs) filter.id = { in: schoolIDs.split(',').map(i => +i) };
+    if (schoolIDs) {
+      filter.id = { in: schoolIDs.split(',').map(i => +i) };
+    } else if (eventID) {
+      const eventPerformances = await getPerformances({
+        event_id: parseInt(eventID),
+      });
+
+      filter.id = { in: [...new Set(eventPerformances.map(event => event.school.id))] };
+    }
 
     // Collect schools
     const schools = await getSchools(filter);

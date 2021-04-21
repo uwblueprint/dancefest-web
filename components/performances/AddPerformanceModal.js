@@ -25,6 +25,8 @@ export default function AddPerformanceModal({
   const [danceStyle, setDanceStyle] = useState(null);
   const [danceSize, setDanceSize] = useState(null);
 
+  const fieldsMissing = !danceTitle || !school || !competitionLevel || !danceStyle || !danceSize;
+
   const clearFields = () => {
     setDanceTitle('');
     setDancersString('');
@@ -69,7 +71,7 @@ export default function AddPerformanceModal({
       submitText={'Add Performance'}
       onCancel={onCancel}
       onSubmit={onSubmit}
-      disableSubmitButton={loading}
+      disableSubmitButton={loading || fieldsMissing}
     >
       <div className={styles.modal}>
         <div>

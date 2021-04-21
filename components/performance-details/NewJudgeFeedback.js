@@ -20,6 +20,7 @@ const DANCE_ARTISTRY_AWARD_TYPE = 'DANCE_ARTISTRY';
 
 export default function NewJudgeFeedback({
   getPerformance = () => {},
+  loading,
   setLoading = () => {},
   awardsDict,
   nominations: initialNominations,
@@ -71,6 +72,8 @@ export default function NewJudgeFeedback({
   const [recordingChanged, setRecordingChanged] = useState(false);
   const [recording, setRecording] = useState(false);
   const [recordedBlob, setRecordedBlob] = useState(null);
+
+  const fieldsMissing = !technicalScore || !artisticScore || !cumulativeScore;
 
   useEffect(() => {
     setNormalAwards(initialNormalAwards);
@@ -176,6 +179,7 @@ export default function NewJudgeFeedback({
                 createFeedback();
                 setEditMode(false);
               }}
+              disabled={loading || fieldsMissing}
             >
               Submit
             </Button>

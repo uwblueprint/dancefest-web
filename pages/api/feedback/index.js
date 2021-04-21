@@ -2,7 +2,7 @@ import prisma from '@prisma/index'; // Prisma client
 import { getSession } from 'next-auth/client'; // Session handling
 import { getPerformances } from '@pages/api/performances/collect';
 import { transporter } from 'aws/index';
-import { json2csvParser } from '@utils/csvParser';
+import { generateFeedbackCSV } from '@utils/feedback';
 
 export default async (req, res) => {
   const session = await getSession({ req });
@@ -57,7 +57,7 @@ export default async (req, res) => {
     const schoolPerformances = schoolToPerformancesMap[school];
     if (schoolPerformances && schoolPerformances.length > 0) {
       // TODO: Figure out which fields to remove before sending!
-      const csv = json2csvParser.parse(schoolPerformances);
+      const csv = generateFeedbackCSV(schoolPerformances);
 
       const mailData = {
         from: process.env.FEEDBACK_EMAIL_FROM,

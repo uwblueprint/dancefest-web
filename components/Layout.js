@@ -3,27 +3,13 @@ import Head from 'next/head'; // HTML head handling
 import { useRouter } from 'next/router'; // Routing
 import { signOut, useSession } from 'next-auth/client'; // Authentication
 import Event from '@containers/Event'; // Event state
-import Banner from '@components/Banner'; // Banner
 import styles from '@styles/components/Layout.module.scss'; // Component styles
 
 export default function Layout({ children }) {
-  // const { pathname } = useRouter();
-
   return (
     <div>
       {/* Layout: Meta */}
       <Meta />
-
-      {/* Layout: Banner */}
-      <Banner
-        visible={false}
-        // visible={pathname !== '/performances' && pathname !== '/feedback'}
-      >
-        {'Feedback sharing available for “OSSDF2021-Let’s Dis-Dance”. '}
-        <Link href="/performances">
-          <a>Go to Performance Page</a>
-        </Link>
-      </Banner>
 
       {/* Layout: Header */}
       <Header />
@@ -117,8 +103,15 @@ function Header() {
                   </li>
                 </>
               )}
-              {session.role == 'ADMIN' && (
-                <li className={pathname === '/settings' && styles.selected}>
+              {session.role === 'ADMIN' && event !== null && (
+                <li className={pathname === '/feedback' ? styles.selected : ''}>
+                  <Link href="/feedback">
+                    <a>Feedback</a>
+                  </Link>
+                </li>
+              )}
+              {session.role === 'ADMIN' && (
+                <li className={pathname === '/settings' ? styles.selected : ''}>
                   <Link href="/settings">
                     <a>Settings</a>
                   </Link>

@@ -1,3 +1,6 @@
+/**
+ * Not in use
+ */
 import InfoIcon from '@assets/info.svg'; // Info icon
 import styles from '@styles/components/Banner.module.scss'; // Component styles
 

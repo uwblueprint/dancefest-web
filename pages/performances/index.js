@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'; // React
 import axios from 'axios'; // axios
-import Link from 'next/link'; // Next link
 import Layout from '@components/Layout'; // Layout wrapper
 import Event from '@containers/Event'; // Event state
 import { getSession } from 'next-auth/client'; // Session handling
@@ -18,8 +17,7 @@ import { formatDropdownOptions } from '@components/Dropdown'; // Format dropdown
 import FilterDropdown, { formatFilterDropdownOptions } from '@components/FilterDropdown'; // Filter Dropdown + Format filter dropdown options util
 import Pill from '@components/Pill'; // Pill
 import Pagination from '@components/Pagination'; // Pagination
-// import FeedbackReadyNotification from '@components/performances/FeedbackReadyNotification'; // Feedback Ready Notification
-import BackArrow from '@assets/back-arrow.svg'; // Back arrow icon
+import BackButton from '@components/BackButton';
 import Search from '@assets/search.svg'; // Search icon
 import ChevronDown from '@assets/chevron-down.svg'; // Chevron down icon
 import ChevronDownGrey from '@assets/chevron-down-grey.svg'; // Chevron down grey icon
@@ -371,13 +369,7 @@ export default function Performances({ session }) {
     <Layout>
       <div>
         <div className={styles.performances__navigation}>
-          <Link href="/">
-            <Button className={styles.performances__navigation__button} variant="outlined">
-              <img src={BackArrow} />
-              Back to Events
-            </Button>
-          </Link>
-          {/* <FeedbackReadyNotification /> */}
+          <BackButton href="/">Back to Events</BackButton>
         </div>
         <h2 className={styles.performances__eventName}>{eventName}</h2>
         <div className={styles.performances__header}>

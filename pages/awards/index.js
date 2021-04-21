@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'; // React
 import axios from 'axios';
 import { useRouter } from 'next/router'; // Routing (with buttons)
 import { getSession } from 'next-auth/client'; // Session handling
-import Link from 'next/link'; // Next link
 import Loader from 'react-loader-spinner'; // Spinning loader
 import Layout from '@components/Layout'; // Layout wrapper
 import Event from '@containers/Event'; // Event state
@@ -16,7 +15,7 @@ import Tabs from '@components/Tabs'; // Tabs
 import FilterDropdown, { formatFilterDropdownOptions } from '@components/FilterDropdown'; // Filter Dropdown
 import Table from '@components/Table'; // Table
 import Pagination from '@components/Pagination'; // Pagination
-import BackArrow from '@assets/back-arrow.svg'; // Back arrow icon
+import BackButton from '@components/BackButton';
 import Search from '@assets/search.svg'; // Search icon
 import ChevronDown from '@assets/chevron-down.svg'; // Chevron down icon
 import ChevronDownGrey from '@assets/chevron-down-grey.svg'; // Chevron down grey icon
@@ -207,7 +206,7 @@ export default function Awards({ session }) {
         if (award.is_finalized) {
           award.performances.forEach(perf => {
             if (perf.status === 'FINALIST') {
-              award.winner = perf.name;
+              award.winner = perf.dance_title;
             }
           });
           setFinalizedAwards(prevFinalized => [...prevFinalized, award]);
@@ -265,16 +264,8 @@ export default function Awards({ session }) {
     <Layout>
       <div>
         <div className={styles.performances__navigation}>
-          <Link href="/">
-            <Button className={styles.performances__navigation__button} variant="outlined">
-              <img src={BackArrow} />
-              Back to Events
-            </Button>
-          </Link>
-
-          <h2 className={styles.performances__navigation__eventName}>
-            {`OSSDF2021- Let's Dis-dance`}
-          </h2>
+          <BackButton href="/">Back to Events</BackButton>
+          <h2 className={styles.performances__navigation__eventName}>{event.name}</h2>
         </div>
         <div className={styles.performances__header}>
           <div>

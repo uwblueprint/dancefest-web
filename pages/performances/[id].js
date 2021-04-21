@@ -18,6 +18,7 @@ import Title from '@components/Title'; // Title
 import styles from '@styles/pages/PerformanceDetails.module.scss';
 import { formatPerformance } from '@utils/performances'; // Format performance util
 import useSnackbar from '@utils/useSnackbar'; // Snackbar
+import BackButton from '@components/BackButton';
 
 // Page: Settings
 export default function PerformanceDetails({ session }) {
@@ -121,6 +122,9 @@ export default function PerformanceDetails({ session }) {
       ) : (
         <>
           <div>
+            <BackButton href="/performances">Back to Performances</BackButton>
+          </div>
+          <div>
             <h2 className={styles.performances_details__eventName}>{eventName}</h2>
           </div>
           <div>
@@ -185,6 +189,7 @@ export default function PerformanceDetails({ session }) {
                 session.role === 'JUDGE' && !judgeFeedbackExists ? (
                   <NewJudgeFeedback
                     getPerformance={getPerformance}
+                    loading={loading}
                     setLoading={setLoading}
                     awardsDict={awardsDict}
                     nominations={currentNominations}

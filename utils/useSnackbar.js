@@ -20,7 +20,12 @@ export default function useSnackbar() {
     }
   };
 
+  const snackbarSuccess = message => {
+    openSnackbar(message);
+  };
+
   return {
+    snackbarSuccess,
     snackbarError,
   };
 }
