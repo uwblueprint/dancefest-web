@@ -56,10 +56,16 @@ export default function Performances({ award, session }) {
   const getPerformances = async () => {
     setLoading(true);
 
+    // NOTE: If we know the specific award category, we can pass in 3 params (competition_level_id, dance_size_id, dance_level_id)
+    let performanceUrl = `/api/performances/collect?eventID=${event.id}`;
+    if (award.awards_categories && award.awards_categories.length !== 0) {
+      performanceUrl += `&settingIDs=${award.awards_categories.join(',')}`;
+    }
+
     try {
       const response = await axios({
         method: 'GET',
-        url: `/api/performances/collect?eventID=${event.id}`,
+        url: performanceUrl,
       });
 
       setPerformances(formatPerformances(response.data));
