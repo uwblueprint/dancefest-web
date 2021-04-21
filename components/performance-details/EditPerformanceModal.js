@@ -37,6 +37,8 @@ export default function EditPerformanceModal({
   const [danceStyleDropdownOptions, setDanceStyleDropdownOptions] = useState([]);
   const [danceSizeDropdownOptions, setDanceSizeDropdownOptions] = useState([]);
 
+  const fieldsMissing = !danceTitle || !school || !competitionLevel || !danceStyle || !danceSize;
+
   const getFilters = async () => {
     setLoading(true);
 
@@ -189,7 +191,7 @@ export default function EditPerformanceModal({
       submitText={'Edit Performance'}
       onCancel={onCancel}
       onSubmit={updatePerformance}
-      disableSubmitButton={loading}
+      disableSubmitButton={loading || fieldsMissing}
     >
       <div className={styles.modal}>
         <div>

@@ -91,8 +91,8 @@ export default function Feedback() {
         url: '/api/feedback',
         data: {
           // TODO: Replace with dynamic values
-          eventID: 1,
-          schoolIDs: [1, 2, 3],
+          eventID: event.id,
+          schoolIDs: [...selectedSchoolsSet],
         },
       });
     } catch (err) {
@@ -126,10 +126,20 @@ export default function Feedback() {
         <h2 className={styles.feedback__eventName}>{eventName}</h2>
         <div className={styles.feedback__title_wrapper}>
           <Title className={styles.feedback__title}>Share Feedback</Title>
-          <Button variant="warning" disabled={!canSendFeedback} onClick={() => setModalOpen(true)}>
+          <Button
+            variant="warning"
+            disabled={!canSendFeedback || selectedSchoolsSet.size === 0}
+            onClick={() => setModalOpen(true)}
+          >
             Send Feedback
           </Button>
-          <p>{canSendFeedback ? 'Feedback is available' : 'No available feedback to send'}</p>
+          <p>
+            {canSendFeedback
+              ? selectedSchoolsSet.size > 0
+                ? 'Feedback is ready to send'
+                : 'Feedback is available'
+              : 'No available feedback to send'}
+          </p>
         </div>
         <Table
           columns={[
