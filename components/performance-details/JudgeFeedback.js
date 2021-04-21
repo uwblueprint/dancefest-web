@@ -83,6 +83,7 @@ export default function JudgeFeedback({
     .filter(award => !!award)
     .map(award => awardsDict[award.value]);
   const specialAwardData = specialAward && awardsDict[specialAward.value];
+  const fieldsMissing = !technicalScore || !artisticScore || !cumulativeScore;
 
   useEffect(() => {
     if (adjudication) {
@@ -196,7 +197,7 @@ export default function JudgeFeedback({
                   updateFeedback();
                   setEditingFeedback(false);
                 }}
-                disabled={loading}
+                disabled={loading || fieldsMissing}
               >
                 Save
               </Button>

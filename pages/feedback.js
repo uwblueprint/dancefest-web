@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'; // React
+import { useState, useEffect, useRef } from 'react'; // React
 import axios from 'axios'; // axios
 import { CSVLink } from 'react-csv'; // Link for downloading feedback preview
 import Layout from '@components/Layout'; // Layout
@@ -13,14 +13,15 @@ import useSnackbar from '@utils/useSnackbar'; // Snackbar
 import styles from '@styles/pages/Feedback.module.scss'; // Component styles
 
 export default function Feedback() {
-  const { snackbarError } = useSnackbar();
+  const { snackbarSuccess, snackbarError } = useSnackbar();
   const [event] = Event.useContainer();
   const eventName = event ? event.name : '';
+  const csvDownloadRef = useRef(null);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [schools, setSchools] = useState([]);
   const [selectedSchools, setSelectedSchools] = useState([]); // List of school IDs that are currently selected
-  const [csvData, setCsvData] = useState(''); // CSV data for feedback to download
+  const [schoolData, setSchoolData] = useState({ school: null, csv: '' }); // CSV data for feedback to download
 
   const schoolsWithFeedbackReady = schools.filter(school => school.feedbackReady);
   const selectedSchoolsSet = new Set(selectedSchools);
@@ -95,20 +96,23 @@ export default function Feedback() {
           schoolIDs: [...selectedSchoolsSet],
         },
       });
+
+      snackbarSuccess(`Feedback sent to selected schools`);
     } catch (err) {
       snackbarError(err);
     }
   };
 
   // Download feedback preview
-  const downloadFeedbackPreview = async schoolId => {
+  const downloadFeedbackPreview = async school => {
     try {
       const response = await axios({
         method: 'GET',
-        url: `/api/feedback/download?eventID=${event.id}&schoolID=${schoolId}`,
+        url: `/api/feedback/download?eventID=${event.id}&schoolID=${school.id}`,
       });
 
-      setCsvData(response.data);
+      setSchoolData({ school, csv: response.data });
+      csvDownloadRef.current.link.click();
     } catch (err) {
       snackbarError(err);
     }
@@ -158,26 +162,22 @@ export default function Feedback() {
             { Header: 'School', accessor: 'schoolName' },
             { Header: 'Contact email', accessor: 'email' },
             {
-              Header: 'Feedback',
-              accessor: 'preview',
-              // eslint-disable-next-line react/display-name
+              Header: 'Judging complete',
+              accessor: 'feedbackReady',
               Cell: ({
                 row: {
-                  original: { id, schoolName },
+                  original: { feedbackReady },
                 },
-              }) => (
-                <CSVLink
-                  className={styles.previewLink}
-                  filename={`${event.name.replaceAll(' ', '-')}-${schoolName}-feedback-preview.csv`}
-                  data={csvData}
-                  asyncOnClick={true}
-                  onClick={async (_, done) => {
-                    await downloadFeedbackPreview(id);
-                    done();
-                  }}
-                >
+              }) => (feedbackReady ? 'Yes' : 'No'),
+            },
+            {
+              Header: '',
+              accessor: 'preview',
+              // eslint-disable-next-line react/display-name
+              Cell: ({ row: { original: school } }) => (
+                <a className={styles.previewLink} onClick={() => downloadFeedbackPreview(school)}>
                   Preview
-                </CSVLink>
+                </a>
               ),
             },
           ]}
@@ -185,7 +185,7 @@ export default function Feedback() {
           filters={[]}
           paginate={false}
           clickable={false}
-          initialSort={[{ id: 'schoolName' }, { id: 'feedbackReady' }]}
+          initialSort={[{ id: 'schoolName' }]}
         />
       </div>
       <Modal
@@ -199,6 +199,17 @@ export default function Feedback() {
       >
         <p>This action cannot be undone.</p>
       </Modal>
+      {schoolData.csv && (
+        <CSVLink
+          className="hidden"
+          ref={csvDownloadRef}
+          filename={`${event.name.replaceAll(' ', '-')}-${
+            schoolData.school.schoolName
+          }-feedback-preview.csv`}
+          data={schoolData.csv}
+          target="_blank"
+        />
+      )}
     </Layout>
   );
 }

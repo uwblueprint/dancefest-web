@@ -189,6 +189,7 @@ export default function PerformanceDetails({ session }) {
                 session.role === 'JUDGE' && !judgeFeedbackExists ? (
                   <NewJudgeFeedback
                     getPerformance={getPerformance}
+                    loading={loading}
                     setLoading={setLoading}
                     awardsDict={awardsDict}
                     nominations={currentNominations}

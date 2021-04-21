@@ -6,12 +6,13 @@
  */
 export const formatSchools = schools => {
   return schools.map(
-    ({ contact_name: contactName, email, id, phone, school_name: schoolName }) => ({
+    ({ contact_name: contactName, email, id, phone, school_name: schoolName, ...rest }) => ({
       contactName,
       email,
       id,
       phone,
       schoolName,
+      ...rest,
     })
   );
 };

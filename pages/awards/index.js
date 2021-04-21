@@ -206,7 +206,7 @@ export default function Awards({ session }) {
         if (award.is_finalized) {
           award.performances.forEach(perf => {
             if (perf.status === 'FINALIST') {
-              award.winner = perf.name;
+              award.winner = perf.dance_title;
             }
           });
           setFinalizedAwards(prevFinalized => [...prevFinalized, award]);

@@ -2,10 +2,7 @@ import { Parser, transforms } from 'json2csv';
 
 // TODO: Figure out what paths need to be unwinded
 export const json2csvParser = new Parser({
-  transforms: [
-    transforms.unwind({ paths: ['schools', 'awards'], blankOut: true }),
-    transforms.flatten('__'),
-  ],
+  transforms: [transforms.unwind({ paths: ['schools'], blankOut: true }), transforms.flatten('__')], // Do not unwind awards
   fields: [
     { label: 'Entry Title', value: 'dance_title' },
     {
@@ -53,14 +50,19 @@ export const json2csvParser = new Parser({
           ? row.awards
               .filter(award => award.status === 'FINALIST' && award.type !== 'SPECIAL')
               .map(award => award.title)
+              .filter(award => !!award)
               .join(', ')
           : null,
     },
     {
-      label: 'Special Award',
+      label: 'Special Award(s)',
       value: row =>
-        row.awards
-          ? row.awards.filter(award => award.status === 'FINALIZED').map(award => award.title)
+        row.specialAwards
+          ? row.specialAwards
+              .filter(award => award.is_finalized)
+              .map(award => award.title)
+              .filter(award => !!award)
+              .join(', ')
           : null,
     },
   ],
