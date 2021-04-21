@@ -6,6 +6,7 @@ import ArrowDown from '@assets/arrow-down.svg'; // Arrow down icon
 import styles from '@styles/components/Table.module.scss'; // Component styles
 
 export default function Table({
+  className,
   columns,
   data,
   filters,
@@ -71,7 +72,7 @@ export default function Table({
   }, [filters]);
 
   return (
-    <div className={styles.table__div}>
+    <div className={`${styles.table__div} ${className || ''}`}>
       {data && data.length === 0 ? (
         // If there's no data just show the table header along with an optional 'emptyComponent'
         <>

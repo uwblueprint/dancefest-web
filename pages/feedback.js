@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'; // React
 import axios from 'axios'; // axios
 import { CSVLink } from 'react-csv'; // Link for downloading feedback preview
+import Loader from 'react-loader-spinner'; // Loader
 import Layout from '@components/Layout'; // Layout
 import Title from '@components/Title'; // Title
 import Button from '@components/Button'; // Button
@@ -18,10 +19,11 @@ export default function Feedback() {
   const eventName = event ? event.name : '';
   const csvDownloadRef = useRef(null);
 
+  const [loading, setLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [schools, setSchools] = useState([]);
   const [selectedSchools, setSelectedSchools] = useState([]); // List of school IDs that are currently selected
-  const [schoolData, setSchoolData] = useState({ school: null, csv: '' }); // CSV data for feedback to download
+  const [schoolData, setSchoolData] = useState({ school: null, csv: '' }); // School and CSV data to download
 
   const schoolsWithFeedbackReady = schools.filter(school => school.feedbackReady);
   const selectedSchoolsSet = new Set(selectedSchools);
@@ -32,6 +34,8 @@ export default function Feedback() {
 
   // Get schools
   const getSchools = async () => {
+    setLoading(true);
+
     try {
       const schoolsResponse = await axios({
         method: 'get',
@@ -53,6 +57,8 @@ export default function Feedback() {
     } catch (err) {
       snackbarError(err);
     }
+
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -91,7 +97,6 @@ export default function Feedback() {
         method: 'POST',
         url: '/api/feedback',
         data: {
-          // TODO: Replace with dynamic values
           eventID: event.id,
           schoolIDs: [...selectedSchoolsSet],
         },
@@ -132,61 +137,70 @@ export default function Feedback() {
           <Title className={styles.feedback__title}>Share Feedback</Title>
           <Button
             variant="warning"
-            disabled={!canSendFeedback || selectedSchoolsSet.size === 0}
+            disabled={loading || !canSendFeedback || selectedSchoolsSet.size === 0}
             onClick={() => setModalOpen(true)}
           >
             Send Feedback
           </Button>
           <p>
-            {canSendFeedback
+            {loading
+              ? ''
+              : canSendFeedback
               ? selectedSchoolsSet.size > 0
                 ? 'Feedback is ready to send'
                 : 'Feedback is available'
               : 'No available feedback to send'}
           </p>
         </div>
-        <Table
-          columns={[
-            {
-              Header: (
-                <Checkbox
-                  checked={allSchoolsSelected}
-                  disabled={schoolsWithFeedbackReady.length === 0}
-                  onToggle={selectAllSchools}
-                />
-              ),
-              accessor: 'select',
-              Cell: renderCheckbox,
-              disableSortBy: true,
-            },
-            { Header: 'School', accessor: 'schoolName' },
-            { Header: 'Contact email', accessor: 'email' },
-            {
-              Header: 'Judging complete',
-              accessor: 'feedbackReady',
-              Cell: ({
-                row: {
-                  original: { feedbackReady },
-                },
-              }) => (feedbackReady ? 'Yes' : 'No'),
-            },
-            {
-              Header: '',
-              accessor: 'preview',
-              // eslint-disable-next-line react/display-name
-              Cell: ({ row: { original: school } }) => (
-                <a className={styles.previewLink} onClick={() => downloadFeedbackPreview(school)}>
-                  Preview
-                </a>
-              ),
-            },
-          ]}
-          data={schools}
-          filters={[]}
-          paginate={false}
-          clickable={false}
-          initialSort={[{ id: 'schoolName' }]}
-        />
+        {loading ? (
+          <div className={styles.feedback__loader}>
+            <Loader type="Oval" color="#c90c0f" height={80} width={80} />
+          </div>
+        ) : (
+          <Table
+            className={styles.feedback__table}
+            columns={[
+              {
+                Header: (
+                  <Checkbox
+                    checked={allSchoolsSelected}
+                    disabled={schoolsWithFeedbackReady.length === 0}
+                    onToggle={selectAllSchools}
+                  />
+                ),
+                accessor: 'select',
+                Cell: renderCheckbox,
+                disableSortBy: true,
+              },
+              { Header: 'School', accessor: 'schoolName' },
+              { Header: 'Contact email', accessor: 'email' },
+              {
+                Header: 'Judging complete',
+                accessor: 'feedbackReady',
+                Cell: ({
+                  row: {
+                    original: { feedbackReady },
+                  },
+                }) => (feedbackReady ? 'Yes' : 'No'),
+              },
+              {
+                Header: '',
+                accessor: 'preview',
+                // eslint-disable-next-line react/display-name
+                Cell: ({ row: { original: school } }) => (
+                  <a className={styles.previewLink} onClick={() => downloadFeedbackPreview(school)}>
+                    Preview
+                  </a>
+                ),
+              },
+            ]}
+            data={schools}
+            filters={[]}
+            paginate={false}
+            clickable={false}
+            initialSort={[{ id: 'schoolName' }]}
+          />
+        )}
       </div>
       <Modal
         containerClassName={styles.confirmationModal}
