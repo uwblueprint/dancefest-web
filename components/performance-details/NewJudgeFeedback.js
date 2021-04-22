@@ -73,7 +73,7 @@ export default function NewJudgeFeedback({
   const [recording, setRecording] = useState(false);
   const [recordedBlob, setRecordedBlob] = useState(null);
 
-  const fieldsMissing = !technicalScore || !artisticScore || !cumulativeScore;
+  const fieldsMissing = technicalScore === '' || artisticScore === '' || cumulativeScore === '';
 
   useEffect(() => {
     setNormalAwards(initialNormalAwards);

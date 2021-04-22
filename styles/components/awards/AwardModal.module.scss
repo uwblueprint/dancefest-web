@@ -54,7 +54,7 @@ Performances: Modal
 }
 
 /* Last field each  column */
-.modal > div:nth-child(4),
+.modal > div:nth-child(3),
 .modal > div:last-child {
   margin-bottom: 0;
 }
@@ -68,9 +68,4 @@ Performances: Modal
 .modal input,
 .modal__dropdown {
   width: 408px;
-}
-
-/* Entry Id field */
-.modal > div:first-child input {
-  width: 128px;
 }

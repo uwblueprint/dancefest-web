@@ -8,7 +8,7 @@ export default async (req, res) => {
   const session = await getSession({ req });
 
   if (!session) {
-    return res.status(401).end();
+    return res.status(401).send('Unauthorized');
   }
 
   let { eventID, schoolIDs } = req.body;
@@ -84,15 +84,12 @@ export default async (req, res) => {
       // Send all performance data for the school
       mailerPromises.push(transporter.sendMail(mailData));
     }
-
-    await Promise.all(mailerPromises).catch(() => {
-      return res.status(400).json({ error: 'Could not successfully send emails.' });
-    });
-
-    // When all emails are sent successfully
-    return res.status(200).json({ message: 'Successfully shared feedback with all schools.' });
   }
 
-  // Else, return 401 for all failures
-  return res.status(401).send('Unauthorized');
+  await Promise.all(mailerPromises).catch(() => {
+    return res.status(400).json({ error: 'Could not successfully send emails.' });
+  });
+
+  // When all emails are sent successfully
+  return res.status(200).json({ message: 'Successfully shared feedback with all schools.' });
 };

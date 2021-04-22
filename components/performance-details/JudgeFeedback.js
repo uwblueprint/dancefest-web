@@ -83,7 +83,7 @@ export default function JudgeFeedback({
     .filter(award => !!award)
     .map(award => awardsDict[award.value]);
   const specialAwardData = specialAward && awardsDict[specialAward.value];
-  const fieldsMissing = !technicalScore || !artisticScore || !cumulativeScore;
+  const fieldsMissing = technicalScore === '' || artisticScore === '' || cumulativeScore === '';
 
   useEffect(() => {
     if (adjudication) {
