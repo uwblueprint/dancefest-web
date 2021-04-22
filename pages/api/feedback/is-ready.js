@@ -38,7 +38,7 @@ export default async (req, res) => {
     const { school_id: schoolId, totalAdjudications, completedAdjudications } = performance;
     if (schoolId in schoolsToFeedbackReady) {
       const adjudicationComplete = totalAdjudications === completedAdjudications;
-      schoolsToFeedbackReady[schoolId] &&= adjudicationComplete;
+      schoolsToFeedbackReady[schoolId] = schoolsToFeedbackReady[schoolId] && adjudicationComplete;
     } else {
       schoolsToFeedbackReady[schoolId] = true;
     }
