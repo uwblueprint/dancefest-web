@@ -265,7 +265,7 @@ export default function Awards({ session }) {
       <div>
         <div className={styles.performances__navigation}>
           <BackButton href="/">Back to Events</BackButton>
-          <h2 className={styles.performances__navigation__eventName}>{event.name}</h2>
+          <h2 className={styles.performances__navigation__eventName}>{event ? event.name : ''}</h2>
         </div>
         <div className={styles.performances__header}>
           <div>

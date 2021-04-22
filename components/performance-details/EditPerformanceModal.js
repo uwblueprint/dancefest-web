@@ -100,6 +100,7 @@ export default function EditPerformanceModal({
   const clearFields = () => {
     setDanceTitle('');
     setDancersString('');
+    setPerformanceLink('');
     setChoreographersString('');
     setSchool(null);
     setCompetitionLevel(null);

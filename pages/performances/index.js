@@ -417,7 +417,7 @@ export default function Performances({ session }) {
                 setOptions={setSchoolFilters}
               />
               <FilterDropdown
-                buttonText="Competition Level"
+                buttonText="Performance Level"
                 options={performanceLevelFilters}
                 setOptions={setPerformanceLevelFilters}
               />
