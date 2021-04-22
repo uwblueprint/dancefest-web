@@ -36,11 +36,11 @@ export default async (req, res) => {
   const schoolsToFeedbackReady = {};
   for (const performance of performances) {
     const { school_id: schoolId, totalAdjudications, completedAdjudications } = performance;
+    const adjudicationComplete = totalAdjudications === completedAdjudications;
     if (schoolId in schoolsToFeedbackReady) {
-      const adjudicationComplete = totalAdjudications === completedAdjudications;
       schoolsToFeedbackReady[schoolId] = schoolsToFeedbackReady[schoolId] && adjudicationComplete;
     } else {
-      schoolsToFeedbackReady[schoolId] = true;
+      schoolsToFeedbackReady[schoolId] = adjudicationComplete;
     }
   }
 

@@ -85,7 +85,7 @@ export default function PerformancesTable({ performances, emptyPrompt, ...props 
       data={performances}
       pageSize={PAGE_SIZE}
       emptyComponent={<EmptyTableComponent prompt={emptyPrompt} />}
-      initialSort={[{ id: 'id' }]}
+      initialSort={[{ id: 'danceTitle' }]}
       onRowClick={goToPerformanceDetails}
       clickable
       {...props}
