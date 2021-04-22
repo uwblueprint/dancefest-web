@@ -61,19 +61,18 @@ export default async (req, res) => {
 
       const mailData = {
         from: process.env.FEEDBACK_EMAIL_FROM,
-        //TODO: switch back
-        to: 'oustanding@uwblueprint.org',
-        // to: schoolPerformances[0].school.email,
-        subject: `Automated Feedback from Dancefest Event`,
-        html: `<p>Hi ${
-          schoolPerformances[0].school.contact_name || schoolPerformances[0].school.school_name
-        },</p>
-              <p>Thank you for your participation in ${event.name}!</p>
-              <p>Attached you will find a summary of the scores and awards won by all performances from your school. Audio feedback from the judges is also included. Feel free to share this feedback with other contacts and/or performers from your school as you see fit.</p>
-              <p>If you have any questions regarding the feedback, do not reply to this email as it is automatically generated and the inbox is not monitored. Instead, please contact Ontario Secondary School Dancefest directly.</p>
-              <p>We hope you enjoyed ${
-                event.name
-              } and we look forward to seeing you again at future events!</p>`,
+        to: schoolPerformances[0].school.email,
+        subject: `Feedback from DANCEFEST Event`,
+        html: `<p>Hi ${schoolPerformances[0].school.contact_name},</p>
+              <p>Thank you for your participation in ${event.name} and for sharing the creative artistry of your students!</p>
+              <p>Attached you will find a summary of the scores and awards won by all performances from your school. 
+              Audio feedback from the adjudicators is also included. 
+              Feel free to share this feedback with your student dancers and any other dance teachers/coaches or administrators from your school.</p>
+              <p>If you have any questions regarding the feedback, do not reply to this email as it is automatically generated and the inbox is not monitored. 
+              Instead, please email your concerns directly to Ontario Secondary School Dancefest at ossdancefest@gmail.com.</p>
+              <p>We hope you enjoyed ${event.name}!  We look forward to seeing you and your student dancers again at future events!</p>
+              <p>Be well.  Stay safe.  Keep dancing!</p>
+              <p>The Board Members of Ontario Secondary School DANCEFEST</p>`,
         attachments: [
           {
             filename: `${schoolPerformances[0].school.school_name}-feedback.csv`,
