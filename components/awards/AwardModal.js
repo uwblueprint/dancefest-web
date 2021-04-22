@@ -104,7 +104,7 @@ export default function AwardModal({
           />
         </div>
         <div>
-          <h2>Performance Level*</h2>
+          <h2>Performance Level</h2>
           <Dropdown
             className={styles.modal__dropdown}
             placeholder="Performance Level"
@@ -113,7 +113,7 @@ export default function AwardModal({
           />
         </div>
         <div>
-          <h2>Dance Style*</h2>
+          <h2>Dance Style</h2>
           <Dropdown
             className={styles.modal__dropdown}
             placeholder="Dance Style"
