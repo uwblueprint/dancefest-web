@@ -151,7 +151,7 @@ export default function Performances({ award, session }) {
           <BackButton href="/awards">Back to Awards</BackButton>
         </div>
         <div className={styles.performances__navigation}>
-          <h2 className={styles.performances__navigation__eventName}>{`EVENT NAME`}</h2>
+          <h2 className={styles.performances__navigation__eventName}>{event ? event.name : ''}</h2>
         </div>
         <div className={styles.performances__header}>
           <div>
@@ -335,7 +335,7 @@ const JudgingTable = ({
       Cell: ({ value }) => (value !== null ? String(value) : 'N/A'),
     },
     {
-      Header: 'Awards',
+      Header: 'Nominated Awards',
       accessor: 'awardsString',
       Cell: ({ value }) => (value !== '' ? String(value) : 'N/A'),
     },

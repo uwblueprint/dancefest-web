@@ -59,9 +59,9 @@ export default function NewJudgeFeedback({
 
   const [editMode, setEditMode] = useState(true);
   const [notes, setNotes] = useState('');
-  const [technicalScore, setTechnicalScore] = useState(0);
-  const [artisticScore, setArtisticScore] = useState(0);
-  const [cumulativeScore, setCumulativeScore] = useState(0);
+  const [technicalScore, setTechnicalScore] = useState('');
+  const [artisticScore, setArtisticScore] = useState('');
+  const [cumulativeScore, setCumulativeScore] = useState('');
   const [normalAwards, setNormalAwards] = useState(initialNormalAwards);
   const [specialAward, setSpecialAward] = useState(initialSpecialAward); // Existing special award
   const [specialAwardName, setSpecialAwardName] = useState(
@@ -73,7 +73,7 @@ export default function NewJudgeFeedback({
   const [recording, setRecording] = useState(false);
   const [recordedBlob, setRecordedBlob] = useState(null);
 
-  const fieldsMissing = !technicalScore || !artisticScore || !cumulativeScore;
+  const fieldsMissing = technicalScore === '' || artisticScore === '' || cumulativeScore === '';
 
   useEffect(() => {
     setNormalAwards(initialNormalAwards);

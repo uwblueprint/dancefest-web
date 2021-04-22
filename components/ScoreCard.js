@@ -43,6 +43,7 @@ export default function ScoreCard({
           type="number"
           min="0"
           max="100"
+          placeholder="0"
           value={score}
           onKeyDown={handleKeyDown}
           onChange={handleChange}
