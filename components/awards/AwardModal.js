@@ -96,6 +96,9 @@ export default function AwardModal({
             Select categories that apply to the potential winners of this award. (Selecting no
             categories will mean that all performances are elligible for this award).
           </h3>
+        </div>
+        <div>
+          <h2>Dance Size</h2>
           <Dropdown
             className={styles.modal__dropdown}
             placeholder="Dance Size"
