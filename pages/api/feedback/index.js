@@ -36,7 +36,9 @@ export default async (req, res) => {
   }
 
   const schoolIdSet = new Set(schoolIDs);
-  const performances = await getPerformances();
+  const performances = await getPerformances({
+    event_id: eventID,
+  });
 
   // Create a map where key: schoolId, value: array of performances of that school
   const schoolToPerformancesMap = {};
