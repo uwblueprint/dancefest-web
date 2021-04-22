@@ -71,7 +71,7 @@ export default async (req, res) => {
               <p>If you have any questions regarding the feedback, do not reply to this email as it is automatically generated and the inbox is not monitored. 
               Instead, please email your concerns directly to Ontario Secondary School Dancefest at ossdancefest@gmail.com.</p>
               <p>We hope you enjoyed ${event.name}!  We look forward to seeing you and your student dancers again at future events!</p>
-              <p>Be well.  Stay safe.  Keep dancing!</p>
+              <p>Be well.  Stay safe.  Keep dancing!</p><br />
               <p>The Board Members of Ontario Secondary School DANCEFEST</p>`,
         attachments: [
           {
