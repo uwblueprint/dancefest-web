@@ -370,8 +370,8 @@ const IndividualFeedback = ({ feedback }) => {
     <div className={styles.individual__feedback_container}>
       <div className={styles.individual__feedback_header}>
         <h3>{feedback.user.name}</h3>
-        <h2>{`ARTISTIC: ${feedback.artistic_mark}`}</h2>
         <h2>{`TECHNICAL: ${feedback.technical_mark}`}</h2>
+        <h2>{`ARTISTIC: ${feedback.artistic_mark}`}</h2>
         <h2>{`CUMULATIVE: ${feedback.cumulative_mark}`}</h2>
       </div>
       <h2>NOTES</h2>

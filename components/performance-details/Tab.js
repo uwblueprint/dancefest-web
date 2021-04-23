@@ -17,8 +17,8 @@ export default function Tab({
         <h3>{children}</h3>
         {!newFeedback && (
           <div className={styles.judge__tab_stats}>
-            <span>ARTISTIC: {adjudication.artisticScore}</span>
             <span>TECHNICAL: {adjudication.technicalScore}</span>
+            <span>ARTISTIC: {adjudication.artisticScore}</span>
             <span>CUMULATIVE: {adjudication.cumulativeScore}</span>
           </div>
         )}
