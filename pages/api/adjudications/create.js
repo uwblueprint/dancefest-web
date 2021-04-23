@@ -36,8 +36,7 @@ export default async (req, res) => {
   }
 
   const existingAdjudications = await prisma.adjudication.findMany({
-    performance_id: parseInt(performanceID),
-    user_id: userID,
+    where: { performance_id: parseInt(performanceID), user_id: userID },
   });
 
   if (existingAdjudications && existingAdjudications.length > 0) {
