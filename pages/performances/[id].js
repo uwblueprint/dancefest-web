@@ -43,7 +43,12 @@ export default function PerformanceDetails({ session }) {
     performance || {};
   const adjudications = initialAdjudications.sort((a, b) => (a.user.name > b.user.name ? 1 : -1));
   const eventName = event && event.name;
-  const currentAdjudication = adjudications.length > 0 ? adjudications[selectedTab] : undefined;
+  const currentAdjudication =
+    adjudications.length > 0
+      ? session.role === 'JUDGE'
+        ? adjudications.find(adjudication => adjudication.user.id === session.id)
+        : adjudications[selectedTab]
+      : undefined;
   const currentJudgeUserId = currentAdjudication && currentAdjudication.userId;
   const currentNominations =
     nominations && currentJudgeUserId ? nominations[currentJudgeUserId] : undefined;
