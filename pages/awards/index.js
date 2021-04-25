@@ -63,6 +63,7 @@ export default function Awards({ session }) {
   // Filter dropdown options
   const [performanceLevelFilters, setPerformanceLevelFilters] = useState({});
   const [danceSizeFilters, setDanceSizeFilters] = useState({});
+  const [danceStyleFilters, setDanceStyleFilters] = useState({});
 
   // Modal dropdown options
   const [performanceLevelDropdownOptions, setPerformanceLevelDropdownOptions] = useState([]);
@@ -160,9 +161,14 @@ export default function Awards({ session }) {
         danceSizeSettings,
         formatOptionsFields
       );
+      const initialDanceStyleFilters = formatDropdownOptions(
+        danceStyleSettings,
+        formatOptionsFields
+      );
 
       setPerformanceLevelFilters(initialPerformanceLevelFilters);
       setDanceSizeFilters(initialDanceSizeFilters);
+      setDanceStyleFilters(initialDanceStyleFilters);
     } catch (err) {
       snackbarError(err);
     }
@@ -313,6 +319,11 @@ export default function Awards({ session }) {
                 buttonText="Performance Level"
                 options={performanceLevelFilters}
                 setOptions={setPerformanceLevelFilters}
+              />
+              <FilterDropdown
+                buttonText="Dance Style"
+                options={danceStyleFilters}
+                setOptions={setDanceStyleFilters}
               />
             </div>
             {/* <div className={styles.performances__filters__appliedFilters}>
