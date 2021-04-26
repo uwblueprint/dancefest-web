@@ -79,7 +79,6 @@ model Performance {
   id                                                   Int                @id @default(autoincrement())
   dance_title                                          String?            @db.VarChar(255)
   performance_link                                     String?            @db.VarChar(255)
-  audio_recording_link                                 String?            @db.VarChar(255)
   performers                                           String[]           @db.VarChar(255)
   choreographers                                       String[]           @db.VarChar(255)
   competition_level                                    String?            @db.VarChar(255)
@@ -105,9 +104,9 @@ model Performance {
 
 model Adjudication {
   id              Int         @id @default(autoincrement())
-  artistic_mark   Int
-  technical_mark  Int
-  cumulative_mark Int
+  artistic_mark   Decimal     @db.Decimal
+  technical_mark  Decimal     @db.Decimal
+  cumulative_mark Decimal     @db.Decimal
   audio_url       String?     @db.VarChar(255)
   notes           String?
   performance_id  Int

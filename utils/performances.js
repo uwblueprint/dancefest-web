@@ -7,7 +7,6 @@ import { formatAdjudication } from '@utils/adjudications'; // Format adjudicatio
  * @returns {Object} Formatted performance
  */
 export const formatPerformance = ({
-  audio_recording_link: audioRecordingLink,
   competition_level: performanceLevel,
   competition_level_id: performanceLevelID,
   dance_size: danceSize,
@@ -34,7 +33,6 @@ export const formatPerformance = ({
   });
 
   return {
-    audioRecordingLink,
     performanceLevel,
     performanceLevelID,
     danceSize,
@@ -72,7 +70,7 @@ export const formatPerformances = performances => {
 /**
  * Calculates the average of an array of scores
  * @param {number[]} scores - Array of scores
- * @returns {number | null} - The average score, to 1 decimal point
+ * @returns {number | null} - The average score, to 2 decimal point
  */
 export const calculateAverageScore = scores => {
   if (!Array.isArray(scores)) {
@@ -84,7 +82,8 @@ export const calculateAverageScore = scores => {
   }
 
   const average = scores.reduce((a, v) => a + v, 0) / scores.length;
-  return Math.round(average * 10) / 10;
+
+  return Math.round(average * 100) / 100;
 };
 
 export const filterPerformancesForJudge = (performances, judgeID) => {

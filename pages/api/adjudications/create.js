@@ -48,9 +48,9 @@ export default async (req, res) => {
   // Create new adjudication
   const adjudication = await prisma.adjudication.create({
     data: {
-      artistic_mark: parseInt(artisticMark),
-      technical_mark: parseInt(technicalMark),
-      cumulative_mark: parseInt(cumulativeMark),
+      artistic_mark: parseFloat(artisticMark),
+      technical_mark: parseFloat(technicalMark),
+      cumulative_mark: parseFloat(cumulativeMark),
       audio_url: audioUrl,
       notes: notes,
       performance_id: parseInt(performanceID),
