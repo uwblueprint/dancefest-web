@@ -44,7 +44,7 @@ async function prodSeed() {
     'Musical Theatre',
     'Live Vocals',
   ];
-  const levelSettings = ['Easy', 'Intermediate', 'Advanced'];
+  const levelSettings = ['Novice', 'Intermediate', 'Advanced'];
   for (const size of sizeSettings) {
     const setting = await prisma.setting.upsert({
       where: {
@@ -197,7 +197,7 @@ async function devSeed() {
     'Musical Theatre',
     'Live Vocals',
   ];
-  const levelSettings = ['Easy', 'Intermediate', 'Advanced'];
+  const levelSettings = ['Novice', 'Intermediate', 'Advanced'];
   for (const size of sizeSettings) {
     const setting = await prisma.setting.upsert({
       where: {
@@ -295,197 +295,197 @@ async function devSeed() {
   }
 
   // PERFORMANCE SEEDING
-  const performances = [
-    {
-      id: 1,
-      dance_title: 'Performance 1',
-      performers: ['Performer 1', 'Performer 2'],
-      cheoreographers: ['Choreo 1'],
-      event_id: eventUpsert.id,
-      school_id: schoolUpserts[0].id,
-    },
-    {
-      id: 2,
-      dance_title: 'Performance 2',
-      performers: ['Performer 3'],
-      cheoreographers: ['Choreo 2', 'Choreo 3'],
-      event_id: eventUpsert.id,
-      school_id: schoolUpserts[0].id,
-    },
-    {
-      id: 3,
-      dance_title: 'Performance 3',
-      performers: ['Performer 4', 'Performer 5', 'Performer 6'],
-      cheoreographers: ['Choreo 4', 'Choreo 5'],
-      event_id: eventUpsert.id,
-      school_id: schoolUpserts[0].id,
-    },
-  ];
+  // const performances = [
+  //   {
+  //     id: 1,
+  //     dance_title: 'Performance 1',
+  //     performers: ['Performer 1', 'Performer 2'],
+  //     cheoreographers: ['Choreo 1'],
+  //     event_id: eventUpsert.id,
+  //     school_id: schoolUpserts[0].id,
+  //   },
+  //   {
+  //     id: 2,
+  //     dance_title: 'Performance 2',
+  //     performers: ['Performer 3'],
+  //     cheoreographers: ['Choreo 2', 'Choreo 3'],
+  //     event_id: eventUpsert.id,
+  //     school_id: schoolUpserts[0].id,
+  //   },
+  //   {
+  //     id: 3,
+  //     dance_title: 'Performance 3',
+  //     performers: ['Performer 4', 'Performer 5', 'Performer 6'],
+  //     cheoreographers: ['Choreo 4', 'Choreo 5'],
+  //     event_id: eventUpsert.id,
+  //     school_id: schoolUpserts[0].id,
+  //   },
+  // ];
 
-  const performanceUpserts = [];
-  for (const performance of performances) {
-    const performanceUpsert = await prisma.performance.upsert({
-      where: {
-        id: performance.id,
-      },
-      update: {
-        dance_title: performance.dance_title,
-        performers: performance.performers,
-        choreographers: performance.cheoreographers,
-        event_id: performance.event_id,
-        school_id: performance.school_id,
-      },
-      create: {
-        dance_title: performance.dance_title,
-        performers: performance.performers,
-        choreographers: performance.cheoreographers,
-        event_id: performance.event_id,
-        school_id: performance.school_id,
-      },
-    });
-    performanceUpserts.push(performanceUpsert);
-    console.log(performanceUpsert);
-  }
+  // const performanceUpserts = [];
+  // for (const performance of performances) {
+  //   const performanceUpsert = await prisma.performance.upsert({
+  //     where: {
+  //       id: performance.id,
+  //     },
+  //     update: {
+  //       dance_title: performance.dance_title,
+  //       performers: performance.performers,
+  //       choreographers: performance.cheoreographers,
+  //       event_id: performance.event_id,
+  //       school_id: performance.school_id,
+  //     },
+  //     create: {
+  //       dance_title: performance.dance_title,
+  //       performers: performance.performers,
+  //       choreographers: performance.cheoreographers,
+  //       event_id: performance.event_id,
+  //       school_id: performance.school_id,
+  //     },
+  //   });
+  //   performanceUpserts.push(performanceUpsert);
+  //   console.log(performanceUpsert);
+  // }
 
   // ADJUDICATION SEEDING
-  const ajudications = [
-    {
-      id: 1,
-      artistic_mark: 100,
-      technical_mark: 100,
-      cumulative_mark: 100,
-      performance_id: performanceUpserts[0].id,
-      user_id: judgeUpserts[0].id,
-    },
-    {
-      id: 2,
-      artistic_mark: 100,
-      technical_mark: 80,
-      cumulative_mark: 90,
-      performance_id: performanceUpserts[0].id,
-      user_id: judgeUpserts[1].id,
-    },
-    {
-      id: 3,
-      artistic_mark: 50,
-      technical_mark: 50,
-      cumulative_mark: 50,
-      performance_id: performanceUpserts[0].id,
-      user_id: judgeUpserts[2].id,
-    },
-    {
-      id: 4,
-      artistic_mark: 100,
-      technical_mark: 95,
-      cumulative_mark: 100,
-      performance_id: performanceUpserts[1].id,
-      user_id: judgeUpserts[0].id,
-    },
-    {
-      id: 5,
-      artistic_mark: 98,
-      technical_mark: 88,
-      cumulative_mark: 90,
-      performance_id: performanceUpserts[1].id,
-      user_id: judgeUpserts[1].id,
-    },
-    {
-      id: 6,
-      artistic_mark: 50,
-      technical_mark: 60,
-      cumulative_mark: 55,
-      performance_id: performanceUpserts[1].id,
-      user_id: judgeUpserts[2].id,
-    },
-  ];
+  // const ajudications = [
+  //   {
+  //     id: 1,
+  //     artistic_mark: 100,
+  //     technical_mark: 100,
+  //     cumulative_mark: 100,
+  //     performance_id: performanceUpserts[0].id,
+  //     user_id: judgeUpserts[0].id,
+  //   },
+  //   {
+  //     id: 2,
+  //     artistic_mark: 100,
+  //     technical_mark: 80,
+  //     cumulative_mark: 90,
+  //     performance_id: performanceUpserts[0].id,
+  //     user_id: judgeUpserts[1].id,
+  //   },
+  //   {
+  //     id: 3,
+  //     artistic_mark: 50,
+  //     technical_mark: 50,
+  //     cumulative_mark: 50,
+  //     performance_id: performanceUpserts[0].id,
+  //     user_id: judgeUpserts[2].id,
+  //   },
+  //   {
+  //     id: 4,
+  //     artistic_mark: 100,
+  //     technical_mark: 95,
+  //     cumulative_mark: 100,
+  //     performance_id: performanceUpserts[1].id,
+  //     user_id: judgeUpserts[0].id,
+  //   },
+  //   {
+  //     id: 5,
+  //     artistic_mark: 98,
+  //     technical_mark: 88,
+  //     cumulative_mark: 90,
+  //     performance_id: performanceUpserts[1].id,
+  //     user_id: judgeUpserts[1].id,
+  //   },
+  //   {
+  //     id: 6,
+  //     artistic_mark: 50,
+  //     technical_mark: 60,
+  //     cumulative_mark: 55,
+  //     performance_id: performanceUpserts[1].id,
+  //     user_id: judgeUpserts[2].id,
+  //   },
+  // ];
 
-  const adjudicationUpserts = [];
-  for (const adjudication of ajudications) {
-    const adjudicationUpsert = await prisma.adjudication.upsert({
-      where: {
-        id: adjudication.id,
-      },
-      update: {
-        artistic_mark: adjudication.artistic_mark,
-        technical_mark: adjudication.technical_mark,
-        cumulative_mark: adjudication.cumulative_mark,
-      },
-      create: {
-        artistic_mark: adjudication.artistic_mark,
-        technical_mark: adjudication.technical_mark,
-        cumulative_mark: adjudication.cumulative_mark,
-        performance_id: adjudication.performance_id,
-        user_id: adjudication.user_id,
-      },
-    });
-    adjudicationUpserts.push(adjudicationUpsert);
-    console.log(adjudicationUpsert);
-  }
+  // const adjudicationUpserts = [];
+  // for (const adjudication of ajudications) {
+  //   const adjudicationUpsert = await prisma.adjudication.upsert({
+  //     where: {
+  //       id: adjudication.id,
+  //     },
+  //     update: {
+  //       artistic_mark: adjudication.artistic_mark,
+  //       technical_mark: adjudication.technical_mark,
+  //       cumulative_mark: adjudication.cumulative_mark,
+  //     },
+  //     create: {
+  //       artistic_mark: adjudication.artistic_mark,
+  //       technical_mark: adjudication.technical_mark,
+  //       cumulative_mark: adjudication.cumulative_mark,
+  //       performance_id: adjudication.performance_id,
+  //       user_id: adjudication.user_id,
+  //     },
+  //   });
+  //   adjudicationUpserts.push(adjudicationUpsert);
+  //   console.log(adjudicationUpsert);
+  // }
 
   // AWARDS SEEDING
-  const awards = [
-    {
-      id: 1,
-      title: 'Award 1',
-      type: 'SPECIAL',
-    },
-    {
-      id: 2,
-      title: 'Award 2',
-      type: 'SPECIAL',
-    },
-    {
-      id: 3,
-      title: 'Award 3',
-      type: 'SCORE_BASED',
-    },
-    {
-      id: 4,
-      title: 'Award 4',
-      type: 'DANCE_ARTISTRY',
-    },
-  ];
+  // const awards = [
+  //   {
+  //     id: 1,
+  //     title: 'Award 1',
+  //     type: 'SPECIAL',
+  //   },
+  //   {
+  //     id: 2,
+  //     title: 'Award 2',
+  //     type: 'SPECIAL',
+  //   },
+  //   {
+  //     id: 3,
+  //     title: 'Award 3',
+  //     type: 'SCORE_BASED',
+  //   },
+  //   {
+  //     id: 4,
+  //     title: 'Award 4',
+  //     type: 'DANCE_ARTISTRY',
+  //   },
+  // ];
 
-  const awardUpserts = [];
-  for (const award of awards) {
-    const awardUpsert = await prisma.award.upsert({
-      where: {
-        id: award.id,
-      },
-      update: {
-        title: award.title,
-        event_id: eventUpsert.id,
-        type: award.type,
-      },
-      create: {
-        title: award.title,
-        event_id: eventUpsert.id,
-        type: award.type,
-      },
-    });
-    awardUpserts.push(awardUpsert);
-    console.log(awardUpsert);
+  // const awardUpserts = [];
+  // for (const award of awards) {
+  //   const awardUpsert = await prisma.award.upsert({
+  //     where: {
+  //       id: award.id,
+  //     },
+  //     update: {
+  //       title: award.title,
+  //       event_id: eventUpsert.id,
+  //       type: award.type,
+  //     },
+  //     create: {
+  //       title: award.title,
+  //       event_id: eventUpsert.id,
+  //       type: award.type,
+  //     },
+  //   });
+  //   awardUpserts.push(awardUpsert);
+  //   console.log(awardUpsert);
 
-    if (award.type === 'DANCE_ARTISTRY' || award.type === 'SCORE_BASED') {
-      const awardCategoryUpsert = await prisma.awardCategory.upsert({
-        where: {
-          awards_categories_unique: {
-            award_id: award.id,
-            category_id: styleSettingUpserts[0].id,
-          },
-        },
-        update: {
-          award_id: award.id,
-          category_id: styleSettingUpserts[0].id,
-        },
-        create: {
-          award_id: award.id,
-          category_id: styleSettingUpserts[0].id,
-        },
-      });
-      console.log(awardCategoryUpsert);
-    }
-  }
+  //   if (award.type === 'DANCE_ARTISTRY' || award.type === 'SCORE_BASED') {
+  //     const awardCategoryUpsert = await prisma.awardCategory.upsert({
+  //       where: {
+  //         awards_categories_unique: {
+  //           award_id: award.id,
+  //           category_id: styleSettingUpserts[0].id,
+  //         },
+  //       },
+  //       update: {
+  //         award_id: award.id,
+  //         category_id: styleSettingUpserts[0].id,
+  //       },
+  //       create: {
+  //         award_id: award.id,
+  //         category_id: styleSettingUpserts[0].id,
+  //       },
+  //     });
+  //     console.log(awardCategoryUpsert);
+  //   }
+  // }
 }
 
 main()
