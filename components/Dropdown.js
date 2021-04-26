@@ -44,6 +44,7 @@ export default function Dropdown({
             primary25: '#f5f6f7',
           },
         })}
+        menuPosition="fixed"
       />
     </div>
   );
