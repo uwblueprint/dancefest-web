@@ -148,6 +148,7 @@ export default function EditEventModal({
                   options={judgeOptions}
                   selected={judge}
                   onChange={judge => updateJudge(i, judge)}
+                  fixed
                 />
               </div>
             );

@@ -130,6 +130,7 @@ export default function NewEventModal({
                   options={judgeOptions}
                   selected={judge}
                   onChange={judge => updateJudge(i, judge)}
+                  fixed
                 />
               </div>
             );
