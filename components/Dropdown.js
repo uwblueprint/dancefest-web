@@ -19,6 +19,7 @@ export default function Dropdown({
   isDisabled = false,
   options,
   placeholder = 'placeholder',
+  fixed = false,
   selected,
   onChange = () => {}, // selectedValue => setSelectedValue(selectedValue.value)
 }) {
@@ -44,7 +45,7 @@ export default function Dropdown({
             primary25: '#f5f6f7',
           },
         })}
-        menuPosition="fixed"
+        menuPosition={fixed ? 'fixed' : undefined}
       />
     </div>
   );

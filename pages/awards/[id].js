@@ -9,6 +9,7 @@ import { getSession } from 'next-auth/client'; // Session handling
 import { getAward } from 'pages/api/awards/get'; // Helper method to get award details by ID
 import Modal from '@components/Modal.js'; // Modal component
 import BackButton from '@components/BackButton';
+import Event from '@containers/Event'; // Event state
 
 import Title from '@components/Title'; // Title
 import DancerRedJump from '@assets/dancer-red-jump.svg'; // Jumping Dancer SVG
@@ -27,6 +28,7 @@ export default function DetailsRoute({ award, session }) {
 
 // Page: Award Details
 function AwardDetails({ award, session }) {
+  const [event] = Event.useContainer();
   const { snackbarError } = useSnackbar();
 
   const [selectedTab, setSelectedTab] = useState(-1);
@@ -129,7 +131,7 @@ function AwardDetails({ award, session }) {
           <BackButton href="/awards">Back to Awards</BackButton>
         </div>
         <div>
-          <h2 className={styles.performances_details__eventName}>{`Event Title`}</h2>
+          <h2 className={styles.performances_details__eventName}>{event ? event.name : ''}</h2>
         </div>
         <div className={styles.award_details__header_container}>
           <Title>{award.title}</Title>
@@ -266,12 +268,25 @@ const EmptyComponent = () => {
 };
 
 const AwardSummary = ({ type, nominations }) => {
+  let typeName = '';
+  switch (type) {
+    case 'DANCE_ARTISTRY':
+      typeName = 'Dance artistry';
+      break;
+    case 'SCORE_BASED':
+      typeName = 'Score based';
+      break;
+    case 'SPECIAL':
+      typeName = 'Special';
+      break;
+  }
+
   return (
     <div className={styles.award__summary_container}>
       <div className={styles.award__summary}>
         <div>
           <h2>Type</h2>
-          <span>{type}</span>
+          <span>{typeName}</span>
         </div>
         <div>
           <h2>No. of Nominations</h2>
