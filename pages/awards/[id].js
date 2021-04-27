@@ -271,10 +271,10 @@ const AwardSummary = ({ type, nominations }) => {
   let typeName = '';
   switch (type) {
     case 'DANCE_ARTISTRY':
-      typeName = 'Dance artistry';
+      typeName = 'Dance Artistry';
       break;
     case 'SCORE_BASED':
-      typeName = 'Score based';
+      typeName = 'Score Based';
       break;
     case 'SPECIAL':
       typeName = 'Special';
