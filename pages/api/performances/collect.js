@@ -31,17 +31,19 @@ export default async (req, res) => {
     // We get all the performances where the competition_level, dance_size, dance_style are in
     // the requested settingIDs that are passed in
     const settingIDArray = settingIDs.split(',').map(i => +i);
-    filter.competition_level_id = {
-      in: settingIDArray,
-    };
 
-    filter.dance_size_id = {
-      in: settingIDArray,
-    };
-
-    filter.dance_style_id = {
-      in: settingIDArray,
-    };
+    for (const settingID of settingIDArray) {
+      const setting = await getSetting(settingID);
+      if (setting) {
+        if (setting.type === 'COMPETITION_LEVEL') {
+          filter.competition_level_id = settingID;
+        } else if (setting.type === 'STYLE') {
+          filter.dance_style_id = settingID;
+        } else if (setting.type === 'DANCE_SIZE') {
+          filter.dance_size_id = settingID;
+        }
+      }
+    }
   }
 
   const performances = await getPerformances(filter);
@@ -103,4 +105,14 @@ export const getPerformances = async filter => {
       };
     }
   );
+};
+
+const getSetting = async id => {
+  const setting = await prisma.setting.findUnique({
+    where: {
+      id: parseInt(id),
+    },
+  });
+  if (!setting) return;
+  return setting;
 };

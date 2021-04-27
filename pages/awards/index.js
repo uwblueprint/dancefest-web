@@ -13,6 +13,7 @@ import Title from '@components/Title'; // Title
 import Input from '@components/Input'; // Input
 import Tabs from '@components/Tabs'; // Tabs
 import FilterDropdown, { formatFilterDropdownOptions } from '@components/FilterDropdown'; // Filter Dropdown
+import Pill from '@components/Pill'; // Pill
 import Table from '@components/Table'; // Table
 import Pagination from '@components/Pagination'; // Pagination
 import BackButton from '@components/BackButton';
@@ -26,18 +27,24 @@ import styles from '@styles/pages/Awards.module.scss'; // Page styles
 import useSnackbar from '@utils/useSnackbar'; // Snackbar
 
 const PAGE_SIZE = 20; // Rows per page
+const AWARDS_TABLE_HIDDEN_COLUMN = ['categories'];
 
 // Get the active filters (list of column accessors) from an object of filter dropdown values
-// const getActiveFilters = options => {
-//   return Object.keys(options).filter(option => options[option].selected);
-// };
+const getActiveFilters = options => {
+  return Object.entries(options)
+    .filter(([key]) => options[key].selected)
+    .map(([value, { label }]) => ({
+      value,
+      label,
+    }));
+};
 
 // Remove key from object (returns new object)
-// const removeKeyFromObject = (object, key) => {
-//   // eslint-disable-next-line no-unused-vars
-//   const { [key]: _, ...rest } = object;
-//   return rest;
-// };
+const removeKeyFromObject = (object, key) => {
+  // eslint-disable-next-line no-unused-vars
+  const { [key]: _, ...rest } = object;
+  return rest;
+};
 
 const awardOptions = [
   {
@@ -63,6 +70,7 @@ export default function Awards({ session }) {
   // Filter dropdown options
   const [performanceLevelFilters, setPerformanceLevelFilters] = useState({});
   const [danceSizeFilters, setDanceSizeFilters] = useState({});
+  const [danceStyleFilters, setDanceStyleFilters] = useState({});
 
   // Modal dropdown options
   const [performanceLevelDropdownOptions, setPerformanceLevelDropdownOptions] = useState([]);
@@ -96,8 +104,9 @@ export default function Awards({ session }) {
   // Update table filters
   useEffect(() => {
     const newFilters = [];
-    // const activeSizeFilters = getActiveFilters(danceSizeFilters);
-    // const activePerfFilters = getActiveFilters(performanceLevelFilters);
+    const activeSizeFilters = getActiveFilters(danceSizeFilters);
+    const activePerfFilters = getActiveFilters(performanceLevelFilters);
+    const activeStyleFilters = getActiveFilters(danceStyleFilters);
 
     if (query) {
       newFilters.push({
@@ -105,10 +114,68 @@ export default function Awards({ session }) {
         value: query,
       });
     }
+    if (activeSizeFilters.length > 0) {
+      newFilters.push({
+        id: 'categories',
+        value: activeSizeFilters.map(filter => filter.value),
+      });
+    }
+    if (activePerfFilters.length > 0) {
+      newFilters.push({
+        id: 'categories',
+        value: activePerfFilters.map(filter => filter.value),
+      });
+    }
+    if (activeStyleFilters.length > 0) {
+      newFilters.push({
+        id: 'categories',
+        value: activeStyleFilters.map(filter => filter.value),
+      });
+    }
 
     setFilters(newFilters);
     setPageNumber(0);
-  }, [query]);
+  }, [query, danceSizeFilters, performanceLevelFilters, danceStyleFilters]);
+
+  // Render active filter pills
+  const renderActiveFilters = () => {
+    const activeFilterPills = [];
+    const activeSizeFilters = getActiveFilters(danceSizeFilters);
+    const activePerfFilters = getActiveFilters(performanceLevelFilters);
+    const activeStyleFilters = getActiveFilters(danceStyleFilters);
+
+    activeSizeFilters.forEach(({ label, value }, i) => {
+      activeFilterPills.push(
+        <Pill
+          key={`size-${i}`}
+          label={label}
+          onDelete={() => setDanceSizeFilters(removeKeyFromObject(danceSizeFilters, value))}
+        />
+      );
+    });
+    activePerfFilters.forEach(({ label, value }, i) => {
+      activeFilterPills.push(
+        <Pill
+          key={`performance-level-${i}`}
+          label={label}
+          onDelete={() =>
+            setPerformanceLevelFilters(removeKeyFromObject(performanceLevelFilters, value))
+          }
+        />
+      );
+    });
+    activeStyleFilters.forEach(({ label, value }, i) => {
+      activeFilterPills.push(
+        <Pill
+          key={`dance-style-${i}`}
+          label={label}
+          onDelete={() => setDanceStyleFilters(removeKeyFromObject(danceStyleFilters, value))}
+        />
+      );
+    });
+
+    return activeFilterPills;
+  };
 
   const getSettings = async () => {
     try {
@@ -160,9 +227,14 @@ export default function Awards({ session }) {
         danceSizeSettings,
         formatOptionsFields
       );
+      const initialDanceStyleFilters = formatFilterDropdownOptions(
+        danceStyleSettings,
+        formatOptionsFields
+      );
 
       setPerformanceLevelFilters(initialPerformanceLevelFilters);
       setDanceSizeFilters(initialDanceSizeFilters);
+      setDanceStyleFilters(initialDanceStyleFilters);
     } catch (err) {
       snackbarError(err);
     }
@@ -314,10 +386,15 @@ export default function Awards({ session }) {
                 options={performanceLevelFilters}
                 setOptions={setPerformanceLevelFilters}
               />
+              <FilterDropdown
+                buttonText="Dance Style"
+                options={danceStyleFilters}
+                setOptions={setDanceStyleFilters}
+              />
             </div>
-            {/* <div className={styles.performances__filters__appliedFilters}>
+            <div className={styles.performances__filters__appliedFilters}>
               {renderActiveFilters()}
-            </div> */}
+            </div>
           </div>
         )}
         {!loading ? (
@@ -332,10 +409,18 @@ export default function Awards({ session }) {
                     filters={filters}
                     pageNumber={pageNumber}
                     setPageCount={setPageCount}
+                    hiddenColumns={AWARDS_TABLE_HIDDEN_COLUMN}
                     clickable
                   />
                 }
-                secondTabContent={<FinalizedTable finalizedAwards={finalizedAwards} clickable />}
+                secondTabContent={
+                  <FinalizedTable
+                    filters={filters}
+                    finalizedAwards={finalizedAwards}
+                    clickable
+                    hiddenColumns={AWARDS_TABLE_HIDDEN_COLUMN}
+                  />
+                }
               />
             ) : (
               <div className={styles.awards__judge_table}>
@@ -344,6 +429,7 @@ export default function Awards({ session }) {
                   filters={filters}
                   pageNumber={pageNumber}
                   setPageCount={setPageCount}
+                  hiddenColumns={AWARDS_TABLE_HIDDEN_COLUMN}
                   clickable
                 />
               </div>
@@ -391,6 +477,11 @@ const NominationTable = ({ nominatedAwards, ...props }) => {
       filter: 'matchEnum',
       headerStyle: { textAlign: 'right' },
     },
+    {
+      Header: 'Categories',
+      accessor: 'categories',
+      filter: 'matchCategory',
+    },
   ];
 
   const goToPerformanceDetails = row => {
@@ -427,6 +518,11 @@ const FinalizedTable = ({ finalizedAwards, ...props }) => {
       Header: 'Winner',
       accessor: 'winner',
     },
+    {
+      Header: 'Categories',
+      accessor: 'categories',
+      filter: 'matchCategory',
+    },
   ];
 
   const goToPerformanceDetails = row => {
@@ -437,7 +533,6 @@ const FinalizedTable = ({ finalizedAwards, ...props }) => {
     <Table
       columns={columns}
       data={finalizedAwards}
-      filters={[]}
       emptyComponent={<EmptyTableComponent />}
       onRowClick={goToPerformanceDetails}
       {...props}

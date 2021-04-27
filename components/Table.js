@@ -42,6 +42,15 @@ export default function Table({
             return rowValue !== undefined ? filterValues.includes(String(rowValue)) : true;
           });
         },
+        matchCategory: (rows, id, filterValues) => {
+          // Match an array to another array
+          return rows.filter(row => {
+            const rowValue = row.values[id];
+            return rowValue !== undefined
+              ? filterValues.some(v => rowValue.indexOf(parseInt(v)) >= 0)
+              : true;
+          });
+        },
       },
       initialState: {
         sortBy: initialSort,
