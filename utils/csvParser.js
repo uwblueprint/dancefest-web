@@ -47,11 +47,14 @@ export const json2csvParser = new Parser({
       label: 'Award(s)',
       value: row =>
         row.awards
-          ? row.awards
-              .filter(award => award.status === 'FINALIST' && award.type !== 'SPECIAL')
-              .map(award => award.title)
-              .filter(award => !!award)
-              .join(', ')
+          ? [
+              ...new Set(
+                row.awards
+                  .filter(award => award.status === 'FINALIST' && award.type !== 'SPECIAL')
+                  .map(award => award.title)
+                  .filter(award => !!award)
+              ),
+            ].join(', ')
           : null,
     },
     {
