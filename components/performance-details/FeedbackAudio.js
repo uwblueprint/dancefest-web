@@ -1,3 +1,4 @@
+import Loader from 'react-loader-spinner'; // Recording animation
 import Button from '@components/Button'; // Button
 import AudioPlayer from '@components/AudioPlayer'; // Audio player
 import AudioRecorder from '@components/AudioRecorder'; // Audio recorder
@@ -21,21 +22,32 @@ export default function FeedbackAudio({
 
   return edit ? (
     <div>
-      <div className={`${styles.audioRecorder__wrapper} ${recording ? undefined : styles.hidden}`}>
+      <div className={`${styles.audioRecorder__wrapper} ${styles.hidden}`}>
         <AudioRecorder
-          className={`${styles.audioRecorder}`}
+          className={styles.audioRecorder}
           recording={recording}
           onStopRecording={onStopRecording}
         />
       </div>
       {recording ? (
-        <Button
-          className={styles.stopButton}
-          variant="outlined"
-          onClick={() => setRecording(false)}
-        >
-          Stop
-        </Button>
+        <>
+          <div className={styles.recordingAnimation__wrapper}>
+            <Loader
+              type="Audio"
+              color="#a72a1d" // brand-other-red
+              height={32}
+              width={48}
+            />
+            <p>Recording...</p>
+          </div>
+          <Button
+            className={styles.stopButton}
+            variant="outlined"
+            onClick={() => setRecording(false)}
+          >
+            Stop
+          </Button>
+        </>
       ) : recordedBlob || audioUrl ? (
         <>
           <AudioPlayer audioUrl={recordedBlob ? recordedBlob.blobURL : audioUrl} />

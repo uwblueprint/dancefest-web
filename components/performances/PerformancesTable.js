@@ -54,7 +54,7 @@ export default function PerformancesTable({ performances, emptyPrompt, ...props 
       Cell: ({ value }) => (value !== null ? String(value) : 'N/A'),
     },
     {
-      Header: 'Awards',
+      Header: 'Nominated Awards',
       accessor: 'awardsString',
       Cell: ({ value }) => String(value) || 'N/A',
     },
@@ -85,7 +85,7 @@ export default function PerformancesTable({ performances, emptyPrompt, ...props 
       data={performances}
       pageSize={PAGE_SIZE}
       emptyComponent={<EmptyTableComponent prompt={emptyPrompt} />}
-      initialSort={[{ id: 'id' }]}
+      initialSort={[{ id: 'danceTitle' }]}
       onRowClick={goToPerformanceDetails}
       clickable
       {...props}

@@ -7,6 +7,8 @@ import Input from '@components/Input'; // Input
 import Dropdown from '@components/Dropdown'; // Dropdown
 import styles from '@styles/components/settings/AdminModal.module.scss'; // Component styles
 
+import useSnackbar from '@utils/useSnackbar'; // Snackbar
+
 const ADMIN_ROLE_OPTIONS = [
   {
     label: 'ADMIN',
@@ -30,6 +32,8 @@ export default function AdminModal({
   adminToEdit = null,
   setAdminToEdit,
 }) {
+  const { snackbarError } = useSnackbar();
+
   const [adminName, setAdminName] = useState('');
   const [adminEmail, setAdminEmail] = useState('');
   const [adminRole, setAdminRole] = useState(null);
@@ -54,8 +58,8 @@ export default function AdminModal({
       });
 
       await getAdmins();
-    } catch {
-      // Empty catch block
+    } catch (err) {
+      snackbarError(err);
     }
 
     setLoading(false);
@@ -78,8 +82,8 @@ export default function AdminModal({
       });
 
       await getAdmins();
-    } catch {
-      // Empty catch block
+    } catch (err) {
+      snackbarError(err);
     }
 
     setLoading(false);

@@ -12,6 +12,7 @@ import DropdownGrid from '@components/DropdownGrid'; // Dropdown Grid
 import FeedbackAudio from '@components/performance-details/FeedbackAudio'; // Feedback audio
 import styles from '@styles/components/performance-details/JudgeFeedback.module.scss'; // Component styles
 
+import useSnackbar from '@utils/useSnackbar'; // Snackbar
 import { calculateAverageScore } from '@utils/performances'; // Calculate average score util
 
 const SPECIAL_AWARD_TYPE = 'SPECIAL';
@@ -19,11 +20,13 @@ const DANCE_ARTISTRY_AWARD_TYPE = 'DANCE_ARTISTRY';
 
 export default function NewJudgeFeedback({
   getPerformance = () => {},
+  loading,
   setLoading = () => {},
   awardsDict,
   nominations: initialNominations,
   judgeID,
 }) {
+  const { snackbarError } = useSnackbar();
   const [event] = Event.useContainer();
   const router = useRouter();
   const { id: performanceId } = router.query;
@@ -56,9 +59,9 @@ export default function NewJudgeFeedback({
 
   const [editMode, setEditMode] = useState(true);
   const [notes, setNotes] = useState('');
-  const [technicalScore, setTechnicalScore] = useState(0);
-  const [artisticScore, setArtisticScore] = useState(0);
-  const [cumulativeScore, setCumulativeScore] = useState(0);
+  const [technicalScore, setTechnicalScore] = useState('');
+  const [artisticScore, setArtisticScore] = useState('');
+  const [cumulativeScore, setCumulativeScore] = useState('');
   const [normalAwards, setNormalAwards] = useState(initialNormalAwards);
   const [specialAward, setSpecialAward] = useState(initialSpecialAward); // Existing special award
   const [specialAwardName, setSpecialAwardName] = useState(
@@ -69,6 +72,8 @@ export default function NewJudgeFeedback({
   const [recordingChanged, setRecordingChanged] = useState(false);
   const [recording, setRecording] = useState(false);
   const [recordedBlob, setRecordedBlob] = useState(null);
+
+  const fieldsMissing = technicalScore === '' || artisticScore === '' || cumulativeScore === '';
 
   useEffect(() => {
     setNormalAwards(initialNormalAwards);
@@ -129,8 +134,8 @@ export default function NewJudgeFeedback({
       });
 
       await getPerformance();
-    } catch {
-      // Empty catch block
+    } catch (err) {
+      snackbarError(err);
     } finally {
       // Reset audio state
       if (recordingChanged) {
@@ -174,6 +179,7 @@ export default function NewJudgeFeedback({
                 createFeedback();
                 setEditMode(false);
               }}
+              disabled={loading || fieldsMissing}
             >
               Submit
             </Button>

@@ -18,11 +18,15 @@ import DancerYellowBlue from '@assets/dancer-yellow-blue.svg'; // Jumping Dancer
 import styles from '@styles/pages/Awards.module.scss'; // Page styles
 import { formatPerformances } from '@utils/performances'; // Format performances util
 import AwardPill from '@components/awards/FinalizePill.js'; // Award Finalize Pill
+import BackButton from '@components/BackButton';
+
+import useSnackbar from '@utils/useSnackbar'; // Snackbar
 
 const PAGE_SIZE = 20; // Rows per page
 
 // Page: Performances
-export default function Performances({ award }) {
+export default function Performances({ award, session }) {
+  const { snackbarError } = useSnackbar();
   const [event] = Event.useContainer();
 
   const router = useRouter();
@@ -53,15 +57,21 @@ export default function Performances({ award }) {
   const getPerformances = async () => {
     setLoading(true);
 
+    // NOTE: If we know the specific award category, we can pass in 3 params (competition_level_id, dance_size_id, dance_level_id)
+    let performanceUrl = `/api/performances/collect?eventID=${event.id}`;
+    if (award.awards_categories && award.awards_categories.length !== 0) {
+      performanceUrl += `&settingIDs=${award.awards_categories.join(',')}`;
+    }
+
     try {
       const response = await axios({
         method: 'GET',
-        url: `/api/performances/collect?eventID=${event.id}`,
+        url: performanceUrl,
       });
 
       setPerformances(formatPerformances(response.data));
     } catch (err) {
-      // Empty catch block
+      snackbarError(err);
     }
 
     setLoading(false);
@@ -93,8 +103,8 @@ export default function Performances({ award }) {
           eventID: event.id,
         },
       });
-    } catch {
-      // Empty catch block
+    } catch (err) {
+      snackbarError(err);
     }
 
     setLoading(false);
@@ -112,8 +122,8 @@ export default function Performances({ award }) {
       });
 
       router.push('/awards');
-    } catch {
-      // Empty catch block
+    } catch (err) {
+      snackbarError(err);
     }
   }
 
@@ -129,16 +139,19 @@ export default function Performances({ award }) {
       });
       // Go back to awards
       router.push('/awards');
-    } catch {
-      // Empty catch statement
+    } catch (err) {
+      snackbarError(err);
     }
   }
 
   return (
     <Layout>
       <div>
+        <div>
+          <BackButton href="/awards">Back to Awards</BackButton>
+        </div>
         <div className={styles.performances__navigation}>
-          <h2 className={styles.performances__navigation__eventName}>{`EVENT NAME`}</h2>
+          <h2 className={styles.performances__navigation__eventName}>{event ? event.name : ''}</h2>
         </div>
         <div className={styles.performances__header}>
           <div>
@@ -248,7 +261,7 @@ const EntryTable = ({
   const columns = [
     {
       Header: 'Title',
-      accessor: 'name',
+      accessor: 'danceTitle',
     },
     {
       Header: 'School',
@@ -303,12 +316,8 @@ const JudgingTable = ({
 }) => {
   const columns = [
     {
-      Header: 'ID',
-      accessor: 'id',
-    },
-    {
       Header: 'Title',
-      accessor: 'name',
+      accessor: 'danceTitle',
     },
     {
       Header: 'Tech. Score',
@@ -326,7 +335,7 @@ const JudgingTable = ({
       Cell: ({ value }) => (value !== null ? String(value) : 'N/A'),
     },
     {
-      Header: 'Awards',
+      Header: 'Nominated Awards',
       accessor: 'awardsString',
       Cell: ({ value }) => (value !== '' ? String(value) : 'N/A'),
     },

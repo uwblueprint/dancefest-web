@@ -6,6 +6,7 @@ import ArrowDown from '@assets/arrow-down.svg'; // Arrow down icon
 import styles from '@styles/components/Table.module.scss'; // Component styles
 
 export default function Table({
+  className,
   columns,
   data,
   filters,
@@ -41,6 +42,15 @@ export default function Table({
             return rowValue !== undefined ? filterValues.includes(String(rowValue)) : true;
           });
         },
+        matchCategory: (rows, id, filterValues) => {
+          // Match an array to another array
+          return rows.filter(row => {
+            const rowValue = row.values[id];
+            return rowValue !== undefined
+              ? filterValues.some(v => rowValue.indexOf(parseInt(v)) >= 0)
+              : true;
+          });
+        },
       },
       initialState: {
         sortBy: initialSort,
@@ -71,7 +81,7 @@ export default function Table({
   }, [filters]);
 
   return (
-    <div className={styles.table__div}>
+    <div className={`${styles.table__div} ${className || ''}`}>
       {data && data.length === 0 ? (
         // If there's no data just show the table header along with an optional 'emptyComponent'
         <>

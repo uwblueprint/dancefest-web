@@ -1,5 +1,6 @@
-import React, { useState } from 'react'; // React
+import { useState } from 'react'; // React
 
+import { isKeyValidOnNumberInput } from '@utils/score-validation'; // Key validation
 import styles from '@styles/components/ScoreCard.module.scss'; // Component styles
 
 export default function ScoreCard({
@@ -12,7 +13,24 @@ export default function ScoreCard({
   const [focused, setFocused] = useState(false);
   const variantClassName = variant === 'grey' ? styles.grey : variant === 'red' ? styles.red : '';
 
-  const onChange = event => {
+  const handleKeyDown = event => {
+    const key = event.key;
+    // Allow some keys
+    if (isKeyValidOnNumberInput(key)) {
+      return;
+    }
+    // Disallow +, -, 'e' (for exponent), .
+    if (/\+|-|e|\./.test(key)) {
+      event.preventDefault();
+    }
+  };
+
+  const handleChange = event => {
+    const scoreInt = parseInt(event.target.value);
+    // Disallow value being greater than 100
+    if (scoreInt < 0 || scoreInt > 100) {
+      return;
+    }
     setScore(event.target.value);
   };
 
@@ -22,13 +40,18 @@ export default function ScoreCard({
     >
       {edit ? (
         <input
+          type="number"
+          min="0"
+          max="100"
+          placeholder="0"
           value={score}
-          onChange={onChange}
+          onKeyDown={handleKeyDown}
+          onChange={handleChange}
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
         />
       ) : (
-        <h1>{score}</h1>
+        <h1>{isNaN(score) ? '-' : score}</h1>
       )}
       <h2>{title}</h2>
     </div>

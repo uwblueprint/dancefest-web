@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'; // React
 import axios from 'axios';
 import { useRouter } from 'next/router'; // Routing (with buttons)
 import { getSession } from 'next-auth/client'; // Session handling
-import Link from 'next/link'; // Next link
 import Loader from 'react-loader-spinner'; // Spinning loader
 import Layout from '@components/Layout'; // Layout wrapper
 import Event from '@containers/Event'; // Event state
@@ -14,9 +13,10 @@ import Title from '@components/Title'; // Title
 import Input from '@components/Input'; // Input
 import Tabs from '@components/Tabs'; // Tabs
 import FilterDropdown, { formatFilterDropdownOptions } from '@components/FilterDropdown'; // Filter Dropdown
+import Pill from '@components/Pill'; // Pill
 import Table from '@components/Table'; // Table
 import Pagination from '@components/Pagination'; // Pagination
-import BackArrow from '@assets/back-arrow.svg'; // Back arrow icon
+import BackButton from '@components/BackButton';
 import Search from '@assets/search.svg'; // Search icon
 import ChevronDown from '@assets/chevron-down.svg'; // Chevron down icon
 import ChevronDownGrey from '@assets/chevron-down-grey.svg'; // Chevron down grey icon
@@ -24,19 +24,36 @@ import DancerRedJump from '@assets/dancer-red-jump.svg'; // Jumping Dancer SVG
 import DancerYellowBlue from '@assets/dancer-yellow-blue.svg'; // Jumping Dancer SVG
 import styles from '@styles/pages/Awards.module.scss'; // Page styles
 
+import useSnackbar from '@utils/useSnackbar'; // Snackbar
+
 const PAGE_SIZE = 20; // Rows per page
+const AWARDS_TABLE_HIDDEN_COLUMN = ['categories'];
 
 // Get the active filters (list of column accessors) from an object of filter dropdown values
-// const getActiveFilters = options => {
-//   return Object.keys(options).filter(option => options[option].selected);
-// };
+const getActiveFilters = options => {
+  return Object.entries(options)
+    .filter(([key]) => options[key].selected)
+    .map(([value, { label }]) => ({
+      value,
+      label,
+    }));
+};
 
-// Remove key from object (returns new object)
-// const removeKeyFromObject = (object, key) => {
-//   // eslint-disable-next-line no-unused-vars
-//   const { [key]: _, ...rest } = object;
-//   return rest;
-// };
+/**
+ * Remove key from object
+ * @param {Object} object - An object containing all the available filters
+ * @param {*} key - A key in the object
+ * @returns {Object} A new object that is a copy of the `object` parameter with the `key` removed
+ */
+const removeFilter = (object, key) => {
+  return {
+    ...object,
+    [key]: {
+      label: object[key].label,
+      selected: false,
+    },
+  };
+};
 
 const awardOptions = [
   {
@@ -51,6 +68,7 @@ const awardOptions = [
 
 // Page: Awards
 export default function Awards({ session }) {
+  const { snackbarError } = useSnackbar();
   const router = useRouter(); // collect router
   const [event] = Event.useContainer(); // get event from global state
 
@@ -61,6 +79,7 @@ export default function Awards({ session }) {
   // Filter dropdown options
   const [performanceLevelFilters, setPerformanceLevelFilters] = useState({});
   const [danceSizeFilters, setDanceSizeFilters] = useState({});
+  const [danceStyleFilters, setDanceStyleFilters] = useState({});
 
   // Modal dropdown options
   const [performanceLevelDropdownOptions, setPerformanceLevelDropdownOptions] = useState([]);
@@ -94,8 +113,9 @@ export default function Awards({ session }) {
   // Update table filters
   useEffect(() => {
     const newFilters = [];
-    // const activeSizeFilters = getActiveFilters(danceSizeFilters);
-    // const activePerfFilters = getActiveFilters(performanceLevelFilters);
+    const activeSizeFilters = getActiveFilters(danceSizeFilters);
+    const activePerfFilters = getActiveFilters(performanceLevelFilters);
+    const activeStyleFilters = getActiveFilters(danceStyleFilters);
 
     if (query) {
       newFilters.push({
@@ -103,10 +123,66 @@ export default function Awards({ session }) {
         value: query,
       });
     }
+    if (activeSizeFilters.length > 0) {
+      newFilters.push({
+        id: 'categories',
+        value: activeSizeFilters.map(filter => filter.value),
+      });
+    }
+    if (activePerfFilters.length > 0) {
+      newFilters.push({
+        id: 'categories',
+        value: activePerfFilters.map(filter => filter.value),
+      });
+    }
+    if (activeStyleFilters.length > 0) {
+      newFilters.push({
+        id: 'categories',
+        value: activeStyleFilters.map(filter => filter.value),
+      });
+    }
 
     setFilters(newFilters);
     setPageNumber(0);
-  }, [query]);
+  }, [query, danceSizeFilters, performanceLevelFilters, danceStyleFilters]);
+
+  // Render active filter pills
+  const renderActiveFilters = () => {
+    const activeFilterPills = [];
+    const activeSizeFilters = getActiveFilters(danceSizeFilters);
+    const activePerfFilters = getActiveFilters(performanceLevelFilters);
+    const activeStyleFilters = getActiveFilters(danceStyleFilters);
+
+    activeSizeFilters.forEach(({ label, value }, i) => {
+      activeFilterPills.push(
+        <Pill
+          key={`size-${i}`}
+          label={label}
+          onDelete={() => setDanceSizeFilters(removeFilter(danceSizeFilters, value))}
+        />
+      );
+    });
+    activePerfFilters.forEach(({ label, value }, i) => {
+      activeFilterPills.push(
+        <Pill
+          key={`performance-level-${i}`}
+          label={label}
+          onDelete={() => setPerformanceLevelFilters(removeFilter(performanceLevelFilters, value))}
+        />
+      );
+    });
+    activeStyleFilters.forEach(({ label, value }, i) => {
+      activeFilterPills.push(
+        <Pill
+          key={`dance-style-${i}`}
+          label={label}
+          onDelete={() => setDanceStyleFilters(removeFilter(danceStyleFilters, value))}
+        />
+      );
+    });
+
+    return activeFilterPills;
+  };
 
   const getSettings = async () => {
     try {
@@ -129,11 +205,25 @@ export default function Awards({ session }) {
       };
 
       // Modal dropdown options
-      setPerformanceLevelDropdownOptions(
-        formatDropdownOptions(performanceLevelSettings, formatOptionsFields)
+      const initialPerformanceLevelDropdownOptions = formatDropdownOptions(
+        performanceLevelSettings,
+        formatOptionsFields
       );
-      setDanceSizeDropdownOptions(formatDropdownOptions(danceSizeSettings, formatOptionsFields));
-      setDanceStyleDropdownOptions(formatDropdownOptions(danceStyleSettings, formatOptionsFields));
+      const initialDanceSizeDropdownOptions = formatDropdownOptions(
+        danceSizeSettings,
+        formatOptionsFields
+      );
+      const initialDanceStyleDropdownOptions = formatDropdownOptions(
+        danceStyleSettings,
+        formatOptionsFields
+      );
+      // Add none option
+      initialPerformanceLevelDropdownOptions.unshift({ label: 'None', value: -1 });
+      initialDanceSizeDropdownOptions.unshift({ label: 'None', value: -1 });
+      initialDanceStyleDropdownOptions.unshift({ label: 'None', value: -1 });
+      setPerformanceLevelDropdownOptions(initialPerformanceLevelDropdownOptions);
+      setDanceSizeDropdownOptions(initialDanceSizeDropdownOptions);
+      setDanceStyleDropdownOptions(initialDanceStyleDropdownOptions);
 
       // Filters
       const initialPerformanceLevelFilters = formatFilterDropdownOptions(
@@ -144,11 +234,16 @@ export default function Awards({ session }) {
         danceSizeSettings,
         formatOptionsFields
       );
+      const initialDanceStyleFilters = formatFilterDropdownOptions(
+        danceStyleSettings,
+        formatOptionsFields
+      );
 
       setPerformanceLevelFilters(initialPerformanceLevelFilters);
       setDanceSizeFilters(initialDanceSizeFilters);
-    } catch {
-      // empty catch block
+      setDanceStyleFilters(initialDanceStyleFilters);
+    } catch (err) {
+      snackbarError(err);
     }
   };
 
@@ -165,7 +260,7 @@ export default function Awards({ session }) {
 
       setAwardData(resp.data);
     } catch (err) {
-      // Empty catch block
+      snackbarError(err);
     }
   }
 
@@ -190,7 +285,7 @@ export default function Awards({ session }) {
         if (award.is_finalized) {
           award.performances.forEach(perf => {
             if (perf.status === 'FINALIST') {
-              award.winner = perf.name;
+              award.winner = perf.dance_title;
             }
           });
           setFinalizedAwards(prevFinalized => [...prevFinalized, award]);
@@ -221,9 +316,10 @@ export default function Awards({ session }) {
   ) => {
     setLoading(true);
     const settingIds = [];
-    if (danceSizeOption !== null) settingIds.push(danceSizeOption);
-    if (performanceLevelOption !== null) settingIds.push(performanceLevelOption);
-    if (danceStyleOption !== null) settingIds.push(danceStyleOption);
+    if (danceSizeOption !== null && danceSizeOption !== -1) settingIds.push(danceSizeOption);
+    if (performanceLevelOption !== null && performanceLevelOption !== -1)
+      settingIds.push(performanceLevelOption);
+    if (danceStyleOption !== null && danceStyleOption !== -1) settingIds.push(danceStyleOption);
 
     try {
       await axios({
@@ -236,8 +332,8 @@ export default function Awards({ session }) {
           settingIDs: settingIds,
         },
       });
-    } catch {
-      // Empty catch block
+    } catch (err) {
+      snackbarError(err);
     }
     await getAwards();
     setLoading(false);
@@ -247,16 +343,8 @@ export default function Awards({ session }) {
     <Layout>
       <div>
         <div className={styles.performances__navigation}>
-          <Link href="/">
-            <Button className={styles.performances__navigation__button} variant="outlined">
-              <img src={BackArrow} />
-              Back to Events
-            </Button>
-          </Link>
-
-          <h2 className={styles.performances__navigation__eventName}>
-            {`OSSDF2021- Let's Dis-dance`}
-          </h2>
+          <BackButton href="/">Back to Events</BackButton>
+          <h2 className={styles.performances__navigation__eventName}>{event ? event.name : ''}</h2>
         </div>
         <div className={styles.performances__header}>
           <div>
@@ -305,10 +393,15 @@ export default function Awards({ session }) {
                 options={performanceLevelFilters}
                 setOptions={setPerformanceLevelFilters}
               />
+              <FilterDropdown
+                buttonText="Dance Style"
+                options={danceStyleFilters}
+                setOptions={setDanceStyleFilters}
+              />
             </div>
-            {/* <div className={styles.performances__filters__appliedFilters}>
+            <div className={styles.performances__filters__appliedFilters}>
               {renderActiveFilters()}
-            </div> */}
+            </div>
           </div>
         )}
         {!loading ? (
@@ -323,10 +416,18 @@ export default function Awards({ session }) {
                     filters={filters}
                     pageNumber={pageNumber}
                     setPageCount={setPageCount}
+                    hiddenColumns={AWARDS_TABLE_HIDDEN_COLUMN}
                     clickable
                   />
                 }
-                secondTabContent={<FinalizedTable finalizedAwards={finalizedAwards} clickable />}
+                secondTabContent={
+                  <FinalizedTable
+                    filters={filters}
+                    finalizedAwards={finalizedAwards}
+                    clickable
+                    hiddenColumns={AWARDS_TABLE_HIDDEN_COLUMN}
+                  />
+                }
               />
             ) : (
               <div className={styles.awards__judge_table}>
@@ -335,6 +436,7 @@ export default function Awards({ session }) {
                   filters={filters}
                   pageNumber={pageNumber}
                   setPageCount={setPageCount}
+                  hiddenColumns={AWARDS_TABLE_HIDDEN_COLUMN}
                   clickable
                 />
               </div>
@@ -382,6 +484,11 @@ const NominationTable = ({ nominatedAwards, ...props }) => {
       filter: 'matchEnum',
       headerStyle: { textAlign: 'right' },
     },
+    {
+      Header: 'Categories',
+      accessor: 'categories',
+      filter: 'matchCategory',
+    },
   ];
 
   const goToPerformanceDetails = row => {
@@ -418,6 +525,11 @@ const FinalizedTable = ({ finalizedAwards, ...props }) => {
       Header: 'Winner',
       accessor: 'winner',
     },
+    {
+      Header: 'Categories',
+      accessor: 'categories',
+      filter: 'matchCategory',
+    },
   ];
 
   const goToPerformanceDetails = row => {
@@ -428,7 +540,6 @@ const FinalizedTable = ({ finalizedAwards, ...props }) => {
     <Table
       columns={columns}
       data={finalizedAwards}
-      filters={[]}
       emptyComponent={<EmptyTableComponent />}
       onRowClick={goToPerformanceDetails}
       {...props}

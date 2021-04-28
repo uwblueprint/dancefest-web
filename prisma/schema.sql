@@ -69,7 +69,6 @@ CREATE TABLE performances (
   id SERIAL PRIMARY KEY NOT NULL,
   dance_title VARCHAR(255),
   performance_link VARCHAR(255),
-  audio_recording_link VARCHAR(255),
   performers VARCHAR(255)[],
   choreographers VARCHAR(255)[],
   competition_level VARCHAR(255),
@@ -92,9 +91,9 @@ CREATE TABLE performances (
 -- Create adjudications table
 CREATE TABLE adjudications (
   id SERIAL PRIMARY KEY NOT NULL,
-  artistic_mark INTEGER NOT NULL,
-  technical_mark INTEGER NOT NULL,
-  cumulative_mark INTEGER NOT NULL,
+  artistic_mark DECIMAL NOT NULL,
+  technical_mark DECIMAL NOT NULL,
+  cumulative_mark DECIMAL NOT NULL,
   audio_url VARCHAR(255),
   notes TEXT,
   performance_id INTEGER NOT NULL,

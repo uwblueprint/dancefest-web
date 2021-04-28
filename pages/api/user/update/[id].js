@@ -1,5 +1,6 @@
 import prisma from '@prisma/index'; // Prisma client
 import { getSession } from 'next-auth/client'; // Session handling
+import validator from 'validator';
 
 export default async (req, res) => {
   // Collect session from request
@@ -13,6 +14,13 @@ export default async (req, res) => {
 
     // If email exists
     if (id && name && email) {
+      // If the email is invalid
+      if (!validator.isEmail(email)) {
+        return res.status(400).json({
+          error: 'Provided email is invalid.',
+        });
+      }
+
       // User update
       const user = await prisma.user.update({
         where: {
@@ -27,14 +35,14 @@ export default async (req, res) => {
 
       // If user updated send it back
       if (user) {
-        res.send(user);
+        return res.json(user);
       }
       // Else, return server error
       else {
-        res.status(500).end();
+        return res.status(500).end();
       }
     }
   }
   // Return unauthorized for all other requests
-  res.status(401).end();
+  return res.status(401).send('Unauthorized');
 };

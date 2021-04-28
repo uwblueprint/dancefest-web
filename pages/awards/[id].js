@@ -8,11 +8,15 @@ import ScoreBasedAwards from '@components/awards/ScoreBasedAwards'; // Score Bas
 import { getSession } from 'next-auth/client'; // Session handling
 import { getAward } from 'pages/api/awards/get'; // Helper method to get award details by ID
 import Modal from '@components/Modal.js'; // Modal component
+import BackButton from '@components/BackButton';
+import Event from '@containers/Event'; // Event state
 
 import Title from '@components/Title'; // Title
 import DancerRedJump from '@assets/dancer-red-jump.svg'; // Jumping Dancer SVG
 import styles from '@styles/pages/AwardDetails.module.scss';
 import AudioPlayer from '@components/AudioPlayer';
+
+import useSnackbar from '@utils/useSnackbar'; // Snackbar
 
 export default function DetailsRoute({ award, session }) {
   return award.type === 'SCORE_BASED' && !award.is_finalized ? (
@@ -24,6 +28,9 @@ export default function DetailsRoute({ award, session }) {
 
 // Page: Award Details
 function AwardDetails({ award, session }) {
+  const [event] = Event.useContainer();
+  const { snackbarError } = useSnackbar();
+
   const [selectedTab, setSelectedTab] = useState(-1);
   const [showAwardSummary, setShowAwardSummary] = useState(true);
   const [feedbackAvailable, setFeedbackAvailable] = useState(true);
@@ -75,8 +82,8 @@ function AwardDetails({ award, session }) {
       });
       // Go back to awards
       router.push('/awards');
-    } catch {
-      // Empty catch block
+    } catch (err) {
+      snackbarError(err);
     }
     setLoading(false);
   }
@@ -94,8 +101,8 @@ function AwardDetails({ award, session }) {
       });
       // Go back to awards
       router.push('/awards');
-    } catch {
-      // Empty catch block
+    } catch (err) {
+      snackbarError(err);
     }
     setLoading(false);
   }
@@ -112,8 +119,8 @@ function AwardDetails({ award, session }) {
       });
       // Go back to awards
       router.push('/awards');
-    } catch {
-      // Empty catch statement
+    } catch (err) {
+      snackbarError(err);
     }
   }
 
@@ -121,7 +128,10 @@ function AwardDetails({ award, session }) {
     <Layout>
       <div>
         <div>
-          <h2 className={styles.performances_details__eventName}>{`Event Title`}</h2>
+          <BackButton href="/awards">Back to Awards</BackButton>
+        </div>
+        <div>
+          <h2 className={styles.performances_details__eventName}>{event ? event.name : ''}</h2>
         </div>
         <div className={styles.award_details__header_container}>
           <Title>{award.title}</Title>
@@ -258,12 +268,25 @@ const EmptyComponent = () => {
 };
 
 const AwardSummary = ({ type, nominations }) => {
+  let typeName = '';
+  switch (type) {
+    case 'DANCE_ARTISTRY':
+      typeName = 'Dance Artistry';
+      break;
+    case 'SCORE_BASED':
+      typeName = 'Score Based';
+      break;
+    case 'SPECIAL':
+      typeName = 'Special';
+      break;
+  }
+
   return (
     <div className={styles.award__summary_container}>
       <div className={styles.award__summary}>
         <div>
           <h2>Type</h2>
-          <span>{type}</span>
+          <span>{typeName}</span>
         </div>
         <div>
           <h2>No. of Nominations</h2>
@@ -362,8 +385,8 @@ const IndividualFeedback = ({ feedback }) => {
     <div className={styles.individual__feedback_container}>
       <div className={styles.individual__feedback_header}>
         <h3>{feedback.user.name}</h3>
-        <h2>{`ARTISTIC: ${feedback.artistic_mark}`}</h2>
         <h2>{`TECHNICAL: ${feedback.technical_mark}`}</h2>
+        <h2>{`ARTISTIC: ${feedback.artistic_mark}`}</h2>
         <h2>{`CUMULATIVE: ${feedback.cumulative_mark}`}</h2>
       </div>
       <h2>NOTES</h2>

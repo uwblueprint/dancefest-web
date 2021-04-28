@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'; // React
 import axios from 'axios'; // axios
-import Link from 'next/link'; // Next link
 import Layout from '@components/Layout'; // Layout wrapper
 import Event from '@containers/Event'; // Event state
 import { getSession } from 'next-auth/client'; // Session handling
@@ -18,13 +17,13 @@ import { formatDropdownOptions } from '@components/Dropdown'; // Format dropdown
 import FilterDropdown, { formatFilterDropdownOptions } from '@components/FilterDropdown'; // Filter Dropdown + Format filter dropdown options util
 import Pill from '@components/Pill'; // Pill
 import Pagination from '@components/Pagination'; // Pagination
-// import FeedbackReadyNotification from '@components/performances/FeedbackReadyNotification'; // Feedback Ready Notification
-import BackArrow from '@assets/back-arrow.svg'; // Back arrow icon
+import BackButton from '@components/BackButton';
 import Search from '@assets/search.svg'; // Search icon
 import ChevronDown from '@assets/chevron-down.svg'; // Chevron down icon
 import ChevronDownGrey from '@assets/chevron-down-grey.svg'; // Chevron down grey icon
 import styles from '@styles/pages/Performances.module.scss'; // Page styles
 
+import useSnackbar from '@utils/useSnackbar'; // Snackbar
 import { formatSchools } from '@utils/schools'; // Format schools util
 import { formatPerformances, filterPerformancesForJudge } from '@utils/performances'; // Format performances util
 
@@ -47,18 +46,23 @@ const getActiveFilters = options => {
 
 /**
  * Remove key from object
- * @param {Object} object - An object
+ * @param {Object} object - An object containing all the available filters
  * @param {*} key - A key in the object
  * @returns {Object} A new object that is a copy of the `object` parameter with the `key` removed
  */
-const removeKeyFromObject = (object, key) => {
-  // eslint-disable-next-line no-unused-vars
-  const { [key]: _, ...rest } = object;
-  return rest;
+const removeFilter = (object, key) => {
+  return {
+    ...object,
+    [key]: {
+      label: object[key].label,
+      selected: false,
+    },
+  };
 };
 
 // Page: Performances
 export default function Performances({ session }) {
+  const { snackbarError } = useSnackbar();
   const router = useRouter();
   const [event] = Event.useContainer();
 
@@ -103,8 +107,8 @@ export default function Performances({ session }) {
       const { name } = response.data;
 
       setEventName(name);
-    } catch {
-      // Empty catch block
+    } catch (err) {
+      snackbarError(err);
     }
   };
 
@@ -133,8 +137,8 @@ export default function Performances({ session }) {
           label: 'schoolName',
         });
         setSchoolFilters(initialSchoolFilters);
-      } catch {
-        // Empty catch block
+      } catch (err) {
+        snackbarError(err);
       }
     };
 
@@ -207,8 +211,8 @@ export default function Performances({ session }) {
       });
 
       setPerformances(formatPerformances(response.data));
-    } catch {
-      // Empty catch block
+    } catch (err) {
+      snackbarError(err);
     }
 
     setLoading(false);
@@ -252,8 +256,8 @@ export default function Performances({ session }) {
       });
 
       getPerformances();
-    } catch {
-      // Empty catch block
+    } catch (err) {
+      snackbarError(err);
     }
 
     setLoading(false);
@@ -324,38 +328,36 @@ export default function Performances({ session }) {
     activeSchoolFilters.forEach(({ label, value }, i) => {
       activeFilterPills.push(
         <Pill
-          key={i}
+          key={`school-${i}`}
           label={label}
-          onDelete={() => setSchoolFilters(removeKeyFromObject(schoolFilters, value))}
+          onDelete={() => setSchoolFilters(removeFilter(schoolFilters, value))}
         />
       );
     });
     activePerformanceLevelFilters.forEach(({ label, value }, i) => {
       activeFilterPills.push(
         <Pill
-          key={i}
+          key={`performance-level-${i}`}
           label={label}
-          onDelete={() =>
-            setPerformanceLevelFilters(removeKeyFromObject(performanceLevelFilters, value))
-          }
+          onDelete={() => setPerformanceLevelFilters(removeFilter(performanceLevelFilters, value))}
         />
       );
     });
     activeDanceStyleFilters.forEach(({ label, value }, i) => {
       activeFilterPills.push(
         <Pill
-          key={i}
+          key={`dance-style-${i}`}
           label={label}
-          onDelete={() => setDanceStyleFilters(removeKeyFromObject(danceStyleFilters, value))}
+          onDelete={() => setDanceStyleFilters(removeFilter(danceStyleFilters, value))}
         />
       );
     });
     activeDanceSizeFilters.forEach(({ label, value }, i) => {
       activeFilterPills.push(
         <Pill
-          key={i}
+          key={`dance-size-${i}`}
           label={label}
-          onDelete={() => setDanceSizeFilters(removeKeyFromObject(danceSizeFilters, value))}
+          onDelete={() => setDanceSizeFilters(removeFilter(danceSizeFilters, value))}
         />
       );
     });
@@ -367,13 +369,7 @@ export default function Performances({ session }) {
     <Layout>
       <div>
         <div className={styles.performances__navigation}>
-          <Link href="/">
-            <Button className={styles.performances__navigation__button} variant="outlined">
-              <img src={BackArrow} />
-              Back to Events
-            </Button>
-          </Link>
-          {/* <FeedbackReadyNotification /> */}
+          <BackButton href="/">Back to Events</BackButton>
         </div>
         <h2 className={styles.performances__eventName}>{eventName}</h2>
         <div className={styles.performances__header}>
@@ -421,7 +417,7 @@ export default function Performances({ session }) {
                 setOptions={setSchoolFilters}
               />
               <FilterDropdown
-                buttonText="Competition Level"
+                buttonText="Performance Level"
                 options={performanceLevelFilters}
                 setOptions={setPerformanceLevelFilters}
               />

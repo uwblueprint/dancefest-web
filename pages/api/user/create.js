@@ -1,5 +1,6 @@
 import prisma from '@prisma/index'; // Prisma client
 import { getSession } from 'next-auth/client'; // Session handling
+import validator from 'validator';
 
 const UNIQUE_CONSTRAINT_ERROR_CODE = 'P2002';
 
@@ -14,6 +15,13 @@ export default async (req, res) => {
 
     // If name and email are defined
     if (name && email) {
+      // If the email is invalid
+      if (!validator.isEmail(email)) {
+        return res.status(400).json({
+          error: 'Provided email is invalid.',
+        });
+      }
+
       // Create new user
       let user;
       try {
@@ -35,15 +43,15 @@ export default async (req, res) => {
 
       // If user creation is successful, return user
       if (user) {
-        res.send(user);
+        return res.json(user);
       }
       // Else, return server error
       else {
-        res.status(500).end();
+        return res.status(500).end();
       }
     }
   }
 
   // Return unauthorized for all other requests
-  res.status(401).end();
+  return res.status(401).send('Unauthorized');
 };

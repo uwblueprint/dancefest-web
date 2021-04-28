@@ -9,7 +9,7 @@ export default async (req, res) => {
 
   // If not authenticated, return error
   if (!session) {
-    return res.status(401).end();
+    return res.status(401).send('Unauthorized');
   }
 
   // TODO: I think this should be path rather than query parameter
@@ -67,9 +67,13 @@ export const getAward = async filter => {
         return {
           ...rest,
           adjudications,
-          artisticScore: calculateAverageScore(adjudications.map(a => a.artistic_mark)),
-          technicalScore: calculateAverageScore(adjudications.map(a => a.technical_mark)),
-          cumulativeScore: calculateAverageScore(adjudications.map(a => a.cumulative_mark)),
+          artisticScore: calculateAverageScore(adjudications.map(a => parseFloat(a.artistic_mark))),
+          technicalScore: calculateAverageScore(
+            adjudications.map(a => parseFloat(a.technical_mark))
+          ),
+          cumulativeScore: calculateAverageScore(
+            adjudications.map(a => parseFloat(a.cumulative_mark))
+          ),
           status,
           nominator,
         };

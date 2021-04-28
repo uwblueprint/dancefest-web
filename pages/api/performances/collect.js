@@ -12,7 +12,7 @@ export default async (req, res) => {
 
   // If not authenticated
   if (!session) {
-    return res.status(401).end();
+    return res.status(401).send('Unauthorized');
   }
 
   if (!eventID) {
@@ -27,24 +27,23 @@ export default async (req, res) => {
   // If schoolIDs exist, we convert it into an array of integers to add to the filter
   if (schoolIDs) filter.school_id = { in: schoolIDs.split(',').map(i => +i) };
   if (settingIDs) {
+    // If settingIDs array is passed in, we filter for performances with the matching settings
+    // We get all the performances where the competition_level, dance_size, dance_style are in
+    // the requested settingIDs that are passed in
     const settingIDArray = settingIDs.split(',').map(i => +i);
-    filter.OR = [
-      {
-        competition_level_id: {
-          in: settingIDArray,
-        },
-      },
-      {
-        dance_size_id: {
-          in: settingIDArray,
-        },
-      },
-      {
-        dance_style_id: {
-          in: settingIDArray,
-        },
-      },
-    ];
+
+    for (const settingID of settingIDArray) {
+      const setting = await getSetting(settingID);
+      if (setting) {
+        if (setting.type === 'COMPETITION_LEVEL') {
+          filter.competition_level_id = settingID;
+        } else if (setting.type === 'STYLE') {
+          filter.dance_style_id = settingID;
+        } else if (setting.type === 'DANCE_SIZE') {
+          filter.dance_size_id = settingID;
+        }
+      }
+    }
   }
 
   const performances = await getPerformances(filter);
@@ -68,7 +67,10 @@ export const getPerformances = async filter => {
       },
       school: {
         select: {
+          id: true,
           school_name: true,
+          email: true,
+          contact_name: true,
         },
       },
       adjudications: true,
@@ -89,13 +91,28 @@ export const getPerformances = async filter => {
             user_id,
           };
         }),
+        specialAwards: awards_performances
+          .filter(award => award.awards.type === 'SPECIAL')
+          .map(award => award.awards),
         adjudications,
         totalAdjudications: (JSON.parse(judgesString) || []).filter(judge => judge !== '').length,
         completedAdjudications: adjudications.length,
-        artisticScore: calculateAverageScore(adjudications.map(a => a.artistic_mark)),
-        technicalScore: calculateAverageScore(adjudications.map(a => a.technical_mark)),
-        cumulativeScore: calculateAverageScore(adjudications.map(a => a.cumulative_mark)),
+        artisticScore: calculateAverageScore(adjudications.map(a => parseFloat(a.artistic_mark))),
+        technicalScore: calculateAverageScore(adjudications.map(a => parseFloat(a.technical_mark))),
+        cumulativeScore: calculateAverageScore(
+          adjudications.map(a => parseFloat(a.cumulative_mark))
+        ),
       };
     }
   );
+};
+
+const getSetting = async id => {
+  const setting = await prisma.setting.findUnique({
+    where: {
+      id: parseInt(id),
+    },
+  });
+  if (!setting) return;
+  return setting;
 };

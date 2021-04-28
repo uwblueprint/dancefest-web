@@ -4,6 +4,7 @@ Share Feedback
 ****************************************
 */
 .feedback {
+  width: 100%;
   padding-top: 56px;
 
   // Event name
@@ -35,11 +36,12 @@ Share Feedback
     // Send Feedback button
     & > button {
       height: 37px;
+      margin-right: 16px;
     }
   }
 
   // Table
-  div:last-child {
+  .feedback__table {
     width: 100%;
     padding: 0;
 
@@ -93,4 +95,15 @@ Confirmation Modal
 
     color: var(--system-neutral-grey);
   }
+}
+
+/*
+****************************************
+Share Feedback: Loading spinner
+****************************************
+*/
+.feedback__loader {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }

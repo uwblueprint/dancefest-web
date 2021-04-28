@@ -22,12 +22,12 @@ export default async (req, res) => {
       });
 
       // Return deleted performance
-      res.send(deletedSchool);
+      return res.json(deletedSchool);
     } else {
-      res.status(404).end();
+      return res.status(404).end();
     }
   }
 
   // Else, throw unauthenticated
-  res.status(401).end();
+  return res.status(401).send('Unauthorized');
 };

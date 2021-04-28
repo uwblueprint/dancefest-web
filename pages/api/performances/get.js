@@ -9,7 +9,7 @@ export default async (req, res) => {
 
   // If not authenticated
   if (!session) {
-    return res.status(401).end();
+    return res.status(401).send('Unauthorized');
   }
 
   const { id } = req.query;
@@ -67,6 +67,9 @@ export const getPerformance = async filter => {
     ...rest
   } = performance;
 
+  const totalAdjudications = (JSON.parse(judgesString) || []).filter(judge => judge !== '').length;
+  const completedAdjudications = adjudications.length;
+
   return {
     ...rest,
     awards: awards.map(({ awards, status, user_id }) => {
@@ -77,11 +80,12 @@ export const getPerformance = async filter => {
       };
     }),
     adjudications,
-    totalAdjudications: (JSON.parse(judgesString) || []).filter(judge => judge !== '').length,
-    completedAdjudications: adjudications.length,
-    artisticScore: calculateAverageScore(adjudications.map(a => a.artistic_mark)),
-    technicalScore: calculateAverageScore(adjudications.map(a => a.technical_mark)),
-    cumulativeScore: calculateAverageScore(adjudications.map(a => a.cumulative_mark)),
+    totalAdjudications,
+    completedAdjudications,
+    feedbackComplete: completedAdjudications >= totalAdjudications,
+    artisticScore: calculateAverageScore(adjudications.map(a => parseFloat(a.artistic_mark))),
+    technicalScore: calculateAverageScore(adjudications.map(a => parseFloat(a.technical_mark))),
+    cumulativeScore: calculateAverageScore(adjudications.map(a => parseFloat(a.cumulative_mark))),
     event,
   };
 };

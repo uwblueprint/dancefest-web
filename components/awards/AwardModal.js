@@ -42,6 +42,7 @@ export default function AwardModal({
     setDanceSize(null);
     setPerformanceLevel(null);
     setDanceStyle(null);
+    setDisableButton(true);
     setOpen(false);
   };
 
@@ -60,7 +61,7 @@ export default function AwardModal({
       perfLevelSelection,
       styleSelection
     );
-    setOpen(false);
+    discardChanges();
   };
 
   return (
@@ -95,6 +96,9 @@ export default function AwardModal({
             Select categories that apply to the potential winners of this award. (Selecting no
             categories will mean that all performances are elligible for this award).
           </h3>
+        </div>
+        <div>
+          <h2>Dance Size</h2>
           <Dropdown
             className={styles.modal__dropdown}
             placeholder="Dance Size"
@@ -103,6 +107,7 @@ export default function AwardModal({
           />
         </div>
         <div>
+          <h2>Performance Level</h2>
           <Dropdown
             className={styles.modal__dropdown}
             placeholder="Performance Level"
@@ -111,6 +116,7 @@ export default function AwardModal({
           />
         </div>
         <div>
+          <h2>Dance Style</h2>
           <Dropdown
             className={styles.modal__dropdown}
             placeholder="Dance Style"

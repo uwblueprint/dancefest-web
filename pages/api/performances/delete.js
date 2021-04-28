@@ -6,7 +6,7 @@ export default async (req, res) => {
   const session = await getSession({ req });
 
   if (!session || session.role !== 'ADMIN') {
-    return res.status(401).end();
+    return res.status(401).send('Unauthorized');
   }
 
   // Collect id of performance to delete

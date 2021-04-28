@@ -17,9 +17,12 @@ import Loader from 'react-loader-spinner'; // Loading spinner
 import Title from '@components/Title'; // Title
 import styles from '@styles/pages/PerformanceDetails.module.scss';
 import { formatPerformance } from '@utils/performances'; // Format performance util
+import useSnackbar from '@utils/useSnackbar'; // Snackbar
+import BackButton from '@components/BackButton';
 
 // Page: Settings
 export default function PerformanceDetails({ session }) {
+  const { snackbarError } = useSnackbar();
   const router = useRouter();
   const { id } = router.query;
   const [eventData] = Event.useContainer();
@@ -40,7 +43,12 @@ export default function PerformanceDetails({ session }) {
     performance || {};
   const adjudications = initialAdjudications.sort((a, b) => (a.user.name > b.user.name ? 1 : -1));
   const eventName = event && event.name;
-  const currentAdjudication = adjudications.length > 0 ? adjudications[selectedTab] : undefined;
+  const currentAdjudication =
+    adjudications.length > 0
+      ? session.role === 'JUDGE'
+        ? adjudications.find(adjudication => adjudication.user.id === session.id)
+        : adjudications[selectedTab]
+      : undefined;
   const currentJudgeUserId = currentAdjudication && currentAdjudication.userId;
   const currentNominations =
     nominations && currentJudgeUserId ? nominations[currentJudgeUserId] : undefined;
@@ -65,8 +73,8 @@ export default function PerformanceDetails({ session }) {
         newAwardsDict[award.id] = award;
       });
       setAwardsDict(newAwardsDict);
-    } catch {
-      // Empty catch block
+    } catch (err) {
+      snackbarError(err);
     }
 
     setLoading(false);
@@ -94,9 +102,8 @@ export default function PerformanceDetails({ session }) {
       setPerformance(formattedPerformance);
 
       await getAwards(response.data);
-    } catch {
-      // Temporary solution, as error UI has not been implemented
-      router.push('/performances');
+    } catch (err) {
+      snackbarError(err);
     }
 
     setLoading(false);
@@ -119,6 +126,9 @@ export default function PerformanceDetails({ session }) {
         </div>
       ) : (
         <>
+          <div>
+            <BackButton href="/performances">Back to Performances</BackButton>
+          </div>
           <div>
             <h2 className={styles.performances_details__eventName}>{eventName}</h2>
           </div>
@@ -184,6 +194,7 @@ export default function PerformanceDetails({ session }) {
                 session.role === 'JUDGE' && !judgeFeedbackExists ? (
                   <NewJudgeFeedback
                     getPerformance={getPerformance}
+                    loading={loading}
                     setLoading={setLoading}
                     awardsDict={awardsDict}
                     nominations={currentNominations}

@@ -8,6 +8,7 @@ import Modal from '@components/Modal'; // Modal
 import Dropdown, { formatDropdownOptions } from '@components/Dropdown'; // Dropdown
 import styles from '@styles/components/performances/PerformanceModal.module.scss'; // Component styles
 
+import useSnackbar from '@utils/useSnackbar'; // Snackbar
 import { formatSchools } from '@utils/schools'; // Format schools util
 
 export default function EditPerformanceModal({
@@ -18,6 +19,7 @@ export default function EditPerformanceModal({
   getPerformance,
   performance,
 }) {
+  const { snackbarError } = useSnackbar();
   const [event] = Event.useContainer();
 
   const [danceTitle, setDanceTitle] = useState('');
@@ -34,6 +36,8 @@ export default function EditPerformanceModal({
   const [performanceLevelDropdownOptions, setPerformanceLevelDropdownOptions] = useState([]);
   const [danceStyleDropdownOptions, setDanceStyleDropdownOptions] = useState([]);
   const [danceSizeDropdownOptions, setDanceSizeDropdownOptions] = useState([]);
+
+  const fieldsMissing = !danceTitle || !school || !competitionLevel || !danceStyle || !danceSize;
 
   const getFilters = async () => {
     setLoading(true);
@@ -53,8 +57,8 @@ export default function EditPerformanceModal({
             label: 'schoolName',
           })
         );
-      } catch {
-        // Empty catch block
+      } catch (err) {
+        snackbarError(err);
       }
     };
 
@@ -96,6 +100,7 @@ export default function EditPerformanceModal({
   const clearFields = () => {
     setDanceTitle('');
     setDancersString('');
+    setPerformanceLink('');
     setChoreographersString('');
     setSchool(null);
     setCompetitionLevel(null);
@@ -137,8 +142,8 @@ export default function EditPerformanceModal({
       });
 
       getPerformance();
-    } catch {
-      // Empty catch block
+    } catch (err) {
+      snackbarError(err);
     }
 
     setLoading(false);
@@ -187,7 +192,7 @@ export default function EditPerformanceModal({
       submitText={'Edit Performance'}
       onCancel={onCancel}
       onSubmit={updatePerformance}
-      disableSubmitButton={loading}
+      disableSubmitButton={loading || fieldsMissing}
     >
       <div className={styles.modal}>
         <div>

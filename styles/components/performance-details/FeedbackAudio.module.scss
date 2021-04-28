@@ -12,6 +12,19 @@
   }
 }
 
+.recordingAnimation__wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 8px;
+
+  // "Recording..."
+  p {
+    margin: 0;
+  }
+}
+
 .recordButton,
 .stopButton {
   width: 100%;

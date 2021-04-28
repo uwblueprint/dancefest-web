@@ -12,6 +12,7 @@ import DropdownGrid from '@components/DropdownGrid'; // Dropdown Grid
 import FeedbackAudio from '@components/performance-details/FeedbackAudio'; // Feedback audio
 import styles from '@styles/components/performance-details/JudgeFeedback.module.scss'; // Component styles
 
+import useSnackbar from '@utils/useSnackbar'; // Snackbar
 import { calculateAverageScore } from '@utils/performances'; // Calculate average score util
 
 const SPECIAL_AWARD_TYPE = 'SPECIAL';
@@ -27,6 +28,7 @@ export default function JudgeFeedback({
   editingJudgeFeedback: editingFeedback,
   setEditingJudgeFeedback: setEditingFeedback,
 }) {
+  const { snackbarError } = useSnackbar();
   const [event] = Event.useContainer();
   const router = useRouter();
   const { id: performanceId } = router.query;
@@ -81,6 +83,7 @@ export default function JudgeFeedback({
     .filter(award => !!award)
     .map(award => awardsDict[award.value]);
   const specialAwardData = specialAward && awardsDict[specialAward.value];
+  const fieldsMissing = technicalScore === '' || artisticScore === '' || cumulativeScore === '';
 
   useEffect(() => {
     if (adjudication) {
@@ -147,8 +150,8 @@ export default function JudgeFeedback({
       });
 
       await getPerformance();
-    } catch {
-      // Empty catch block
+    } catch (err) {
+      snackbarError(err);
     } finally {
       // Reset audio state
       if (recordingChanged) {
@@ -194,7 +197,7 @@ export default function JudgeFeedback({
                   updateFeedback();
                   setEditingFeedback(false);
                 }}
-                disabled={loading}
+                disabled={loading || fieldsMissing}
               >
                 Save
               </Button>

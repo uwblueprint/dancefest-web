@@ -17,6 +17,12 @@ Checkbox
 
   cursor: pointer;
 
+  // Inner checkbox
+  & > div {
+    height: 12px;
+    width: 12px;
+  }
+
   // Checkbox (checked)
   &.selected {
     background-color: var(--system-light-blue);
@@ -27,5 +33,12 @@ Checkbox
       top: 2px;
       left: 1px;
     }
+  }
+
+  // Checkbox (disabled)
+  &.disabled {
+    background-color: var(--system-lightest-grey);
+    border: 2px solid var(--system-light-grey);
+    cursor: default;
   }
 }

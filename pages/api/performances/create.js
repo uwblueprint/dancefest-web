@@ -7,7 +7,7 @@ export default async (req, res) => {
 
   // If not authenticated or is not an admin
   if (!session || session.role !== 'ADMIN') {
-    return res.status(401).end();
+    return res.status(401).send('Unauthorized');
   }
 
   // Collect performance information from request body
@@ -19,7 +19,6 @@ export default async (req, res) => {
     danceSize,
     danceStyle,
     performanceLink,
-    audioRecordingLink,
     danceSizeID,
     danceStyleID,
     competitionLevelID,
@@ -58,7 +57,6 @@ export default async (req, res) => {
         dance_size: danceSize,
         dance_style: danceStyle,
         performance_link: performanceLink,
-        audio_recording_link: audioRecordingLink,
         dance_size_id: danceSizeID,
         dance_style_id: danceStyleID,
         competition_level_id: competitionLevelID,
@@ -75,7 +73,6 @@ export default async (req, res) => {
       });
     }
   } catch (err) {
-    console.log(err);
     return res.status(400).json({
       error: 'Error creating new performance',
     });
