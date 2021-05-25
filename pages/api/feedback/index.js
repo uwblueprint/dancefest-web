@@ -70,6 +70,9 @@ export default async (req, res) => {
               <p>Attached you will find a summary of the scores and awards won by all performances from your school. 
               Audio feedback from the adjudicators is also included. 
               Feel free to share this feedback with your student dancers and any other dance teachers/coaches or administrators from your school.</p>
+              <p>We ask teachers to download the audio feedback from the links in the spreadsheet by visiting the links under the feedback column in the spreadsheet and downloading the audio. 
+              They are comma separated values so there are actually 3 links separated by commas under the 'audio feedback' column.  Downloading all three links for each performance 
+              and saving this feedback will ensure that you will always have a copy available.</p>
               <p>If you have any questions regarding the feedback, do not reply to this email as it is automatically generated and the inbox is not monitored. 
               Instead, please email your concerns directly to Ontario Secondary School Dancefest at ossdancefest@gmail.com.</p>
               <p>We hope you enjoyed ${event.name}!  We look forward to seeing you and your student dancers again at future events!</p>
