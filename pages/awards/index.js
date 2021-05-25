@@ -424,6 +424,8 @@ export default function Awards({ session }) {
                   <FinalizedTable
                     filters={filters}
                     finalizedAwards={finalizedAwards}
+                    pageNumber={pageNumber}
+                    setPageCount={setPageCount}
                     clickable
                     hiddenColumns={AWARDS_TABLE_HIDDEN_COLUMN}
                   />
@@ -540,6 +542,7 @@ const FinalizedTable = ({ finalizedAwards, ...props }) => {
     <Table
       columns={columns}
       data={finalizedAwards}
+      pageSize={PAGE_SIZE}
       emptyComponent={<EmptyTableComponent />}
       onRowClick={goToPerformanceDetails}
       {...props}
