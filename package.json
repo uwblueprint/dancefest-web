@@ -41,7 +41,7 @@
     "react-table": "^7.6.3",
     "sass": "^1.32.7",
     "unstated-next": "^1.1.0",
-    "validator": "^13.5.2",
+    "validator": "^13.7.0",
     "yocto-queue": "^0.1.0"
   },
   "devDependencies": {
