@@ -107,7 +107,7 @@ export default function SchoolModal({
         clearFields();
       }}
       onSubmit={schoolToEdit ? updateSchool : addSchool}
-      disableSubmitButton={loading || !schoolName || !contactName || !contactEmail || !phoneNumber}
+      disableSubmitButton={loading || !schoolName || !contactName || !contactEmail}
     >
       <div className={styles.schoolModal}>
         <div>
