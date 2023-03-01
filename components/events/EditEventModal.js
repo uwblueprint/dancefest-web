@@ -51,7 +51,7 @@ export default function EditEventModal({
         // And data to patch
         title,
         date,
-        judges: [...new Set(judges.map(judge => judge.value).filter(judge => !!judge))],
+        judges: [...new Set(judges.filter(judge => !!judge).map(judge => judge.label))],
       });
 
       reloadEvents(); // Begin reloading events in background
