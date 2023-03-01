@@ -24,7 +24,7 @@
     "husky": "4",
     "json2csv": "^5.0.6",
     "next": "10.0.7",
-    "next-auth": "^3.4.2",
+    "next-auth": "^3.29.10",
     "next-images": "^1.7.0",
     "next-s3-upload": "^0.1.4",
     "nodemailer": "^6.4.18",
