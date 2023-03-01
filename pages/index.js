@@ -111,8 +111,8 @@ export default function Events({ session }) {
     const judgesData = response.data;
     setJudgeOptions([
       { label: 'None', value: null },
-      ...judgesData.map(({ email }) => ({
-        label: email,
+      ...judgesData.map(({ name, email }) => ({
+        label: name,
         value: email,
       })),
     ]);

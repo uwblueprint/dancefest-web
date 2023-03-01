@@ -47,7 +47,7 @@ export default function NewEventModal({
         // With required data
         title,
         date,
-        judges: [...new Set(judges.filter(judge => !!judge).map(judge => judge.value))],
+        judges: [...new Set(judges.filter(judge => !!judge).map(judge => judge.label))],
       });
 
       reloadEvents(); // Begin reloading all events in background
